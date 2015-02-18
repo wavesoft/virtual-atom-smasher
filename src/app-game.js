@@ -29,7 +29,7 @@ requirejs.config({
 /**
  * Start application
  */
-requirejs(['require', 'extern', 'core', 'vas', 'tootr'], 
+requirejs(['require', 'extern', 'core', 'vas', 'tootr', 'less!../app-game'], 
 	function (require, Extern, Core, VAS, Tootr) {
 
 		require(
