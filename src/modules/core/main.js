@@ -4,7 +4,9 @@
 require.config({
 	
 	packages: [
-		"core/db"
+		"core/db",
+		"core/util",
+		"core/analytics"
 	]
 
 });

@@ -11,19 +11,48 @@ requirejs.config({
 	'packages': [
 		'extern',
 		'core',
+		'vas',
 		{
-			'name': 'game',
-			'location': 'game/js'
+			'name': 'tootr',
+			'location': 'tootr/js'
 		}
-	]
+	],
+
+	map: {
+		'*': {
+			'less': 'extern/require-less/js/less'
+		}
+	}
 
 });
 
 /**
  * Start application
  */
-requirejs(['extern', 'core', 'game'], 
-	function (Extern, Core, Game) {
+requirejs(['require', 'extern', 'core', 'vas', 'tootr'], 
+	function (require, Extern, Core, VAS, Tootr) {
 
+		require(
+			[
+				// Core components required by bootstrap
+				"jquery",
+				"vas/core",
+				// Game modules
+				"vas/basic",
+				"vas/3d/main",
+			], 
+			function($, main) {
+
+				$(function() {
+					// Initialize VAS 
+					main.initialize(function() {
+						// Wait until VAS is ready and run it
+						main.run();
+					});
+				});
+
+			}
+		);
+		
 	}
 );

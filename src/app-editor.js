@@ -26,7 +26,7 @@ requirejs.config({
 /**
  * Start application
  */
-requirejs(['extern', 'core', 'tootr', 'tootr_editor'], 
+requirejs(['extern', 'core', 'tootr', 'tootr_editor', 'less!app-game'], 
 	function (Extern, Core, Tootr, TootrEditor) {
 
 	}

@@ -6,78 +6,79 @@ require.config({
 	packages: [
 		{
 			'name'		: 'jquery',
-			'location'	: 'extern/jquery',
-			'main'		: 'js/jquery-2.1.1'
+			'location'	: 'extern/jquery/js',
+			'main'		: 'jquery-2.1.1'
 		},
 		{
 			'name'		: 'jquery-ui',
-			'location'	: 'extern/jquery-ui',
-			'main'		: 'js/jquery-ui-1.11.0'
+			'location'	: 'extern/jquery-ui/js',
+			'main'		: 'jquery-ui-1.11.0'
 		},
 		{
 			'name'		: 'fabric',
-			'location'	: 'extern/fabric',
-			'main'		: 'js/fabric-1.4.9'
+			'location'	: 'extern/fabric/js',
+			'main'		: 'fabric-1.4.9'
 		},
 		{
 			'name'		: 'three',
-			'location'	: 'extern/three',
-			'main'		: 'js/three-67'
+			'location'	: 'extern/three/js',
+			'main'		: 'three-67'
 		},
 		{
 			'name'		: 'three-extras',
-			'location'	: 'extern/three-extras'
+			'location'	: 'extern/three-extras/js'
 		},
 		{
 			'name'		: 'bootstrap',
-			'location'	: 'extern/bootstrap',
-			'main'		: 'js/bootstrap-3.1.1'
+			'location'	: 'extern/bootstrap/js',
+			'main'		: 'bootstrap-3.1.1'
 		},
 		{
 			'name'		: 'tweenjs',
-			'location'	: 'extern/tweenjs',
-			'main'		: 'js/tweenjs.js'
+			'location'	: 'extern/tweenjs/js',
+			'main'		: 'tweenjs'
 		},
 		{
 			'name'		: 'popcorn',
-			'location'	: 'extern/popcorn',
-			'main'		: 'js/popcorn-1.5.6'
+			'location'	: 'extern/popcorn/js',
+			'main'		: 'popcorn-1.5.6'
 		},
 		{
 			'name'		: 'jquery-knob',
-			'location'	: 'extern/jquery-knob',
-			'main'		: 'js/jquery-knob-1.2.8'
+			'location'	: 'extern/jquery-knob/js',
+			'main'		: 'jquery-knob-1.2.8'
 		},
 		{
 			'name'		: 'd3',
-			'location'	: 'extern/d3',
-			'main'		: 'js/d3-3.5.5.min'
+			'location'	: 'extern/d3/js',
+			'main'		: 'd3-3.5.5.min'
 		},
 		{
 			'name'		: 'sha1',
-			'location'	: 'extern/sha1',
-			'main'		: 'js/sha1'
+			'location'	: 'extern/sha1/js',
+			'main'		: 'sha1'
 		},
 		{
 			'name'		: 'dragdealer',
-			'location'	: 'extern/dragdealer',
-			'main'		: 'js/dragdealer'
+			'location'	: 'extern/dragdealer/js',
+			'main'		: 'dragdealer'
 		},
 		{
 			'name'		: 'colorpicker',
-			'location'	: 'extern/colorpicker',
-			'main'		: 'js/colorpicker.min'
+			'location'	: 'extern/colorpicker/js',
+			'main'		: 'colorpicker.min'
 		},
 		{
 			'name'		: 'codemirror',
-			'location'	: 'extern/codemirror',
+			'location'	: 'extern/codemirror/js',
 			'main'		: 'codemirror'
 		},
 		{
 			'name'		: 'mustache',
-			'location'	: 'extern/mustache',
-			'main'		: 'js/mustache'
+			'location'	: 'extern/mustache/js',
+			'main'		: 'mustache'
 		}
-	]
+	],
+
 
 });
