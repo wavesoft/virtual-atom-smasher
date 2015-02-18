@@ -65,7 +65,7 @@
 }
 
 #editor-frame #editor-canvas {
-	background: url(static/img/blackboard.jpg) no-repeat center center;
+	background: url(modules/tootr/img/blackboard.jpg) no-repeat center center;
 	position: absolute;
 	left: 10px; top: 50px; width: 800px; height: 450px;
 	border: solid 1px #eee;
