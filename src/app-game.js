@@ -10,7 +10,11 @@ requirejs.config({
 	// Import external packages
 	'packages': [
 		'extern',
-		'game'
+		'core',
+		{
+			'name': 'game',
+			'location': 'game/js'
+		}
 	]
 
 });
@@ -18,8 +22,8 @@ requirejs.config({
 /**
  * Start application
  */
-requirejs(['extern', 'game'],
-	function (Extern, Game) {
+requirejs(['extern', 'core', 'game'], 
+	function (Extern, Core, Game) {
 
 	}
 );

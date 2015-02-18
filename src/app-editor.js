@@ -10,9 +10,15 @@ requirejs.config({
 	// Import external packages
 	'packages': [
 		'extern',
-		'tootr',
 		'core',
-		'tootr_editor'
+		{
+			'name': 'tootr',
+			'location': 'tootr/js'
+		},
+		{
+			'name': 'tootr_editor',
+			'location': 'tootr_editor/js'
+		}
 	]
 
 });
@@ -21,7 +27,7 @@ requirejs.config({
  * Start application
  */
 requirejs(['extern', 'core', 'tootr', 'tootr_editor'], 
-	function (Extern, Tootr, TootrEditor) {
+	function (Extern, Core, Tootr, TootrEditor) {
 
 	}
 );
