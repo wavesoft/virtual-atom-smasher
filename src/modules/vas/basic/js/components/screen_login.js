@@ -2,14 +2,19 @@
 define(
 
 	// Requirements
-	["vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/ui" ],
+	["require", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/ui" ],
 
 	/**
 	 * Basic version of the home screen
 	 *
 	 * @exports vas-basic/components/running_screen
 	 */
-	function(config,R,C,UI) {
+	function(require, config,R,C,UI) {
+
+		/**
+		 * Find base directory for images
+		 */
+		var img_dir = require.toUrl(".").split("/").slice(0,-2).join("/") + "/img";
 
 		/**
 		 * @class
@@ -52,7 +57,7 @@ define(
 			this.elmLeftBody.append($("<h1>Welcome visitor!</h1>"));
 			this.elmLeftBody.append($("<p>Virtual Atom Smasher is a revolutionary educational game that brings you along with the theoretical physicists inside CERN!</p>"));
 			this.elmLeftBody.append($("<p>Playing this game you are not only learning about particle physics, but you are actively helping scientists with their research!</p>"));
-			var btnTour = $('<a href="do:tour"><img src="static/img/take-tour.png" /></a>')
+			var btnTour = $('<a href="do:tour"><img src="'+img_dir+'/take-tour.png" /></a>')
 			btnTour.click(function(e) {
 				e.preventDefault();
 				e.stopPropagation();

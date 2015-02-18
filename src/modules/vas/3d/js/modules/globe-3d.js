@@ -1,9 +1,14 @@
 
 define(
 
-	[ "three", "three-extras", "vas/core/registry", "vas/core/base/component" ], 
+	[ "require", "three", "three-extras", "vas/core/registry", "vas/core/base/component" ], 
 
-	function(THREE, THREEx, R, Component ) {
+	function(require, THREE, THREEx, R, Component ) {
+
+		/**
+		 * Find base directory for images
+		 */
+		var img_dir = require.toUrl(".").split("/").slice(0,-2).join("/") + "/img";
 
 		/**
 		 * Prepare the globe component
@@ -55,7 +60,7 @@ define(
 					wireframe: false,
 					transparent: true,
 					side: THREE.DoubleSide,
-					map: THREE.ImageUtils.loadTexture('static/img/earth.png')
+					map: THREE.ImageUtils.loadTexture( img_dir + '/earth.png' )
 				});
 
 			this.sphere = new THREE.Mesh( globeGeom, globeMat );

@@ -5,14 +5,19 @@ define(
 	/**
 	 * Dependencies
 	 */
-	["jquery", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/db", "vas/core/ui", "vas/core/user" ],
+	["jquery", "require", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/db", "vas/core/ui", "vas/core/user" ],
 
 	/**
 	 * Basic version of the home screen
 	 *
 	 * @exports vas-basic/components/tuning_screen
 	 */
-	function($, config, R, C, DB, UI, User, LiveQCore) {
+	function($, require, config, R, C, DB, UI, User, LiveQCore) {
+
+		/**
+		 * Find base directory for images
+		 */
+		var img_dir = require.toUrl(".").split("/").slice(0,-2).join("/") + "/img";
 
 		/**
 		 * Registration scren
@@ -126,7 +131,7 @@ define(
 				avatars = ['model-1.png', 'model-2.png', 'model-3.png', 'model-4.png', 
 				           'model-5.png', 'model-6.png', 'model-7.png'];
 			for (var i=0; i<avatars.length; i++) {
-				var item = $('<div class="item" style="background-image: url(static/img/avatars/'+avatars[i]+')"></div>')
+				var item = $('<div class="item" style="background-image: url('+img_dir+'/avatars/'+avatars[i]+')"></div>')
 								.data("avatar", avatars[i])
 								.appendTo(this.fAvatarList);
 				item.click(function() {

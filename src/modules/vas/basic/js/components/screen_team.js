@@ -2,14 +2,19 @@
 define(
 
 	// Requirements
-	["jquery", "vas/core/db", "vas/core/ui", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/apisocket", "vas/core/global"],
+	["jquery", "require", "vas/core/db", "vas/core/ui", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/apisocket", "vas/core/global"],
 
 	/**
 	 * Basic version of the team screen
 	 *
 	 * @exports basic/components/screem_team
 	 */
-	function($, DB, UI, config, R,C, API, Global) {
+	function($, require, DB, UI, config, R,C, API, Global) {
+
+		/**
+		 * Find base directory for images
+		 */
+		var img_dir = require.toUrl(".").split("/").slice(0,-2).join("/") + "/img";
 
 		/**
 		 * @class
@@ -52,7 +57,7 @@ define(
 
 			this.eUsersPanel = $('<div class="panel-users"></div>').appendTo(hostDOM);
 			this.eUserDetails = $('<div class="user-profile"></div>').appendTo(this.eUsersPanel);
-			this.eUserPicture = $('<div class="user-image" style="background-image: url(static/img/avatars/model-1.png)"></div>').appendTo(this.eUserDetails);
+			this.eUserPicture = $('<div class="user-image" style="background-image: url('+img_dir+'/avatars/model-1.png)"></div>').appendTo(this.eUserDetails);
 			this.eUserTitle = $('<div class="user-title">User Title</div>').appendTo(this.eUserDetails);
 			this.eUserCreditsHost = $('<div class="user-details"><span class="label">Credits: </span></div>').appendTo(this.eUserDetails);
 			this.eUserCredits = $('<span class="value">8</span>').appendTo(this.eUserCreditsHost);

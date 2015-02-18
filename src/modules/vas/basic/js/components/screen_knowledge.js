@@ -2,19 +2,24 @@
 define(
 
 	// Requirements
-	["jquery", "d3", "vas/core/ui", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/user" ],
+	["jquery", "d3", "require", "vas/core/ui", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/user" ],
 
 	/**
 	 * Basic version of the home screen
 	 *
 	 * @exports basic/components/explain_screen
 	 */
-	function($, d3, UI, config, R,C, User) {
+	function($, d3, require, UI, config, R,C, User) {
 
 		/**
 		 * Blank image payload
 		 */
 		var BLANK_IMAGE = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+
+		/**
+		 * Find base directory for images
+		 */
+		var img_dir = require.toUrl(".").split("/").slice(0,-2).join("/") + "/img";
 
 		/**
 		 * Darken color
@@ -407,7 +412,7 @@ define(
 						'id'		: n._id || "",
 						'info'		: n.info || {},
 						'enabled'	: n_enabled,
-						'icon'		: config['images_url'] + "/" + (n.info.icon || 'level-icons/hard.png'),
+						'icon'		: img_dir + "/" + (n.info.icon || 'level-icons/hard.png'),
 						'color' 	: n.enabled ? color_sceme[n.info.color || 'green'] : color_sceme['gray'],
 						'radius' 	: 20,
 						'opacity' 	: (n.enabled ? 1.0 : 0.5),
@@ -442,7 +447,7 @@ define(
 			// Override root node icon/radius
 			this.graph.nodes[0].radius = 50;
 			this.graph.nodes[0].color = '#ECF0F1';
-			this.graph.nodes[0].icon = 'static/img/logo.png';
+			this.graph.nodes[0].icon = img_dir + '/logo.png';
 			this.graph.nodes[0].tagAid = "knowledgegrid.begin";
 
 			// Regen UI

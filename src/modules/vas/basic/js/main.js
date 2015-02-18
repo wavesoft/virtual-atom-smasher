@@ -1,5 +1,8 @@
 
 define([
+
+	// Dependencies
+	'require',
 	
 	// Screens
 	'vas/basic/components/screen_explain',
@@ -84,4 +87,11 @@ define([
 	'vas/basic/overlays/histograms',
 	'vas/basic/overlays/questionaire',
 
-]);
+], function(require) {
+
+	// Return module configuration
+	return {
+		'img' : require.toUrl('../img')
+	};
+
+});
