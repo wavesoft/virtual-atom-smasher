@@ -505,9 +505,6 @@ define(
 					scrHome.on('changeScreen', function(name) {
 						UI.selectScreen(name);
 					});
-					scrHome.on('explainTopic', function(topic_id) {
-						VAS.displayExplainTopic(topic_id);
-					});
 					scrHome.on('showKnowledge', function() {
 						VAS.displayKnowledge();
 					});
@@ -654,65 +651,6 @@ define(
 					cb();
 				};				
 
-			var prog_run = progressAggregator.begin(1),
-				init_run = function(cb) {
-					var scrRunning = VAS.scrRunning = UI.initAndPlaceScreen("screen.running");
-					if (!scrRunning) {
-						UI.logError("Core: Unable to initialize run screen!");
-						return;
-					}
-
-					// Initialize running screen
-					scrRunning.onTunablesDefined( DB.cache['tunables'] );
-					scrRunning.onObservablesDefined( DB.cache['observables'] );
-
-					// Bind events
-					scrRunning.on('abortRun', function() {
-
-						// Abort run
-						LiveQCore.abortRun();
-
-						// Display tuning screen
-						UI.selectScreen("screen.tuning")
-
-					});
-
-					// Complete run
-					prog_run.ok("Run screen ready");
-					cb();
-				};
-
-			var prog_explain = progressAggregator.begin(1),
-				init_explain = function(cb) {
-
-					// Create explain screen
-					var scrExplain = VAS.scrExplain = UI.initAndPlaceScreen("screen.explain", Components.ExplainScreen);
-					if (!scrExplain) {
-						UI.logError("Core: Unable to initialize explaination screen!");
-						return;
-					}
-
-					// Initialize explain screen
-					scrExplain.onTunablesDefined( DB.cache['tunables'] );
-					scrExplain.onObservablesDefined( DB.cache['observables'] );
-
-					// Check for machine layout
-					var diagram = DB.cache['definitions']['machine-diagram'] || { layout: [] };
-					scrExplain.onMachineLayoutDefined( diagram.layout );
-
-					// Handle events
-					scrExplain.on('hideExplain', function() {
-						VAS.displayHome(true);
-					});
-					scrExplain.on('startTask', function(task_id) {
-						VAS.displayTuningScreen(task_id);
-					});
-
-					// Complete explain
-					prog_explain.ok("Explaination screen ready");
-					cb();
-				};
-
 			var prog_tune = progressAggregator.begin(1),
 				init_tune = function(cb) {
 
@@ -728,10 +666,6 @@ define(
 					scrTuning.onObservablesDefined( DB.cache['observables'] );
 
 					// Bind events
-					scrTuning.on('explainParameter', function(parameter) {
-						UI.selectScreen("screen.explain")
-							.onParameterFocus(parameter);
-					});
 					scrTuning.on('showBook', function(bookID) {
 						VAS.displayBook(bookID);
 					});
@@ -773,7 +707,7 @@ define(
 
 				var chainRun = [
 						init_db, init_api, init_home, init_jobs, init_cinematic, init_courseroom, init_courses, 
-						init_tutorials, init_login, init_team, init_explain, init_tune, init_run, init_results,
+						init_tutorials, init_login, init_team, init_tune, init_results,
 						init_menu
 					],
 					runChain = function(cb, index) {
@@ -892,20 +826,6 @@ define(
 
 		}
 
-		/**
-		 * Check user's configuration and display the appropriate topic screen
-		 */
-		VAS.displayExplainTopic = function( topic_id ) {
-			if (!topic_id) return;
-
-			// Setup explain screen
-			VAS.scrExplain.onTopicUpdated( User.getTopicDetails(topic_id) );
-			VAS.activeTopic = topic_id;
-
-			// Switch screen
-			UI.selectScreen("screen.explain");
-
-		}
 
 		/**
 		 * Check user's configuration and display the appropriate tuning screen
@@ -917,73 +837,6 @@ define(
 
 			// Display tuning screen
 			UI.selectScreen("screen.tuning")
-
-		}
-
-		/**
-		 * Check user's configuration and display the appropriate tuning screen
-		 */
-		VAS.displayRunningScreen = function( values, referenceHistograms, taskData ) {
-
-			//var _dummyRunner_ = new _DummyRunner_();
-			//_dummyRunner_.onUpdate = VAS.scrRunning.onUpdate.bind( VAS.scrRunning );
-
-			// Keep the task and the topic for reference
-			VAS.runningTask = VAS.activeTask;
-			VAS.runningTopic = VAS.activeTopic;
-
-			// Let running screen know that simulation has started
-			VAS.scrRunning.onStartRun( values, taskData.obs, referenceHistograms );
-
-			// Let home screen know that we started the simulation
-			VAS.scrHome.onStateChanged( 'simulating', true );
-
-			// Start Lab Socket
-			LiveQCore.requestRun(values,
-				function(histograms) { // Data Arrived
-					//_dummyRunner_.data = histograms;
-					//_dummyRunner_.start();
-					VAS.scrRunning.onUpdate( histograms );
-				},
-				function(histograms) { // Completed
-					
-					// Update running screen
-					VAS.scrRunning.onUpdate( histograms );
-
-					// Handle simulation completion
-					VAS.handleSimulationCompletion( histograms );
-
-					// Update state variables
-					VAS.scrHome.onStateChanged( 'simulating', false );
-
-				},
-				function(errorMsg) { // Error
-
-					// Update state variables
-					VAS.scrHome.onStateChanged( 'simulating', false );
-
-					// "Aborted" is not an error ;)
-					if (errorMsg.trim().toLowerCase() == "aborted") return;
-					UI.growl("Simulation Error: "+errorMsg, "alert");
-
-					// Go to the home screen					
-					VAS.displayHome();
-				},
-				function(logLine, telemtryData) { // Log/Telemetry
-					if (telemtryData['agent_added']) {
-						VAS.scrRunning.onWorkerAdded(telemtryData['agent_added'],
-						{
-							'lat' : Math.random() * 180 - 90,
-							'lng' : Math.random() * 180
-						});
-					} else if (telemtryData['agent_removed']) {
-						VAS.scrRunning.onWorkerRemoved(telemtryData['agent_removed']);
-					}
-					console.log(">>> ",logLine,telemtryData);
-				});
-
-			// Display tuning screen
-			UI.selectScreen("screen.running")
 
 		}
 

@@ -22,7 +22,7 @@ define(
 		ExplainBackdrop.prototype = Object.create( C.Backdrop.prototype );
 
 		// Register home screen
-		R.registerComponent( "backdrop.explain", ExplainBackdrop, 1 );
+		R.registerComponent( "backdrop.knowledge", ExplainBackdrop, 1 );
 
 	}
 

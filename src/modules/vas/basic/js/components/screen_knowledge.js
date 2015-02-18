@@ -164,7 +164,7 @@ define(
 			// Create a slpash backdrop
 			this.backdropDOM = $('<div class="'+config.css['backdrop']+'"></div>');
 			hostDOM.append(this.backdropDOM);
-			this.backdrop = R.instanceComponent("backdrop.explain", this.backdropDOM);
+			this.backdrop = R.instanceComponent("backdrop.knowledge", this.backdropDOM);
 
 			// ---------------------------------
 			// Create foreground DOM
