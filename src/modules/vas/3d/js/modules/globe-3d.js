@@ -1,7 +1,7 @@
 
 define(
 
-	[ "three", "three-extras", "core/registry", "core/base/component" ], 
+	[ "three", "three-extras", "vas/core/registry", "vas/core/base/component" ], 
 
 	function(THREE, THREEx, R, Component ) {
 

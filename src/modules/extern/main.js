@@ -26,7 +26,7 @@ require.config({
 		},
 		{
 			'name'		: 'three-extras',
-			'location'	: 'extern/three-extras/js'
+			'location'	: 'extern/three-extras'
 		},
 		{
 			'name'		: 'bootstrap',

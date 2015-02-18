@@ -43,16 +43,19 @@ requirejs(['require', 'extern', 'core', 'vas', 'tootr'],
 			], 
 			function($, main) {
 
+				console.log("Loaded!");
 				$(function() {
+					console.log("Initializing...");
 					// Initialize VAS 
 					main.initialize(function() {
 						// Wait until VAS is ready and run it
+						console.log("Running...");
 						main.run();
 					});
 				});
 
 			}
 		);
-		
+
 	}
 );
