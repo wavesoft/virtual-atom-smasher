@@ -35,11 +35,20 @@
 	packages: [
 
 		/////////////////////////////////
+		// From app-game.js
+		/////////////////////////////////
+		'extern',
+		'core',
+		'vas',
+		{
+			'name': 'tootr',
+			'location': 'tootr/js'
+		},
+
+		/////////////////////////////////
 		// From core/vas.js
 		/////////////////////////////////
 
-		'extern',
-		'core',
 		{
 			'name': 'vas/core',
 			'location': 'vas/core/js'
@@ -57,13 +66,9 @@
 		// From core/main.js
 		/////////////////////////////////
 
-		'extern',
-		'core',
-		'vas',
-		{
-			'name': 'tootr',
-			'location': 'tootr/js'
-		},
+		"core/db",
+		"core/util",
+		"core/analytics",
 
 		/////////////////////////////////
 		// From extern/main.js
