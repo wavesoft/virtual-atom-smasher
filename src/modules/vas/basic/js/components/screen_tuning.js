@@ -56,8 +56,8 @@ define(
 
 			// Create a description vrame
 			var descFrame = this.descFrame = $('<div class="description-frame visible"></div>').appendTo(hostDOM);
-			this.descTitle = $('<h1>This is a header</h1>').appendTo(descFrame);
-			this.descBody = $('<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ornare eu ex consectetur feugiat. Pellentesque quis dolor sed lacus pellentesque euismod lacinia eget urna. Vestibulum ipsum lorem, posuere in dignissim ac, sollicitudin eu odio. Suspendisse ac porta turpis. Etiam nec consequat mauris, at placerat urna. Nam suscipit nisl eget nisi semper, quis aliquet sem interdum. Proin condimentum nunc vel imperdiet vehicula.</div>').appendTo(descFrame);
+			this.descTitle = $('<h1>No part selected</h1>').appendTo(descFrame);
+			this.descBody = $('<div>Please move your mouse over a machine part to see more information.</div>').appendTo(descFrame);
 
 			// Bind listeners
 			this.machine.on('hover', (function(id) {
