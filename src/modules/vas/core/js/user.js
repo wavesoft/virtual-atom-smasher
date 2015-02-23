@@ -236,7 +236,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 						this.trigger("flash", 
 							"You got <strong>"+response['credits']+'</strong> credits', 
 							reason,
-							Config.images_url + '/flash-icons/coins.png'
+							'flash-icons/coins.png'
 							);
 					}
 

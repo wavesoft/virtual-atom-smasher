@@ -2,14 +2,19 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry","vas/core/base/component", "vas/core/db" ], 
+	["jquery", "require", "vas/core/registry","vas/core/base/component", "vas/core/db" ], 
 
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
  	 * @exports vas-basic/overlay/flash
 	 */
-	function(config, R, Component, DB) {
+	function(config, require, R, Component, DB) {
+
+		/**
+		 * Find base directory for images
+		 */
+		var img_dir = require.toUrl(".").split("/").slice(0,-2).join("/") + "/img";
 
 		/**
 		 * The default tunable body class
@@ -39,7 +44,7 @@ define(
 		 * Reposition flashDOM on resize
 		 */
 		OverlayFlash.prototype.onMessageDefined = function( image, title, body ) {
-			this.domImg.css("background-image", "url("+image+")");
+			this.domImg.css("background-image", "url("+img_dir+'/'+image+")");
 			this.domTitle.html(title);
 			this.domBody.html(body);
 		}

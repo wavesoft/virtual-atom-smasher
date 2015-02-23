@@ -103,6 +103,16 @@ define(
 				this.trigger("login", fName.val(), fPassword.val() );
 			}).bind(this));
 
+			// Handle log-in with enter
+			fName.keypress(function(e) {
+				if (e.keyCode == 13)
+					btnLogin.click();
+			});
+			fPassword.keypress(function(e) {
+				if (e.keyCode == 13)
+					btnLogin.click();
+			});
+
 		}
 		LoginScreen.prototype = Object.create( C.LoginScreen.prototype );
 

@@ -2,14 +2,19 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/config", "vas/core/registry","vas/core/base/data_widget", "vas/core/db", "core/analytics/analytics" ], 
+	["jquery", "require", "vas/config", "vas/core/registry","vas/core/base/data_widget", "vas/core/db", "core/analytics/analytics" ], 
 
 	/**
 	 * This is the default component for displaying information regarding a tunable
 	 *
  	 * @exports vas-basic/infoblock/tunable
 	 */
-	function($, Config, R, DataWidget, DB, Analytics) {
+	function($, require, Config, R, DataWidget, DB, Analytics) {
+
+		/**
+		 * Find base directory for images
+		 */
+		var img_dir = require.toUrl(".").split("/").slice(0,-2).join("/") + "/img";
 
 		/**
 		 * Replace book macros (helpers for specifying images in the description)
@@ -17,7 +22,7 @@ define(
 		function replace_macros(body) {
 			var text = body;
 			// Replace macros
-			text = text.replace(/\${images}/gi, Config.images_url);
+			text = text.replace(/\${images}/gi, img_dir);
 			// Return text
 			return text;
 		}

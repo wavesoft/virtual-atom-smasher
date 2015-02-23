@@ -612,7 +612,7 @@ define(
 								UI.showFlash(
 									'Knowledge expanded',
 									'You have just expanded your knowlege and unlocked the topic <em>'+knowlegeDetails['info']['title']+'</em>',
-									config['images_url']+'/flash-icons/books.png'
+									'/flash-icons/books.png'
 								);
 
 								// Display course
