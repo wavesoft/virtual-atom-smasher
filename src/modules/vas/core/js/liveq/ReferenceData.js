@@ -127,9 +127,9 @@ define(
 				hc.url = config['urldesc'];
 
 				// Get PNG for title
-				hc.imgTitle = reader.getData('image/png');
-				hc.imgXLabel = reader.getData('image/png');
-				hc.imgYLabel = reader.getData('image/png');
+				hc.imgTitle = config['titleImg'];
+				hc.imgXLabel = config['labelXImg'];
+				hc.imgYLabel = config['labelYImg'];
 
 				// Get reference histogram
 				hc.data = HistogramData.fromReader( reader );

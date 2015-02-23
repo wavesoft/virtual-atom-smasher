@@ -89,21 +89,15 @@ define(
 			var protoVersion = configReader.getUint8();
 
 			// Handle protocols according to versions
-			if (protoVersion == 1) {
+			if (protoVersion == 2) {
 
 				var flags = configReader.getUint8(),
 					numEvents = configReader.getUint16(),
 					numHistos = configReader.getUint32();
 
-				// Fetch configuration and links data
-				var tunablesJSON = configReader.getJSON(),
-					linksJSON = configReader.getJSON();
-				if (tunablesJSON) {
-					this.trigger('tunablesUpdated', tunablesJSON, linksJSON);
-				}
-
 				// Read histograms
 				for (var j=0; j<numHistos; j++) {
+					
 					// Fetch histogram from buffer
 					var histo = ReferenceData.fromReader( configReader );
 
@@ -251,14 +245,6 @@ define(
 		 * @param {module:liveq/HistogramData~HistogramData} histogram - The histogram data
 		 * @param {module:liveq/ReferenceData~ReferenceData} reference - The reference data
 		 * @event module:liveq/LabProtocol~LabProtocol#histogramRemoved		
-		 */
-
-		/**
-		 * This event is fired when the tunables table has arrived.
-		 *
-		 * @param {object} tunables - Tunables dictionary
-		 * @param {object} correlation - Correlation information
-		 * @event module:liveq/LabProtocol~LabProtocol#tunablesUpdated		
 		 */
 
 		/**
