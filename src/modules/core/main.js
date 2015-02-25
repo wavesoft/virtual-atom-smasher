@@ -6,7 +6,8 @@ require.config({
 	packages: [
 		"core/db",
 		"core/util",
-		"core/analytics"
+		"core/analytics",
+		"core/ui",
 	]
 
 });

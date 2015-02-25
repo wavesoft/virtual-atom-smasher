@@ -5,19 +5,29 @@ define(
 	/**
 	 * Dependencies
 	 */
-	["jquery", "require", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/db", "vas/core/ui", "vas/core/user" ],
+	[
+		"jquery", "require", "vas/config", 
+		"vas/core/registry", 
+		"vas/core/base/components", 
+		"vas/core/db", 
+		"vas/core/ui", 
+		"vas/core/user",
+
+		"core/ui/view",
+		"text!vas/basic/tpl/register.html" 
+	],
 
 	/**
 	 * Basic version of the home screen
 	 *
 	 * @exports vas-basic/components/tuning_screen
 	 */
-	function($, require, config, R, C, DB, UI, User, LiveQCore) {
+	function($, require, config, R, C, DB, UI, User, View, tplLogin) {
 
 		/**
 		 * Find base directory for images
 		 */
-		var img_dir = require.toUrl(".").split("/").slice(0,-2).join("/") + "/img";
+		var img_dir = require.toUrl("vas/basic/img");
 
 		/**
 		 * Registration scren
@@ -25,13 +35,23 @@ define(
 		var RegisterScreen = function(hostDOM) {
 			C.RegisterScreen.call(this, hostDOM);
 
-			// 
+			// Add register class on the host DOM
 			hostDOM.addClass("register");
+
+
 			/*
 			$('<div class="side-left"></div>').appendTo(this.hostDOM);
 			var panel = $('<div class="side-right"></div>').appendTo(this.hostDOM);
 			*/
 			var panel = this.ePanel = $('<div class="side-full panel"></div>').appendTo(this.hostDOM);
+
+			// Setup View
+			this.view = new View(tplLogin, panel);
+
+
+			this.view.select("")
+
+			this.view.update();
 
 			// Setup the registration form
 			$('<h1>Register</h1>').appendTo(panel);
@@ -206,11 +226,11 @@ define(
 			this.eAlert.hide();
 
 			// Get obvious fields
-			profile.username = this.fUsername.val();
-			profile.displayName = this.fDisplayName.val();
-			profile.email = this.fEmail.val();
-			profile.gender = this.fGender.val();
-			profile.password = this.fPassword1.val();
+			profile.username = this.view.valueOf("#f-username"); //this.fUsername.val();
+			profile.displayName = this.view.valueOf("#f-displayname"); //this.fDisplayName.val();
+			profile.email = this.view.valueOf("#f-email"); //this.fEmail.val();
+			profile.gender = this.view.valueOf("#f-gender"); //this.fGender.val();
+			profile.password = this.view.valueOf("#f-password1"); //this.fPassword1.val();
 			profile.research = this.fResearch.is(":checked");
 
 			// Validate blank fields

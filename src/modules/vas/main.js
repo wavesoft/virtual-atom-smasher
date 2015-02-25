@@ -16,6 +16,16 @@ require.config({
 			'name': 'vas/3d',
 			'location': 'vas/3d/js'
 		},
-	]
+	],
+
+	paths: {
+
+		'vas/core/img' : 'vas/core/img',
+		
+		'vas/basic/img' : 'vas/basic/img',
+		'vas/basic/tpl' : 'vas/basic/tpl',
+		'vas/basic/css' : 'vas/basic/css',
+
+	}
 
 });

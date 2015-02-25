@@ -20,8 +20,9 @@ requirejs.config({
 
 	map: {
 		'*': {
-			'less': 'extern/require-less/js/less'
-		}
+			'less': 'extern/require-less/js/less',
+			'text': 'extern/require-text/js/text-2.0.14'
+		},
 	}
 
 });

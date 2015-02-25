@@ -80,7 +80,7 @@ define(
 				a.click((function(imageURL) {
 					return function() {
 						this.canvas.addImage( imageURL );
-						jQuery("#editor-modal-image").modal('hide');
+						$("#editor-modal-image").modal('hide');
 					}
 				})(url).bind(this));
 				$("#editor-modal-images-host").append(a);
@@ -146,7 +146,7 @@ define(
 						if (data['res'] == 'ok') {
 							createIcon( data['file'] );
 							this.canvas.addImage( data['file'] );
-							jQuery("#editor-modal-image").modal('hide');
+							$("#editor-modal-image").modal('hide');
 						}
 					}).bind(this)
 				});
@@ -158,7 +158,7 @@ define(
 					textFamily = $("#editor-text-family").val();
 
 				this.canvas.addText( textString, textSize, textFamily );
-				jQuery("#editor-modal-text").modal('hide');
+				$("#editor-modal-text").modal('hide');
 			}).bind(this));
 
 			var updateTextPreview = function() {

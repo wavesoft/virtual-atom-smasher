@@ -9,36 +9,50 @@ define(["vas/core/api/interface", "vas/config"],
 		 * APISocket Database Record
 		 */
 
-		var APIDocument = function(parent, name) {
+		var DBTable = function(parent, name) {
 			this.parent = parent;
 			this.name = name;
 		}
 
 		/**
- 		 * Get a document from the document
+ 		 * Get a document from the table
 		 */
-		APIDocument.prototype.get = function(index, cb) {
+		DBTable.prototype.get = function(index, cb) {
 			
-			// Send document/get action
-			this.parent.sendAction("doc.get", {
-				'document': this.name
+			// Send table/get action
+			this.parent.sendAction("table.get", {
+				'table': this.name,
+				'index': index,
 			}, function(data) {
-
+				if (data['status'] != 'ok') {
+					// Callback with the error
+					if (cb) cb(null, data['error'], data['error_id']);
+				} else {
+					// Callback with the document
+					if (cb) cb(data['doc']);
+				}
 			});
 
 		}
 
 		/**
- 		 * Store a record in the document
+ 		 * Store a record in the table
 		 */
-		APIDocument.prototype.put = function(index, doc, cb) {
+		DBTable.prototype.put = function(index, doc, cb) {
 
-			// Send document/put action
-			this.parent.sendAction("doc.put", {
-				'document': this.name,
-				'data': doc
+			// Send table/put action
+			this.parent.sendAction("table.put", {
+				'table': this.name,
+				'index': index,
+				'doc': doc
 			}, function(data) {
-
+				if (data['status'] != 'ok') {
+					// Callback with the error
+					if (cb) cb(false, data['error'], data['error_id']);
+				} else {
+					// Callback with the acknowledge
+					if (cb) cb(true);
+				}
 			});
 
 		}
@@ -46,15 +60,22 @@ define(["vas/core/api/interface", "vas/config"],
 		/**
  		 * Return all records from the database
 		 */
-		APIDocument.prototype.all = function(cb) {
+		DBTable.prototype.all = function(cb) {
 			
 		}
 
 		/**
  		 * Filter documents using the given query
 		 */
-		APIDocument.prototype.filter = function(query, cb) {
+		DBTable.prototype.filter = function(query, cb) {
 			
+		}
+
+		/**
+ 		 * Close table when we are done
+		 */
+		DBTable.prototype.close = function() {
+
 		}
 
 
@@ -93,9 +114,9 @@ define(["vas/core/api/interface", "vas/config"],
 		/**
 		 * Open a document
 		 */
-		APIDatabase.prototype.openDocument = function( name ) {
+		APIDatabase.prototype.openTable = function( name ) {
 			// Create a document instance and return
-			var doc = new APIDocument(this, name);
+			var doc = new DBTable(this, name);
 			return doc;
 		}
 
