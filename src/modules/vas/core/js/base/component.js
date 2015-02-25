@@ -1,5 +1,5 @@
 
-define(["core/util/event_base", "vas/config"], 
+define(["jquery", "core/util/event_base", "core/ui/view", "vas/config"], 
 
 	/**
 	 * This module provides the base component class which is used for derriving all of the
@@ -7,7 +7,7 @@ define(["core/util/event_base", "vas/config"],
 	 *
 	 * @exports core/base/component
 	 */
-	function (EventBase, config) {
+	function ($, EventBase, View, config) {
 
 		/**
 		 * Instantiate a new componet
@@ -21,6 +21,7 @@ define(["core/util/event_base", "vas/config"],
 
 			// Initialize superclass
 			EventBase.call(this);
+			View.call(this);
 
 			// Keep reference of the host DOM element
 			this.hostDOM = hostDOM;

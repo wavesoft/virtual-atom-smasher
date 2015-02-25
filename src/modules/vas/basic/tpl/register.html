@@ -1,113 +1,117 @@
-<h1>Register</h1>
+<div class="side-full panel">
+  <h1>Register</h1>
 
-<p>Thanks for your interest in the Virtual Atom Smasher game. We are going to need
-some information from you in order to prepare your profile.</p>
+  <p>Thanks for your interest in the Virtual Atom Smasher game. We are going to need
+  some information from you in order to prepare your profile.</p>
 
-<div class="alert" style="display: none;"></div>
+  <div class="alert" style="display: none;"></div>
 
-<div class="row">
-  <label for="f-username">User name:</label><input type="text" id="f-username" />
+  <form name="register">
 
-  <div class="details">
-    The username to use for logging into the game.
-  </div>
-</div>
+    <!-- Username -->
+    <div class="row">
+      <label for="f-username">User name:</label><input type="text" id="f-username" name="username" />
+      <div class="details">
+        The username to use for logging into the game.
+      </div>
+    </div>
 
-<div class="row">
-  <label for="f-displayname">Display name:</label><input type="text" id=
-  "f-displayname" />
+    <!-- Display Name -->
+    <div class="row">
+      <label for="f-displayname">Display name:</label><input type="text" id="f-displayname" />
+      <div class="details">
+        How everone will see you.
+      </div>
+    </div>
 
-  <div class="details">
-    How everone will see you.
-  </div>
-</div>
+    <!-- E-mail -->
+    <div class="row">
+      <label for="f-email">E-Mail:</label><input type="text" id="f-email" />
+      <div class="details">
+        We will use this e-mail address to send you notifications regarding in-game events.
+      </div>
+    </div>
 
-<div class="row">
-  <label for="f-email">E-Mail:</label><input type="text" id="f-email" />
+    <!-- Password -->
+    <div class="row">
+      <label for="f-password1">Password:</label><input type="password" id="f-password1" />
+    </div>
+    <div class="row">
+      <label for="f-password2">Password (Repeat):</label><input type="password" id="f-password2" />
+      <div class="details">
+        This is your account password. Be careful not to forget it!
+      </div>
+    </div>
 
-  <div class="details">
-    We will use this e-mail address to send you notifications regarding in-game
-    events.
-  </div>
-</div>
+    <!--  -->
+    <div class="row">
+      <label for="f-birth-day">Birth Year:</label>
+      <select id="f-birth-day">
+      </select>
+      <select id="f-birth-month">
+      </select>
+      <select id="f-birth-year">
+      </select>
+      <div class="details">
+        This is the name under everone will see you.
+      </div>
+    </div>
 
-<div class="row">
-  <label for="f-password1">Password:</label><input type="password" id=
-  "f-password1" />
-</div>
+    <div class="row">
+      <label for="f-gender">I am a:</label><select id="f-gender">
+        <option value="guy">
+          Guy
+        </option>
 
-<div class="row">
-  <label for="f-password2">Password (Repeat):</label><input type="password" id=
-  "f-password2" />
+        <option value="girl">
+          Girl
+        </option>
 
-  <div class="details">
-    This is your account password. Be careful not to forget it!
-  </div>
-</div>
+        <option value="man">
+          Man
+        </option>
 
-<div class="row">
-  <label for="f-birth-month">Birth Date:</label><select id="f-birth-month"></select>
-  <select id="f-birth-month"></select>
-  <select id="f-birth-month"></select>
+        <option value="woman">
+          Woman
+        </option>
 
-  <div class="details">
-    This is the name under everone will see you.
-  </div>
-</div>
+        <option value="unknown">
+          Won't tell
+        </option>
+      </select>
 
-<div class="row">
-  <label for="f-gender">I am a:</label><select id="f-gender">
-    <option value="guy">
-      Guy
-    </option>
+      <div class="details">
+        In order to customize the messages for you.
+      </div>
+    </div>
 
-    <option value="girl">
-      Girl
-    </option>
+    <div class="row">
+      <label for="f-avatar">Avatar:</label>
+      <div class="input avatar-list">
+      </div>
 
-    <option value="man">
-      Man
-    </option>
+      <div class="details">
+        Pick your favourite avatar.
+      </div>
+    </div>
 
-    <option value="woman">
-      Woman
-    </option>
+    <div class="row">
+      <label for="f-research">Count me in:</label><input id="f-research" type="checkbox"
+      checked="checked" value="1" />
 
-    <option value="unknown">
-      Won't tell
-    </option>
-  </select>
+      <div class="details">
+        Check the box above if you allow CERN and it's partners to collect anonymous
+        information regarding your game experience in order to improve future versions of
+        Virtual Atom Smasher.
+      </div>
+    </div>
 
-  <div class="details">
-    In order to customize the messages for you.
-  </div>
-</div>
+    <div class="row">
+      <div class="input">
+        <button class="btn-shaded btn-blue btn-lg btn-register">Register</button><button class=
+        "btn-shaded btn-teal btn-lg btn-cancel">Cancel</button>
+      </div>
+    </div>
 
-<div class="row">
-  <label for="f-avatar">Avatar:</label>
-
-  <div class="input avatar-list">
-  </div>
-
-  <div class="details">
-    Pick your favourite avatar.
-  </div>
-</div>
-
-<div class="row">
-  <label for="f-research">Count me in:</label><input id="f-research" type="checkbox"
-  checked="checked" value="1" />
-
-  <div class="details">
-    Check the box above if you allow CERN and it's partners to collect anonymous
-    information regarding your game experience in order to improve future versions of
-    Virtual Atom Smasher.
-  </div>
-</div>
-
-<div class="row">
-  <div class="input">
-    <button class="btn-shaded btn-blue btn-lg">Register</button><button class=
-    "btn-shaded btn-teal btn-lg">Cancel</button>
-  </div>
+  </form>
 </div>

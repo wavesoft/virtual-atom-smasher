@@ -38,154 +38,94 @@ define(
 			// Add register class on the host DOM
 			hostDOM.addClass("register");
 
+			// Load view template
+			this.loadTemplate( tplLogin );
 
-			/*
-			$('<div class="side-left"></div>').appendTo(this.hostDOM);
-			var panel = $('<div class="side-right"></div>').appendTo(this.hostDOM);
-			*/
-			var panel = this.ePanel = $('<div class="side-full panel"></div>').appendTo(this.hostDOM);
+			///////////////////////////////
+			// View Data
+			///////////////////////////////
 
-			// Setup View
-			this.view = new View(tplLogin, panel);
-
-
-			this.view.select("")
-
-			this.view.update();
-
-			// Setup the registration form
-			$('<h1>Register</h1>').appendTo(panel);
-			$('<p>Thanks for your interest in the Virtual Atom Smasher game. We are going to need some information from you in order to prepare your profile.</p>').appendTo(panel);
-
-			this.eAlert = $('<div class="alert"></div>').appendTo(panel).hide();
-
-			// FIELD: Username
-			$('<div class="row"></div>')
-				.append($('<label for="f-username">User name:</label>'))
-				.append(this.fUsername = $('<input type="text" id="f-username" />'))
-				.append($('<div class="details">The username to use for logging into the game.</div>'))
-				.appendTo(panel);
-
-			// FIELD: Display name
-			$('<div class="row"></div>')
-				.append($('<label for="f-displayname">Display name:</label>'))
-				.append(this.fDisplayName = $('<input type="text" id="f-displayname" />'))
-				.append($('<div class="details">How everone will see you.</div>'))
-				.appendTo(panel);
-
-			// FIELD: E-Mail address
-			$('<div class="row"></div>')
-				.append($('<label for="f-email">E-Mail:</label>'))
-				.append(this.fEmail = $('<input type="text" id="f-email" />'))
-				.append($('<div class="details">We will use this e-mail address to send you notifications regarding in-game events.</div>'))
-				.appendTo(panel);
-
-			// FIELD: Password
-			$('<div class="row"></div>')
-				.append($('<label for="f-password1">Password:</label>'))
-				.append(this.fPassword1 = $('<input type="password" id="f-password1" />'))
-				.appendTo(panel);
-			$('<div class="row"></div>')
-				.append($('<label for="f-password2">Password (Repeat):</label>'))
-				.append(this.fPassword2 = $('<input type="password" id="f-password2" />'))
-				.append($('<div class="details">This is your account password. Be careful not to forget it!</div>'))
-				.appendTo(panel);
-
-			// FIELD: Birth date
-			$('<div class="row"></div>')
-				.append($('<label for="f-birth-month">Birth Date:</label>'))
-				.append(this.fBirthDay = $('<select id="f-birth-month" />'))
-				.append(this.fBirthMonth = $('<select id="f-birth-month" />'))
-				.append(this.fBirthYear = $('<select id="f-birth-month" />'))
-				.append($('<div class="details">This is the name under everone will see you.</div>'))
-				.appendTo(panel);
-
-			// Populate birthdate grid
-			for (var i=1; i<=31; i++) {
-				$('<option value="'+i+'">'+i+'</option>').appendTo(this.fBirthDay);
-			}
-
-			$('<option value="1">January</option>').appendTo(this.fBirthMonth);
-			$('<option value="2">February</option>').appendTo(this.fBirthMonth);
-			$('<option value="3">March</option>').appendTo(this.fBirthMonth);
-			$('<option value="4">April</option>').appendTo(this.fBirthMonth);
-			$('<option value="5">May</option>').appendTo(this.fBirthMonth);
-			$('<option value="6">June</option>').appendTo(this.fBirthMonth);
-			$('<option value="7">July</option>').appendTo(this.fBirthMonth);
-			$('<option value="8">August</option>').appendTo(this.fBirthMonth);
-			$('<option value="9">September</option>').appendTo(this.fBirthMonth);
-			$('<option value="10">October</option>').appendTo(this.fBirthMonth);
-			$('<option value="11">November</option>').appendTo(this.fBirthMonth);
-			$('<option value="12">December</option>').appendTo(this.fBirthMonth);
-
+			// Calculate birth year data
+			this.viewData['birth_year'] = [];
 			var y = new Date().getFullYear();
 			for (var i=y-100; i<=y; i++) {
-				var s = $('<option value="'+i+'">'+i+'</option>').appendTo(this.fBirthYear);
-				if (i == y-20) s.attr("selected","selected");
+				this.viewData['birth_year'].push(i);
 			}
 
-			// FIELD: Gender
+			// Set view data
+			this.setViewData({
 
-			$('<div class="row"></div>')
-				.append($('<label for="f-gender">I am a:</label>'))
-				.append(this.fGender = $('<select id="f-gender" />'))
-				.append($('<div class="details">In order to customize the messages for you.</div>'))
-				.appendTo(panel);
+			});
 
-			$('<option value="guy">Guy</option>').appendTo(this.fGender);
-			$('<option value="girl">Girl</option>').appendTo(this.fGender);
-			$('<option value="man">Man</option>').appendTo(this.fGender);
-			$('<option value="woman">Woman</option>').appendTo(this.fGender);
-			$('<option value="unknown">Won\'t tell</option>').appendTo(this.fGender);
+			// Hide Alert
+			this.view.select(".alert", function(dom) {
+				dom.hide();
+			});
 
-			// FIELD: Avatar
+			// Populate birth date
+			this.view.select("#f-birth-day", function(dom) {
+				for (var i=1; i<=31; i++) {
+					$('<option value="'+i+'">'+i+'</option>').appendTo(dom);
+				}
+			});
 
-			$('<div class="row"></div>')
-				.append($('<label for="f-avatar">Avatar:</label>'))
-				.append(this.fAvatarList = $('<div class="input avatar-list"></div>'))
-				.append($('<div class="details">Pick your favourite avatar.</div>'))
-				.appendTo(panel);
+			// Populate birth month
+			this.view.select("#f-birth-month", function(dom) {
+				$('<option value="1">January</option>').appendTo(dom);
+				$('<option value="2">February</option>').appendTo(dom);
+				$('<option value="3">March</option>').appendTo(dom);
+				$('<option value="4">April</option>').appendTo(dom);
+				$('<option value="5">May</option>').appendTo(dom);
+				$('<option value="6">June</option>').appendTo(dom);
+				$('<option value="7">July</option>').appendTo(dom);
+				$('<option value="8">August</option>').appendTo(dom);
+				$('<option value="9">September</option>').appendTo(dom);
+				$('<option value="10">October</option>').appendTo(dom);
+				$('<option value="11">November</option>').appendTo(dom);
+				$('<option value="12">December</option>').appendTo(dom);
+			});
 
-			// Populate the avatars table
-			var self = this,
-				avatars = ['model-1.png', 'model-2.png', 'model-3.png', 'model-4.png', 
-				           'model-5.png', 'model-6.png', 'model-7.png'];
-			for (var i=0; i<avatars.length; i++) {
-				var item = $('<div class="item" style="background-image: url('+img_dir+'/avatars/'+avatars[i]+')"></div>')
-								.data("avatar", avatars[i])
-								.appendTo(this.fAvatarList);
-				item.click(function() {
-					self.fAvatarList.find(".item").removeClass("selected");
-					$(this).addClass("selected");
-				});
-				if (i == 0) item.addClass("selected");
-			}
+			// Populate birth year
+			this.view.select("#f-birth-year", function(dom) {
+			});
 
-			// FIELD: Accept to be a research patrtner
+			// Populate avatars table
+			this.view.select(".input.avatar-list", function(dom) {
 
-			$('<div class="row"></div>')
-				.append($('<label for="f-research">Count me in:</label>'))
-				.append(this.fResearch = $('<input id="f-research" type="checkbox" checked="checked" value="1" />'))
-				.append($('<div class="details">Check the box above if you allow CERN and it\'s partners to collect anonymous information regarding your game experience in order to improve future versions of Virtual Atom Smasher.</div>'))
-				.appendTo(panel);
+				// Populate the avatars table
+				var self = this,
+					avatars = ['model-1.png', 'model-2.png', 'model-3.png', 'model-4.png', 
+					           'model-5.png', 'model-6.png', 'model-7.png'];
+				for (var i=0; i<avatars.length; i++) {
+					var item = $('<div class="item" style="background-image: url('+img_dir+'/avatars/'+avatars[i]+')"></div>')
+									.data("avatar", avatars[i])
+									.appendTo(dom);
+					item.click(function() {
+						dom.find(".item").removeClass("selected");
+						$(this).addClass("selected");
+					});
+					if (i == 0) item.addClass("selected");
+				}
 
-			$('<div class="row"></div>')
-				.append(
-					$('<div class="input"></div>')
-					.append(this.btnRegister = $('<button class="btn-shaded btn-blue btn-lg">Register</button>'))
-					.append(this.btnCancel = $('<button class="btn-shaded btn-teal btn-lg">Cancel</button>'))
-				)
-				.appendTo(panel);
+			});
 
-			this.btnCancel.click((function() {
-				this.trigger('cancel');
+			// Bind buttons
+			this.view.select(".btn-cancel", (function(dom) {
+				dom.click((function() {
+					this.trigger('cancel');
+				}).bind(this));
 			}).bind(this));
-			this.btnRegister.click((function() {
-				var profile = this.compileProfile();
-				if (!profile) return;
-				console.log(profile);
-				this.trigger('register', profile);
+			this.view.select(".btn-register", (function(dom) {
+				dom.click((function() {
+					var profile = this.compileProfile();
+					if (!profile) return;
+					console.log(profile);
+					this.trigger('register', profile);
+				}).bind(this));
 			}).bind(this));
+
+			// Render template
+			this.view.update();
 
 		}
 		RegisterScreen.prototype = Object.create( C.RegisterScreen.prototype );
@@ -231,10 +171,10 @@ define(
 			profile.email = this.view.valueOf("#f-email"); //this.fEmail.val();
 			profile.gender = this.view.valueOf("#f-gender"); //this.fGender.val();
 			profile.password = this.view.valueOf("#f-password1"); //this.fPassword1.val();
-			profile.research = this.fResearch.is(":checked");
+			profile.research = this.view.valueOf("#f-research");
 
 			// Validate blank fields
-			var noblank = [this.fUsername, this.fDisplayName, this.fEmail, this.fPassword1];
+			var noblank = this.view.select("#f-username,#f-displayname,#f-email,#f-gender,#f-password1,#f-research");
 			for (var i=0; i<noblank.length; i++) {
 				if (noblank[i].val() == "") {
 					this.markInvalid(noblank[i]);
@@ -246,24 +186,28 @@ define(
 			// Validate e-mail
 			var rx_mail = /^\w[-._\w]*\w@\w[-._\w]*\w\.\w{2,3}$/;
 			if (!profile.email.match(rx_mail)) {
-				this.markInvalid(this.fEmail);
+				this.markInvalid(this.view.select("#f-email"));
 				this.onRegistrationError("The e-mail address is not valid!");
 				return null;
 			}
 
 			// Validate password
 			profile.password = this.fPassword1.val();
-			if (this.fPassword2.val() != profile.password) {
-				this.markInvalid(this.fPassword2);
+			if (this.view.valueOf("#f-password2") != profile.password) {
+				this.markInvalid(this.view.select("#f-password2"));
 				this.onRegistrationError("The passwords do not match!");
 				return null;
 			}
 
 			// Pick avatar
-			profile.avatar = this.fAvatarList.find(".selected").data("avatar");
+			profile.avatar = this.view.select(".input.avatar-list .selected").data("avatar");
 
 			// Compile birth date in UNIX timestamp
-			profile.birthdate = Date.parse(this.fBirthYear.val() + "-" + this.fBirthMonth.val() + "-" + this.fBirthDay.val()) / 1000;
+			profile.birthdate = Date.parse(
+					this.view.valueOf("#f-birth-year") + "-" + 
+					this.view.valueOf("#f-birth-month") + "-" +
+					this.view.valueOf("#f-birth-day")
+				) / 1000;
 
 			return profile;
 		};

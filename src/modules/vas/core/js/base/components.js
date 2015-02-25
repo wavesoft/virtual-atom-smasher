@@ -1,5 +1,5 @@
 
-define(["vas/config", "vas/core/base/component" ], 
+define(["vas/config", "vas/core/base/component", "vas/core/base/view" ], 
 
 	/**
 	 * This module provides the base classes for various root
@@ -30,7 +30,7 @@ define(["vas/config", "vas/core/base/component" ],
      * );
  	 * @exports core/base/components
 	 */
-	function(config, Component) {
+	function(config, Component, View) {
 
 
 		////////////////////////////////////////////////////////////
@@ -399,12 +399,12 @@ define(["vas/config", "vas/core/base/component" ],
 		var RegisterScreen = function( hostDOM ) {
 
 			// Initialize base class
-			Component.call(this, hostDOM);
+			View.call(this, hostDOM);
 
 		}
 
-		// Subclass from Component
-		RegisterScreen.prototype = Object.create( Component.prototype );
+		// Subclass from View
+		RegisterScreen.prototype = Object.create( View.prototype );
 		
 		/**
 		 * A registration error occured
