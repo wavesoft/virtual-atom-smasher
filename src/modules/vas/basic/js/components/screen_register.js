@@ -99,6 +99,10 @@ define(
 				}).bind(this));
 			}).bind(this));
 
+			///////////////////////////////
+			// Render
+			///////////////////////////////
+
 			// Render template
 			this.renderView();
 
@@ -109,9 +113,9 @@ define(
 		 * Collect all the fields into a profile object
 		 */
 		RegisterScreen.prototype.onRegistrationError = function(text) {
-			this.ePanel.scrollTop(0);
-			this.eAlert.html(text);
-			this.eAlert.fadeIn();
+			this.hostDOM.scrollTop(0);
+			this.select(".alert").html(text);
+			this.select(".alert").fadeIn();
 		}
 
 		/**
@@ -137,8 +141,8 @@ define(
 			var profile = {};
 
 			// Reset state
-			this.ePanel.find(".invalid").removeClass("invalid");
-			this.eAlert.hide();
+			this.select(".invalid").removeClass("invalid");
+			this.select(".alert").hide();
 
 			// Get obvious fields
 			profile.username = this.valueOf("#f-username"); //this.fUsername.val();
@@ -167,7 +171,7 @@ define(
 			}
 
 			// Validate password
-			profile.password = this.fPassword1.val();
+			profile.password = this.valueOf("#f-password1");
 			if (this.valueOf("#f-password2") != profile.password) {
 				this.markInvalid(this.select("#f-password2"));
 				this.onRegistrationError("The passwords do not match!");
