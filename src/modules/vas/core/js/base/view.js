@@ -7,7 +7,7 @@ define(["jquery", "vas/core/base/component", "core/ui/view"],
 	 *
 	 * @exports core/base/view
 	 */
-	function ($, Component, View) {
+	function ($, Component, BaseView) {
 
 		/**
 		 * Instantiate a new View
@@ -21,12 +21,12 @@ define(["jquery", "vas/core/base/component", "core/ui/view"],
 
 			// Initialize superclasses
 			Component.call(this, hostDOM);
-			View.call(this);
+			BaseView.call(this, false, hostDOM);
 
 		}
 
 		// Subclass from EventBase
-		View.prototype = $.extend(Component.prototype, View.prototype);
+		View.prototype = $.extend(Component.prototype, BaseView.prototype);
 
 		// Return component
 		return View;

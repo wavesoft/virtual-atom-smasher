@@ -2,14 +2,14 @@
 define(
 
 	// Requirements
-	[ "jquery", "popcorn", "vas/core/ui", "vas/core/registry", "vas/core/base/agent" ],
+	[ "require", "jquery", "popcorn", "vas/core/ui", "vas/core/registry", "vas/core/base/agent" ],
 
 	/**
 	 * Basic version of the home screen
 	 *
 	 * @exports basic/components/tvhead_agent
 	 */
-	function($, Popcorn, UI, R, VisualAgent) {
+	function(require, $, Popcorn, UI, R, VisualAgent) {
 
 
 		/**

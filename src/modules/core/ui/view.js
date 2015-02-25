@@ -95,7 +95,7 @@ define(["mustache", "jquery"],
 		/**
 		 * Set a view field
 		 */
-		View.prototype.loadTemplate = function( payload ) {
+		View.prototype.loadTemplate = function( template ) {
 			// Import template
 			this.viewTemplate = String(template);
 			Mustache.parse(this.viewTemplate);
@@ -169,7 +169,7 @@ define(["mustache", "jquery"],
 		/**
 		 * Update view
 		 */
-		View.prototype.render = function() {
+		View.prototype.renderView = function() {
 			var self = this;
 
 			// Render template
@@ -179,7 +179,7 @@ define(["mustache", "jquery"],
 			this.forms = [];
 			this.hostDOM.find("form").each(function(i, elm) {
 				var elm = $(elm),
-					f = { };
+					f = { 'elements': {} };
 
 				// Iterate over input or input-like elements
 				$(elm).find("input,.form-input-list").each(function(i, inpElm) {
@@ -190,6 +190,7 @@ define(["mustache", "jquery"],
 						 name = inpElm.attr("name");
 					if (!name) name = inpElm.data("name");
 					if (!name) name = inpElm.attr("id");
+					if (!name) return;
 
 					// Define property
 					Object.defineProperty(f, name, {
@@ -203,6 +204,9 @@ define(["mustache", "jquery"],
 						}
 					});
 
+					// Store element
+					f.elements[name] = inpElm;
+
 				});
 
 				// Look if we have a name for the form in the fields:
@@ -212,8 +216,8 @@ define(["mustache", "jquery"],
 				if (!name) name = elm.attr("id");
 
 				// If we have a name, add a keyed value for the form
-				self.viewForms.push(f);
-				if (name) self.viewForms[name] = f;
+				self.forms.push(f);
+				if (name) self.forms[name] = f;
 
 			});
 

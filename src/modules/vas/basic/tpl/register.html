@@ -46,11 +46,10 @@
     <!--  -->
     <div class="row">
       <label for="f-birth-day">Birth Year:</label>
-      <select id="f-birth-day">
-      </select>
-      <select id="f-birth-month">
-      </select>
       <select id="f-birth-year">
+        {{#birth_year}}
+        <option value="{{.}}">{{.}}</option>
+        {{/birth_year}}
       </select>
       <div class="details">
         This is the name under everone will see you.
@@ -87,7 +86,7 @@
 
     <div class="row">
       <label for="f-avatar">Avatar:</label>
-      <div class="input avatar-list">
+      <div class="input avatar-list form-input-list">
       </div>
 
       <div class="details">
@@ -98,7 +97,6 @@
     <div class="row">
       <label for="f-research">Count me in:</label><input id="f-research" type="checkbox"
       checked="checked" value="1" />
-
       <div class="details">
         Check the box above if you allow CERN and it's partners to collect anonymous
         information regarding your game experience in order to improve future versions of
@@ -108,8 +106,8 @@
 
     <div class="row">
       <div class="input">
-        <button class="btn-shaded btn-blue btn-lg btn-register">Register</button><button class=
-        "btn-shaded btn-teal btn-lg btn-cancel">Cancel</button>
+        <button class="btn-shaded btn-blue btn-lg btn-register">Register</button>
+        <button class="btn-shaded btn-teal btn-lg btn-cancel">Cancel</button>
       </div>
     </div>
 
