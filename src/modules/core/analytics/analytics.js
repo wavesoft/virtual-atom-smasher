@@ -38,6 +38,15 @@ define(["core/analytics/transaction"],
 		}
 
 		/**
+		 * Disable the analytics functionality entirely
+		 */
+		Analytics.prototype.disable = function() {
+			// Mark as disabled and expired
+			this.expired = true;
+			this.enabled = false;
+		}
+
+		/**
 		 * Trigger an analytics action
 		 */
 		Analytics.prototype.probeListener = function() {
@@ -75,6 +84,9 @@ define(["core/analytics/transaction"],
 
 			// Check for listener
 			this.probeListener();
+
+			// If we are not enabled or expired, exit
+			if (!this.enabled || this.expired) return;
 
 			// Append globals
 			for (k in this.globals)

@@ -27,11 +27,11 @@ define(["vas/core/api/interface", "vas/config"],
 		/**
 		 * Perform login 
 		 */
-		APIAccount.prototype.login = function(username, password, callback) {
+		APIAccount.prototype.login = function(email, password, callback) {
 
 			// Log-in user and fire callback when logged in
 			this.sendAction("login", {
-				'username': username,
+				'email': email,
 				'password': password
 			}, callback);
 			

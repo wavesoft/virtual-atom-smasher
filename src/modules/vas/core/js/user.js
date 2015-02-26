@@ -77,7 +77,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		User.prototype.login = function(params, callback) {
 
 			// Try to log-in the user
-			this.accountIO.login(params['username'], params['password'], (function(response) {
+			this.accountIO.login(params['email'], params['password'], (function(response) {
 				
 				// If something went wrong, fire error callback
 				if (response['status'] != 'ok') {
@@ -96,8 +96,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 					this.vars = profile['vars'];
 					this.initVars();
 
-					// Update user ID on analytics
-					Analytics.setGlobal("userid", params['username']);
+					// If user has an analytics profile, update user ID on analytics
+					if (profile['analytics']) {
+						// Provide tracking UUID to the analytics
+						Analytics.setGlobal("userid", profile['analytics']['uuid']);
+					} else {
+						// Otherwise disable analytics for this session
+						Analytics.disable();
+					}
 
 					// Fire callback
 					if (callback) callback(true);

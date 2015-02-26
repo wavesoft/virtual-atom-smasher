@@ -114,7 +114,7 @@ define(
 		 * Collect all the fields into a profile object
 		 */
 		RegisterScreen.prototype.onRegistrationError = function(text) {
-			this.hostDOM.scrollTop(0);
+			this.hostDOM.children().scrollTop(0);
 			this.select(".alert").html(text);
 			this.select(".alert").fadeIn();
 		}
@@ -148,9 +148,7 @@ define(
 			// Get obvious fields
 			profile.displayName = this.forms[0].displayName; //this.fDisplayName.val();
 			profile.email = this.forms[0].email; //this.fEmail.val();
-			profile.gender = this.forms[0].gender; //this.fGender.val();
 			profile.password = this.forms[0].password1; //this.fPassword1.val();
-			profile.research = this.forms[0].research;
 
 			// Validate blank fields
 			var noblank = ['password2','password1','email','displayName'],
@@ -188,8 +186,16 @@ define(
 			// Pick avatar
 			profile.avatar = this.forms[0].avatar;
 
-			// Compile birth date in UNIX timestamp
-			profile.birthYear = this.forms[0].birthYear;
+			// Compile analytics profile
+			profile.analytics = {};
+			if (this.forms[0].research) {
+				profile.analytics = {
+					'gender': this.forms[0].gender,
+					'birthYear': this.forms[0].birthYear,
+					'audienceSource': this.forms[0].audienceSource,
+					'audienceInterests': this.forms[0].audienceInterests,
+				};
+			}
 
 			return profile;
 		};
