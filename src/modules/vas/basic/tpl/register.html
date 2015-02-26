@@ -8,25 +8,9 @@
 
   <form name="register">
 
-    <!-- Username -->
-    <div class="row">
-      <label for="f-username">User name:</label><input type="text" id="f-username" name="username" />
-      <div class="details">
-        The username to use for logging into the game.
-      </div>
-    </div>
-
-    <!-- Display Name -->
-    <div class="row">
-      <label for="f-displayname">Display name:</label><input type="text" id="f-displayname" />
-      <div class="details">
-        How everone will see you.
-      </div>
-    </div>
-
     <!-- E-mail -->
     <div class="row">
-      <label for="f-email">E-Mail:</label><input type="text" id="f-email" />
+      <label for="f-email">E-Mail:</label><input type="text" id="f-email" name="email" />
       <div class="details">
         We will use this e-mail address to send you notifications regarding in-game events.
       </div>
@@ -34,55 +18,27 @@
 
     <!-- Password -->
     <div class="row">
-      <label for="f-password1">Password:</label><input type="password" id="f-password1" />
+      <label for="f-password1">Password:</label><input type="password" id="f-password1" name="password1" />
     </div>
     <div class="row">
-      <label for="f-password2">Password (Repeat):</label><input type="password" id="f-password2" />
+      <label for="f-password2">Password (Repeat):</label><input type="password" id="f-password2" name="password2" />
       <div class="details">
         This is your account password. Be careful not to forget it!
       </div>
     </div>
 
-    <!--  -->
+    <!-- Display Name -->
     <div class="row">
-      <label for="f-birth-day">Birth Year:</label>
-      <select id="f-birth-year">
-        {{#birth_year}}
-        <option value="{{.}}">{{.}}</option>
-        {{/birth_year}}
-      </select>
+      <label for="f-displayname">In-game name:</label><input type="text" id="f-displayname" name="displayName" />
       <div class="details">
-        This is the name under everone will see you.
+        How everone will see you.
       </div>
     </div>
 
-    <div class="row">
-      <label for="f-gender">I am a:</label><select id="f-gender">
-        <option value="guy">
-          Guy
-        </option>
-        <option value="girl">
-          Girl
-        </option>
-        <option value="man">
-          Man
-        </option>
-        <option value="woman">
-          Woman
-        </option>
-        <option value="unknown">
-          Won't tell
-        </option>
-      </select>
-
-      <div class="details">
-        In order to customize the messages for you.
-      </div>
-    </div>
-
+    <!-- Avatar -->
     <div class="row">
       <label for="f-avatar">Avatar:</label>
-      <div class="input avatar-list form-input-list">
+      <div class="input avatar-list form-input-list" data-name="avatar">
       </div>
 
       <div class="details">
@@ -91,13 +47,90 @@
     </div>
 
     <div class="row">
-      <label for="f-research">Count me in:</label><input id="f-research" type="checkbox"
-      checked="checked" value="1" />
+      <label for="f-research">Count me in:</label>
+      <input id="f-research" type="checkbox"checked="checked" name="research" data-show-fade="fade" data-show=".research-details" data-hide-fade="fade" data-hide=".research-convince" />
       <div class="details">
         Check the box above if you allow CERN and it's partners to collect anonymous
         information regarding your game experience in order to improve future versions of
         Virtual Atom Smasher.
       </div>
+    </div>
+
+    <div class="row-group research-convince">
+      <div class="row">
+        <div class="details">
+          <p>We could encourage you to reconsider and enable the above checkbox. Your information will always remain anonymously and only used internally by the Citizen Cyberlab in order to evaluate learning behaviours.</p>
+          <p>We are only interesting in understanding how to provide all the information people like you will need in order to understand and enjoy this game a much as possible!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row-group research-details">
+
+      <div class="row">
+        <div class="details">
+          The following information are required when you are participating on the learning analytics program and are used in order to understand what's the audience that is using this software.
+        </div>
+      </div>
+
+      <!-- Gender -->
+      <div class="row">
+        <label for="f-gender">I am:</label><select id="f-gender" name="gender">
+          <option value="male">
+            Male
+          </option>
+          <option value="female">
+            Female
+          </option>
+          <option value="other">
+            Other
+          </option>
+        </select>
+
+        <div class="details">
+          In order to customize the messages for you.
+        </div>
+      </div>
+
+      <!-- Birth Year -->
+      <div class="row">
+        <label for="f-birth-day">Birth Year:</label>
+        <select id="f-birth-year" name="birthYear">
+          {{#birth_year}}
+          <option value="{{.}}">{{.}}</option>
+          {{/birth_year}}
+        </select>
+        <div class="details">
+          The year you were born.
+        </div>
+      </div>
+
+      <!-- Source -->
+      <div class="row">
+        <label for="f-birth-day">I found this game:</label>
+        <select id="f-birth-year" name="audienceSource">
+          <option value="school">My school teacher mentioned it</option>
+          <option value="university">My university proffessor mentioned it</option>
+          <option value="internet">I found it on the internet</option>
+        </select>
+        <div class="details">
+          How did you hear about this game.
+        </div>
+      </div>
+
+      <!-- Source -->
+      <div class="row">
+        <label for="f-birth-day">I am registering:</label>
+        <select id="f-birth-year" name="audienceInterests">
+          <option value="university">My university proffessor mentioned it</option>
+          <option value="school">Because particle physics is my university topic</option>
+          <option value="internet">I found it on the internet</option>
+        </select>
+        <div class="details">
+          Why would you like to join this game?
+        </div>
+      </div>
+
     </div>
 
     <div class="row">

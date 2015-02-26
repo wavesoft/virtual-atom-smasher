@@ -1,8 +1,8 @@
 /**
  * [core/ui/view] - A templated view
  */
-define(["mustache", "jquery"], 
-	function(Mustache, $) {
+define(["require", "mustache", "jquery"], 
+	function(require, Mustache, $) {
 
 		/**
 		 * Generic purpose function to get value of a DOM element
@@ -19,7 +19,7 @@ define(["mustache", "jquery"],
 				return elm.is(":checked");
 
 			// If field is input, use value
-			} else if (elm.is("input")) {
+			} else if (elm.is("input,textarea,datalist,select")) {
 
 				// Return value
 				return elm.val();
@@ -32,8 +32,8 @@ define(["mustache", "jquery"],
 					val = sel.val();
 
 				// Try other fields if value is missing
-				if (!val) val = elm.attr("value");
-				if (!val) val = elm.data("value");
+				if (!val) val = sel.attr("value");
+				if (!val) val = sel.data("value");
 				return val;
 
 			}
@@ -54,7 +54,7 @@ define(["mustache", "jquery"],
 				elm.attr( "checked", value ? "checked" : "" );
 
 			// If field is input, use value
-			} else if (elm.is("input")) {
+			} else if (elm.is("input,textarea,datalist,select")) {
 				elm.val( value );
 
 			// If it's a dynamic selection list, update 'selected'
@@ -86,10 +86,48 @@ define(["mustache", "jquery"],
 			// View input elements
 			this.forms = [];
 
+			// Plugins
+			this.viewPlugins = [];
+			this.viewWaitPlugins = {
+				counter: 0,
+				hooks: []
+			};
+
 			// Import template
 			if (template)
 				this.loadTemplate(template);
 
+		}
+
+		/**
+		 * Load a template plugin
+		 */
+		View.prototype.loadTemplatePlugin = function( name ) {
+
+			// Increment plugin counter
+			this.viewWaitPlugins.counter++;
+
+			// Asynchronously load plug-in
+			require([name], (function(pluginClass) {
+
+				// Instantiate and register
+				var plugin = new pluginClass(this);
+				this.viewPlugins.push(plugin);
+
+				// Fire pluginReady
+				if (plugin.pluginReady)
+					plugin.pluginReady( );
+
+				// Decrement plugin counter and callback on zero
+				if (!--this.viewWaitPlugins.counter) {
+					// Fire hooks
+					for (var i=0; i<this.viewWaitPlugins.hooks.length; i++)
+						this.viewWaitPlugins.hooks[i]();
+					// And reset
+					this.viewWaitPlugins.hooks = [];
+				}
+
+			}).bind(this));
 		}
 
 		/**
@@ -170,59 +208,86 @@ define(["mustache", "jquery"],
 		 * Update view
 		 */
 		View.prototype.renderView = function() {
-			var self = this;
+			var self = this,
+				delayWrapper = (function() {
 
-			// Render template
-			this.hostDOM.html( Mustache.render(this.viewTemplate, this.viewData) );
+				// Plugins: preRender
+				for (var i=0; i<this.viewPlugins.length; i++) {
+					if (this.viewPlugins[i].preRender)
+						this.viewPlugins[i].preRender( this.hostDOM, this.viewData );
+				}
 
-			// Introspect DOM forms
-			this.forms = [];
-			this.hostDOM.find("form").each(function(i, elm) {
-				var elm = $(elm),
-					f = { 'elements': {} };
+				// Render template
+				this.hostDOM.html( Mustache.render(this.viewTemplate, this.viewData) );
 
-				// Iterate over input or input-like elements
-				$(elm).find("input,.form-input-list").each(function(i, inpElm) {
-					
-					// Get field name from the fields:
-					// [ name=, data-name=, or id= ]
-					var  inpElm = $(inpElm),
-						 name = inpElm.attr("name");
-					if (!name) name = inpElm.data("name");
-					if (!name) name = inpElm.attr("id");
-					if (!name) return;
+				// Plugins: postRender
+				for (var i=0; i<this.viewPlugins.length; i++) {
+					if (this.viewPlugins[i].postRender)
+						this.viewPlugins[i].postRender( this.hostDOM, this.viewData );
+				}
 
-					// Define property
-					Object.defineProperty(f, name, {
-						// Get input field value
-						get: function() {
-							return get_element_value(inpElm);
-						},
-						// Set input field value
-						set: function(value) {
-							set_element_value(inpElm,value);
-						}
+				// Introspect DOM forms
+				this.forms = [];
+				this.hostDOM.find("form").each(function(i, elm) {
+					var elm = $(elm),
+						f = { 'elements': {} };
+
+					// Abort accidental form submissions
+					elm.submit(function(e) {
+						e.preventDefault();
+						return false;
 					});
 
-					// Store element
-					f.elements[name] = inpElm;
+					// Iterate over input or input-like elements
+					elm.find("input,textarea,datalist,select,.form-input-list").each(function(i, inpElm) {
+						
+						// Get field name from the fields:
+						// [ name=, data-name=, or id= ]
+						var  inpElm = $(inpElm),
+							 name = inpElm.attr("name");
+						if (!name) name = inpElm.data("name");
+						if (!name) name = inpElm.attr("id");
+						if (!name) return;
+
+						// Define property
+						Object.defineProperty(f, name, {
+							// Get input field value
+							get: function() {
+								return get_element_value(inpElm);
+							},
+							// Set input field value
+							set: function(value) {
+								set_element_value(inpElm,value);
+							}
+						});
+
+						// Store element
+						f.elements[name] = inpElm;
+
+					});
+
+					// Look if we have a name for the form in the fields:
+					// [ name=, data-name=, or id= ]
+					var name = elm.attr("name");
+					if (!name) name = elm.data("name");
+					if (!name) name = elm.attr("id");
+
+					// If we have a name, add a keyed value for the form
+					self.forms.push(f);
+					if (name) self.forms[name] = f;
 
 				});
 
-				// Look if we have a name for the form in the fields:
-				// [ name=, data-name=, or id= ]
-				var name = elm.attr("name");
-				if (!name) name = elm.data("name");
-				if (!name) name = elm.attr("id");
-
-				// If we have a name, add a keyed value for the form
-				self.forms.push(f);
-				if (name) self.forms[name] = f;
-
-			});
-
-			// In any case, we have a new DOM, run selectors
-			this._updateSelectors();
+				// In any case, we have a new DOM, run selectors
+				this._updateSelectors();
+			}).bind(this);
+			
+			// If there are plug-ins pending loading, wait for them before
+			if (this.viewWaitPlugins.counter > 0) {
+				this.viewWaitPlugins.hooks.push( delayWrapper );
+			} else {
+				delayWrapper();
+			}
 
 		}
 
