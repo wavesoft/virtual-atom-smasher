@@ -217,7 +217,8 @@ define(
 			this.tvHead.empty();
 			var videoHost = $('<div id="misc-presentation-video"></div>').css({
 				'width': 360,
-				'height': 203
+				'height': 203,
+				'pointer-events': 'none'
 			});
 			this.tvHead.append(videoHost);
 

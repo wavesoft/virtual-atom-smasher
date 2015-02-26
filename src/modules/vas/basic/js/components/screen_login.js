@@ -67,8 +67,8 @@ define(
 
 			// Prepare right body
 			this.elmRightBody.append($("<h1>Welcome fellow scientist!</h1>"));
-			var fEmail = $('<input  id="login-email" type="text" />'),
-				fPassword = $('<input id="login-password" type="password" />');
+			var fEmail = this.fEmail = $('<input  id="login-email" type="text" />'),
+				fPassword = this.fPassword = $('<input id="login-password" type="password" />');
 
 			var table = $('<table></table>'),
 				tr1 = $('<tr></tr'), tr2 = $('<tr></tr>'),
@@ -98,9 +98,17 @@ define(
 			var btnLogin = $('<button class="btn-shaded btn-blue">Login</button>');
 			loginBtnHost.append(btnLogin);
 			btnLogin.click((function(e) {
+
+				// Prevent default
 				e.preventDefault();
 				e.stopPropagation();
+
+				// Save e-mail
+				localStorage.setItem("vas-login", fEmail.val());
+
+				// Trigger login
 				this.trigger("login", fEmail.val(), fPassword.val() );
+
 			}).bind(this));
 
 			// Handle log-in with enter
@@ -120,7 +128,25 @@ define(
 		 * Reset/populate form on show
 		 */
 		LoginScreen.prototype.onWillShow = function(ready) {
+
+			// Pre-populate log-in field
+			this.fEmail.val( localStorage.getItem("vas-login") );
+
 			ready();
+		}
+
+		/**
+		 * Focus username or password upon show
+		 */
+		LoginScreen.prototype.onShown = function() {
+
+			// If we have username focus on password
+			if (!this.fEmail.val()) {
+				this.fEmail.focus();
+			} else {
+				this.fPassword.focus();
+			}
+
 		}
 
 		// Register login screen
