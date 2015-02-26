@@ -99,19 +99,6 @@ define(["vas/core/api/interface", "vas/config"],
 		APIDatabase.prototype = Object.create( APIInterface.prototype );
 
 		/**
-		 * Perform login 
-		 */
-		APIDatabase.prototype.get = function(username, password, callback) {
-
-			// Log-in user and fire callback when logged in
-			this.sendAction("login", {
-				'username': username,
-				'password': password
-			}, callback);
-			
-		}
-
-		/**
 		 * Open a document
 		 */
 		APIDatabase.prototype.openTable = function( name ) {

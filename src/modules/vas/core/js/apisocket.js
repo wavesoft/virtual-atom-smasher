@@ -36,6 +36,7 @@ define(["core/util/event_base", "sha1", "vas/config", "vas/core/api/chatroom", "
 			this.registerInterface( "account" 	, 0x00, "vas/core/api/account" );
 			this.registerInterface( "chatroom"	, 0x00, "vas/core/api/chatroom" );
 			this.registerInterface( "course" 	, 0x00, "vas/core/api/course" );
+			this.registerInterface( "db" 		, 0x00, "vas/core/api/db" );
 			this.registerInterface( "labsocket" , 0x01, "vas/core/api/labsocket" );
 			this.registerInterface( "labtrain"  , 0x02, "vas/core/api/labtrain" );
 
