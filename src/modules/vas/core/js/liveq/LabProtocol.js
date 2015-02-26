@@ -148,7 +148,7 @@ define(
 				numEvents = 0;
 
 			// Handle protocols according to versions
-			if (protoVersion == 1) {
+			if (protoVersion == 2) {
 
 				var flags = reader.getUint8(),
 					reserved0 = reader.getUint16(),
