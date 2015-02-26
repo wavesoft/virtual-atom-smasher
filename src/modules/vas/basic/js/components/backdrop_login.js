@@ -39,8 +39,8 @@ define(
 			setInterval((function() {
 
 				// Check for damp
-				if ((this.targetX - this.currX <= 0.1) &&
-					(this.targetY - this.currY <= 0.1)) return;
+				if ((Math.abs(this.targetX - this.currX) <= 0.1) &&
+					(Math.abs(this.targetY - this.currY) <= 0.1)) return;
 
 				this.currX += (this.targetX - this.currX) / 50;
 				this.currY += (this.targetY - this.currY) / 50;

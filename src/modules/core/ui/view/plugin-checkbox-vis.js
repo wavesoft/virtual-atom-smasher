@@ -19,19 +19,19 @@ define(["require","jquery"],
 			// Helper function to apply checkbox state to matching elements
 			function checkbox_apply(elm, target, fade, invert) {
 				var targets = dom.find(target),
-					show = elm.is(":checked") && !invert;
-
+					show = elm.is(":checked");
+				if (invert) show=!show;
 				if (show) {
 					if (!fade) {
-						targets.fadeIn();
-					} else {					
 						targets.show();
+					} else if (fade == "fade") {
+						targets.fadeIn();
 					}
 				} else {
 					if (!fade) {
-						targets.fadeOut();
-					} else {
 						targets.hide();
+					} else if (fade == "fade") {
+						targets.fadeOut();
 					}
 				}
 			}

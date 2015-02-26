@@ -80,8 +80,10 @@ define(
 			this.hostDOM.addClass("tvhead");
 			this.tvHead = $('<div class="head"></div>');
 			this.tvBody = $('<div class="body"></div>');
+			this.escBtn = $('<img class="escIcon" src="' + require.toUrl("tootr/img/escape.png") + '" />')
 			this.hostDOM.append( this.tvHead );
 			this.hostDOM.append( this.tvBody );
+			this.hostDOM.append( this.escBtn );
 
 		}
 		TVhead.prototype = Object.create( VisualAgent.prototype );
@@ -198,6 +200,9 @@ define(
 		 */
 		VisualAgent.prototype.onSequenceDefined = function(sequence, cb) {
 
+			// Show escape button
+			this.escBtn.show();
+
 			// Validate sequence structure
 			if (!sequence) {
 				console.error("TVhead: Invalid sequence specified");
@@ -273,6 +278,12 @@ define(
 		 * This function is called by the system when the tutorial should start.
 		 */
 		VisualAgent.prototype.onStart = function() {
+
+			// Show ESC and fade-out after a while
+			this.escBtn.show();
+			setTimeout((function() {
+				this.escBtn.fadeOut();
+			}).bind(this), 2000);
 
 			// Start the video
 			this.eExplainPopcorn.play();

@@ -341,9 +341,9 @@ define(
 					}
 
 					// Bind events
-					scrLogin.on('login', function(user, password) {
+					scrLogin.on('login', function(email, password) {
 						User.login({
-							'username' : user,
+							'email' : email,
 							'password' : password
 						}, function(status, errorMsg) {
 							if (!status) {

@@ -67,16 +67,16 @@ define(
 
 			// Prepare right body
 			this.elmRightBody.append($("<h1>Welcome fellow scientist!</h1>"));
-			var fName = $('<input  id="login-username" type="text" />'),
+			var fEmail = $('<input  id="login-email" type="text" />'),
 				fPassword = $('<input id="login-password" type="password" />');
 
 			var table = $('<table></table>'),
 				tr1 = $('<tr></tr'), tr2 = $('<tr></tr>'),
-				td11 = $('<th><label for="login-username">Username:</label></th>'),
+				td11 = $('<th><label for="login-email">E-Mail:</label></th>'),
 				td21 = $('<th><label for="login-password">Password:</label></th>'),
 				td12 = $('<td></td>'), td22 = $('<td></td>');
 
-			td12.append( fName ); td22.append( fPassword );
+			td12.append( fEmail ); td22.append( fPassword );
 			tr1.append(td11).append(td12);
 			tr2.append(td21).append(td22);
 			table.append(tr1).append(tr2);
@@ -91,7 +91,7 @@ define(
 			btnRegister.click((function(e) {
 				e.preventDefault();
 				e.stopPropagation();
-				this.trigger("register", fName.val(), fPassword.val() );
+				this.trigger("register", fEmail.val(), fPassword.val() );
 			}).bind(this));
 
 			// Prepare log-in button
@@ -100,11 +100,11 @@ define(
 			btnLogin.click((function(e) {
 				e.preventDefault();
 				e.stopPropagation();
-				this.trigger("login", fName.val(), fPassword.val() );
+				this.trigger("login", fEmail.val(), fPassword.val() );
 			}).bind(this));
 
 			// Handle log-in with enter
-			fName.keypress(function(e) {
+			fEmail.keypress(function(e) {
 				if (e.keyCode == 13)
 					btnLogin.click();
 			});

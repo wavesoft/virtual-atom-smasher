@@ -18,6 +18,10 @@ requirejs.config({
 		}
 	],
 
+	paths: {
+		'tootr/img': 'tootr/img'
+	},
+
 	map: {
 		'*': {
 			'less': 'extern/require-less/js/less',
