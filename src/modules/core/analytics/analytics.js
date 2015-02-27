@@ -25,6 +25,7 @@ define(["core/analytics/transaction"],
 
 			// Timers
 			this.timers = { };
+			this.timerAccummulators = { };
 
 			// Global properties
 			this.globals = { };
@@ -179,14 +180,26 @@ define(["core/analytics/transaction"],
 		}
 
 		/**
-		 * Begin/Continue a transaction
+		 * Freeze analytics timers
 		 */
-		Analytics.prototype.transaction = function( name ) {
-
-			// Create a new transaction
-
+		Analytics.prototype.freeze = function() {
+			// Snapshot all timers and place on accumulators
+			for (name in this.timers) {
+				// Collect duration till NOW on accummulators
+				this.timerAccummulators[name] += (Date.now() - this.timers[name]);
+			}
 		}
 
+		/**
+		 * Thaw analytics timers
+		 */
+		Analytics.prototype.thaw = function() {
+			// Restart all timers
+			for (name in this.timers) {
+				// Start counting from NOW
+				this.timers[name] = Date.now();
+			}
+		}
 
 		/**
 		 * Start a timer with the given name
@@ -196,6 +209,7 @@ define(["core/analytics/transaction"],
 			if (this.timers[name] !== undefined) return;
 			// Store the current time in the given timer
 			this.timers[name] = Date.now();
+			this.timerAccummulators[name] = 0;
 		}
 
 		/**
@@ -206,6 +220,7 @@ define(["core/analytics/transaction"],
 			var duration = this.stopTimer(name);
 			// Replace timer start time
 			this.timers[name] = Date.now();
+			this.timerAccummulators[name] = 0;
 			// Return duration
 			return duration;
 		}
@@ -218,8 +233,9 @@ define(["core/analytics/transaction"],
 			// Check for invalid timers
 			if (!this.timers[name]) return 0;
 			// Stop timer and get duration
-			var duration = Date.now() - this.timers[name];
+			var duration = (Date.now() - this.timers[name]) + this.timerAccummulators[name];
 			delete this.timers[name];
+			delete this.timerAccummulators[name];
 			// Return duration
 			return duration;
 		}
@@ -227,6 +243,17 @@ define(["core/analytics/transaction"],
 
 		// Create and return an analytics instance
 		var analytics = new Analytics();
+
+		// Freeze analytics on window blur
+		window.addEventListener('blur', function(ev) {
+			analytics.freeze();
+		});
+
+		// Thaw analytics on window focus
+		window.addEventListener('focus', function(ev) {
+			analytics.thaw();
+		});
+
 		return analytics;
 
 	}

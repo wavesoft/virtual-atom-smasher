@@ -178,6 +178,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			tutorialOriginalScreen = "",
 			tutorialCompleteListener = false,
 			tutorialActive = false,
+			tutorialSequence = "",
 			popupWidget = false;
 
 		///////////////////////////////////////////////////////////////
@@ -1129,6 +1130,9 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			if (UI.lockdown)
 				return;
 
+			// Store name of sequence
+			tutorialSequence = sequence;
+
 			// Asynchronouos callback to start the sequence
 			var __startTutorial = function() {
 
@@ -1140,6 +1144,12 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 				// The tutorial has started
 				if (cb_completed) cb_completed();
+
+				// Fire analytics
+				Analytics.restartTimer("ui.tutorial");
+				Analytics.fireEvent('interface_tutorial.start', {
+					'id': sequence
+				});
 
 			}
 
@@ -1220,6 +1230,12 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			// Asynchronous function to wait until a screen transition
 			// has completed
 			var __continueHideTutorial = function() {
+
+				// Fire analytics event
+				Analytics.fireEvent('interface_tutorial.completed', {
+					'id': tutorialSequence,
+					'time': Analytics.stopTimer("ui.tutorial")
+				});
 
 				// Hide visual agent
 				UI.visualAgent.hide(function() {
