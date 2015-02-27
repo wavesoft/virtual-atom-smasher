@@ -221,7 +221,8 @@ define(
 			this.statusScreen.onObservablesReset();
 
 			// Open labsocket for testing
-			this.lab = APISocket.openLabsocket("3e63661c13854de7a9bdeed71be16bb9");
+			this.lab = APISocket.openLabsocket("3782c144f19c41f4bf37160420915e46");
+			//this.lab = APISocket.openLabsocket("3e63661c13854de7a9bdeed71be16bb9");
 
 			// Register histograms
 			this.lab.on('histogramAdded', (function(data, ref) {

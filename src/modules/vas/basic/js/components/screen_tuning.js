@@ -347,7 +347,7 @@ define(
 			});
 
 			// Pick the appropriate labSocket
-			this.lab = APISocket.openLabsocket("3e63661c13854de7a9bdeed71be16bb9");
+			this.lab = APISocket.openLabsocket("3782c144f19c41f4bf37160420915e46");
 			this.lab.on('histogramsUpdated', (function(histos) {
 
 				// Save last histograms
