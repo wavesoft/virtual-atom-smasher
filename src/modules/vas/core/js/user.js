@@ -35,12 +35,18 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			 */
 			this.accountIO = null;
 
+			/**
+			 * The socket used for database I/O
+			 * @type {object}
+			 */
+			this.dbIO = null;
 
 			// On user log-in update credits
 			APISocket.on('ready', (function() {
 
 				// Open Account socket when API socket is ready
 				this.accountIO = APISocket.openAccount();
+				this.dbIO = APISocket.openDb();
 
 				// Bind events
 				this.accountIO.on('profile', (function(profile) {
@@ -469,9 +475,15 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 
+		/**
+		 * Return a list of the currently unlocked deatures
+		 */
+		User.prototype.getUnlockedFeatures = function( feature ) {
+
+			// Get knowledge grid as a flat list
 
 
-
+		}
 
 
 

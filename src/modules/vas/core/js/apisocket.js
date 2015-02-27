@@ -33,12 +33,12 @@ define(["core/util/event_base", "sha1", "vas/config", "vas/core/api/chatroom", "
 			this.apiInstances = [];
 
 			// Register interfaces
-			this.registerInterface( "account" 	, 0x00, "vas/core/api/account" );
-			this.registerInterface( "chatroom"	, 0x00, "vas/core/api/chatroom" );
-			this.registerInterface( "course" 	, 0x00, "vas/core/api/course" );
-			this.registerInterface( "db" 		, 0x00, "vas/core/api/db" );
-			this.registerInterface( "labsocket" , 0x01, "vas/core/api/labsocket" );
-			this.registerInterface( "labtrain"  , 0x02, "vas/core/api/labtrain" );
+			this.registerInterface( "db" 		, 0x00, "vas/core/api/db"		,true  );
+			this.registerInterface( "account" 	, 0x00, "vas/core/api/account" 	,true  );
+			this.registerInterface( "chatroom"	, 0x00, "vas/core/api/chatroom" ,false );
+			this.registerInterface( "course" 	, 0x00, "vas/core/api/course" 	,false );
+			this.registerInterface( "labsocket" , 0x01, "vas/core/api/labsocket",false );
+			this.registerInterface( "labtrain"  , 0x02, "vas/core/api/labtrain" ,false );
 
 		}
 
@@ -48,7 +48,11 @@ define(["core/util/event_base", "sha1", "vas/config", "vas/core/api/chatroom", "
 		/**
 		 * Register a dynamic API interface
 		 */
-		APISocket.prototype.registerInterface = function( domain, bitDomain, classPath ) {
+		APISocket.prototype.registerInterface = function( domain, bitDomain, classPath, reuse ) {
+
+			// Set default value to reuse
+			var reuseInstance = reuse;
+			if (reuseInstance === undefined) reuseInstance = true;
 
 			// Request an interface through require.js
 			require([classPath], (function(Interface) {
@@ -59,14 +63,22 @@ define(["core/util/event_base", "sha1", "vas/config", "vas/core/api/chatroom", "
 				// Register open function
 				this['open' + domain[0].toUpperCase() + domain.substr(1) ] = (function() {
 
-					// Close and cleanup previous instance
+					// Close or reuse previous instance
 					if (this.apiInstances[domain] !== undefined ) {
+
+						// Check if we should reuse single instance
+						if (reuseInstance) {
+							return this.apiInstances[domain];
+						}
+
+						// Otherwise cleanup
 						try {
 							this.apiInstances[domain].__handleClose();
 						} catch(e) {
 							console.error("Error closing interface '",domain,"':",e);
 						};
 						delete this.apiInstances[domain];
+						
 					}
 
 					// Prepare arguments by the ones given to openXXXX function

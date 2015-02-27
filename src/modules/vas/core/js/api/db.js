@@ -18,50 +18,24 @@ define(["vas/core/api/interface", "vas/config"],
  		 * Get a document from the table
 		 */
 		DBTable.prototype.get = function(index, cb) {
-			
-			// Send table/get action
-			this.parent.sendAction("table.get", {
-				'table': this.name,
-				'index': index,
-			}, function(data) {
-				if (data['status'] != 'ok') {
-					// Callback with the error
-					if (cb) cb(null, data['error'], data['error_id']);
-				} else {
-					// Callback with the document
-					if (cb) cb(data['doc']);
-				}
-			});
-
+			// Get table record
+			this.parent.getRecord(this.table, index, cb);
 		}
 
 		/**
  		 * Store a record in the table
 		 */
 		DBTable.prototype.put = function(index, doc, cb) {
-
-			// Send table/put action
-			this.parent.sendAction("table.put", {
-				'table': this.name,
-				'index': index,
-				'doc': doc
-			}, function(data) {
-				if (data['status'] != 'ok') {
-					// Callback with the error
-					if (cb) cb(false, data['error'], data['error_id']);
-				} else {
-					// Callback with the acknowledge
-					if (cb) cb(true);
-				}
-			});
-
+			// Put table record
+			this.parent.putRecord(this.table, index, doc, cb);
 		}
 
 		/**
  		 * Return all records from the database
 		 */
 		DBTable.prototype.all = function(cb) {
-			
+			// Put table record
+			this.parent.getAllRecords(this.table, cb);
 		}
 
 		/**
@@ -105,6 +79,69 @@ define(["vas/core/api/interface", "vas/config"],
 			// Create a document instance and return
 			var doc = new DBTable(this, name);
 			return doc;
+		}
+
+		/**
+		 * Get a record from the database
+		 */
+		APIDatabase.prototype.getRecord = function( table, index, cb ) {
+
+			// Send table/get action
+			this.sendAction("table.get", {
+				'table': table,
+				'index': index,
+			}, function(data) {
+				if (data['status'] != 'ok') {
+					// Callback with the error
+					if (cb) cb(null, data['error'], data['error_id']);
+				} else {
+					// Callback with the document
+					if (cb) cb(data['doc']);
+				}
+			});
+
+		}
+
+		/**
+		 * Put a record to the database
+		 */
+		APIDatabase.prototype.putRecord = function( table, index, doc, cb ) {
+
+			// Send table/put action
+			this.sendAction("table.put", {
+				'table': table,
+				'index': index,
+				'doc': doc
+			}, function(data) {
+				if (data['status'] != 'ok') {
+					// Callback with the error
+					if (cb) cb(false, data['error'], data['error_id']);
+				} else {
+					// Callback with the acknowledge
+					if (cb) cb(true);
+				}
+			});
+
+		}
+
+		/**
+		 * Get all records from the database
+		 */
+		APIDatabase.prototype.getAllRecords = function( table, cb ) {
+
+			// Send table/get action
+			this.sendAction("table.all", {
+				'table': table
+			}, function(data) {
+				if (data['status'] != 'ok') {
+					// Callback with the error
+					if (cb) cb(null, data['error'], data['error_id']);
+				} else {
+					// Callback with the document
+					if (cb) cb(data['docs']);
+				}
+			});
+
 		}
 
 		/**
