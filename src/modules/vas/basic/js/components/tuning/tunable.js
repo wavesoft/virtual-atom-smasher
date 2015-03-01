@@ -67,7 +67,7 @@ define(
 
 							// Fire analytics event
 							Analytics.fireEvent("tuning.values.explain", {
-								'id': this.meta['_id']
+								'id': this.meta['name']
 							});
 
 							// Start analytics timer
@@ -91,7 +91,7 @@ define(
 						}).bind(this),
 						{ 
 							'offset': $(this.hostDOM).width()/2+20,
-							'title' : this.meta['info']['name']
+							'title' : this.meta['name']
 						}
 					);
 
@@ -104,7 +104,7 @@ define(
 
 						// Fire analytics event
 						Analytics.fireEvent("tuning.values.explain_time", {
-							'id': this.meta['_id'],
+							'id': this.meta['name'],
 							'time': Analytics.stopTimer("info-popup")
 						});
 
@@ -158,7 +158,7 @@ define(
 		 */
 		DefaultTunableWidget.prototype.renderValue = function() {
 			var v = this.getValue(), dec=0;
-			if (this.meta['value'] && (this.meta['value']['dec'] != undefined)) dec=this.meta['value']['dec'];
+			if (this.meta && (this.meta['dec'] != undefined)) dec=this.meta['dec'];
 			return v.toFixed(dec);
 		}
 
@@ -167,7 +167,7 @@ define(
 		 * (Convert normalized this.value to mapped value)
 		 */
 		DefaultTunableWidget.prototype.getValue = function() {
-			if (!this.meta['value']) return this.value;
+			if (!this.meta) return this.value;
 			return this.mapValue(this.value);
 		}
 
@@ -175,8 +175,8 @@ define(
 		 * Map value
 		 */
 		DefaultTunableWidget.prototype.mapValue = function(value) {
-			var vInt = this.meta['value']['min'] + (this.meta['value']['max'] - this.meta['value']['min']) * value;
-			return parseFloat( vInt.toFixed(this.meta['value']['dec'] || 2) )
+			var vInt = this.meta['min'] + (this.meta['max'] - this.meta['min']) * value;
+			return parseFloat( vInt.toFixed(this.meta['dec'] || 2) )
 		}
 
 		/**
@@ -184,8 +184,8 @@ define(
 		 */
 		DefaultTunableWidget.prototype.unmapValue = function( value ) {
 			if ((value == undefined) || (value == null)) return value;
-			if (!this.meta['value']) return this.value = value;
-			return (value - this.meta['value']['min']) / (this.meta['value']['max'] - this.meta['value']['min']);
+			if (!this.meta) return this.value = value;
+			return (value - this.meta['min']) / (this.meta['max'] - this.meta['min']);
 		}
 
 		/**
@@ -295,6 +295,7 @@ define(
 		 */
 		DefaultTunableWidget.prototype.onUpdate = function(value) {
 			this.value = this.unmapValue( value );
+			console.log("> Setting value",value,"=",this.value);
 
 			if (this.dragdealer == null) return;
 			this.dragdealer.setValue( this.value, 0 );
@@ -307,11 +308,11 @@ define(
 			this.meta = meta;
 
 			// Update label
-			this.elmTitle.text(meta['info']['short']);
+			this.elmTitle.text(meta['short']);
 
 			// Prepare spinner
 			if (this.spinner) return;
-			this.spinner = new Spinner(this.meta['value'], (function(v) {
+			this.spinner = new Spinner(this.meta, (function(v) {
 
 				// Spinner works in mapped values, while we internaly
 				// work with normalized values. Therefore we trigger handleValueChange
@@ -374,6 +375,7 @@ define(
 			//
 
 			if (this.dragdealer != null) return;
+			console.log(this.elmDragDealer.width());
 			this.dragdealer = new Dragdealer( this.elmDragDealer[0], {
 				horizontal : true,
 				vertical   : false,
@@ -386,7 +388,8 @@ define(
 					this.handleValueChange(x, 1);
 				}).bind(this)
 
-			});			
+			});	
+			this.dragdealer.setValue( this.value, 0 );
 		}
 
 		// Store tuning widget component on registry

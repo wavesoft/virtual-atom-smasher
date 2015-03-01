@@ -166,140 +166,6 @@ define(
 
 
 			// Break down initialization process in individual chainable functions
-			var prog_db = progressAggregator.begin(7),
-				init_db = function(cb) {
-					var sequence = [
-
-							// It's not a good idea to saturate the bandwidth of CouchDB, therefore
-							// we are executing our fetches in sequence.
-
-							function(cb) {
-
-								// Fetch & cache tunables
-								DB.getAll("tunables", "object", function(tunables) {
-									prog_db.ok("Fetched tunable configuration");
-									cb();
-								});
-
-							},
-							function(cb) {
-
-								// Fetch & cache observables
-								DB.getAll("observables", "object", function(tunables) {
-									prog_db.ok("Fetched observable configuration");
-									cb();
-								});
-
-							},
-							function(cb) {
-
-								var dScenes = DB.openDatabase("topic_map").all(function(topic_map) {
-									prog_db.ok("Fetched topic map");
-
-									// Prepare topics
-									DB.cache['topics'] = topic_map;
-									DB.cache['topic_root'] = null;
-
-									// Prepare index
-									DB.cache['topic_index'] = { };
-									for (var i=0; i<topic_map.length; i++) {
-										var o = topic_map[i];
-
-										// Prepare children array
-										o.children = [];
-
-										// Store on lookup index
-										DB.cache['topic_index'][ o['_id'] ] = o;
-
-										// Lookup root
-										if (!o['parent']) DB.cache['topic_root'] = o;
-									}
-
-									// Traverse again the topics map and populate
-									// children array for forward tree tranversal
-									for (var i=0; i<topic_map.length; i++) {
-										var o = topic_map[i];
-										if (o['parent'])
-											DB.cache['topic_index'][o['parent']].children.push( o );
-									}
-
-									cb();
-								});
-
-
-							},
-							function(cb) {
-
-								DB.getAll("knowlege_grid", "tree", function(grid) {
-									prog_db.ok("Fetched knowledge grid");
-									cb();
-								});
-
-							},
-							function(cb) {
-
-								var dScenes = DB.openDatabase("tasks").all(function(tasks) {
-									prog_db.ok("Fetched tasks");
-
-									DB.cache['tasks'] = { };
-									for (var i=0; i<tasks.length; i++) {
-										DB.cache['tasks'][tasks[i]['_id']] = tasks[i];
-									}
-									cb();
-								});
-
-
-							},
-							function(cb) {
-
-								var dDefinitions = DB.openDatabase("first_time").all(function(definitions) {
-									prog_db.ok("Fetched first-time definitions");
-
-									// Convert definitions to key-based index
-									var def = {};
-									for (var i=0; i<definitions.length; i++) {
-										def[definitions[i]._id] = definitions[i];
-									}
-
-									// Update definitions
-									DB.cache['first_time'] = def;
-									cb();
-								});
-
-							},
-							function(cb) {
-
-								var dDefinitions = DB.openDatabase("definitions").all(function(definitions) {
-									prog_db.ok("Fetched definitions");
-
-									// Convert definitions to key-based index
-									var def = {};
-									for (var i=0; i<definitions.length; i++) {
-										def[definitions[i]._id] = definitions[i];
-									}
-
-									// Update definitions
-									DB.cache['definitions'] = def;
-									cb();
-								});
-
-							}
-						],
-						seq_index = 0,
-						seq_next = function() {
-							if (seq_index >= sequence.length) {
-								cb();
-							} else {
-								sequence[seq_index]( seq_next );
-								seq_index += 1;
-							}
-						};
-
-					// Start sequence
-					seq_next();
-
-				};
-
 			var prog_api = progressAggregator.begin(1),
 				init_api = function(cb) {
 
@@ -353,19 +219,24 @@ define(
 								// Alert on unload
 								VAS.alertUnload = true;
 
-								// User is logged-in, check if he has sheen the introduction
-								// sequence
-								if (!User.isFirstTimeSeen("intro")) {
-										// Display the intro sequence
-										UI.displaySequence( DB.cache['definitions']['intro-sequence']['sequence'] , function() {
-											// Mark introduction sequence as shown
-											User.markFirstTimeAsSeen("intro");
-											// Display home page
-											VAS.displayTuningScreen();
-										});
-								} else {
-									VAS.displayTuningScreen();
-								}
+								// Post-login initialize
+								VAS.postLoginInitialize(function() {
+
+									// User is logged-in, check if he has sheen the introduction
+									// sequence
+									if (!User.isFirstTimeSeen("intro")) {
+											// Display the intro sequence
+											UI.displaySequence( DB.cache['definitions']['intro-sequence']['sequence'] , function() {
+												// Mark introduction sequence as shown
+												User.markFirstTimeAsSeen("intro");
+												// Display home page
+												VAS.displayTuningScreen();
+											});
+									} else {
+										VAS.displayTuningScreen();
+									}
+
+								});
 
 							}
 						});
@@ -391,16 +262,22 @@ define(
 										// The user is registered and logged in
 										/////////////
 
-										// Hide overlay
-										UI.hideOverlay();
+										// Post-login initialize
+										VAS.postLoginInitialize(function() {
 
-										// Display the intro sequence
-										UI.displaySequence( DB.cache['definitions']['intro-sequence']['sequence'] , function() {
-											// Mark introduction sequence as shown
-											User.markFirstTimeAsSeen("intro");
-											// Display home page
-											VAS.displayTuningScreen();
+											// Hide overlay
+											UI.hideOverlay();
+
+											// Display the intro sequence
+											UI.displaySequence( DB.cache['definitions']['intro-sequence']['sequence'] , function() {
+												// Mark introduction sequence as shown
+												User.markFirstTimeAsSeen("intro");
+												// Display home page
+												VAS.displayTuningScreen();
+											});
+
 										});
+
 									}
 								});
 
@@ -601,11 +478,10 @@ define(
 
 					// Handle buy action
 					scrKnowledge.on('unlock', function(knowledge_id) {
-						User.unlockKnowledge(knowledge_id, function() {
+						User.unlockKnowledge(knowledge_id, function(knowlegeDetails) {
 							// Unlock successful, display alert
 
 							// Get topic details
-							var knowlegeDetails = DB.cache['knowlege_grid_index'][knowledge_id];
 							if (knowlegeDetails) {
 
 								// Show flash banner
@@ -661,10 +537,6 @@ define(
 						return;
 					}
 
-					// Initialize tuning screen
-					scrTuning.onTunablesDefined( DB.cache['tunables'] );
-					scrTuning.onObservablesDefined( DB.cache['observables'] );
-
 					// Bind events
 					scrTuning.on('showBook', function(bookID) {
 						VAS.displayBook(bookID);
@@ -706,7 +578,7 @@ define(
 			setTimeout(function() {
 
 				var chainRun = [
-						init_db, init_api, init_home, init_jobs, init_cinematic, init_courseroom, init_courses, 
+						init_api, init_home, init_jobs, init_cinematic, init_courseroom, init_courses, 
 						init_tutorials, init_login, init_team, init_tune, init_results,
 						init_menu
 					],
@@ -737,6 +609,45 @@ define(
 
 			}, 500)
 
+
+		}
+
+		/**
+		 * VAS Post-login initialize
+		 */
+		VAS.postLoginInitialize = function(cb) {
+
+			// Run post-login initialization in sequence
+			var sequence = [
+					function(cb) {
+						// Fetch & Cache definitions
+						DB.cacheTable("definitions", function(records, cache) {
+							// Unserialize documents
+							for (var i=0; i<records.length; i++) {
+								cache[records[i].key] = JSON.parse(records[i].value);
+							}
+							cb();
+						});
+					},
+					function(cb) {
+						// Fetch & First-Time definitions
+						DB.cacheTable("first_time", function() {
+							cb();
+						});
+					}
+				],
+				seq_index = 0,
+				seq_next = function() {
+					if (seq_index >= sequence.length) {
+						cb();
+					} else {
+						sequence[seq_index]( seq_next );
+						seq_index += 1;
+					}
+				};
+
+			// Start sequence
+			seq_next();
 
 		}
 
@@ -818,11 +729,17 @@ define(
 		 */
 		VAS.displayKnowledge = function( animateBackwards ) {
 
-			// Setup home screen
-			VAS.scrKnowledge.onTopicTreeUpdated( User.getKnowledgeTree(true) );
+			// Get user's knowledge from database 
+			User.getKnowledgeTree(function(config) {
 
-			// Select home screen
-			UI.selectScreen("screen.knowledge", animateBackwards ? UI.Transitions.ZOOM_OUT : UI.Transitions.ZOOM_IN);
+				// Setup home screen
+				VAS.scrKnowledge.onTopicTreeUpdated( config );
+
+				// Select home screen
+				UI.selectScreen("screen.knowledge", animateBackwards ? UI.Transitions.ZOOM_OUT : UI.Transitions.ZOOM_IN);
+
+
+			});
 
 		}
 
@@ -832,11 +749,17 @@ define(
 		 */
 		VAS.displayTuningScreen = function() {
 
-			// Start task
-			VAS.scrTuning.onTuningConfigUpdated( User.getTuningConfiguration() );
+			// Get tuning configuration
+			User.getTuningConfiguration(function(config) {
 
-			// Display tuning screen
-			UI.selectScreen("screen.tuning")
+				// Start task
+				VAS.scrTuning.onTuningConfigUpdated( config );
+
+				// Display tuning screen
+				UI.selectScreen("screen.tuning")
+
+			});
+
 
 		}
 

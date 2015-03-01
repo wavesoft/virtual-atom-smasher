@@ -54,6 +54,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 					// Update profile and variables
 					this.profile = profile;
 					this.vars = profile['vars'];
+					this.state = profile['state'];
 					this.initVars();
 
 					// Fire the profile event
@@ -175,7 +176,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 
 					// Fire callback
 					if (response['status'] == 'ok') {
-						if (callback) callback();
+						if (callback) callback( response['knowledge'] );
 					}
 
 				}).bind(this)
@@ -246,7 +247,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 					// Fire callback
 					if (response['status'] == 'ok') {
 						this.trigger("flash", 
-							"You got <strong>"+response['credits']+'</strong> credits', 
+							"You got <strong>"+response['points']+'</strong> science points', 
 							reason,
 							'flash-icons/coins.png'
 							);
@@ -305,28 +306,73 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
-		 * Build and return a flat version of the knowledge tree.
-		 */
-		User.prototype.getKnowledgeList = function() {
-			// Prepare answer array
-			var ans = [];
-
-			// Iterate over the knowledge grid
-			for (var i=0; i<DB.cache['knowlege_grid_list'].length; i++) {
-				var item = DB.cache['knowlege_grid_list'][i];
-				// Check it item is explored
-				item['enabled'] = !!(this.vars['explored_knowledge'][item['_id']]);
-				if (item['parent'] == null) item['enabled']=true;
-				ans.push(item);
-			}
-			return ans;
-		}
-
-		/**
 		 * Build and return the enabled tunables and enabled observables
 		 * by traversing the knowledge grid and the relevant databases.
 		 */
-		User.prototype.getTuningConfiguration = function() {
+		User.prototype.getTuningConfiguration = function( callback ) {
+
+			// Get some useful database information
+			var dbMachineParts = DB.cache['definitions']['machine-parts'];
+
+			// Tunable group index and prefix-to-machine parts lookup table
+			var tunableGroupIndex = {},
+				prefixToMachinePart = {};
+
+			// Populate prefix-to-machine part index
+			for (k in dbMachineParts) {
+				if (k[0] == "_") continue;
+				if (!dbMachineParts[k]['prefixes']) continue;
+				for (var i=0; i<dbMachineParts[k]['prefixes'].length; i++) {
+					// Map this prefix to machine part ID
+					prefixToMachinePart[dbMachineParts[k]['prefixes'][i]] = k;
+				}
+			}
+
+			// Forward query to user API
+			this.accountIO.getTuningConfiguration(function(cfg) {
+
+				// Prepare 'machineParts' on the configuration
+				cfg.machineParts = [];
+
+				// From tunables, lookup the machine part they belong
+				for (var i=0; i<cfg.tunables.length; i++) {
+
+					// Get tunable name
+					var tun = cfg.tunables[i],
+						tunName = tun.name;
+
+					// Find tunable prefix
+					var tunPrefix = tunName.split(":")[0],
+						machinePart = prefixToMachinePart[tunPrefix];
+
+					// Get/Place group
+					var machineGroup = tunableGroupIndex[machinePart];
+					if (!machineGroup) {
+						machineGroup = { "part": machinePart, "tunables": [] };
+						tunableGroupIndex[machinePart] = machineGroup;
+						cfg.machineParts.push(machineGroup);
+					}
+
+					// Append tunable on the machine tunables
+					machineGroup.tunables.push( tun );
+
+				}
+
+				// Callback with the configuration
+				callback( cfg );
+
+			});
+
+			/*
+			// Get tuning configuration from user's profile
+			return {
+				'configurations' : this.profile.state['config'] || [],
+				'machineParts' 	 : this.profile.state['parts'] || [],
+				'observables'	 : this.profile.state['observables'] || [],
+			};
+			*/
+
+			/*
 			var config = {
 				// The enabled machine configurations (ex. ee, ppbar)
 				'configurations': [],
@@ -418,22 +464,24 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			}
 
 			return config;
+			*/
+
 		}
 
 		/**
 		 * Build and return the user's knowledge information tree
 		 */
-		User.prototype.getKnowledgeTree = function( showEdgeNode ) {
+		User.prototype.getKnowledgeTree = function( callback ) {
 
 			// Prepare nodes and links
 			var nodes = [],
 				links = [],
-				node_id = {},
-				showEdge = (showEdgeNode == undefined) ? false : showEdgeNode;
+				node_id = {};
 
 			// Traverse nodes
 			var traverse_node = (function(node, parent, show_edge) {
 
+				/*
 				// Skip invisible nodes
 				if ((parent != null) && !this.vars['explored_knowledge'][node['_id']]) {
 					if (show_edge) {
@@ -442,17 +490,16 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 						return;
 					}
 				}
+				*/
 
 				// Store to nodes & it's lookup
 				var curr_node_id = nodes.length;
-				node_id[node['_id']] = curr_node_id;
-				node.edge = !show_edge;
-				node.enabled = !!this.vars['explored_knowledge'][node['_id']];
+				node_id[node['id']] = curr_node_id;
 				nodes.push( node );
 
 				// Check if we should make a link
 				if (parent != null) {
-					var parent_id = node_id[parent['_id']];
+					var parent_id = node_id[parent['id']];
 					links.push({ 'source': curr_node_id, 'target': parent_id });
 				}
 
@@ -463,14 +510,30 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 
 			}).bind(this);
 
-			// Start node traversal
-			traverse_node( DB.cache['knowlege_grid'], null, showEdge );
+			// Query knowledge grid
+			this.accountIO.getKnowledge(function(knowledge) {
 
-			// Return the tree data
-			return {
-				'nodes': nodes,
-				'links': links
-			};
+				// If tree is empty, do nothing
+				if (!knowledge.id) {
+
+					// Error
+					console.error("Empty knowledge tree obtained by the server!");
+
+				} else {
+
+					// Start node traversal
+					traverse_node( knowledge, null );
+
+					// Return the tree data
+					console.log(nodes, links);
+					callback({
+						'nodes': nodes,
+						'links': links
+					});
+
+				}
+
+			});
 
 		}
 
@@ -481,7 +544,6 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		User.prototype.getUnlockedFeatures = function( feature ) {
 
 			// Get knowledge grid as a flat list
-
 
 		}
 
@@ -788,6 +850,25 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 
 
 
+		/**
+		 * Build and return a flat version of the knowledge tree.
+		 */
+		/*
+		User.prototype.getKnowledgeList = function() {
+			// Prepare answer array
+			var ans = [];
+
+			// Iterate over the knowledge grid
+			for (var i=0; i<DB.cache['knowlege_grid_list'].length; i++) {
+				var item = DB.cache['knowlege_grid_list'][i];
+				// Check it item is explored
+				item['enabled'] = !!(this.vars['explored_knowledge'][item['_id']]);
+				if (item['parent'] == null) item['enabled']=true;
+				ans.push(item);
+			}
+			return ans;
+		}
+		*/
 
 
 

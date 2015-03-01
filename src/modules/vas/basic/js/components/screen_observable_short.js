@@ -208,10 +208,10 @@ define(
 		 *
 		 * @param {liveq/HistogramData~HistogramData} data - The histogram data.
 		 * @param {liveq/ReferenceData~ReferenceData} data - The histogram reference data.
+		 * @param {object} meta - The observable metadata
 		 */
-		ObservableScreen.prototype.onObservableAdded = function( data, ref ) {
-			var id = data.id,  // Histogram data ID
-				meta = DB.cache['observables'][id];
+		ObservableScreen.prototype.onObservableAdded = function( data, ref, meta ) {
+			var id = data.id;  // Histogram data ID
 
 			// If we don't have metadata, exit
 			if (!meta) return;

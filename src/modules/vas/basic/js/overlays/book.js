@@ -142,7 +142,7 @@ define(
 
 			// Fire tab analytics
 			Analytics.fireEvent("book.tab_metrics", {
-				"id": this.meta['info']['book'],
+				"id": this.meta['book'],
 				"tab": this.currTab,
 				"time": Analytics.restartTimer("book-tab"),
 				"coverage": this.coverage[this.currTab]
@@ -153,7 +153,7 @@ define(
 
 			// Fire tab change analytic
 			Analytics.fireEvent("book.tab_change", {
-				"id": this.meta['info']['book'],
+				"id": this.meta['book'],
 				"tab": this.currTab
 			});
 
@@ -167,7 +167,7 @@ define(
 
 			// Fire tab analytics
 			Analytics.fireEvent("book.tab_metrics", {
-				"id": this.meta['info']['book'],
+				"id": this.meta['book'],
 				"tab": this.currTab,
 				"time": Analytics.stopTimer("book-tab"),
 				"coverage": this.coverage[this.currTab]
@@ -175,7 +175,7 @@ define(
 
 			// Fire book analytics
 			Analytics.fireEvent("book.hide", {
-				"id": this.meta['info']['book'],
+				"id": this.meta['book'],
 				"time": Analytics.stopTimer("book")
 			});
 
@@ -192,7 +192,7 @@ define(
 
 			// Get the specified book from database
 			var books = DB.openDatabase("books");
-			if (!meta['info']['book']) {
+			if (!meta['book']) {
 				this.bodyDOM.append(this.errorTab);
 				return;
 			}
@@ -201,11 +201,11 @@ define(
 			this.meta = meta;
 
 			// Load book
-			books.get(meta['info']['book'], (function(data, errorMsg) {
+			books.get(meta['book'], (function(data, errorMsg) {
 				if (data != null) {
 
 					// Place description tab
-					var body = $('<div class="content"><h1><span class="glyphicon glyphicon-book"></span> ' + data['info']['title'] + '</h1><div>'+replace_macros(data['info']['description'])+'</div></div>');
+					var body = $('<div class="content"><h1><span class="glyphicon glyphicon-book"></span> ' + data['title'] + '</h1><div>'+replace_macros(data['description'])+'</div></div>');
 					this.createTab(body, 'cs-blue', '<span class="uicon uicon-explain"></span> Description');
 
 					// Handle body analytics
@@ -335,7 +335,7 @@ define(
 					Analytics.restartTimer("book");
 					Analytics.restartTimer("book-tab");
 					Analytics.fireEvent("book.show", {
-						"id": meta['info']['book']
+						"id": meta['book']
 					});
 
 				} else {

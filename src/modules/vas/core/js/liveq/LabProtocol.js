@@ -93,7 +93,8 @@ define(
 
 				var flags = configReader.getUint8(),
 					numEvents = configReader.getUint16(),
-					numHistos = configReader.getUint32();
+					numHistos = configReader.getUint32(),
+					allHistos = [];
 
 				// Read histograms
 				for (var j=0; j<numHistos; j++) {
@@ -110,7 +111,17 @@ define(
 					// Fire histogram added callbacks
 					this.trigger('histogramAdded', this.data[histo.id], this.reference[histo.id]);
 
+					// Store for histogramsAdded
+					allHistos.push({
+						'id'   : histo.id,
+						'data' : this.data[histo.id],
+						'ref'  : this.reference[histo.id]
+					})
+
 				}
+
+				// Fire one event when all histograms are added
+				this.trigger('histogramsAdded', allHistos);
 
 				// If we were not initialized, fire onReady
 				if (!this.initialized) {

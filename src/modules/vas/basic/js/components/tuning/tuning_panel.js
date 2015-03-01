@@ -59,24 +59,24 @@ define(
 			// Bind events
 			com.on('valueChanged', (function(newValue) {
 				// Update value on valuesMap
-				this.valuesMap[metadata['_id']] = newValue;
+				this.valuesMap[metadata['name']] = newValue;
 				// Trigger change
 				this.trigger('change', this.valuesMap);
 			}).bind(this));
 
 			// Listen for mouse events on the container
 			container.mouseenter((function() {
-				this.trigger('hover', metadata['_id']);
+				this.trigger('hover', metadata['name']);
 			}).bind(this));
 
 			// Update component value
-			com.onUpdate( this.valuesMap[metadata['_id']] );
+			com.onUpdate( this.valuesMap[metadata['name']] );
 
 			// Resize to update DOM information
 			com.onResize( com.width, com.height );
 
 			// Store component tunables map
-			this.tunablesMap[metadata['_id']] = com;
+			this.tunablesMap[metadata['name']] = com;
 
 			// Return component
 			return com;

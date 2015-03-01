@@ -113,7 +113,7 @@ define(
 
 			// Fire tab analytics
 			Analytics.fireEvent("book.tab_time", {
-				"id": meta['info']['book'],
+				"id": meta['book'],
 				"tab": this.currTab,
 				"time": Analytics.restartTimer("book-tab")
 			});
@@ -123,7 +123,7 @@ define(
 
 			// Fire tab change analytic
 			Analytics.fireEvent("book.tab_change", {
-				"id": meta['info']['book'],
+				"id": meta['book'],
 				"tab": this.currTab
 			});
 
@@ -137,18 +137,18 @@ define(
 
 			// Fire tab analytics
 			Analytics.fireEvent("book.tab_time", {
-				"id": meta['info']['book'],
+				"id": meta['book'],
 				"tab": this.currTab,
 				"time": Analytics.stopTimer("book-tab")
 			});
 
 			// Fire book analytics
 			Analytics.fireEvent("book.time", {
-				"id": meta['info']['book'],
+				"id": meta['book'],
 				"time": Analytics.stopTimer("book")
 			});
 			Analytics.fireEvent("book.hide", {
-				"id": meta['info']['book'],
+				"id": meta['book'],
 			});
 
 		}
@@ -164,11 +164,11 @@ define(
 
 			// Get the specified book from database
 			var books = DB.openDatabase("books");
-			books.get(meta['info']['book'], (function(data, errorMsg) {
+			books.get(meta['book'], (function(data, errorMsg) {
 				if (data != null) {
 
 					// Place description tab
-					var body = $('<div>'+data['info']['short']+'</div>');
+					var body = $('<div>'+data['short']+'</div>');
 					this.createTab(body, '<span class="uicon uicon-explain"></span> Description');
 
 					// Place games tab
@@ -204,7 +204,7 @@ define(
 				} else {
 
 					// Place error tab
-					var body = $('<div>Could not find book #'+meta['info']['book']+' in the database!</div>');
+					var body = $('<div>Could not find book #'+meta['book']+' in the database!</div>');
 					this.createTab(body, '<span class="uicon uicon-warning"></span> Error &nbsp;');
 
 				}
@@ -216,7 +216,7 @@ define(
 				Analytics.restartTimer("book");
 				Analytics.restartTimer("book-tab");
 				Analytics.fireEvent("book.show", {
-					"id": meta['info']['book']
+					"id": meta['book']
 				});
 
 			}).bind(this));

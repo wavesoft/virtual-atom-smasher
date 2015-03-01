@@ -64,7 +64,7 @@ define(
 		 */
 		DefaultObservableWidget.prototype.onMetaUpdate = function(meta) {
 			this.meta = meta;
-			this.element.html(meta['info']['short']);
+			this.element.html(meta['short']);
 		}
 
 		/**
@@ -113,7 +113,7 @@ define(
 					}).bind(this),
 					{ 
 						'offset': 50,
-						'title' : this.meta['info']['name']
+						'title' : this.meta['name']
 					}
 				);				
 

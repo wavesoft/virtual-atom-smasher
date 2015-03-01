@@ -121,8 +121,8 @@ define(
 
 				// A tuning value changed
 				Analytics.fireEvent("tuning.values.change", {
-					'id': meta['_id'],
-					'scale': Math.abs(fromValue - toValue) / (meta.value['max'] - meta.value['min'])
+					'id': meta['name'],
+					'scale': Math.abs(fromValue - toValue) / (meta['max'] - meta['min'])
 				});
 
 			}).bind(this));
@@ -578,7 +578,7 @@ define(
 
 				// Place tunable values on map
 				for (var j=0; j<tunables.length; j++) {
-					this.values[tunables[j]['_id']] = tunables[j]['def'] || tunables[j]['value']['min'] || 0.0;
+					this.values[tunables[j]['name']] = tunables[j]['default'] || tunables[j]['min'] || 0.0;
 				}
 			}
 

@@ -166,8 +166,8 @@ define(["core/util/event_base", "sha1", "vas/config", "vas/core/api/chatroom", "
 				// 
 				this.socket.onopen = (function() {
 
-					this.trigger('ready');
 					this.connected = true;
+					this.trigger('ready');
 					this.keepaliveTimer = setInterval(this.sendKeepalive.bind(this), 10000);
 
 				}).bind(this);
@@ -176,8 +176,8 @@ define(["core/util/event_base", "sha1", "vas/config", "vas/core/api/chatroom", "
 				// If for any reason the socket is closed, retry connection
 				//
 				this.socket.onclose = (function() {
-					this.trigger('critical', 'Disconnected from the APISocket socket!');
 					this.connected = false;
+					this.trigger('critical', 'Disconnected from the APISocket socket!');
 					clearInterval(this.keepaliveTimer);
 
 					// Cleanup dynamic API instances
@@ -196,15 +196,15 @@ define(["core/util/event_base", "sha1", "vas/config", "vas/core/api/chatroom", "
 				// Handle socket errors
 				//
 				this.socket.onerror = (function(ws, error) {
-					this.trigger('critical', 'Error while trying to connect to the API socket!');
 					this.connected = false;
+					this.trigger('critical', 'Error while trying to connect to the API socket!');
 					clearInterval(this.keepaliveTimer);
 				}).bind(this);
 
 			}
 			catch (e) {
-				this.trigger('critical', 'Could not connect to the API socket! ' + String(e));
 				this.connected = false;
+				this.trigger('critical', 'Could not connect to the API socket! ' + String(e));
 			}
 		}
 
@@ -298,7 +298,7 @@ define(["core/util/event_base", "sha1", "vas/config", "vas/core/api/chatroom", "
 
 			// Handle errors
 			else if (action == "error") {
-				this.trigger('error', parameters['message']);
+				this.trigger('error', parameters['message'], parameters['code'], parameters['domain']);
 			}
 
 		}

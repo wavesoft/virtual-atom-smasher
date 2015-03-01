@@ -38,7 +38,7 @@ define(
 
 			// Prepare body DOM
 			this.bodyDOM.empty();
-			this.bodyDOM.append($('<div>'+meta['info']['desc']+'</div>'));
+			this.bodyDOM.append($('<div>'+meta['desc']+'</div>'));
 
 			// Prepare 'more' links
 			this.moreLinks.empty();
@@ -48,11 +48,11 @@ define(
 			l.click((function(e) {
 				e.preventDefault();
 				e.stopPropagation();
-				this.trigger('showBook', meta['info']['book'] );
+				this.trigger('showBook', meta['book'] );
 
 				// Fire analytics event
 				Analytics.fireEvent("tuning.values.learn", {
-					'id': meta['_id']
+					'id': meta['name']
 				});
 
 			}).bind(this));

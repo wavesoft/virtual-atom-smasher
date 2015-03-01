@@ -76,6 +76,26 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get tuning configuration for this user
+		 */
+		APIAccount.prototype.getTuningConfiguration = function(callback) {
+			// Query server
+			this.sendAction("data.tuning", {}, function(data) {
+				if (data) callback(data['data']);
+			});
+		}
+
+		/**
+		 * Get knowledge grid configuration
+		 */
+		APIAccount.prototype.getKnowledge = function(callback) {
+			// Query server
+			this.sendAction("data.knowledge", {}, function(data) {
+				if (data) callback(data['data']);
+			});
+		}
+
+		/**
 		 * Handle chatroom event
 		 */
 		APIAccount.prototype.handleAction = function(action, data) {

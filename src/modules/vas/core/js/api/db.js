@@ -19,7 +19,7 @@ define(["vas/core/api/interface", "vas/config"],
 		 */
 		DBTable.prototype.get = function(index, cb) {
 			// Get table record
-			this.parent.getRecord(this.table, index, cb);
+			this.parent.getRecord(this.name, index, cb);
 		}
 
 		/**
@@ -27,31 +27,32 @@ define(["vas/core/api/interface", "vas/config"],
 		 */
 		DBTable.prototype.put = function(index, doc, cb) {
 			// Put table record
-			this.parent.putRecord(this.table, index, doc, cb);
+			this.parent.putRecord(this.name, index, doc, cb);
 		}
 
 		/**
  		 * Return all records from the database
 		 */
 		DBTable.prototype.all = function(cb) {
-			// Put table record
-			this.parent.getAllRecords(this.table, cb);
+			// Get all table records
+			this.parent.getAllRecords(this.name, cb);
 		}
 
 		/**
- 		 * Filter documents using the given query
+ 		 * Find documents using the given query
 		 */
-		DBTable.prototype.filter = function(query, cb) {
-			
+		DBTable.prototype.find = function(query, cb) {
+			// Get all table records
+			this.parent.findRecords(this.name, query, cb);
 		}
 
 		/**
- 		 * Close table when we are done
+ 		 * Return multiple documents using the given query
 		 */
-		DBTable.prototype.close = function() {
-
+		DBTable.prototype.multiple = function(names, cb) {
+			// Get all table records
+			this.parent.getMultipleRecords(this.name, names, cb);
 		}
-
 
 		/**
 		 * APISocket Database
@@ -66,6 +67,9 @@ define(["vas/core/api/interface", "vas/config"],
 
 			// Initialize superclass
 			APIInterface.call(this, apiSocket);
+
+			// Initialize cache
+			this.cache = {};
 
 		}
 
@@ -138,22 +142,204 @@ define(["vas/core/api/interface", "vas/config"],
 					if (cb) cb(null, data['error'], data['error_id']);
 				} else {
 					// Callback with the document
-					if (cb) cb(data['docs']);
+					if (cb) {
+
+						// Build index
+						var index = { }, 
+							docs = data['docs'],
+							iKey = data['index'] || 'id';
+
+						// Build index
+						for (var i=0; i<docs.length; i++)
+							index[docs[i][iKey]] = docs[i];
+
+						// Fire callback
+						cb(docs, index);
+						
+					}
 				}
 			});
 
 		}
 
 		/**
-		 * Handle chatroom event
+		 * Get multiple records that match the given indices
+		 */
+		APIDatabase.prototype.getMultipleRecords = function( table, indices, cb ) {
+
+			// Send table/get action
+			this.sendAction("table.multiple", {
+				'table': table,
+				'indices': indices
+			}, function(data) {
+				if (data['status'] != 'ok') {
+					// Callback with the error
+					if (cb) cb(null, data['error'], data['error_id']);
+				} else {
+					// Callback with the document
+					if (cb) {
+
+						// Build index
+						var index = { }, 
+							docs = data['docs'],
+							iKey = data['index'] || 'id';
+
+						// Build index
+						for (var i=0; i<docs.length; i++)
+							index[docs[i][iKey]] = docs[i];
+
+						// Fire callback
+						cb(docs, index);
+
+					}
+				}
+			});
+
+		}
+
+		/**
+		 * Find records that match the given criteria
+		 */
+		APIDatabase.prototype.findRecords = function( table, query, cb ) {
+
+			// Send table/get action
+			this.sendAction("table.find", {
+				'table': table,
+				'query': query
+			}, function(data) {
+				if (data['status'] != 'ok') {
+					// Callback with the error
+					if (cb) cb(null, data['error'], data['error_id']);
+				} else {
+					// Callback with the document
+					if (cb) {
+
+						// Build index
+						var index = { }, 
+							docs = data['docs'],
+							iKey = data['index'] || 'id';
+
+						// Build index
+						for (var i=0; i<docs.length; i++)
+							index[docs[i][iKey]] = docs[i];
+
+						// Fire callback
+						cb(docs, index);
+
+					}
+				}
+			});
+
+		}
+
+		/**
+		 * Get all records of the given database and cache them
+		 *
+		 * @param {string} name - The database records to fetch
+		 * @param {string} format - The result format: "list", "object", "tree"
+		 * @param {function} callback - The callback to fire when the record is ready
+		 */
+		APIDatabase.cacheTable = function(name, format, callback) {
+
+			// Handle missing parameters
+			if (format == undefined) {
+				format = "object";
+			}
+			if (typeof(format) == "function") {
+				callback = format;
+				format = "object";
+			}
+
+			// Check cache first
+			if (this.cache[name] !== undefined) {
+				if (callback) callback(this.cache[name]);
+				return this.cache[name];
+			} else {
+
+				// Call database after
+				var db = this.openDatabase(name);
+				this.getAllRecords( name, (function(records) {
+
+					// Process records
+					if (format == "object") {
+
+						// Setup cache
+						this.cache[name] = {};
+
+						// Skip empty records
+						if (records && (records.length > 0)) {
+
+							// Check if we should use 'id' or 'name'
+							// for the indexing key.
+							var idx = 'id';
+							if (records[0]['name'] !== undefined)
+								idx = 'name';
+
+							// Covert record to object ('_id' is the key)
+							for (var i=0; i<records.length; i++) {
+								this.cache[name][records[i][idx]] = records[i];
+							}
+
+						}
+
+					} else if (format == "tree") {
+
+						// Convert record to tree
+						// ('parent' points to a parent entry, 'child' will contain the child nodes, returns root)
+						this.cache[name+'_list'] = records;
+						this.cache[name+'_index'] = {};
+						this.cache[name] = null;
+
+						// Skip empty records
+						if (records && (records.length > 0)) {
+
+							// Check if we should use 'id' or 'name'
+							// for the indexing key.
+							var idx = 'id';
+							if (records[0]['name'] !== undefined)
+								idx = 'name';
+
+							// First pass: build index & initialize children array
+							for (var i=0; i<records.length; i++) {
+								records[i].children = [];
+								this.cache[name+'_index'][records[i][idx]] = records[i];
+								if (!records[i]['parent']) this.cache[name] = this.cache[name+'_index'][records[i][idx]];
+							}
+
+							// Second pass: build tree
+							for (var i=0; i<records.length; i++) {
+								var parent = this.cache[name+'_index'][records[i]['parent']];
+								// Check if that's a root item
+								if (!parent) continue;
+								// Update children and parent with references
+								parent.children.push( records[i] );
+								records[i]['parent'] = parent;
+							}
+
+						}
+
+					} else {
+
+						// Use raw list
+						this.cache[name] = records;
+
+					}
+
+					// Fire callback
+					if (callback) callback(this.cache[name]);
+
+				}).bind(this));
+				
+				// Return empty record here
+				return null;
+			}
+		}
+
+		/**
+		 * Handle database events
 		 */
 		APIDatabase.prototype.handleAction = function(action, data) {
 			if (!this.active) return;
-
-			if (action == "profile") { /* Profile information arrived */
-				this.trigger('profile', data);
-
-			}
 		}
 
 		// Return the Chatroom class

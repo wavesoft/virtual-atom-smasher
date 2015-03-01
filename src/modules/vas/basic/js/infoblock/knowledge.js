@@ -39,15 +39,15 @@ define(
 			// Prepare 'more' links
 			this.moreLinks.empty();
 
+			// Prepare body DOM
+			this.bodyDOM.empty();
+			this.bodyDOM.append($('<div>'+meta['desc']+'</div>'));
+
 			// If it's not enabled show how much credits it costs
 			if (!meta['enabled']) {
 
-				// Prepare body DOM
-				this.bodyDOM.empty();
-				this.bodyDOM.append($('<div>You need to unlock this topic first if you want to see more information!</div>'));
-
 				// Put credits button
-				var l = $('<a href="do:show-more"><span class="uicon uicon-money"></span> Unlock for <strong>' + meta['info']['cost'] + '</strong> credits</a>');
+				var l = $('<a href="do:show-more"><span class="uicon uicon-money"></span> Unlock for <strong>' + meta['cost'] + '</strong> credits</a>');
 				l.click((function(e) {
 					e.preventDefault();
 					e.stopPropagation();
@@ -57,39 +57,35 @@ define(
 
 			} else {
 
-				// Prepare body DOM
-				this.bodyDOM.empty();
-				this.bodyDOM.append($('<div>'+meta['info']['shortdesc']+'</div>'));
-
 				// Put an 'explain this' button which triggers the 'explain' event
-				if (meta['info']['book']) {
+				if (meta['book']) {
 					var l = $('<a href="do:show-more"><span class="uicon uicon-book"></span> Learn More</a>');
 					l.click((function(e) {
 						e.preventDefault();
 						e.stopPropagation();
-						this.trigger('explain', meta['info']['book'] );
+						this.trigger('explain', meta['book'] );
 					}).bind(this));
 					this.moreLinks.append( l );
 				}
 
 				// Put a 'Course' button if we have a course
-				if (meta['info']['course']) {
+				if (meta['course']) {
 					var l = $('<a href="do:show-more"><span class="uicon uicon-course"></span> Course</a>');
 					l.click((function(e) {
 						e.preventDefault();
 						e.stopPropagation();
-						this.trigger('course', meta['info']['course'] );
+						this.trigger('course', meta['course'] );
 					}).bind(this));
 					this.moreLinks.append( l );
 				}
 
 				// Put a 'Tutorial' button if we have a tutorial
-				if (meta['info']['tutorial']) {
+				if (meta['tutorial']) {
 					var l = $('<a href="do:show-more"><span class="uicon uicon-play"></span> Tutorial</a>');
 					l.click((function(e) {
 						e.preventDefault();
 						e.stopPropagation();
-						this.trigger('tutorial', meta['info']['tutorial'] );
+						this.trigger('tutorial', meta['tutorial'] );
 					}).bind(this));
 					this.moreLinks.append( l );
 				}

@@ -2,14 +2,14 @@
 define(
 
 	// Requirements
-	["jquery", "d3", "vas/core/db", "vas/core/ui", "vas/core/apisocket", "vas/config", "vas/core/registry", "vas/core/base/components"],
+	["jquery", "d3", "vas/core/ui", "vas/core/apisocket", "vas/config", "vas/core/registry", "vas/core/base/components"],
 
 	/**
 	 * Basic version of the jobs screen
 	 *
 	 * @exports basic/components/explain_screen
 	 */
-	function($, d3, DB, UI, APISocket, config, R,C) {
+	function($, d3, UI, APISocket, config, R,C) {
 
 		/**
 		 * @class
@@ -221,15 +221,39 @@ define(
 			this.statusScreen.onObservablesReset();
 
 			// Open labsocket for testing
+			var DB = APISocket.openDb();
 			this.lab = APISocket.openLabsocket("3782c144f19c41f4bf37160420915e46");
 			//this.lab = APISocket.openLabsocket("3e63661c13854de7a9bdeed71be16bb9");
 
 			// Register histograms
-			this.lab.on('histogramAdded', (function(data, ref) {
-				this.statusScreen.onObservableAdded(data, ref);
-			}).bind(this));
 			this.lab.on('histogramUpdated', (function(data, ref) {
 				this.statusScreen.onObservableUpdated(data, ref);
+			}).bind(this));
+			this.lab.on('histogramsAdded', (function(histos) {
+
+				// Collect names and map histogram ID to object
+				var histoNames = [],
+					histoMap = {};
+				for (var i=0; i<histos.length; i++) {
+					histoNames.push(histos[i].id);
+					histoMap[histos[i].id] = histos[i];
+				}
+
+				// Query db for observable details
+				DB.getMultipleRecords("observable", histoNames, (function(docs) {
+
+					// Handle response
+					for (var i=0; i<docs.length; i++) {
+						var obs = docs[i],
+							hist = histoMap[obs['name']];
+
+						// Fire respective observable
+						this.statusScreen.onObservableAdded(hist.data, hist.ref, obs);
+
+					}
+
+				}).bind(this));
+
 			}).bind(this));
 			this.lab.on('histogramsUpdated', (function(histos) {
 				this.lastHistograms = histos;

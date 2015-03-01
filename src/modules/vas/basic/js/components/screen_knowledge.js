@@ -103,7 +103,7 @@ define(
 							var comBody = R.instanceComponent("infoblock.knowledge", hostDOM);
 							if (comBody) {
 								// Update infoblock 
-								comBody.onMetaUpdate( d );
+								comBody.onMetaUpdate( d['info'] );
 								// Adopt events from infoblock as ours
 								d.eventDelegate.adoptEvents( comBody );
 							} else {
@@ -409,11 +409,11 @@ define(
 					n_enabled = !!n.enabled;
 				if (n.parent == null) n_enabled = true;
 				var d3_node = {
-						'id'		: n._id || "",
-						'info'		: n.info || {},
+						'id'		: n.id || "",
+						'info'		: n,
 						'enabled'	: n_enabled,
-						'icon'		: img_dir + "/" + (n.info.icon || 'level-icons/hard.png'),
-						'color' 	: n.enabled ? color_sceme[n.info.color || 'green'] : color_sceme['gray'],
+						'icon'		: img_dir + "/" + (n.icon || 'level-icons/hard.png'),
+						'color' 	: color_sceme[n.color || 'green'],
 						'radius' 	: 20,
 						'opacity' 	: (n.enabled ? 1.0 : 0.5),
 						'click'  	: (function(record) {
@@ -437,7 +437,7 @@ define(
 				}
 
 				// Check if the user can pay this item
-				if (User.profile['credits'] >= n.info.cost) {
+				if (User.profile['points'] >= n.cost) {
 					d3_node.color = "#2ecc71";
 				}
 

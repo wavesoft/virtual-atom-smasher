@@ -76,7 +76,7 @@ define(
 			// Register on profile updates
 			User.on('profile', (function(profile) {
 				// Update credits
-				this.elmCredit.html( "Credits: <strong>" + profile['credits'].toString() + "</strong>" );
+				this.elmCredit.html( "Science Points: <strong>" + profile['points'].toString() + "</strong>" );
 			}).bind(this));
 
 			// Start fade out

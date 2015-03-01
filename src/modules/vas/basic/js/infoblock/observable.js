@@ -163,12 +163,12 @@ define(
 			*/
 			
 			// Put an 'explain this' button which triggers the 'explain' event
-			if (meta['info']['book']) {
+			if (meta['book']) {
 				var l = $('<a href="do:show-more"><span class="uicon uicon-explain"></span> Explain this ...</a>');
 				l.click((function(e) {
 					e.preventDefault();
 					e.stopPropagation();
-					this.trigger('explain', meta['info']['book'] );
+					this.trigger('explain', meta['book'] );
 				}).bind(this));
 				this.moreLinks.append( l );
 			}
