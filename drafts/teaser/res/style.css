@@ -1,6 +1,6 @@
 
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
-@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700);
 
 body {
 	font-family: 'Open Sans', sans-serif;
@@ -11,6 +11,12 @@ body {
 
 h1,h2,h3,h4 {
 	font-family: 'Open Sans Condensed', sans-serif;
+	font-weight: 300;
+}
+
+h1 {
+	font-size: 34pt;
+	margin: 5px 0;
 }
 
 input,button {
@@ -19,23 +25,38 @@ input,button {
 
 
 .img-back {
-	background: url(back-vas.jpg) no-repeat center center;
-}
-
-.img-back.blur {
-	background: url(back-vas-blur.jpg) no-repeat center center;
+	background-image: url(back-vas.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
 }
 
 .img-logo {
 	background: url(logo.png) no-repeat center center;
 }
 
+.img-part {
+	background: url(part.png) no-repeat center center;
+	background-size: contain;
+	opacity: 0.25;
+}
+
 .page {
-	padding: 10px;
+	padding: 20px;
+	position: relative;
+}
+
+.page h2 {
+	color: #F39C12;
+	font-weight: bold;
+}
+
+p.subtitle {
+	margin-top: -10px;
+	font-size: 12px;
 }
 
 .page.page-alt {
-	background-color: #f00;
+	background-color: #EEE;
 }
 
 #first {
@@ -45,15 +66,33 @@ input,button {
 
 #logo {
 	position: absolute;
-	width: 200px;
-	height: 200px;
+	width: 400px;
+	height: 240px;
 	top: 25%; left: 50%;
 	margin: 0 auto;
-	-webkit-transform: translateY(-100px) translateX(-100px);
-	-moz-transform: translateY(-100px) translateX(-100px);
-	-ms-transform: translateY(-100px) translateX(-100px);
-	-o-transform: translateY(-100px) translateX(-100px);
-	transform: translateY(-100px) translateX(-100px);
+	-webkit-transform: translateY(-120px) translateX(-200px);
+	-moz-transform: translateY(-120px) translateX(-200px);
+	-ms-transform: translateY(-120px) translateX(-200px);
+	-o-transform: translateY(-120px) translateX(-200px);
+	transform: translateY(-120px) translateX(-200px);
+}
+
+#logo .img-logo {
+	width: 200px;
+	height: 200px;
+	margin: 0 auto;
+}
+
+#logo .banner {
+	color: #FFF;
+	text-shadow: 0 0 8px #000;
+	font-weight: bold;
+	text-align: center;
+	font-size: 24pt;
+}
+
+#logo .banner span {
+	color: #F39C12;
 }
 
 #first div#pxback {
@@ -61,23 +100,6 @@ input,button {
 	top: 0; height: 1000px;
 	left: 0; width: 100%;
 	background-size: cover;
-}
-
-
-#first div#register {
-	position: absolute;
-	left: 0; width: 100%;
-	background-color: rgba(255,255,255,0.8);
-	padding: 10px 0;
-	overflow: hidden;
-
-	top: 60%; 
-	height: 100px;
-	-webkit-transform: translateY(-50px);
-	-moz-transform: translateY(-50px);
-	-ms-transform: translateY(-50px);
-	-o-transform: translateY(-50px);
-	transform: translateY(-50px);
 }
 
 #first div#register #pxblur {
@@ -88,11 +110,131 @@ input,button {
 	top: -200%;
 }
 
+#first div#register {
+	position: absolute;
+	left: 0; width: 100%;
+	background-color: rgba(255,255,255,0.8);
+	overflow: hidden;
+	background-color: #E67E22;
+
+	top: 60%; 
+	height: 100px;
+	-webkit-transform: translateY(-50px);
+	-moz-transform: translateY(-50px);
+	-ms-transform: translateY(-50px);
+	-o-transform: translateY(-50px);
+	transform: translateY(-50px);
+}
+
+#first div#register .thankyou {
+	text-align: center;
+	line-height: 100px;
+	color: #fff;
+	font-size: 14pt;
+}
+
 #first div#register .form {
-	width: 400px;
 	display: block;
 	margin: 0 auto;
 	font-size: 18px;
+	background-color: #fff;
+	width: 800px;
+}
+
+#first div#register .form input {
+	background-color: transparent;
+}
+
+#first div#register .form input.wrong {
+	color: #f00;
+}
+
+#first div#register .form .side-left { 
+	height: 100px;
+	width: 200px;
+	background-color: #E67E22;
+	float: left;
+	position: relative;
+	color: #fff;
+}
+
+#first div#register .form .side-left::before {
+	content: " ";
+	width: 142px;
+	height: 142px;
+	background-color: #E67E22;
+	display: block;
+	position: absolute;
+	right: 0; top: 0;
+	-webkit-transform: rotate(45deg) translateY(-100px);
+	-moz-transform: rotate(45deg) translateY(-100px);
+	-ms-transform: rotate(45deg) translateY(-100px);
+	-o-transform: rotate(45deg) translateY(-100px);
+	transform: rotate(45deg) translateY(-100px);
+}
+
+#first div#register .form .side-left .message {
+	position: absolute;
+	color: #fff;
+	height: 100px;
+	width: 100%;
+	line-height: 100px;
+	text-align: right;
+}
+
+#first div#register .form .side-right { 
+	height: 100px;
+	width: 200px;
+	background-color: #E67E22;
+	float: right;
+	position: relative;
+	color: #fff;
+}
+
+#first div#register .form .side-right::before {
+	content: " ";
+	width: 142px;
+	height: 142px;
+	background-color: #E67E22;
+	display: block;
+	position: absolute;
+	left: -42px; top: 0;
+	-webkit-transform: rotate(45deg) translateY(42px);
+	-moz-transform: rotate(45deg) translateY(42px);
+	-ms-transform: rotate(45deg) translateY(42px);
+	-o-transform: rotate(45deg) translateY(42px);
+	transform: rotate(45deg) translateY(42px);
+}
+
+#first div#register .form .side-right .message {
+	position: absolute;
+	color: #fff;
+	height: 100px;
+	width: 100%;
+	line-height: 100px;
+	text-align: right;
+	top: 0;
+	left: -60px;
+}
+
+#first div#register .form .side-right:hover {
+	background-color: #F39C12;
+}
+
+#first div#register .form .side-right:hover::before {
+	background-color: #F39C12;
+}
+
+#first div#register .form input {
+	height: 100px;
+	width: 250px;
+	border: none;
+	padding: 5px;
+	vertical-align: middle;
+	margin-left: 80px;
+}
+#first div#register .form input:focus {
+	outline: none;
 }
 
 #first div#register .desc {
@@ -103,18 +245,23 @@ input,button {
 	padding-left: 200px;
 }
 
-#first div#register .form input {
-	height: 35px;
-	width: 250px;
-	border: none;
-	padding: 5px;
-	vertical-align: middle;
-}
 #first div#register .form button {
-	height: 45px;
 	border: none;
-	background-color: #FF9900;
-	color: #fff;
 	padding: 5px;
-	vertical-align: middle;
+	cursor: pointer;
+}
+
+#announce .content-left {
+	width: 80%;
+}
+
+#announce .content-right {
+	position: absolute;
+	width: 25%;
+	right: 20px; top: 20px; bottom: 20px;
+}
+
+#footer {
+	padding: 20px 0;
+	text-align: center;
 }
