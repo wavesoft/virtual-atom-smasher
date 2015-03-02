@@ -191,7 +191,7 @@ define(
 			this.clearTabs();
 
 			// Get the specified book from database
-			var books = DB.openDatabase("books");
+			var books = DB.openTable("books");
 			if (!meta['book']) {
 				this.bodyDOM.append(this.errorTab);
 				return;

@@ -15,7 +15,7 @@ define(
 		var Main = { };
 
 		Main.loadFromDB = function(filename, cb) {
-			var db = DB.openDatabase("animations");
+			var db = DB.openTable("animations");
 			db.get(filename, (function(doc, err) {
 				if (!doc) {
 					alert("Unable to load the specified file!");
@@ -40,7 +40,7 @@ define(
 		}
 
 		Main.saveToDB = function(filename, cb) {
-			var db = DB.openDatabase("animations");
+			var db = DB.openTable("animations");
 
 			// Prepare save record
 			var record = {

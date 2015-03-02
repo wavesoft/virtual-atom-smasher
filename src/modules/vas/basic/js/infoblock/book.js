@@ -163,7 +163,7 @@ define(
 			this.meta = meta;
 
 			// Get the specified book from database
-			var books = DB.openDatabase("books");
+			var books = DB.openTable("books");
 			books.get(meta['book'], (function(data, errorMsg) {
 				if (data != null) {
 

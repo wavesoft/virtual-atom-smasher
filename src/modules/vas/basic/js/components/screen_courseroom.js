@@ -134,7 +134,7 @@ define(
 		CourseroomScene.prototype.loadAnimation = function(id, cb) {
 
 			// Load animations for the explain scene
-			var db = DB.openDatabase("animations");
+			var db = DB.openTable("animations");
 			db.get(id, (function(doc, err) {
 				if (!doc) {
 					// TODO: Show error

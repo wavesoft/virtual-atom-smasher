@@ -82,15 +82,15 @@ define(
 			var initTweens = (function() {
 
 				// Initialize timeline with json
-				this.timeline.initWithJSON( this.canvasFabric.getObjects(), json['scene']['tweens'] );
+				this.timeline.initWithJSON( this.canvasFabric.getObjects(), json['tweens'] );
 
 				// Redraw canvas
 				this.canvasFabric.renderAll();
 
 				// Initialize timeline audio
-				if (json['narration']) {
+				if (json['audio_url']) {
 					// Setup audio and fire onReady when audio is loaded
-					this.timeline.setupAudio( json['narration']['audio_url'], onReady );
+					this.timeline.setupAudio( json['audio_url'], onReady );
 				} else {
 					// Fire ready
 					if (onReady) onReady();
@@ -104,10 +104,10 @@ define(
 			this.hotspots.clear();
 
 			// Load hotspot information from JSON
-			this.hotspots.loadJSON( json['spots'] );
+			this.hotspots.loadJSON( [] );
 
 			// Load canvas objects & then init tweens
-			this.canvasFabric.loadFromJSON(json['scene']['canvas'], initTweens);
+			this.canvasFabric.loadFromJSON(json['canvas'], initTweens);
 
 		}
 

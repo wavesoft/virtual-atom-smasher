@@ -2,14 +2,22 @@
 define(
 
 	// Requirements
-	["jquery", "d3", "vas/core/db", "vas/core/ui", "sha1", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/user", "vas/core/apisocket", "vas/core/liveq/Calculate", "core/analytics/analytics"],
+	[
+		"jquery", "d3", 
+		"vas/core/db", "vas/core/ui", "sha1", "vas/config", 
+		"vas/core/registry", "vas/core/base/components", 
+		"vas/core/user", "vas/core/apisocket", 
+		"vas/core/liveq/Calculate", "core/analytics/analytics",
+
+		"text!vas/basic/tpl/tuning.html" 
+	],
 
 	/**
 	 * Basic version of the home screen
 	 *
 	 * @exports basic/components/explain_screen
 	 */
-	function($, d3, DB, UI, SHA1, config, R,C, User, APISocket, Calculate, Analytics ) {
+	function($, d3, DB, UI, SHA1, config, R,C, User, APISocket, Calculate, Analytics, tplTuning ) {
 
 		/**
 		 * @class
@@ -20,6 +28,9 @@ define(
 
 			// Prepare host
 			hostDOM.addClass("tuning2");
+
+			// Load view template and plutins
+			//this.loadTemplate( tplTuning );
 
 			// Setup local variables
 			this.machineConfigurationsEnabled = {};

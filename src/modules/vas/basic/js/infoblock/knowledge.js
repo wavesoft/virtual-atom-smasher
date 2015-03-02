@@ -57,6 +57,9 @@ define(
 
 			} else {
 
+				// Check for re-triggerable actions
+				var actions = meta['actions'];
+
 				// Put an 'explain this' button which triggers the 'explain' event
 				if (meta['book']) {
 					var l = $('<a href="do:show-more"><span class="uicon uicon-book"></span> Learn More</a>');
@@ -69,23 +72,23 @@ define(
 				}
 
 				// Put a 'Course' button if we have a course
-				if (meta['course']) {
+				if (actions['course'] != undefined) {
 					var l = $('<a href="do:show-more"><span class="uicon uicon-course"></span> Course</a>');
 					l.click((function(e) {
 						e.preventDefault();
 						e.stopPropagation();
-						this.trigger('course', meta['course'] );
+						this.trigger('course', actions['course'] );
 					}).bind(this));
 					this.moreLinks.append( l );
 				}
 
 				// Put a 'Tutorial' button if we have a tutorial
-				if (meta['tutorial']) {
+				if (actions['tutorial']) {
 					var l = $('<a href="do:show-more"><span class="uicon uicon-play"></span> Tutorial</a>');
 					l.click((function(e) {
 						e.preventDefault();
 						e.stopPropagation();
-						this.trigger('tutorial', meta['tutorial'] );
+						this.trigger('tutorial', actions['tutorial'] );
 					}).bind(this));
 					this.moreLinks.append( l );
 				}

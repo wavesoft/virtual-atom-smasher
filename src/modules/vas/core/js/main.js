@@ -487,17 +487,22 @@ define(
 								// Show flash banner
 								UI.showFlash(
 									'Knowledge expanded',
-									'You have just expanded your knowlege and unlocked the topic <em>'+knowlegeDetails['info']['title']+'</em>',
+									'You have just expanded your knowlege and unlocked the topic <em>'+knowlegeDetails['title']+'</em>',
 									'/flash-icons/books.png'
 								);
 
-								// Display course
-								if (knowlegeDetails['info']['course']) {
-									VAS.displayCourse(knowlegeDetails['info']['course'], function() {
+								// Handle knowledge actions
+								var actions = knowlegeDetails['actions'];
+								if (actions['course'] !== undefined) {
+
+									// Display course
+									VAS.displayCourse(actions['course'], function() {
 										VAS.displayTuningScreen();
 										setTimeout(showBanner, 500);
 									});
+
 								} else {
+
 									// Switch directly to tuning screen
 									VAS.displayTuningScreen();
 								}
@@ -793,7 +798,7 @@ define(
 			var comBook = UI.showOverlay("overlay.book");
 
 			// Update metadata
-			comBook.onMetaUpdate({ 'info': { 'book': bookID } });
+			comBook.onMetaUpdate({ 'book': bookID });
 
 		}
 

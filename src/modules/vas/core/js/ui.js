@@ -1189,7 +1189,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 			// Asynchronous function to download (if required) the video sequence
 			var __downloadTutorial = function( name ) {
-				var db = DB.openDatabase("tutorials");
+				var db = DB.openTable("tutorials");
 				db.get(name, function(data) {
 					if (!name) {
 						console.error("UI: Could not find tutorial '"+name+"' in the database!");
