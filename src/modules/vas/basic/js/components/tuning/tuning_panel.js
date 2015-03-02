@@ -66,7 +66,7 @@ define(
 
 			// Listen for mouse events on the container
 			container.mouseenter((function() {
-				this.trigger('hover', metadata['name']);
+				this.trigger('hover', name);
 			}).bind(this));
 
 			// Update component value

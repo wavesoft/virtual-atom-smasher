@@ -138,13 +138,13 @@ define(
 			// ---------------------------------
 
 			// Create a assistance frame
-			this.assistanceFrame = $('<div class="assistance-frame"></div>').appendTo(hostDOM);
-			this.assistanceTitle = $('<h1><span class="glyphicon glyphicon-user"></span> Collaboration Assistance</h1>').appendTo(this.assistanceFrame);
-			this.assistanceBody = $('<div>Move your mouse over a tunable parameter and you can see more information regarding other users in this panel.</div>').appendTo(this.assistanceFrame);
+			this.machinePartDOM = $('<div class="machinepart-frame"></div>').appendTo(hostDOM);
+			this.machinePartComponent = R.instanceComponent( "overlay.machinepart", this.machinePartDOM );
 
-			// Put additional assistance labels
-			var astLblTeam = $('<div class="ast-team-best"><span class="label">Team Best:</span> </div>').appendTo(this.assistanceFrame);
-			this.assistanceTeamBest = $('<span></span>').appendTo(astLblTeam);
+			// Hide explain frame
+			this.machinePartDOM.css({
+				'left': -300
+			});
 
 			// ---------------------------------
 			// Create machine types
@@ -236,7 +236,9 @@ define(
 			this.machineDOM.removeClass("fx-backblur");
 
 			// Hide assistance panels
-			this.assistanceFrame.removeClass("visible");
+			this.machinePartDOM.css({
+				'left': -300
+			});
 			setTimeout((function() {
 				this.descFrame.addClass("visible");
 			}).bind(this), 100);
@@ -273,10 +275,16 @@ define(
 		TuningScreen.prototype.showPopover = function( pos, machinePartID ) {
 
 			// Find out what tunables are in this machine part
-			var details = DB.cache['definitions']['machine-parts'][machinePartID];
-			this.tuningPanel.onTuningPanelDefined( details.description.title, this.machinePartTunables[machinePartID] );
+			var details = DB.cache['definitions']['machine-parts'][machinePartID],
+				tunables = this.machinePartTunables[machinePartID],
+				hasTunables = (tunables && (tunables.length > 0));
+
+			// Setup tuning panel if we have tunables
+			this.tuningPanel.onTuningPanelDefined( details.description.title, tunables );
 			this.tuningPanel.onTuningValuesDefined( this.values );
 			this.tuningPanel.onTuningMarkersDefined( this.markers );
+			this.machinePartComponent.onTunablesDefined( tunables );
+			this.machinePartComponent.onTuningValuesDefined( tunables );
 
 			// Add back-blur fx on the machine DOM
 			this.machineDOM.addClass("fx-backblur");
@@ -293,42 +301,78 @@ define(
 			// Calculate centered coordinates
 			var sz_w = this.tuningPanel.width, 
 				sz_h = this.tuningPanel.height,
-				x = pos.left, y = pos.top;
+				tX = this.width * 4/6, 
+				tY = this.height / 2 - 100,
+				pX = this.width * 1/4, 
+				pY = this.height / 2;
 
 			// Wrap inside screen coordinates
-			if (x - sz_w/2 < 0) x = sz_w/2;
-			if (y - sz_h/2 < 0) y = sz_h/2;
-			if (x + sz_w/2 > this.width) x = this.width - sz_w/2;
-			if (y + sz_h/2 > this.height) y = this.height - sz_h/2;
+			if (tX - sz_w/2 < 0) tX = sz_w/2;
+			if (tY - sz_h/2 < 0) tY = sz_h/2;
+			if (tX + sz_w/2 > this.width) tX = this.width - sz_w/2;
+			if (tY + sz_h/2 > this.height) tY = this.height - sz_h/2;
 
 			// Apply position
 			this.tunableGroup.css(this.popoverPos = pos);
 
+			// Center screen if no tunables
+			if (!hasTunables) {
+				pX = this.width / 2;
+				pY -= 40;
+				this.tunableGroup.hide();
+			} else {
+				// Otherwise show animating
+				this.tunableGroup.show();
+				this.tunableGroup.addClass("animating");
+			}
+
 			// Prepare show sequence
 			this.tuningMask.show();
-			this.tunableGroup.addClass("animating");
 			setTimeout((function() {
 
-				// Show tuning panel
-				this.tuningPanel.onResize(sz_w, sz_h);
-				this.tuningPanel.onWillShow((function() {
-					// Make element animated
-					this.tunableGroup.removeClass("hidden");
-					// Add css
-					this.tunableGroup.css({
-						'left': x,
-						'top': y
-					});				
-					// Shown
-					this.tuningPanel.onShown();
+				// Display tuning panel if tunables > 0
+				if (hasTunables) {
 
-					// Show the assistance panels
-					this.descFrame.removeClass("visible");
-					setTimeout((function() {
-						this.assistanceFrame.addClass("visible");
-					}).bind(this), 100);
+					// Show tuning panel
+					this.tuningPanel.onResize(sz_w, sz_h);
+					this.tuningPanel.onWillShow((function() {
+						// Make element animated
+						this.tunableGroup.removeClass("hidden");
+						// Add css
+						this.tunableGroup.css({
+							'left': tX,
+							'top': tY
+						});				
+						// Shown
+						this.tuningPanel.onShown();
+
+					}).bind(this));
+
+					// Remove full
+					this.machinePartDOM.removeClass("full");
+
+				} else {
+					// Add full
+					this.machinePartDOM.addClass("full");
+				}
+
+				// Display machine Part Component
+				this.machinePartComponent.onWillShow((function() {
+
+					// Callback Shown
+					this.machinePartComponent.onShown();
+
+					// Move machinePart DOM in place
+					this.machinePartDOM.css({
+						'left': pX,
+						'top' : pY
+					});
 
 				}).bind(this));
+
+				// Show the assistance panels
+				this.descFrame.removeClass("visible");
+
 
 			}).bind(this), 10);
 
@@ -481,10 +525,10 @@ define(
 		/** 
 		 * Update the assistance panel for the given tunable ID 
 		 */
-		TuningScreen.prototype.updateAssistance = function( tunableID ) {
+		TuningScreen.prototype.updateAssistance = function( tunable ) {
 
 			// Change title
-			this.assistanceTitle.html( '<span class="glyphicon glyphicon-pencil"></span> ' + tunableID );
+			this.machinePartComponent.onTunableFocus( tunable );
 
 		}
 

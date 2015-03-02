@@ -83,6 +83,10 @@ define([
 	'vas/basic/overlays/flash',
 	'vas/basic/overlays/histograms',
 	'vas/basic/overlays/questionaire',
+	'vas/basic/overlays/machinepart',
+
+	// Machine parts
+	'vas/basic/machineparts/describe',
 
 ], function(require) {
 
