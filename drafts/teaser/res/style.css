@@ -1,0 +1,120 @@
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300);
+
+body {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+	padding: 0;
+	margin: 0;
+}
+
+h1,h2,h3,h4 {
+	font-family: 'Open Sans Condensed', sans-serif;
+}
+
+input,button {
+	font-size: inherit;
+}
+
+
+.img-back {
+	background: url(back-vas.jpg) no-repeat center center;
+}
+
+.img-back.blur {
+	background: url(back-vas-blur.jpg) no-repeat center center;
+}
+
+.img-logo {
+	background: url(logo.png) no-repeat center center;
+}
+
+.page {
+	padding: 10px;
+}
+
+.page.page-alt {
+	background-color: #f00;
+}
+
+#first {
+	position: relative;
+	overflow: hidden;
+}
+
+#logo {
+	position: absolute;
+	width: 200px;
+	height: 200px;
+	top: 25%; left: 50%;
+	margin: 0 auto;
+	-webkit-transform: translateY(-100px) translateX(-100px);
+	-moz-transform: translateY(-100px) translateX(-100px);
+	-ms-transform: translateY(-100px) translateX(-100px);
+	-o-transform: translateY(-100px) translateX(-100px);
+	transform: translateY(-100px) translateX(-100px);
+}
+
+#first div#pxback {
+	position: absolute;
+	top: 0; height: 1000px;
+	left: 0; width: 100%;
+	background-size: cover;
+}
+
+
+#first div#register {
+	position: absolute;
+	left: 0; width: 100%;
+	background-color: rgba(255,255,255,0.8);
+	padding: 10px 0;
+	overflow: hidden;
+
+	top: 60%; 
+	height: 100px;
+	-webkit-transform: translateY(-50px);
+	-moz-transform: translateY(-50px);
+	-ms-transform: translateY(-50px);
+	-o-transform: translateY(-50px);
+	transform: translateY(-50px);
+}
+
+#first div#register #pxblur {
+	position: absolute;
+	width: 100%;
+	height: 1000px;
+	z-index: -1;
+	top: -200%;
+}
+
+#first div#register .form {
+	width: 400px;
+	display: block;
+	margin: 0 auto;
+	font-size: 18px;
+}
+
+#first div#register .desc {
+	width: 600px;
+	display: block;
+	margin: 0 auto;
+	font-size: 14px;
+	padding-left: 200px;
+}
+
+#first div#register .form input {
+	height: 35px;
+	width: 250px;
+	border: none;
+	padding: 5px;
+	vertical-align: middle;
+}
+#first div#register .form button {
+	height: 45px;
+	border: none;
+	background-color: #FF9900;
+	color: #fff;
+	padding: 5px;
+	vertical-align: middle;
+}
