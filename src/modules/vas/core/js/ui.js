@@ -1194,11 +1194,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 					if (!name) {
 						console.error("UI: Could not find tutorial '"+name+"' in the database!");
 					} else {
-						if (!data['sequence']) {
-							console.error("UI: Invalid database structure for tutorial '"+name+"': Could not find 'sequence' field!");
-						} else{
-							__stopPrevStartThis(data['sequence']);
-						}
+						__stopPrevStartThis(data);
 					}
 				});
 			}

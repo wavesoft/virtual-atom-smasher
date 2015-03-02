@@ -7,9 +7,7 @@ define(
 		"vas/core/db", "vas/core/ui", "sha1", "vas/config", 
 		"vas/core/registry", "vas/core/base/components", 
 		"vas/core/user", "vas/core/apisocket", 
-		"vas/core/liveq/Calculate", "core/analytics/analytics",
-
-		"text!vas/basic/tpl/tuning.html" 
+		"vas/core/liveq/Calculate", "core/analytics/analytics"
 	],
 
 	/**
@@ -17,7 +15,7 @@ define(
 	 *
 	 * @exports basic/components/explain_screen
 	 */
-	function($, d3, DB, UI, SHA1, config, R,C, User, APISocket, Calculate, Analytics, tplTuning ) {
+	function($, d3, DB, UI, SHA1, config, R,C, User, APISocket, Calculate, Analytics ) {
 
 		/**
 		 * @class
@@ -28,9 +26,6 @@ define(
 
 			// Prepare host
 			hostDOM.addClass("tuning2");
-
-			// Load view template and plutins
-			//this.loadTemplate( tplTuning );
 
 			// Setup local variables
 			this.machineConfigurationsEnabled = {};
@@ -143,7 +138,7 @@ define(
 			// ---------------------------------
 
 			// Create a assistance frame
-			this.assistanceFrame = $('<div class="description-frame assistance-frame"></div>').appendTo(hostDOM);
+			this.assistanceFrame = $('<div class="assistance-frame"></div>').appendTo(hostDOM);
 			this.assistanceTitle = $('<h1><span class="glyphicon glyphicon-user"></span> Collaboration Assistance</h1>').appendTo(this.assistanceFrame);
 			this.assistanceBody = $('<div>Move your mouse over a tunable parameter and you can see more information regarding other users in this panel.</div>').appendTo(this.assistanceFrame);
 
