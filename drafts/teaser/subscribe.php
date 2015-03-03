@@ -14,6 +14,10 @@ if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 	$userip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 }
 
+/* If we have multiple IPs, resolve the first */
+$parts = explode(",", $userip);
+$resolveip = $parts[0];
+
 /* Connect to SQL */
 $mysqli = new mysqli($config['server'], $config['server_user'], $config['server_pass'], $config['server_db']);
 if ($mysqli->connect_errno) {
@@ -35,7 +39,7 @@ if (isset($_POST['email'])) {
 	}
 
 	// Bind parameters
-	if (!$stmt->bind_param("ssss", $_POST['email'], $userip, gethostbyaddr($userip), $_SERVER['HTTP_USER_AGENT'] )) {
+	if (!$stmt->bind_param("ssss", $_POST['email'], $userip, gethostbyaddr($resolveip), $_SERVER['HTTP_USER_AGENT'] )) {
 		die(json_encode(array(
 				"status" => "error",
 				"message" => "Binding parameters failed: (" . $mysqli->errno . ") " . $mysqli->error
