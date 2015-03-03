@@ -1,7 +1,7 @@
 $(function() {
 
 	function on_scroll() {
-		var ofs = $(document.body).scrollTop(),
+		var ofs = $(window).scrollTop(),
 			bt = ofs/2;
 
 		$("#pxback").css({

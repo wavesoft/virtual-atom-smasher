@@ -191,6 +191,13 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 			
 		}
 
+		/**
+		 * Enumerate all the jobs available for the user
+		 */
+		APILabSocket.prototype.enumJobs = function() {
+			
+		}
+
 
 		/**
 		 * This event is fired when the socket is connected.
