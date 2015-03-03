@@ -1,13 +1,21 @@
 <?php
 
-/* Server configuration */
-$server = "";
-$server_user = "";
-$server_pass = "";
-$server_db   = "";
+/* Read server configuration */
+if (!is_file("config.php"))
+	die(json_encode(array(
+			"status" => "error",
+			"message" => "Server is not configured properly!"
+		)));
+$config = require("config.php");
+
+/* Get remote IP */
+$userip = $_SERVER['REMOTE_ADDR'];
+if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+	$userip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+}
 
 /* Connect to SQL */
-$mysqli = new mysqli($server, $server_user, $server_pass, $server_db);
+$mysqli = new mysqli($config['server'], $config['server_user'], $config['server_pass'], $config['server_db']);
 if ($mysqli->connect_errno) {
 	die(json_encode(array(
 			"status" => "error",
@@ -27,7 +35,7 @@ if (isset($_POST['email'])) {
 	}
 
 	// Bind parameters
-	if (!$stmt->bind_param("ssss", $_POST['email'], $_SERVER['REMOTE_ADDR'], gethostbyaddr($_SERVER['REMOTE_ADDR']), $_SERVER['HTTP_USER_AGENT'] )) {
+	if (!$stmt->bind_param("ssss", $_POST['email'], $userip, gethostbyaddr($userip), $_SERVER['HTTP_USER_AGENT'] )) {
 		die(json_encode(array(
 				"status" => "error",
 				"message" => "Binding parameters failed: (" . $mysqli->errno . ") " . $mysqli->error

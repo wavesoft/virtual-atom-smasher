@@ -89,7 +89,24 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 				// Simulation is completed
 				this.running = false;
 
+			} else if (action == "job.added") { /* Simulation job added */
+
+				// Job added
+				this.trigger('jobAdded', data['job']);
+
+			} else if (action == "job.removed") { /* Simulation job removed */
+
+				// Job added
+				this.trigger('jobRemoved', data['job']);
+
+			} else if (action == "job.updated") { /* Simulation job updated */
+
+				// Job added
+				this.trigger('jobUpdated', data['job']);
+
+
 			}
+
 		}
 
 		/**
@@ -158,6 +175,22 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 			this.running = false;
 
 		}
+
+
+		/**
+		 * Enumerate all the jobs available for the user
+		 */
+		APILabSocket.prototype.enumJobs = function() {
+
+		}
+
+		/**
+		 * Focus on the particular job 
+		 */
+		APILabSocket.prototype.focusJob = function( jobid ) {
+			
+		}
+
 
 		/**
 		 * This event is fired when the socket is connected.

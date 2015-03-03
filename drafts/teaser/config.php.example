@@ -1,0 +1,17 @@
+<?php
+
+return array(
+
+		/* MySQL Server */
+		"server" 		=> "",
+
+		/* MySQL User */
+		"server_user" 	=> "",
+		"server_pass" 	=> "",
+
+		/* MySQL Database */
+		"server_db"   	=> ""
+		
+	);
+
+?>
