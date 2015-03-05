@@ -18,16 +18,18 @@ define(
 
 			// Initialize widget
 			Component.call(this, hostDOM);
+			this.hostDOM.addClass("describe-machine-part");
 
 			// Setup tabs
 			this.tabsDOM = $('<div class="tabs"></div>').appendTo(hostDOM);
 			this.containers = [];
 			this.tabs = [];
 			this.components = [];
+			this.lastFocusedTab = 0;
 
 			// Register description tab
 			this.registerTab( 'overlay.machinepart.describe', 'Description' );
-			this.registerTab( 'overlay.machinepart.describe', 'Description2' );
+			this.registerTab( 'overlay.machinepart.paper', 'Papers' );
 
 		};
 
@@ -38,6 +40,9 @@ define(
 		 * Select a tab
 		 */
 		MachinePart.prototype.selectTab = function( index ) {
+			// Keep the last focused tab
+			this.lastFocusedTab = index;
+			// Focus the particular tab
 			for (var i=0; i<this.containers.length; i++) {
 				if (i == index) {
 					this.containers[i].show();
@@ -66,9 +71,15 @@ define(
 			var com = R.instanceComponent( docName, dom );
 			this.components.push(com);
 
-			// Adopt event
+			// Adopt/Forward events to the client component
 			this.adoptEvents( com );
 			this.forwardVisualEvents( com );
+			this.forwardEvents( com, [
+					'onTunableFocus',
+					'onTunablesDefined',
+					'onTunablesDefined',
+					'onMachinePartDefined'
+				]);
 
 			// Register
 			(function(idx) {
@@ -102,6 +113,34 @@ define(
 		 */
 		MachinePart.prototype.onTuningValuesDefined = function( tunables ) {
 
+		};
+		
+		/**
+		 * The machine part configuration defined
+		 */
+		MachinePart.prototype.onMachinePartDefined = function( config, isEnabled ) {
+			if (!isEnabled) {
+				
+				// Activate only first tab
+				for (var i=1; i<this.tabs.length; i++) {
+					this.containers[i].hide();
+					this.tabs[i].hide();
+				}
+
+				// Select first tab
+				this.selectTab(0);
+
+			} else {
+
+				// Activate all tabs if enabled
+				for (var i=1; i<this.tabs.length; i++) {
+					this.tabs[i].show();
+				}
+
+				// Select last focused tab
+				this.selectTab(this.lastFocusedTab);
+
+			}
 		};
 
 		// Store overlay component on registry

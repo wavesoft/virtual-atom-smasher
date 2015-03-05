@@ -96,6 +96,16 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get user papers
+		 */
+		APIAccount.prototype.listPapers = function(callback) {
+			// Query server
+			this.sendAction("papers.list", {}, function(data) {
+				if (data) callback(data['data']);
+			});
+		}
+
+		/**
 		 * Handle chatroom event
 		 */
 		APIAccount.prototype.handleAction = function(action, data) {

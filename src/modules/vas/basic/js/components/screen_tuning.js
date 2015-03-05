@@ -274,7 +274,7 @@ define(
 		 */
 		TuningScreen.prototype.showPopover = function( pos, machinePartID ) {
 
-			// Find out what tunables are in this machine part
+			// Find out what tunables are in this machine part 
 			var details = DB.cache['definitions']['machine-parts'][machinePartID],
 				tunables = this.machinePartTunables[machinePartID],
 				hasTunables = (tunables && (tunables.length > 0));
@@ -285,6 +285,7 @@ define(
 			this.tuningPanel.onTuningMarkersDefined( this.markers );
 			this.machinePartComponent.onTunablesDefined( tunables );
 			this.machinePartComponent.onTuningValuesDefined( tunables );
+			this.machinePartComponent.onMachinePartDefined( details, this.machinePartsEnabled[machinePartID] );
 
 			// Add back-blur fx on the machine DOM
 			this.machineDOM.addClass("fx-backblur");

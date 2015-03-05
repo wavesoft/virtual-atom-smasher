@@ -161,15 +161,25 @@ div.table-list {
 	border-top: solid 1px #cccccc;
 	border-bottom: solid 1px #cccccc;	
 
+	&.table-absolute {
+		table {
+			position: absolute;
+			thead {
+				position: absolute;
+			}
+			tbody {
+				position: absolute;
+			}
+		}
+	}
+
 	// Table subcontainer
 	table {
-		position: absolute;
 		left: 0; width: 100%;
 		top: 0; height: 100%;
 
 		thead {
 			display: block;
-			position: absolute;
 			left: 0; right: 0; top: 0;
 
 			border-bottom: solid 1px #CCC;
@@ -178,7 +188,6 @@ div.table-list {
 
 		tbody {
 			display: block;
-			position: absolute;
 			left: 0; width: 100%;
 			bottom: 0;
 			top: 28px;

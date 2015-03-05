@@ -1,0 +1,65 @@
+{{#paper}}
+	<div class="title">
+		<h1>{{ paper.title }}</h1>
+	</div>
+	<div class="abstract">
+		{{ paper.abstract }}
+	</div>
+	<div class="values">
+		<ul>
+			{{#tunables}}
+			<li><a href="do:applyValue('{{ name }}',{{ value }})" class="{{class}}">{{value}}</a></li>
+			{{/tunables}}
+		</ul>
+	</div>
+{{/paper}}
+{{^paper}}
+	<div class="title">
+		<h1>Papers</h1>
+		<p class="small">In this window you can see all the papers you and your team has cited in order to use their values as reference. You can also see your own saved values.</p>
+	</div>
+	<div class="enum">
+		<div class="table-list table-scroll table-lg">
+			<table>
+				<thead>
+					<tr>
+						<th class="col-6">Title</th>
+						<th class="col-4">Author</th>
+						<th class="col-2">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#papers}}
+					<tr>
+						<td class="col-6">
+							{{#mine}}
+							<span class="glyphicon glyphicon-user"></span>
+							{{/mine}}
+							{{^mine}}
+							<span class="glyphicon glyphicon-pushpin"></span>
+							{{/mine}}
+							{{title}}
+						</td>
+						<td class="col-4">{{authors}}</td>
+						<td class="col-2">
+							<button click="do:viewPaper('{{id}}')" class="btn-shaded btn-yellow">
+								<span class="glyphicon glyphicon-eye-open"></span>
+							</button>
+							<button click="do:applyPaper('{{id}}')" class="btn-shaded btn-green">
+								<span class="glyphicon glyphicon-ok"></span>
+							</button>
+						</td>
+					</tr>
+					{{/papers}}
+					{{^papers}}
+					<tr>
+						<td colspan="3" class="col-12 text-center">
+							(No papers to display)
+						</td>
+					</tr>
+					{{/papers}}
+				</tbody>
+			</table>
+		</table>
+	</div>
+{{/paper}}

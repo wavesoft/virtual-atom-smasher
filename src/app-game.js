@@ -33,6 +33,8 @@ requirejs.config({
 
 /**
  * Start application
+ *
+ * NOTE: First load packages and then require() the actual code modules
  */
 requirejs(['require', 'extern', 'core', 'vas', 'tootr', 'less!../app-game'], 
 	function (require, Extern, Core, VAS, Tootr) {
@@ -42,21 +44,28 @@ requirejs(['require', 'extern', 'core', 'vas', 'tootr', 'less!../app-game'],
 				// Core components required by bootstrap
 				"jquery",
 				"vas/core",
+				// Google tag manager
+				"google-tag-manager",
 				// Game modules
 				"vas/basic",
 				"vas/3d/main",
 			], 
-			function($, main) {
+			function($, main, GTM) {
 
 				console.log("Loaded!");
 				$(function() {
-					console.log("Initializing...");
+					
+					// Load GTM when libraries are in place
+					var gtm = new GTM('GTM-PBX27K');
+
 					// Initialize VAS 
+					console.log("Initializing...");
 					main.initialize(function() {
 						// Wait until VAS is ready and run it
 						console.log("Running...");
 						main.run();
 					});
+
 				});
 
 			}

@@ -77,6 +77,10 @@ require.config({
 			'name'		: 'mustache',
 			'location'	: 'extern/mustache/js',
 			'main'		: 'mustache'
+		},
+		{
+			'name'		: 'google-tag-manager',
+			'location'	: 'extern/google-tag-manager/js'
 		}
 	],
 

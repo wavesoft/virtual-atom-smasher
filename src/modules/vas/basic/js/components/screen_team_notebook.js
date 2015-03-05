@@ -25,7 +25,7 @@ define(
 			this.eHeader = $('<h1><span class="highlight">Team</span> Shared Notebook</h1><div class="subtitle">Shared notes with your teammates.</div>').appendTo(hostDOM);
 
 			// Team list
-			this.eListHost = $('<div class="table-list table-scroll table-lg"></div>').appendTo(hostDOM);
+			this.eListHost = $('<div class="table-list table-absolute table-scroll table-lg"></div>').appendTo(hostDOM);
 			this.eListTable = $('<table></table>').appendTo(this.eListHost);
 			this.eListHeader = $('<thead><tr><th class="col-8">Notes</th><th class="col-4">Options</th></tr></thead>').appendTo(this.eListTable);
 			this.eListBody = $('<tbody></tbody>').appendTo(this.eListTable);

@@ -1,8 +1,12 @@
 /**
  * [core/ui/view] - A templated view
  */
-define(["require", "mustache", "jquery"], 
-	function(require, Mustache, $) {
+define(["require", "mustache", "jquery",
+
+		// Load plugins
+		"core/ui/view/plugin-checkbox-vis",
+		"core/ui/view/plugin-do"], 
+	function(require, Mustache, $, plVis, plDo) {
 
 		/**
 		 * Generic purpose function to get value of a DOM element
@@ -93,6 +97,10 @@ define(["require", "mustache", "jquery"],
 				hooks: []
 			};
 
+			// Register core plugins
+			this.registerTemplatePlugin( plVis );
+			this.registerTemplatePlugin( plDo );
+
 			// Import template
 			if (template)
 				this.loadTemplate(template);
@@ -100,32 +108,48 @@ define(["require", "mustache", "jquery"],
 		}
 
 		/**
+		 * Register a template plugin
+		 */
+		View.prototype.registerTemplatePlugin = function( pluginClass ) {
+
+			// Instantiate plugin
+			var plugin = new pluginClass(this);
+
+			// Store on viewPlugins
+			this.viewPlugins.push(plugin);
+
+			// Fire pluginReady
+			if (plugin.pluginReady)
+				plugin.pluginReady( );
+
+			// Decrement plugin counter and callback on zero
+			if (!--this.viewWaitPlugins.counter) {
+				// Fire hooks
+				for (var i=0; i<this.viewWaitPlugins.hooks.length; i++)
+					this.viewWaitPlugins.hooks[i]();
+				// And reset
+				this.viewWaitPlugins.hooks = [];
+			}
+
+
+		}
+
+		/**
 		 * Load a template plugin
 		 */
-		View.prototype.loadTemplatePlugin = function( name ) {
+		View.prototype.loadTemplatePlugin = function( path, callback ) {
 
 			// Increment plugin counter
 			this.viewWaitPlugins.counter++;
 
 			// Asynchronously load plug-in
-			require([name], (function(pluginClass) {
+			require([path], (function(pluginClass) {
 
 				// Instantiate and register
-				var plugin = new pluginClass(this);
-				this.viewPlugins.push(plugin);
+				this.registerTemplatePlugin( pluginClass );
 
-				// Fire pluginReady
-				if (plugin.pluginReady)
-					plugin.pluginReady( );
-
-				// Decrement plugin counter and callback on zero
-				if (!--this.viewWaitPlugins.counter) {
-					// Fire hooks
-					for (var i=0; i<this.viewWaitPlugins.hooks.length; i++)
-						this.viewWaitPlugins.hooks[i]();
-					// And reset
-					this.viewWaitPlugins.hooks = [];
-				}
+				// Fire callback when ready
+				if (callback) callback();
 
 			}).bind(this));
 		}
@@ -147,7 +171,7 @@ define(["require", "mustache", "jquery"],
 			
 			// Normalize set({}), and set("","") cases
 			if (typeof(key) == "object") {
-				transaction = keyl
+				transaction = key;
 			} else {
 				transaction[key] = value;
 			}

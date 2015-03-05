@@ -130,7 +130,7 @@ define(
 		 * Remove a previously added pin
 		 */
 		Globe3D.prototype.removePin = function( pin ) {
-			var i = this.pins.indexof(pin);
+			var i = this.pins.indexOf(pin);
 			if (i<0) return;
 
 			this.pins.splice(i,1);

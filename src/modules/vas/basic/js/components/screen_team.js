@@ -34,7 +34,7 @@ define(
 			// ------------------------------
 
 			// Team list
-			this.eTeamListHost = $('<div class="table-users table-list table-scroll table-lg"></div>').appendTo(hostDOM);
+			this.eTeamListHost = $('<div class="table-users table-list table-absolute table-scroll table-lg"></div>').appendTo(hostDOM);
 			this.eTeamListTable = $('<table></table>').appendTo(this.eTeamListHost);
 			this.eTeamListHeader = $('<thead><tr><th class="col-3">Name</th><th class="col-3">Status</th><th class="col-3">Contribution</th><th class="col-3">Options</th></tr></thead>').appendTo(this.eTeamListTable);
 			this.eTeamListBody = $('<tbody></tbody>').appendTo(this.eTeamListTable);
@@ -70,7 +70,7 @@ define(
 			// ------------------------------
 
 			// Team list
-			this.eMachineListHost = $('<div class="table-machines table-list table-scroll table-lg"></div>').appendTo(hostDOM);
+			this.eMachineListHost = $('<div class="table-machines table-absolute table-list table-scroll table-lg"></div>').appendTo(hostDOM);
 			this.eMachineListTable = $('<table></table>').appendTo(this.eMachineListHost);
 			this.eMachineListHeader = $('<thead><tr><th class="col-6">ID</th><th class="col-3">Owner</th><th class="col-3">Status</th></tr></thead>').appendTo(this.eMachineListTable);
 			this.eMachineListBody = $('<tbody></tbody>').appendTo(this.eMachineListTable);

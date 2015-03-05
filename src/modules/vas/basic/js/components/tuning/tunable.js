@@ -295,7 +295,6 @@ define(
 		 */
 		DefaultTunableWidget.prototype.onUpdate = function(value) {
 			this.value = this.unmapValue( value );
-			console.log("> Setting value",value,"=",this.value);
 
 			if (this.dragdealer == null) return;
 			this.dragdealer.setValue( this.value, 0 );

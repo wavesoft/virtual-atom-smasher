@@ -87,6 +87,7 @@ define([
 
 	// Machine parts
 	'vas/basic/machineparts/describe',
+	'vas/basic/machineparts/papers',
 
 ], function(require) {
 

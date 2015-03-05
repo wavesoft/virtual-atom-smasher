@@ -28,7 +28,7 @@ define(
 			$('<h1><span class="highlight">Team</span> Computing Elements</h1><div class="subtitle">Oversee the computing power of your team and control your resources.</div>').appendTo(hostDOM);
 
 			// Team list
-			this.eListHost = $('<div class="table-list table-scroll table-lg"></div>').appendTo(hostDOM);
+			this.eListHost = $('<div class="table-list table-scroll table-absolute table-lg"></div>').appendTo(hostDOM);
 			this.eListTable = $('<table></table>').appendTo(this.eListHost);
 			this.eListHeader = $('<thead><tr><th class="col-3">ID</th><th class="col-3">User</th><th class="col-3">Jobs Handled</th><th class="col-3">Status</th></tr></thead>').appendTo(this.eListTable);
 			this.eListBody = $('<tbody></tbody>').appendTo(this.eListTable);
