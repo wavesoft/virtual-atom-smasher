@@ -559,7 +559,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 				// Update all papers and tag which ones are mine
 				for (var i=0; i<papers.length; i++) {
 					// Check if this is mine
-					papers[i].mine = (papers[i].owner_id == this.profile['id']);
+					papers[i].mine = (papers[i].owner == this.profile['id']);
 				}
 
 				// Fire callback
