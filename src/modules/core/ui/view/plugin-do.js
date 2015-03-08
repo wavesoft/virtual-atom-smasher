@@ -5,6 +5,42 @@ define(["require","jquery"],
 	function(require, $) {
 
 		/**
+		 * Extract function name and arguments from URL
+		 */
+		function parseAction(url) {
+
+			// Make sure prefix is do:
+			var parts = url.split(":");
+			if (parts[0] != 'do')
+				return false;
+
+			// Get everything after 'do:''
+			parts = parts[1].split("(");
+
+			// Get action and arguments
+			var action = parts[0],
+				args = [];
+
+			// Parse arguments
+			if (parts.length > 1) {
+				// Trim tailing ')'
+				var argStr = parts[1];
+				if (argStr.charAt(argStr.length-1) == ")")
+					argStr = argStr.substr(0,argStr.length-1);
+				// Parse arguments
+				try {
+					args = eval('[' + argStr + ']');
+				} catch(e) {
+					console.error("Could not parse '"+argStr+"':",e);
+				}
+			}
+
+			// Return arguments and action
+			return [action, args];
+
+		}
+
+		/**
 		 * A templated view
 		 */
 		var DOPlugin = function( view ) {
@@ -31,49 +67,72 @@ define(["require","jquery"],
 		}
 
 		/**
+		 * Fire the give handlers
+		 */
+		DOPlugin.prototype.fireDoHandlers = function( action, args ) {
+			// Continue only if we have a handler
+			if (this.doHandlers[action]) {
+				// Fire all handlers
+				for (var i=0; i<this.doHandlers[action].length; i++) {
+					this.doHandlers[action][i].apply(this, args);
+				}
+			}
+		}
+
+		/**
 		 * Fired by the plugin view controller when DOM elements are rendered
 		 */
 		DOPlugin.prototype.postRender = function( dom, data ) {
 
-			// Handle all do: urls and do: event handlers
+			// Handle all links with do: urls
 			var self = this;
-			dom.find("a[href*='do:'],*[click*='do:']").each(function(i, elm) {
+			dom.find("a[href*='do:']").each(function(i, elm) {
 
 				// Register click handler
-				$(elm).click(function() {
+				$(elm).click(function(e) {
+					e.preventDefault();
+					
+					var a = parseAction($(this).attr('href'));
+					if (!a) return;
+					self.fireDoHandlers(a[0], a[1]);
+				})
 
-					// Get everything after do:
-					var doPayload = $(this).attr('href') || $(this).attr('click');
-						parts = doPayload.substr(3).split("(");
+			});
 
-					// Get arguments
-					var action = parts[0],
-						args = [];
+			// Handle all forms with do: actions
+			var self = this;
+			dom.find("form[action*='do:']").each(function(i, elm) {
 
-					// Parse arguments
-					if (parts.length > 1) {
-						// Trim tailing ')'
-						var argStr = parts[1];
-						if (argStr.charAt(argStr.length-1) == ")")
-							argStr = argStr.substr(0,argStr.length-1);
-						// Parse arguments
-						try {
-							args = eval('[' + argStr + ']');
-						} catch(e) {
-							console.error("Could not parse '"+argStr+"':",e);
-						}
-					}
+				// Register click handler
+				$(elm).submit(function(e) {
 
-					// Fire callback;
-					if (self.doHandlers[action]) {
-						for (var i=0; i<self.doHandlers[action].length; i++) {
-							self.doHandlers[action][i].apply(this, args);
-						}
-					}
+					// Prevent form's default action
+					e.preventDefault();
+
+					// On submit, fire action
+					var a = parseAction($(this).attr('action'));
+					if (!a) return;
+					self.fireDoHandlers(a[0], a[1]);
 
 				})
 
 			});
+
+			// Proces all handlers
+			var handlers = ['click','mouseover','mouseout','keypress','keydown','keyup'];
+			for (var i=0; i<handlers.length; i++) {
+				(function(hName){
+					dom.find("*[" + hName + "*='do:']").each(function(i, elm) {
+						// Register click handler
+						$(elm)[hName](function() {
+							var a = parseAction($(this).attr(hName));
+							if (!a) return;
+							self.fireDoHandlers(a[0], a[1]);
+						})
+					});
+				})(handlers[i]);
+			}
+
 
 		};
 

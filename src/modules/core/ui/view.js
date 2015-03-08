@@ -78,6 +78,28 @@ define(["require", "mustache", "jquery",
 		}
 
 		/**
+		 * No cross-fade function
+		 */
+		function transition_none( hostDOM, direction, callback ) {
+			if (callback) callback();
+		}
+
+		/**
+		 * Classic cross-fade transition
+		 */
+		function transition_fade( hostDOM, direction, callback ) {
+			if (!direction) {
+				hostDOM.fadeOut(250, function() {
+					if (callback) callback();
+				});
+			} else {
+				hostDOM.fadeIn(250, function() {
+					if (callback) callback();
+				});
+			}
+		}
+
+		/**
 		 * A templated view
 		 */
 		var View = function(template, hostDOM) {
@@ -219,8 +241,10 @@ define(["require", "mustache", "jquery",
 				// Store selectors on list
 				this.viewSelectors.push([selector, callback]);
 				// If we have DOM, also run it now
-				if (this.hostDOM)
-					callback(this.hostDOM.find(selector));
+				if (this.hostDOM) {
+					var sel = this.hostDOM.find(selector);
+					if ((sel.length > 0) && callback) callback();
+				}
 			} else {
 				// Return 
 				if (!this.hostDOM) return $();
@@ -231,7 +255,15 @@ define(["require", "mustache", "jquery",
 		/**
 		 * Update view
 		 */
-		View.prototype.renderView = function() {
+		View.prototype.renderView = function( transitionFunction ) {
+
+			// Pick transition function
+			var TRANSITIONS = {
+					'none': transition_none,
+					'fade': transition_fade
+				},
+				fadeFn = ((typeof(transitionFunction) == 'function') ? transitionFunction : (TRANSITIONS[transitionFunction] || transition_none));
+
 			var self = this,
 				delayWrapper = (function() {
 
@@ -241,69 +273,79 @@ define(["require", "mustache", "jquery",
 						this.viewPlugins[i].preRender( this.hostDOM, this.viewData );
 				}
 
-				// Render template
-				this.hostDOM.html( Mustache.render(this.viewTemplate, this.viewData) );
+				// Fade-out
+				fadeFn(this.hostDOM, false, function() {
 
-				// Plugins: postRender
-				for (var i=0; i<this.viewPlugins.length; i++) {
-					if (this.viewPlugins[i].postRender)
-						this.viewPlugins[i].postRender( this.hostDOM, this.viewData );
-				}
+					// Render template
+					self.hostDOM.html( Mustache.render(self.viewTemplate, self.viewData) );
 
-				// Introspect DOM forms
-				this.forms = [];
-				this.hostDOM.find("form").each(function(i, elm) {
-					var elm = $(elm),
-						f = { 'elements': {} };
+					// Plugins: postRender
+					for (var i=0; i<self.viewPlugins.length; i++) {
+						if (self.viewPlugins[i].postRender)
+							self.viewPlugins[i].postRender( self.hostDOM, self.viewData );
+					}
 
-					// Abort accidental form submissions
-					elm.submit(function(e) {
-						e.preventDefault();
-						return false;
-					});
+					// Introspect DOM forms
+					self.forms = [];
+					self.hostDOM.find("form").each(function(i, elm) {
+						var elm = $(elm),
+							f = { 'elements': {} };
 
-					// Iterate over input or input-like elements
-					elm.find("input,textarea,datalist,select,.form-input-list").each(function(i, inpElm) {
-						
-						// Get field name from the fields:
-						// [ name=, data-name=, or id= ]
-						var  inpElm = $(inpElm),
-							 name = inpElm.attr("name");
-						if (!name) name = inpElm.data("name");
-						if (!name) name = inpElm.attr("id");
-						if (!name) return;
-
-						// Define property
-						Object.defineProperty(f, name, {
-							// Get input field value
-							get: function() {
-								return get_element_value(inpElm);
-							},
-							// Set input field value
-							set: function(value) {
-								set_element_value(inpElm,value);
-							}
+						// Abort accidental form submissions
+						elm.submit(function(e) {
+							e.preventDefault();
+							return false;
 						});
 
-						// Store element
-						f.elements[name] = inpElm;
+						// Iterate over input or input-like elements
+						elm.find("input,textarea,datalist,select,.form-input-list").each(function(i, inpElm) {
+							
+							// Get field name from the fields:
+							// [ name=, data-name=, or id= ]
+							var  inpElm = $(inpElm),
+								 name = inpElm.attr("name");
+							if (!name) name = inpElm.data("name");
+							if (!name) name = inpElm.attr("id");
+							if (!name) return;
+
+							// Define property
+							Object.defineProperty(f, name, {
+								// Get input field value
+								get: function() {
+									return get_element_value(inpElm);
+								},
+								// Set input field value
+								set: function(value) {
+									set_element_value(inpElm,value);
+								}
+							});
+
+							// Store element
+							f.elements[name] = inpElm;
+
+						});
+
+						// Look if we have a name for the form in the fields:
+						// [ name=, data-name=, or id= ]
+						var name = elm.attr("name");
+						if (!name) name = elm.data("name");
+						if (!name) name = elm.attr("id");
+
+						// If we have a name, add a keyed value for the form
+						self.forms.push(f);
+						if (name) self.forms[name] = f;
 
 					});
 
-					// Look if we have a name for the form in the fields:
-					// [ name=, data-name=, or id= ]
-					var name = elm.attr("name");
-					if (!name) name = elm.data("name");
-					if (!name) name = elm.attr("id");
+					// In any case, we have a new DOM, run selectors
+					self._updateSelectors();
 
-					// If we have a name, add a keyed value for the form
-					self.forms.push(f);
-					if (name) self.forms[name] = f;
+					// Fade-in
+					fadeFn(self.hostDOM, true);
 
 				});
 
-				// In any case, we have a new DOM, run selectors
-				this._updateSelectors();
+
 			}).bind(this);
 			
 			// If there are plug-ins pending loading, wait for them before
@@ -323,7 +365,8 @@ define(["require", "mustache", "jquery",
 			if (!this.hostDOM) return;
 			// Run selectors now
 			for (var i=0; i<this.viewSelectors.length; i++) {
-				this.viewSelectors[i][1]( this.hostDOM.find(this.viewSelectors[i][0]) );
+				var elms = this.hostDOM.find(this.viewSelectors[i][0]);
+				if (elms.length > 0) this.viewSelectors[i][1]( elms );
 			}
 		};
 
