@@ -551,10 +551,10 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		/**
 		 * Build and return the list of papers known to the user.
 		 */
-		User.prototype.getPapers = function( callback ) {
+		User.prototype.getPapers = function( query, callback ) {
 
 			// Query knowledge grid
-			this.accountIO.listPapers((function(papers) {
+			this.accountIO.listPapers(query, (function(papers) {
 
 				// Update all papers and tag which ones are mine
 				for (var i=0; i<papers.length; i++) {
@@ -570,6 +570,26 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 
 		}
 
+		/**
+		 * Return a signle paper.
+		 */
+		User.prototype.getPaper = function( paper_id, callback ) {
+
+			// Query knowledge grid
+			this.accountIO.getPaper(paper_id, (function(paper) {
+
+				// Check if this paper is editable
+				paper.editable = 
+					(paper.owner == this.profile['id']) &&
+					((paper.status == 0 /* Draft */) || (paper.status == 1 /* Team Review */));
+
+				// Fire callback
+				if (callback)
+					callback(paper);
+
+			}).bind(this));
+
+		}
 
 
 

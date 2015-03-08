@@ -79,6 +79,11 @@ require.config({
 			'main'		: 'mustache'
 		},
 		{
+			'name'		: 'quill',
+			'location'	: 'extern/quill/js',
+			'main'		: 'quill-0.19.8.min'
+		},
+		{
 			'name'		: 'google-tag-manager',
 			'location'	: 'extern/google-tag-manager/js'
 		}

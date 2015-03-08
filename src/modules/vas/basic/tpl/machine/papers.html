@@ -1,17 +1,48 @@
 {{#paper}}
-	<div class="title">
-		<h1>{{ paper.title }}</h1>
-	</div>
-	<div class="abstract">
-		{{ paper.abstract }}
-	</div>
-	<div class="values">
-		<ul>
-			{{#tunables}}
-			<li><a href="do:applyValue('{{ name }}',{{ value }})" class="{{class}}">{{value}}</a></li>
-			{{/tunables}}
-		</ul>
-	</div>
+	<form data-name="paper" action="do:savePaper()">
+		<div class="title">
+
+			{{#paper.editable}}
+			<input class="flat-h2 editable-mark" name="title" value="{{paper.title}}" type="text" />
+			{{/paper.editable}}
+			{{^paper.editable}}
+			<h2>{{ paper.title }}</h2>
+			{{/paper.editable}}
+		</div>
+		<div class="full-body">
+			<p class="discreet">Notes:</p>
+			<div class="abstract">
+				{{#paper.editable}}
+				<div class="quill editable-mark" name="body">{{paper.body}}</div>
+				{{/paper.editable}}
+				{{^paper.editable}}
+					{{#paper.body}}
+						{{{paper.body}}}
+					{{/paper.body}}
+					{{^paper.body}}
+						(This paper has no notes, just results!)
+					{{/paper.body}}
+				{{/paper.editable}}
+			</div>
+			<div class="values">
+				<ul>
+					{{#tunables}}
+					<li><a href="do:applyValue('{{ name }}',{{ value }})" class="{{class}}">{{value}}</a></li>
+					{{/tunables}}
+				</ul>
+			</div>
+		</div>
+		<div class="footer footer-input">
+			<button type="button" class="b-teal" click="do:closePaper()">
+				<span class="glyphicon glyphicon-menu-left"></span> Back to the papers
+			</button>
+			{{#paper.editable}}
+			<button type="submit" class="b-purple pull-right">
+				<span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
+			</button>
+			{{/paper.editable}}
+		</div>
+	</form>
 {{/paper}}
 {{^paper}}
 	<div class="title">
@@ -25,10 +56,21 @@
 					<tr>
 						<th class="col-6">Title</th>
 						<th class="col-4">Author</th>
-						<th class="col-2">Actions</th>
+						<th class="col-2" colspan="2">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
+					{{#activePaper}}
+					<tr>
+						<td class="col-6">
+							<span class="glyphicon glyphicon-user"></span> {{activePaper.title}}
+						</td>
+						<td class="col-4">(Editting)</td>
+						<td class="col-1 text-center">
+							<a class="btn-flat btn-flat-yellow" click="do:viewPaper({{id}})">Edit</a>
+						</td>
+					</tr>
+					{{/activePaper}}
 					{{#papers}}
 					<tr>
 						<td class="col-6">
@@ -40,13 +82,11 @@
 							{{/mine}}
 						</td>
 						<td class="col-4">{{authors}}</td>
-						<td class="col-2">
-							<button click="do:viewPaper('{{id}}')" class="btn-shaded btn-yellow">
-								<span class="glyphicon glyphicon-eye-open"></span>
-							</button>
-							<button click="do:applyPaper('{{id}}')" class="btn-shaded btn-green">
-								<span class="glyphicon glyphicon-ok"></span>
-							</button>
+						<td class="col-1 text-center">
+							<a class="btn-flat btn-flat-yellow" click="do:viewPaper({{id}})">See</a>
+						</td>
+						<td class="col-1 text-center">
+							<a class="btn-flat btn-flat-green" click="do:applyPaper({{id}})">Use</a>
 						</td>
 					</tr>
 					{{/papers}}
@@ -60,5 +100,12 @@
 				</tbody>
 			</table>
 		</table>
+	</div>
+	<div class="footer footer-input">
+		<form data-name="search" action="do:searchPapers()">
+			<input style="width: 220px" name="terms" placeholder="Search for paper" value="{{ terms }}" />
+			<button type="submit" class="b-blue">Filter</button>
+			<button type="button" class="pull-right b-teal" click="do:newPaper()"><span class="glyphicon glyphicon-plus"></span> New Paper</button>
+		</form>
 	</div>
 {{/paper}}

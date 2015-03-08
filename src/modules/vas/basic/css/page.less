@@ -95,6 +95,29 @@ h1 {
 .visualaid-focus {
 }
 
+
+// ===============================
+// Flat input elements
+// ===============================
+
+.editable-mark {
+	border: dashed 1px #999 !important;
+}
+
+input.flat-h1 {
+	border: none;
+	background: transparent;
+	font-weight: bold;
+	font-size: 2em;
+}
+
+input.flat-h2 {
+	border: none;
+	background: transparent;
+	font-weight: bold;
+	font-size: 1.5em;
+}
+
 // ===============================
 // General text flags
 // ===============================
@@ -359,6 +382,9 @@ div.table-list {
 .f-grey {
 	color: #bdc3c7;
 }
+.f-teal {
+	color: #16a085;
+}
 
 .b-red {
 	background-color: #e74c3c;	
@@ -384,7 +410,57 @@ div.table-list {
 .b-grey {
 	background-color: #ecf0f1;
 }
+.b-teal {
+	background-color: #1abc9c;
+}
 
+// ===============================
+// Flat buttons
+// ===============================
+
+.btn-flat {
+	color: #2980b9;
+	padding: 4px 2px;
+	.border-radius( 2px );
+}
+
+.btn-flat:hover {
+	text-decoration: none;
+		
+	&.btn-flat-red {
+		color: #fff;
+		background-color: #e74c3c;	
+	}
+	&.btn-flat-green {
+		color: #fff;
+		background-color: #2ecc71;
+	}
+	&.btn-flat-blue {
+		color: #fff;
+		background-color: #3498db;
+	}
+	&.btn-flat-orange {
+		color: #fff;
+		background-color: #e67e22;
+	}
+	&.btn-flat-yellow {
+		color: #fff;
+		background-color: #f1c40f;
+	}
+	&.btn-flat-darkblue {
+		color: #fff;
+		background-color: #34495e;
+	}
+	&.btn-flat-purple {
+		color: #fff;
+		background-color: #9b59b6;
+	}
+	&.btn-flat-grey {
+		color: #fff;
+		background-color: #ecf0f1;
+	}
+
+}
 
 // ===============================
 // Shaded buttons
@@ -715,6 +791,16 @@ body.enable-ipide {
 // ===============================
 //  User interface icons
 // ===============================
+
+.glyphicon-uicon {
+	display: inline-block;
+	vertical-align: middle;
+	width: 24px;
+	height: 24px;
+	color: #ECF0F1;
+	text-align: center;
+	font-size: 18px;
+}
 
 .uicon {
 	background-image: url(modules/vas/basic/img/uicons-24.png);

@@ -98,9 +98,23 @@ define(["vas/core/api/interface", "vas/config"],
 		/**
 		 * Get user papers
 		 */
-		APIAccount.prototype.listPapers = function(callback) {
+		APIAccount.prototype.listPapers = function(query, callback) {
 			// Query server
-			this.sendAction("papers.list", {}, function(data) {
+			this.sendAction("papers.list", {
+				'query': query
+			}, function(data) {
+				if (data) callback(data['data']);
+			});
+		}
+
+		/**
+		 * Get a particular paper
+		 */
+		APIAccount.prototype.getPaper = function(paper_id, callback) {
+			// Query server
+			this.sendAction("papers.get", {
+				'id': paper_id
+			}, function(data) {
 				if (data) callback(data['data']);
 			});
 		}

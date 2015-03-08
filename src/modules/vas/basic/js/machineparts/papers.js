@@ -2,14 +2,14 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry", "vas/core/db", "vas/core/user", "vas/core/base/view", "text!vas/basic/tpl/machine/papers.html"], 
+	["jquery", "quill", "vas/core/registry", "vas/core/db", "vas/core/user", "vas/core/base/view", "text!vas/basic/tpl/machine/papers.html"], 
 
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
  	 * @exports vas-basic/overlay/flash
 	 */
-	function(config, R, DB, User, ViewComponent, tplContent) {
+	function(config, Quill, R, DB, User, ViewComponent, tplContent) {
 
 		/**
 		 * The default tunable body class
@@ -18,13 +18,48 @@ define(
 
 			// Initialize widget
 			ViewComponent.call(this, hostDOM);
+			hostDOM.addClass("machinepart-papers")
 
 			// Load template
 			this.loadTemplate( tplContent );
 
 			// Handle DO URLs
-			this.handleDoURL('beep', function(what) {
-				alert(what);
+			this.handleDoURL('searchPapers', (function() {
+
+				// Define terms
+				this.setViewData( 'terms', this.forms.search.terms );
+
+				// Request paper reload
+				this.reloadPapers({
+					'terms': '%'+this.forms.search.terms+'%'
+				});
+
+			}).bind(this));
+			this.handleDoURL('viewPaper', (function(id) {
+
+				// Get paper details
+				User.getPaper(id, (function(paper) {
+
+					// Define paper
+					this.setViewData('paper', paper);
+					this.renderView('fade');
+
+				}).bind(this));
+
+			}).bind(this));
+			this.handleDoURL('closePaper', (function() {
+
+				// Undefine paper
+				this.setViewData('paper', false);
+				this.renderView('fade');
+
+			}).bind(this));
+
+			// Start Quill on possible editable text areas
+			this.select('.quill', function(dom) {
+				var quill = new Quill(dom.get(0),{
+					theme: 'snow'
+				});
 			});
 
 		};
@@ -40,6 +75,26 @@ define(
 			// Update visual interface
 			this.setViewData( 'part', part );
 			this.setViewData( 'enabled', isEnabled );
+			this.setViewData( 'terms', "" );
+
+		}
+
+		/**
+		 * Render view before show
+		 */
+		PaperMachinePart.prototype.reloadPapers = function( query, cb ) {
+
+			// Request papers
+			User.getPapers(query, (function(papers) {
+
+				// Update papers and render view
+				this.setViewData('papers', papers);
+				this.renderView();
+
+				// Fire callbacks
+				if (cb) cb();
+
+			}).bind(this));
 
 		}
 
@@ -48,19 +103,9 @@ define(
 		 */
 		PaperMachinePart.prototype.onWillShow = function( cb ) {
 
-			// Get user's papers
-			User.getPapers((function(papers) {
-
-				// Update parameter
-				this.setViewData('papers', papers);
-
-				// Render view
-				this.renderView();
-
-				// Callback
-				cb();
-
-			}).bind(this));
+			// Reload papers (and re-render view)
+			// When done, fire callback
+			this.reloadPapers({}, cb);
 
 		}
 
