@@ -331,6 +331,67 @@ define(
 
 					}
 
+					// Place discuss tab
+					if (true) {
+						var discuss_host = $('<div class="content"></div>'),
+							discuss_iframe = $('<iframe class="split-left" frameborder="0" border=0"></iframe>').appendTo(discuss_host),
+							discuss_list = $('<div class="split-right list"></div>').appendTo(discuss_host),
+							discuss_floater = $('<div class="fix-bottom-left"></div>').appendTo(discuss_host);
+
+						// material coverage calculation
+						var discussScreen = [],
+							discussTypes = [
+								{
+									'title': 'Team',
+									'short': 'Discuss with your teammates',
+									'url'  : ''
+								},
+								{
+									'title': 'Public',
+									'short': 'Discuss with everyone in the forum',
+									'url'  : ''
+								},
+								{
+									'title': 'Scientists',
+									'short': 'Discuss with the scientists',
+									'url'  : ''
+								}
+							];
+
+						for (var i=0; i<discussTypes.length; i++) {
+							var disc = discussTypes[i],
+								// Create material label
+								disc_label = $('<div class="list-item"><div class="title"><span class="glyphicon glyphicon-uicon glyphicon-comment"></span> '+disc['title']+'</div><div class="subtitle">'+disc['short']+'</div></div>').appendTo(discuss_list);
+
+							// Activate on click
+							(function(disc) {
+
+								// Register label click
+								disc_label.click(function() {
+									discuss_list.find(".list-item").removeClass("active");
+									$(this).addClass("active");
+									discuss_iframe.attr("src", disc['url']);
+
+									// Update coverage
+									if (discussScreen.indexOf(disc['url']) == -1) {
+										discussScreen.push(disc['url']);
+										self.coverage[3] = discussScreen.length / data['material'].length;
+									}
+
+								});
+							})(disc);
+
+						}
+
+						// Create tab
+						this.createTab(discuss_host, 'cs-yellow', '<span class="glyphicon glyphicon-comment glyphicon-uicon"></span> Discuss')
+							.addClass("tab-noscroll").addClass("tab-fullheight");
+							
+						// Click on the first item
+						discuss_list.find(".list-item:first-child").click();
+
+					}
+
 					// Initial analytics setup
 					Analytics.restartTimer("book");
 					Analytics.restartTimer("book-tab");
