@@ -8,6 +8,11 @@ define({
 	'dom-host' 			: '#game-frame',
 
 	/**
+	 * Forum VAS API URL
+	 */
+	'forum_vas_api'		: '/forum/vasapi.php',
+
+	/**
 	 * Base URL for images
 	 */
 	'images_url'		: 'static/img',

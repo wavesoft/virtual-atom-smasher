@@ -2,14 +2,14 @@ define(
 
 	// Dependencies
 
-	["jquery", "require", "vas/config", "vas/core/registry","vas/core/base/data_widget", "vas/core/db", "core/analytics/analytics" ], 
+	["jquery", "require", "vas/config", "vas/core/user", "vas/core/registry","vas/core/base/data_widget", "vas/core/db", "core/analytics/analytics" ], 
 
 	/**
 	 * This is the default component for displaying information regarding a tunable
 	 *
  	 * @exports vas-basic/infoblock/tunable
 	 */
-	function($, require, Config, R, DataWidget, DB, Analytics) {
+	function($, require, Config, User, R, DataWidget, DB, Analytics) {
 
 		/**
 		 * Find base directory for images
@@ -344,17 +344,17 @@ define(
 								{
 									'title': 'Team',
 									'short': 'Discuss with your teammates',
-									'url'  : ''
+									'url'  : Config['forum_vas_api'] + "?auth=" + User.profile['token'] + '&scope=team&term=' + escape(meta['book'])
 								},
 								{
 									'title': 'Public',
 									'short': 'Discuss with everyone in the forum',
-									'url'  : ''
+									'url'  : Config['forum_vas_api'] + "?auth=" + User.profile['token'] + '&scope=public&term=' + escape(meta['book'])
 								},
 								{
 									'title': 'Scientists',
 									'short': 'Discuss with the scientists',
-									'url'  : ''
+									'url'  : Config['forum_vas_api'] + "?auth=" + User.profile['token'] + '&scope=experts&term=' + escape(meta['book'])
 								}
 							];
 
