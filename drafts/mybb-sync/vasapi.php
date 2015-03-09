@@ -26,7 +26,7 @@ define("DESC_TEAM_FORUM",						// The default description to a team forum create
 define("BODY_NEW_THREAD",						// The body to a new thread post
 	"Hello everyone! I am looking for some information about this particular parameter. Do you know anything?");
 
-define("DISABLE_TEAM_GIDS",		array(1,2,5)); 	// List of groups that should be restricted from accessing a team forum
+define("DISABLE_TEAM_GIDS",		"1,2,5"); 	// List of groups that should be restricted from accessing a team forum
 
 define("GID_TEMPLATE",			2); 	 		// The group to copy fields from when creating usergroup
 define("UID_VAS",				6);				// The Virtual Atom Smasher user as which to post the discussions
@@ -231,7 +231,7 @@ function create_forum( $f_name, $f_parent=0, $f_description="" ) {
  * Set group permissions on the given group
  */
 function set_explicit_permissions( $fid, $enable_gid=array(), $disable_gid=array() ) {
-	global $db;
+	global $db, $cache;
 
 	// Disabling permissions
 	$disable = array(
@@ -298,6 +298,9 @@ function set_explicit_permissions( $fid, $enable_gid=array(), $disable_gid=array
 				'gid' => $gid
 			)));
 	}
+
+	// Update forum permissions
+	$cache->update_forumpermissions();
 
 }
 
@@ -390,7 +393,7 @@ function get_or_create_team_forum( $details, $parent_pid, $owner_gid ) {
 	set_explicit_permissions(
 			$fid,
 			array( $owner_gid ),
-			DISABLE_TEAM_GIDS
+			explode(",",DISABLE_TEAM_GIDS)
 		);
 
 	// Return forum ID
@@ -490,7 +493,7 @@ if (isset($_GET['term'])) {
 	} else if ($_GET['scope'] == 'team') {
 
 		// Get forum ID for our team
-		$pid = get_or_create_team_forum( $details, FORUM_PARENT_TEAM );
+		$pid = get_or_create_team_forum( $details, FORUM_PARENT_TEAM, $mybb_group['gid'] );
 
 	} else if ($_GET['scope'] == 'experts') {
 
