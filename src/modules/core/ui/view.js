@@ -40,6 +40,14 @@ define(["require", "mustache", "jquery",
 				if (!val) val = sel.data("value");
 				return val;
 
+			// If it's a raw HTML element, get inner HTML
+			} else if (elm.is(".form-raw-html")) {
+				return elm.html();
+
+			// If it's a raw text element, get inner text
+			} else if (elm.is(".form-raw-text")) {
+				return elm.text();
+
 			}
 
 		}
@@ -298,7 +306,7 @@ define(["require", "mustache", "jquery",
 						});
 
 						// Iterate over input or input-like elements
-						elm.find("input,textarea,datalist,select,.form-input-list").each(function(i, inpElm) {
+						elm.find("input,textarea,datalist,select,.form-input-list,.form-raw-html,.form-raw-text").each(function(i, inpElm) {
 							
 							// Get field name from the fields:
 							// [ name=, data-name=, or id= ]

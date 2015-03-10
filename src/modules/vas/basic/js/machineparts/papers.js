@@ -7,7 +7,7 @@ define(
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
- 	 * @exports vas-basic/overlay/flash
+ 	 * @exports vas-basic/machineparts/paper
 	 */
 	function(config, Quill, R, DB, User, ViewComponent, tplContent) {
 
@@ -18,10 +18,13 @@ define(
 
 			// Initialize widget
 			ViewComponent.call(this, hostDOM);
-			hostDOM.addClass("machinepart-papers")
+			hostDOM.addClass("machinepart-papers");
 
 			// Load template
 			this.loadTemplate( tplContent );
+			this.setViewData( 'showPapers', true );
+			this.focusedPaper = null;
+			this.quill = null;
 
 			// Handle DO URLs
 			this.handleDoURL('searchPapers', (function() {
@@ -44,6 +47,9 @@ define(
 					this.setViewData('paper', paper);
 					this.renderView('fade');
 
+					// Set focus
+					this.focusedPaper = id;
+
 				}).bind(this));
 
 			}).bind(this));
@@ -51,16 +57,33 @@ define(
 
 				// Undefine paper
 				this.setViewData('paper', false);
-				this.renderView('fade');
+				this.reloadPapers({
+					'terms': '%'+this.forms.search.terms+'%'
+				}, false, 'fade');
+
+				// Unset focus
+				this.focusedPaper = null;
+
+			}).bind(this));
+			this.handleDoURL('savePaper', (function() {
+
+				// Require a focus
+				if (!this.focusedPaper) return;
+
+				// Update user paper
+				User.updatePaper(this.focusedPaper, {
+					'title': this.forms.paper.title,
+					'body': this.quill.getHTML(),
+				});
 
 			}).bind(this));
 
 			// Start Quill on possible editable text areas
-			this.select('.quill', function(dom) {
-				var quill = new Quill(dom.get(0),{
+			this.select('.quill', (function(dom) {
+				this.quill = new Quill(dom.get(0),{
 					theme: 'snow'
 				});
-			});
+			}).bind(this));
 
 		};
 
@@ -82,14 +105,14 @@ define(
 		/**
 		 * Render view before show
 		 */
-		PaperMachinePart.prototype.reloadPapers = function( query, cb ) {
+		PaperMachinePart.prototype.reloadPapers = function( query, cb, transition ) {
 
 			// Request papers
 			User.getPapers(query, (function(papers) {
 
 				// Update papers and render view
 				this.setViewData('papers', papers);
-				this.renderView();
+				this.renderView(transition);
 
 				// Fire callbacks
 				if (cb) cb();

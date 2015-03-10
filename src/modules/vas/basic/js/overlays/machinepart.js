@@ -29,7 +29,8 @@ define(
 
 			// Register description tab
 			this.registerTab( 'overlay.machinepart.describe', 'Description' );
-			this.registerTab( 'overlay.machinepart.paper', 'Papers' );
+			this.registerTab( 'overlay.machinepart.mypaper', 'My Paper' );
+			this.registerTab( 'overlay.machinepart.paper', 'Paper Archive' );
 
 		};
 
