@@ -120,6 +120,19 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Update a particular paper
+		 */
+		APIAccount.prototype.updatePaper = function(paper_id, fields, callback) {
+			// Query server
+			this.sendAction("papers.get", {
+				'id': paper_id,
+				'fields': fields,
+			}, function(data) {
+				if (data) callback(data['status'] == 'ok', data['error']);
+			});
+		}
+
+		/**
 		 * Handle chatroom event
 		 */
 		APIAccount.prototype.handleAction = function(action, data) {

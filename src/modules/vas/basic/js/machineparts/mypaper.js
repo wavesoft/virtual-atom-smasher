@@ -7,14 +7,14 @@ define(
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
- 	 * @exports vas-basic/machineparts/paper
+ 	 * @exports vas-basic/machineparts/mypaper
 	 */
 	function(config, Quill, R, DB, User, ViewComponent, tplContent) {
 
 		/**
 		 * The default tunable body class
 		 */
-		var PaperMachinePart = function(hostDOM) {
+		var MyPaperMachinePart = function(hostDOM) {
 
 			// Initialize widget
 			ViewComponent.call(this, hostDOM);
@@ -22,37 +22,16 @@ define(
 
 			// Load template
 			this.loadTemplate( tplContent );
-			this.setViewData( 'showPapers', true );
+			this.setViewData( 'showPapers', false );
 
 			// Handle DO URLs
-			this.handleDoURL('searchPapers', (function() {
+			this.handleDoURL('savePaper', (function() {
 
-				// Define terms
-				this.setViewData( 'terms', this.forms.search.terms );
-
-				// Request paper reload
-				this.reloadPapers({
-					'terms': '%'+this.forms.search.terms+'%'
+				// Update user paper
+				User.updateUserPaper({
+					'title': this.forms.paper.title,
+					'body': this.forms.paper.body,
 				});
-
-			}).bind(this));
-			this.handleDoURL('viewPaper', (function(id) {
-
-				// Get paper details
-				User.getPaper(id, (function(paper) {
-
-					// Define paper
-					this.setViewData('paper', paper);
-					this.renderView('fade');
-
-				}).bind(this));
-
-			}).bind(this));
-			this.handleDoURL('closePaper', (function() {
-
-				// Undefine paper
-				this.setViewData('paper', false);
-				this.renderView('fade');
 
 			}).bind(this));
 
@@ -66,24 +45,23 @@ define(
 		};
 
 		// Subclass from ObservableWidget
-		PaperMachinePart.prototype = Object.create( ViewComponent.prototype );
+		MyPaperMachinePart.prototype = Object.create( ViewComponent.prototype );
 
 		/**
 		 * Update machine details
 		 */
-		PaperMachinePart.prototype.onMachinePartDefined = function( part, isEnabled ) {
+		MyPaperMachinePart.prototype.onMachinePartDefined = function( part, isEnabled ) {
 
 			// Update visual interface
 			this.setViewData( 'part', part );
 			this.setViewData( 'enabled', isEnabled );
-			this.setViewData( 'terms', "" );
 
 		}
 
 		/**
 		 * Render view before show
 		 */
-		PaperMachinePart.prototype.reloadPapers = function( query, cb ) {
+		MyPaperMachinePart.prototype.reloadPapers = function( query, cb ) {
 
 			// Request papers
 			User.getPapers(query, (function(papers) {
@@ -102,37 +80,42 @@ define(
 		/**
 		 * Render view before show
 		 */
-		PaperMachinePart.prototype.onWillShow = function( cb ) {
+		MyPaperMachinePart.prototype.onWillShow = function( cb ) {
 
-			// Reload papers (and re-render view)
-			// When done, fire callback
-			this.reloadPapers({}, cb);
+			// Load user paper
+			this.getUserPaper((function(paper) {
+
+				// Set view data
+				this.setViewData('paper', paper);
+				cb();
+
+			}).bind(this));
 
 		}
 
 		/**
 		 * User focused on tunable
 		 */
-		PaperMachinePart.prototype.onTunableFocus = function( tunable ) {
+		MyPaperMachinePart.prototype.onTunableFocus = function( tunable ) {
 
 		};
 
 		/**
 		 * Define the list of tunables in the machine part
 		 */
-		PaperMachinePart.prototype.onTunablesDefined = function( tunables ) {
+		MyPaperMachinePart.prototype.onTunablesDefined = function( tunables ) {
 
 		};
 
 		/**
 		 * Define the values on the tunables
 		 */
-		PaperMachinePart.prototype.onTuningValuesDefined = function( tunables ) {
+		MyPaperMachinePart.prototype.onTuningValuesDefined = function( tunables ) {
 
 		};
 
 		// Store overlay component on registry
-		R.registerComponent( 'overlay.machinepart.paper', PaperMachinePart, 1 );
+		R.registerComponent( 'overlay.machinepart.mypaper', MyPaperMachinePart, 1 );
 
 	}
 

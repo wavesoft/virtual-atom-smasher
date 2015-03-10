@@ -108,6 +108,7 @@ define(["require","jquery"],
 
 					// Prevent form's default action
 					e.preventDefault();
+					e.stopPropagation();
 
 					// On submit, fire action
 					var a = parseAction($(this).attr('action'));
@@ -124,7 +125,10 @@ define(["require","jquery"],
 				(function(hName){
 					dom.find("*[" + hName + "*='do:']").each(function(i, elm) {
 						// Register click handler
-						$(elm)[hName](function() {
+						$(elm)[hName](function(e) {
+							e.preventDefault();
+							e.stopPropagation();
+
 							var a = parseAction($(this).attr(hName));
 							if (!a) return;
 							self.fireDoHandlers(a[0], a[1]);

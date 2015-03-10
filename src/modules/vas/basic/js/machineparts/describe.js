@@ -7,7 +7,7 @@ define(
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
- 	 * @exports vas-basic/overlay/flash
+ 	 * @exports vas-basic/machineparts/describe
 	 */
 	function(config, R, ViewComponent, tplContent) {
 

@@ -363,109 +363,6 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 
 			});
 
-			/*
-			// Get tuning configuration from user's profile
-			return {
-				'configurations' : this.profile.state['config'] || [],
-				'machineParts' 	 : this.profile.state['parts'] || [],
-				'observables'	 : this.profile.state['observables'] || [],
-			};
-			*/
-
-			/*
-			var config = {
-				// The enabled machine configurations (ex. ee, ppbar)
-				'configurations': [],
-				// The machine groups and their tunables
-				'machineParts': [],
-				// The list of observables under consideration
-				'observables': []
-			};
-
-			// Get some useful databases
-			var dbMachineParts = DB.cache['definitions']['machine-parts'],
-				dbTunables = DB.getAll("tunables"),
-				dbObservables = DB.getAll("observables");
-
-			// Tunable group index and prefix-to-machine parts lookup table
-			var tunableGroupIndex = {},
-				prefixToMachinePart = {};
-
-			// Populate prefix-to-machine part index
-			for (k in dbMachineParts) {
-				if (k[0] == "_") continue;
-				if (!dbMachineParts[k]['prefixes']) continue;
-				for (var i=0; i<dbMachineParts[k]['prefixes'].length; i++) {
-					// Map this prefix to machine part ID
-					prefixToMachinePart[dbMachineParts[k]['prefixes'][i]] = k;
-				}
-			}
-
-			// Get the knowledge list
-			var knowledge = this.getKnowledgeList();
-			for (var i=0; i<knowledge.length; i++) {
-				if (knowledge[i].enabled || (knowledge[i].parent == null)) {
-					// This knowledge topic is enabled (or the root one)!
-
-					// Collect configurations
-					for (var j=0; j<knowledge[i].configurations.length; j++) {
-						var cfgName = knowledge[i].configurations[j];
-						if (config.configurations.indexOf(cfgName) == -1)
-							config.configurations.push(cfgName);
-					}
-
-					// Store observable names
-					for (var j=0; j<knowledge[i].observables.length; j++) {
-						var obsName = knowledge[i].observables[j],
-							obs = dbObservables[obsName];
-						if (!obs) {
-							console.warn("Could not find observable '",obsName,"' provided by knowledge node '", knowledge[i]['_id'],"'");
-							continue;
-						}
-						config.observables.push(obsName);
-					}
-
-					//
-					// Look for enabled tunables and place them on the 
-					// appropriate machine part that they relate to.
-					//
-					for (var j=0; j<knowledge[i].tunables.length; j++) {
-						var tunName = knowledge[i].tunables[j],
-							tun = dbTunables[tunName];
-						if (!tun) {
-							console.warn("Could not find tunable '",tunName,"' provided by knowledge node '", knowledge[i]['_id'],"'");
-							continue;
-						}
-
-						// Find tunable prefix
-						var tunPrefix = tunName.split(":")[0],
-							machinePart = prefixToMachinePart[tunPrefix];
-
-						// Check if we have a machine part with this prefix
-						if (machinePart == undefined) {
-							console.warn("Could not find machine part for tunable '",tunName,"' provided by knowledge node '", knowledge[i]['_id'],"'");
-							continue;
-						}
-
-						// Get/Place group
-						var machineGroup = tunableGroupIndex[machinePart];
-						if (!machineGroup) {
-							machineGroup = { "part": machinePart, "tunables": [] };
-							tunableGroupIndex[machinePart] = machineGroup;
-							config.machineParts.push(machineGroup);
-						}
-
-						// Append tunable on the machine tunables
-						machineGroup.tunables.push( tun );
-
-					}
-
-				}
-			}
-
-			return config;
-			*/
-
 		}
 
 		/**
@@ -537,7 +434,6 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 
 		}
 
-
 		/**
 		 * Return a list of the currently unlocked deatures
 		 */
@@ -546,7 +442,6 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			// Get knowledge grid as a flat list
 
 		}
-
 
 		/**
 		 * Build and return the list of papers known to the user.
@@ -591,11 +486,30 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 
 		}
 
+		/**
+		 * Update a signle paper.
+		 */
+		User.prototype.updatePaper = function( paper_id, fields, callback ) {
+			// Update paper
+			this.accountIO.updatePaper(paper_id, fields, callback);
+		}
 
 
+		/**
+		 * Shorthand to get the current user's paper
+		 */
+		User.prototype.getUserPaper = function( callback ) {
+			// Get user paper
+			this.getPaper( this.profile['activePaper'], callback );
+		}
 
-
-
+		/**
+		 * Shorthand to update the current user's paper
+		 */
+		User.prototype.updateUserPaper = function( fields, callback ) {
+			// Get user paper
+			this.updatePaper( this.profile['activePaper'], fields, callback );
+		}
 
 		/**
 		 * Commit user variables to the database
