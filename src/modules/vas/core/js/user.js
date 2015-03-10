@@ -473,6 +473,12 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			// Query knowledge grid
 			this.accountIO.getPaper(paper_id, (function(paper) {
 
+				// Check for invalid paper
+				if (!paper) {
+					if (callback) callback(null);
+					return;
+				}
+
 				// Check if this paper is editable
 				paper.editable = 
 					(paper.owner == this.profile['id']) &&

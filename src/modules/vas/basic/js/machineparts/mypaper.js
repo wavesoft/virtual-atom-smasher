@@ -23,6 +23,7 @@ define(
 			// Load template
 			this.loadTemplate( tplContent );
 			this.setViewData( 'showPapers', false );
+			this.quill = null;
 
 			// Handle DO URLs
 			this.handleDoURL('savePaper', (function() {
@@ -30,17 +31,17 @@ define(
 				// Update user paper
 				User.updateUserPaper({
 					'title': this.forms.paper.title,
-					'body': this.forms.paper.body,
+					'body': this.quill.getHTML(),
 				});
 
 			}).bind(this));
 
 			// Start Quill on possible editable text areas
-			this.select('.quill', function(dom) {
-				var quill = new Quill(dom.get(0),{
+			this.select('.quill', (function(dom) {
+				this.quill = new Quill(dom.get(0),{
 					theme: 'snow'
 				});
-			});
+			}).bind(this));
 
 		};
 
@@ -61,32 +62,14 @@ define(
 		/**
 		 * Render view before show
 		 */
-		MyPaperMachinePart.prototype.reloadPapers = function( query, cb ) {
-
-			// Request papers
-			User.getPapers(query, (function(papers) {
-
-				// Update papers and render view
-				this.setViewData('papers', papers);
-				this.renderView();
-
-				// Fire callbacks
-				if (cb) cb();
-
-			}).bind(this));
-
-		}
-
-		/**
-		 * Render view before show
-		 */
 		MyPaperMachinePart.prototype.onWillShow = function( cb ) {
 
 			// Load user paper
-			this.getUserPaper((function(paper) {
+			User.getUserPaper((function(paper) {
 
 				// Set view data
 				this.setViewData('paper', paper);
+				this.renderView();
 				cb();
 
 			}).bind(this));

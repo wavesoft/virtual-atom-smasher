@@ -13,7 +13,7 @@
 			<p class="discreet">Notes:</p>
 			<div class="abstract">
 				{{#paper.editable}}
-				<div class="quill editable-mark form-raw-html" name="body">{{paper.body}}</div>
+				<div class="quill editable-mark form-raw-html" name="body">{{{paper.body}}}</div>
 				{{/paper.editable}}
 				{{^paper.editable}}
 					{{#paper.body}}
@@ -47,6 +47,8 @@
 	</form>
 {{/paper}}
 {{^paper}}
+
+	{{#showPapers}}
 	<div class="title">
 		<h1>Papers</h1>
 		<p class="small">In this window you can see all the papers you and your team has cited in order to use their values as reference. You can also see your own saved values.</p>
@@ -82,7 +84,7 @@
 							<span class="glyphicon glyphicon-education"></span> {{title}}
 							{{/mine}}
 						</td>
-						<td class="col-4">{{team}}</td>
+						<td class="col-4">{{team_name}}</td>
 						<td class="col-2 text-center">
 							<a class="btn-flat btn-flat-green" click="do:applyPaper({{id}})">Apply</a>
 						</td>
@@ -106,4 +108,13 @@
 			<button type="button" class="pull-right b-teal" click="do:newPaper()"><span class="glyphicon glyphicon-plus"></span> New Paper</button>
 		</form>
 	</div>
+	{{/showPapers}}
+	
+	{{^showPapers}}
+	<div class="title">
+		<h1>My Paper</h1>
+		<p class="small">It seems that you haven't created a paper yet.</p>
+	</div>
+	{{/showPapers}}
+
 {{/paper}}

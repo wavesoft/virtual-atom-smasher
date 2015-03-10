@@ -81,7 +81,7 @@ define(["vas/core/api/interface", "vas/config"],
 		APIAccount.prototype.getTuningConfiguration = function(callback) {
 			// Query server
 			this.sendAction("data.tuning", {}, function(data) {
-				if (data) callback(data['data']);
+				if (data && callback) callback(data['data']);
 			});
 		}
 
@@ -91,7 +91,7 @@ define(["vas/core/api/interface", "vas/config"],
 		APIAccount.prototype.getKnowledge = function(callback) {
 			// Query server
 			this.sendAction("data.knowledge", {}, function(data) {
-				if (data) callback(data['data']);
+				if (data && callback) callback(data['data']);
 			});
 		}
 
@@ -103,7 +103,7 @@ define(["vas/core/api/interface", "vas/config"],
 			this.sendAction("papers.list", {
 				'query': query
 			}, function(data) {
-				if (data) callback(data['data']);
+				if (data && callback) callback(data['data']);
 			});
 		}
 
@@ -115,7 +115,7 @@ define(["vas/core/api/interface", "vas/config"],
 			this.sendAction("papers.get", {
 				'id': paper_id
 			}, function(data) {
-				if (data) callback(data['data']);
+				if (data && callback) callback(data['data']);
 			});
 		}
 
@@ -124,11 +124,11 @@ define(["vas/core/api/interface", "vas/config"],
 		 */
 		APIAccount.prototype.updatePaper = function(paper_id, fields, callback) {
 			// Query server
-			this.sendAction("papers.get", {
+			this.sendAction("papers.update", {
 				'id': paper_id,
 				'fields': fields,
 			}, function(data) {
-				if (data) callback(data['status'] == 'ok', data['error']);
+				if (data && callback) callback(data['status'] == 'ok', data['error']);
 			});
 		}
 
