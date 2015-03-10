@@ -1,0 +1,59 @@
+
+///////////////////////////////////////////////
+// Status Screen
+///////////////////////////////////////////////
+
+@status-paper-width: 400px;
+@status-paper-height: 500px;
+@status-align: translateX(-@status-paper-width/2) translateY(-@status-paper-height/2);
+
+.screen.status {
+
+	.com-paper {
+		width: @status-paper-width;
+		height: @status-paper-height;
+		top: 300px;
+		.transform( rotate(-1deg) @status-align );
+		.transition( all 0.5s );
+
+		.tabs {
+			text-align: center;
+
+			.tab {
+				width: 120px;
+				font-weight: bold;
+			}
+		}
+	}
+
+	.com-paper.focused, .com-paper.focused:hover {
+		left: 50%;
+		top: 300px;
+		z-index: 10;
+		opacity: 1;
+		.transform( rotate(0) scale(1) @status-align );
+	}
+
+	.paper-knowledge, .paper-machinery {
+		.transform( rotate(-14deg) scale(0.8) @status-align );
+		left: 25%;
+		top: 190px;
+		opacity: 0.8;
+
+		&:hover {
+			.transform( rotate(-15deg) scale(0.82) @status-align );
+		}
+	}
+
+	.paper-team, .com-paper.focused + .com-paper {
+		.transform( rotate(14deg) scale(0.8) @status-align );
+		left: 75%;
+		top: 280px;
+		opacity: 0.8;
+
+		&:hover {
+			.transform( rotate(15deg) scale(0.82) @status-align );
+		}
+	}
+
+}

@@ -141,6 +141,9 @@ define(
 				UI.mininav.on("displayKnowledge", function() {
 					VAS.displayKnowledge();
 				});
+				UI.mininav.on("displayStatus", function() {
+					VAS.displayStatus();
+				});
 				UI.mininav.on("displayTuningScreen", function() {
 					VAS.displayTuningScreen();
 				});
@@ -341,6 +344,24 @@ define(
 
 					// Complete login
 					prog_results.ok("Results screen ready");
+					cb();
+				};	
+
+			var prog_status = progressAggregator.begin(1),
+				init_status = function(cb) {
+					var scrStatus = VAS.scrStatus = UI.initAndPlaceScreen("screen.status");
+					if (!scrStatus) {
+						UI.logError("Core: Unable to initialize status screen!");
+						return;
+					}
+
+					// Bind events
+					scrStatus.on('hideResults', function() {
+						UI.selectPreviousScreen()
+					});
+
+					// Complete login
+					prog_status.ok("Results screen ready");
 					cb();
 				};	
 
@@ -584,7 +605,7 @@ define(
 
 				var chainRun = [
 						init_api, init_home, init_jobs, init_cinematic, init_courseroom, init_courses, 
-						init_tutorials, init_login, init_team, init_tune, init_results,
+						init_tutorials, init_login, init_status, init_team, init_tune, init_results,
 						init_menu
 					],
 					runChain = function(cb, index) {
@@ -748,6 +769,15 @@ define(
 
 		}
 
+		/**
+		 * Display user's status page.
+		 */
+		VAS.displayStatus = function( animateBackwards ) {
+
+			// Select user status screen
+			UI.selectScreen("screen.status", animateBackwards ? UI.Transitions.DIFF_LEFT : UI.Transitions.DIFF_RIGHT);
+
+		}
 
 		/**
 		 * Check user's configuration and display the appropriate tuning screen

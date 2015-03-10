@@ -46,7 +46,7 @@ define(
 			this.coverage = [];
 			this.currTab = 0;
 			this.createTab($('<p>This is a test</p>'), "cs-blue", '<span class="uicon uicon-info"></span> Explain' );
-			this.createTab($('<p>This is a another test</p>'), "cs-purple", '<span class="uicon uicon-game"></span> Understand' );
+			this.createTab($('<p>This is a another test</p>'), "cs-purple", '<span class="uicon uicon-game"></span> Material' );
 			this.createTab($('<p>This is a yet another test</p>'), "cs-green", '<span class="uicon uicon-find"></span> Research' );
 
 			// Prepare error tab
@@ -272,7 +272,7 @@ define(
 							})(game);
 
 						}
-						this.createTab(games_host, 'cs-purple', '<span class="uicon uicon-game"></span> Understand')
+						this.createTab(games_host, 'cs-purple', '<span class="uicon uicon-game"></span> Material')
 							.addClass("tab-noscroll").addClass("tab-fullheight");
 
 						// Click on the first item

@@ -18,7 +18,7 @@ define(
 
 			// Initialize widget
 			Component.call(this, hostDOM);
-			this.hostDOM.addClass("describe-machine-part");
+			this.hostDOM.addClass("describe-machine-part com-paper");
 
 			// Setup tabs
 			this.tabsDOM = $('<div class="tabs"></div>').appendTo(hostDOM);

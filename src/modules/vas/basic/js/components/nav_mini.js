@@ -34,7 +34,7 @@ define(
 				this.trigger("displayJobs");
 			}).bind(this));
 			this.btnKnowlege.click((function(e) {
-				this.trigger("displayKnowledge");
+				this.trigger("displayStatus");
 			}).bind(this));
 			this.btnTuning.click((function(e) {
 				this.trigger("displayTuningScreen");

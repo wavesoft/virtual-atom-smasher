@@ -24,6 +24,7 @@ define([
 	'vas/basic/components/screen_team_people',
 	'vas/basic/components/screen_tuning',
 	'vas/basic/components/screen_tutorial_stats',
+	'vas/basic/components/screen_status',
 
 	// Subscreens
 	'vas/basic/components/screen_observable_short',

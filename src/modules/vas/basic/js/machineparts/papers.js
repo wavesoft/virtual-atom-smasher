@@ -58,7 +58,7 @@ define(
 				// Undefine paper
 				this.setViewData('paper', false);
 				this.reloadPapers({
-					'terms': '%'+this.forms.search.terms+'%'
+					'terms': '%'+this.getViewData("terms")+'%'
 				}, false, 'fade');
 
 				// Unset focus
