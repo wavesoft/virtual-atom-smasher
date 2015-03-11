@@ -133,6 +133,18 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get a particular book
+		 */
+		APIAccount.prototype.getBook = function(book_name, callback) {
+			// Query server
+			this.sendAction("books.get", {
+				'name': book_name
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
 		 * Handle chatroom event
 		 */
 		APIAccount.prototype.handleAction = function(action, data) {

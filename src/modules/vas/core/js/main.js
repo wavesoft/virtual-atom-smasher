@@ -356,8 +356,8 @@ define(
 					}
 
 					// Bind events
-					scrStatus.on('hideResults', function() {
-						UI.selectPreviousScreen()
+					scrStatus.on('hideStatus', function() {
+						VAS.displayTuningScreen(UI.Transitions.DIFF_LEFT);
 					});
 
 					// Complete login
@@ -782,7 +782,7 @@ define(
 		/**
 		 * Check user's configuration and display the appropriate tuning screen
 		 */
-		VAS.displayTuningScreen = function() {
+		VAS.displayTuningScreen = function(anim) {
 
 			// Get tuning configuration
 			User.getTuningConfiguration(function(config) {
@@ -791,7 +791,7 @@ define(
 				VAS.scrTuning.onTuningConfigUpdated( config );
 
 				// Display tuning screen
-				UI.selectScreen("screen.tuning")
+				UI.selectScreen("screen.tuning", anim)
 
 			});
 

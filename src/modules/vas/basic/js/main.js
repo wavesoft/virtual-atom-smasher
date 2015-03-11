@@ -91,6 +91,13 @@ define([
 	'vas/basic/machineparts/papers',
 	'vas/basic/machineparts/mypaper',
 
+	// Profile parts
+	'vas/basic/profileparts/achievements',
+	'vas/basic/profileparts/books',
+	'vas/basic/profileparts/papers',
+	'vas/basic/profileparts/profile',
+	'vas/basic/profileparts/team',
+
 ], function(require) {
 
 	// Return module configuration

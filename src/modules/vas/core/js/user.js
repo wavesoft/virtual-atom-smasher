@@ -500,7 +500,6 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			this.accountIO.updatePaper(paper_id, fields, callback);
 		}
 
-
 		/**
 		 * Shorthand to get the current user's paper
 		 */
@@ -515,6 +514,25 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		User.prototype.updateUserPaper = function( fields, callback ) {
 			// Get user paper
 			this.updatePaper( this.profile['activePaper'], fields, callback );
+		}
+
+		/**
+		 * Return a book.
+		 */
+		User.prototype.getBook = function( book_name, callback ) {
+
+			// Query knowledge grid
+			this.accountIO.getBook(book_name, (function(book) {
+
+				// Check for invalid paper
+				if (!book) {
+					if (callback) callback(null, "No such book found");
+				} else {
+					if (callback) callback(book);
+				}
+
+			}).bind(this));
+
 		}
 
 		/**

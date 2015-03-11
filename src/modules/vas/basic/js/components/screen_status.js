@@ -26,15 +26,124 @@ define(
 			hostDOM.addClass("status");
 			this.loadTemplate(tplStatus);
 
-			this.select(".com-paper", (function(e) {
-				e.click(function() {
-					$(this).parent().find(".com-paper.focused").removeClass("focused");
-					$(this).addClass("focused");
-				});
+			// Register page parts
+			this.paperDOMs = [];
+			this.buttonDOMs = [];
+
+			var components = [
+				[ "profilepart.achievements", 	"Achievements",		"glyphicon glyphicon-tower" 	],
+				[ "profilepart.book", 			"Knowledge",		"glyphicon glyphicon-book" 		],
+				[ "profilepart.papers", 		"Papers",			"glyphicon glyphicon-education" ],
+				[ "profilepart.team", 			"Team",				"glyphicon glyphicon-globe" 	],
+				[ "profilepart.user", 			"My Profile",		"glyphicon glyphicon-user" 		],
+			];
+
+			// When paper hosts becomes available
+			this.select(".paper-host", (function(e) {
+
+				// Reset DOM
+				this.paperDOMs = [];
+				this.buttonDOMs = [];
+
+				// For each component iterate
+				for (var i=0; i<components.length; i++) {
+
+					// Setup paper
+					var component 	= components[i][0],
+						name 		= components[i][1],
+						icon 		= components[i][2],
+						paper 		= $('<div class="com-paper"></div>'),
+						content 	= $('<div class="content"></div>').appendTo(paper),
+						component 	= R.instanceComponent(component, paper);
+
+					// Add label
+					$('<div class="tabs"><div class="tab focused">'+name+'</div></div>')
+						.appendTo(paper);
+
+					// Add align classes
+					paper.addClass("r"+this.paperDOMs.length);
+
+					// Create button
+					var btn = $('<div class="profilebtn-large b-darkblue"><span class="'+icon+'"></span></div>');
+					btn.click((function(idx) {
+						return function(e) {
+							this.focusPaper(idx);
+						}
+					})(this.buttonDOMs.length).bind(this));
+
+					// Store on paper DOMs
+					this.buttonDOMs.push(btn);
+					this.paperDOMs.push(paper);
+
+					// Even on left, odd on right
+					e.append(paper);
+					if (i % 2 == 0) {
+						this.select(".buttons-left").append(btn);
+					} else {
+						this.select(".buttons-right").append(btn);
+					}
+
+				}
+
 			}).bind(this));
+
+			// Go back
+			this.handleDoURL('hideStatus', (function() {
+				this.trigger('hideStatus');
+			}).bind(this));
+
+			// Render view
+			this.renderView();
+			this.focusPaper(0);
 
 		}
 		StatusScreen.prototype = Object.create( View.prototype );
+
+		/**
+		 * Focus a particular paper
+		 */
+		StatusScreen.prototype.focusPaper = function( paper ) {
+			for (var i=0; i<this.buttonDOMs.length; i++) {
+				if (i == paper) {
+					this.buttonDOMs[i].addClass("active");
+					this.paperDOMs[i].addClass("focused");
+				} else {
+					this.buttonDOMs[i].removeClass("active");
+					this.paperDOMs[i].removeClass("focused");
+				}
+			}
+		}
+
+		/**
+		 * Register a new part in the status page
+		 */
+		StatusScreen.prototype.registerPart = function( component, name, icon ) {
+			
+			// Setup paper
+			var paper = $('<div class="com-paper"></div>'),
+				content = $('<div class="content"></div>').appendTo(paper),
+				component = R.instanceComponent(component, paper);
+
+			// Add label
+			$('<div class="tabs"><div class="tab focused">'+name+'</div></div>')
+				.appendTo(paper);
+
+			// Add align classes
+			paper.addClass("r"+this.paperDOMs.length);
+
+			// Create button
+			var btn = $('<div class="profilebtn-large c'+this.paperDOMs.length+'"><span class="'+icon+'"></span></div>');
+			btn.click((function(idx) {
+				return function(e) {
+					this.focusPaper(idx);
+				}
+			})(this.buttonDOMs.length).bind(this));
+
+			// Store on paper DOMs
+			this.buttonDOMs.push(btn);
+			this.paperDOMs.push(paper);
+
+		}
 
 		///////////////////////////////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////////////

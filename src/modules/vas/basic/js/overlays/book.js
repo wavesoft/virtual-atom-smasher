@@ -2,14 +2,14 @@ define(
 
 	// Dependencies
 
-	["jquery", "require", "vas/config", "vas/core/user", "vas/core/registry","vas/core/base/data_widget", "vas/core/db", "core/analytics/analytics" ], 
+	["jquery", "require", "vas/config", "vas/core/user", "vas/core/registry","vas/core/base/data_widget", "vas/core/db", "core/analytics/analytics", "vas/core/main" ], 
 
 	/**
 	 * This is the default component for displaying information regarding a tunable
 	 *
  	 * @exports vas-basic/infoblock/tunable
 	 */
-	function($, require, Config, User, R, DataWidget, DB, Analytics) {
+	function($, require, Config, User, R, DataWidget, DB, Analytics, VAS) {
 
 		/**
 		 * Find base directory for images
@@ -191,7 +191,6 @@ define(
 			this.clearTabs();
 
 			// Get the specified book from database
-			var books = DB.openTable("books");
 			if (!meta['book']) {
 				this.bodyDOM.append(this.errorTab);
 				return;
@@ -201,12 +200,18 @@ define(
 			this.meta = meta;
 
 			// Load book
-			books.get(meta['book'], (function(data, errorMsg) {
+			User.getBook(meta['book'], (function(data, errorMsg) {
 				if (data != null) {
 
 					// Place description tab
 					var body = $('<div class="content"><h1><span class="glyphicon glyphicon-book"></span> ' + data['title'] + '</h1><div>'+replace_macros(data['description'])+'</div></div>');
 					this.createTab(body, 'cs-blue', '<span class="uicon uicon-explain"></span> Description');
+
+					// Handle book-links inside body
+					body.find("a.book-link").click((function(e) {
+						e.preventDefault();
+						VAS.displayBook( $(e.target).data("book") );
+					}).bind(this));
 
 					// Handle body analytics
 					body.scroll((function(e) {

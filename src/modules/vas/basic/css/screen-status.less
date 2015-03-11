@@ -13,47 +13,106 @@
 		width: @status-paper-width;
 		height: @status-paper-height;
 		top: 300px;
-		.transform( rotate(-1deg) @status-align );
+		opacity: 0.8;
+		.transform( rotate(-1deg) scale(0.8) @status-align );
+		.transform-origin( 50% 50% );
 		.transition( all 0.5s );
+
+		&.r0 {
+			.transform( rotate(-14deg) scale(0.8) @status-align );
+			left: 20%;
+			top: 240px;
+		}
+		&.r1 {
+			.transform( rotate(2deg) scale(0.8) @status-align );
+			left: 45%;
+			top: 290px;
+		}
+		&.r2 {
+			.transform( rotate(-8deg) scale(0.8) @status-align );
+			left: 80%;
+			top: 280px;
+		}
+		&.r3 {
+			.transform( rotate(5deg) scale(0.8) @status-align );
+			left: 20%;
+			top: 250px;
+		}
+		&.r4 {
+			.transform( rotate(-5deg) scale(0.8) @status-align );
+			left: 60%;
+			top: 230px;
+		}
+		&.r5 {
+			.transform( rotate(-8deg) scale(0.8) @status-align );
+			left: 65%;
+			top: 200px;
+		}
+		&.r6 {
+			.transform( rotate(10deg) scale(0.8) @status-align );
+			left: 20%;
+			top: 230px;
+		}
+		&.r7 {
+			.transform( rotate(14deg) scale(0.8) @status-align );
+			left: 70%;
+			top: 180px;
+		}
 
 		.tabs {
 			text-align: center;
-
 			.tab {
 				width: 120px;
 				font-weight: bold;
 			}
 		}
+
 	}
 
 	.com-paper.focused, .com-paper.focused:hover {
-		left: 50%;
-		top: 300px;
+		left: 50% !important;
+		top: 300px !important;
 		z-index: 10;
 		opacity: 1;
 		.transform( rotate(0) scale(1) @status-align );
 	}
-
-	.paper-knowledge, .paper-machinery {
-		.transform( rotate(-14deg) scale(0.8) @status-align );
-		left: 25%;
-		top: 190px;
-		opacity: 0.8;
-
-		&:hover {
-			.transform( rotate(-15deg) scale(0.82) @status-align );
-		}
+	
+	.buttons-left, .buttons-right {
+		position: absolute;
+		bottom: 20px;
+		z-index: 11;
 	}
 
-	.paper-team, .com-paper.focused + .com-paper {
-		.transform( rotate(14deg) scale(0.8) @status-align );
-		left: 75%;
-		top: 280px;
-		opacity: 0.8;
+	.buttons-left {
+		left: 20px;
+	}
+
+	.buttons-right {
+		right: 20px;
+	}
+
+	.back-icon {
+		position: absolute;
+		left: 10px;
+		top: 10px;
+	}
+
+	.profilebtn-large {
+		display: inline-block;
+		width: 64px;
+		height: 64px;
+		margin: 0 5px;
+		.border-radius( 32px );
+		cursor: pointer;
+		line-height: 64px;
+		font-size: 32px;
+		text-align: center;
+		color: rgba(255,255,255,0.8);
 
 		&:hover {
-			.transform( rotate(15deg) scale(0.82) @status-align );
+			.transform( scale(1.1) );
 		}
+
 	}
 
 }
