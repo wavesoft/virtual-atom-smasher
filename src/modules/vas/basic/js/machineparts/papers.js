@@ -42,7 +42,7 @@ define(
 			this.handleDoURL('viewPaper', (function(id) {
 
 				// Get paper details
-				User.getPaper(id, (function(paper) {
+				User.readPaper(id, (function(paper) {
 
 					// Define paper
 					this.setViewData('paper', paper);
@@ -68,15 +68,15 @@ define(
 					'terms': '%'+this.getViewData("terms")+'%'
 				}, false, 'fade');
 
-				// Unset focus
-				this.focusedPaper = null;
-
 				// Trigger user event
 				var paperTimer = Analytics.stopTimer("paper-time");
 				User.triggerEvent("paper.hide", {
-					'paper': id,
+					'paper': this.focusedPaper,
 					'time': paperTimer
 				});
+				
+				// Unset focus
+				this.focusedPaper = null;
 
 			}).bind(this));
 			this.handleDoURL('savePaper', (function() {

@@ -267,11 +267,16 @@ define(
 							(function(game) {
 
 								// Check game type
-								var type='url', url = '';
-								if (game['type']) type = game['type'];
-								if (type == 'redwire') {
+								var url = game['url'],
+									type = 'url',
+									redwireid = '';
+
+								// Handle redwire: URLs
+								if (url.substr(0,8) == "redwire:") {
 									// The EMBED redwire IO parameter
-									url = 'http://redwire.io/#/game/'+game['redwireid']+'/embed?backgroundColor=%23000000';
+									redwireid = url.substr(8);
+									url = 'http://redwire.io/#/game/'+redwireid+'/embed?backgroundColor=%23000000';
+									type = 'redwire';
 								} else {
 									// Otherwise, expect to find 'url' parameter
 									url = game['url'];
@@ -285,7 +290,7 @@ define(
 
 									// Update floater
 									if (type == 'redwire') {
-										games_floater.html('<a href="http://redwire.io/#/game/'+game['redwireid']+'/edit" target="_blank"><img src="http://redwire.io/assets/images/ribbon.png" style="border:none; width: 100%"></a>');
+										games_floater.html('<a href="http://redwire.io/#/game/'+redwireid+'/edit" target="_blank"><img src="http://redwire.io/assets/images/ribbon.png" style="border:none; width: 100%"></a>');
 									} else {
 										games_floater.empty();
 									}

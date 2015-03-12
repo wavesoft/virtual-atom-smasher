@@ -126,9 +126,9 @@ define(["vas/core/api/interface", "vas/config"],
 		/**
 		 * Get a particular paper
 		 */
-		APIAccount.prototype.getPaper = function(paper_id, callback) {
+		APIAccount.prototype.readPaper = function(paper_id, callback) {
 			// Query server
-			this.sendAction("papers.get", {
+			this.sendAction("papers.read", {
 				'id': paper_id
 			}, function(data) {
 				if (data && callback) callback(data['data']);

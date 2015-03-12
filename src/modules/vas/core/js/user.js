@@ -30,6 +30,12 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			this.vars = { };
 
 			/**
+			 * Pile of events
+			 * @type {array}
+			 */
+			this.piledEvents = [];
+
+			/**
 			 * The socket used for account I/O
 			 * @type {object}
 			 */
@@ -56,6 +62,9 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 					this.vars = profile['vars'];
 					this.state = profile['state'];
 					this.initVars();
+
+					// Send pile of events
+					this.sendEventPile();
 
 					// Fire the profile event
 					this.trigger('profile', profile);
@@ -185,11 +194,29 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Send pile of events
+		 */
+		User.prototype.sendEventPile = function() {
+			// Send all stacked events
+			for (var i=0; i<this.piledEvents.length; i++) {
+				this.accountIO.triggerEvent(this.piledEvents[i][0], this.piledEvents[i][1]);
+			}
+			// Reset array
+			this.piledEvents = [];
+		}
+
+		/**
 		 * Trigger an arbitrary user action.
 		 */
 		User.prototype.triggerEvent = function( eventName, data ) {
 			if (!this.accountIO) return;
-			this.accountIO.triggerEvent(eventName, data);
+			if (!this.profile['id']) {
+				// Stack events if user is not logged in
+				this.piledEvents.push([eventName, data]);
+			} else {
+				// Otherwise send them now
+				this.accountIO.triggerEvent(eventName, data);
+			}
 		}
 
 		/**
@@ -476,10 +503,10 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		/**
 		 * Return a signle paper.
 		 */
-		User.prototype.getPaper = function( paper_id, callback ) {
+		User.prototype.readPaper = function( paper_id, callback ) {
 
 			// Query knowledge grid
-			this.accountIO.getPaper(paper_id, (function(paper) {
+			this.accountIO.readPaper(paper_id, (function(paper) {
 
 				// Check for invalid paper
 				if (!paper) {
@@ -513,7 +540,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 */
 		User.prototype.getUserPaper = function( callback ) {
 			// Get user paper
-			this.getPaper( this.profile['activePaper'], callback );
+			this.readPaper( this.profile['activePaper'], callback );
 		}
 
 		/**
