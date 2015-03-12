@@ -9,7 +9,7 @@ define("IN_MYBB", 1);
 define('THIS_SCRIPT', 'showthread.php');
 
 require_once "./global.php";
-require_once "./inc/vsapi-config.php";
+require_once "./inc/vasapi-config.php";
 
 /**
  * Boilerplace to start an HTML page
