@@ -151,7 +151,7 @@ define(
 			// Trigger user event
 			User.triggerEvent("book.tab.change", {
 				"book" : this.meta['book'],
-				"from": machinePart,
+				"from": this.currTab,
 				"to": index,
 				"time": bookTabTime,
 				"coverage": this.coverage[this.currTab]
@@ -227,7 +227,7 @@ define(
 				if (data != null) {
 
 					// Place description tab
-					var body = $('<div class="content"><h1><span class="glyphicon glyphicon-book"></span> ' + data['title'] + '</h1><div>'+replace_macros(data['description'])+'</div></div>');
+					var body = $('<div class="content"><h1><span class="glyphicon glyphicon-book"></span> ' + data['name'] + '</h1><div>'+replace_macros(data['description'])+'</div></div>');
 					this.createTab(body, 'cs-blue', '<span class="uicon uicon-explain"></span> Description');
 
 					// Handle book-links inside body

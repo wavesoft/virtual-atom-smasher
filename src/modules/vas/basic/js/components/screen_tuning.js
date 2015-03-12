@@ -318,7 +318,7 @@ define(
 				"id": machinePartID
 			});
 			User.triggerEvent("tuning.machine.expand", {
-				"part": machinePart
+				"part": machinePartID
 			});
 
 			// Calculate centered coordinates
