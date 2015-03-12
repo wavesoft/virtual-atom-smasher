@@ -51,7 +51,7 @@ define(
 		/**
 		 * Update machine details
 		 */
-		MyPaperMachinePart.prototype.onMachinePartDefined = function( part, isEnabled ) {
+		MyPaperMachinePart.prototype.onMachinePartDefined = function( partID, part, isEnabled ) {
 
 			// Update visual interface
 			this.setViewData( 'part', part );

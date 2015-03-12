@@ -67,6 +67,39 @@
 			}
 		}
 
+		.content {
+			padding: 5px;
+
+			.progress-thin {
+				height: 10px;
+				background-color: #FFF;
+				.progress-bar {
+
+				}
+			}
+			.knowledge-body {
+				height: 345px;
+				overflow-y: auto;
+
+				.bookterm {
+				    padding: 4px;
+				    margin: 4px;
+				    border-radius: 5px;
+
+				    &.bookterm-state-0 {
+				    	cursor: default;
+				    }
+				    &.bookterm-state-1 {
+					    cursor: pointer;
+				    }
+				    &.bookterm-state-2 {
+					    cursor: pointer;
+				    }
+				}
+
+			}
+		}
+
 	}
 
 	.com-paper.focused, .com-paper.focused:hover {
@@ -104,7 +137,7 @@
 		margin: 0 5px;
 		.border-radius( 32px );
 		cursor: pointer;
-		line-height: 64px;
+		line-height: 70px;
 		font-size: 32px;
 		text-align: center;
 		color: rgba(255,255,255,0.8);

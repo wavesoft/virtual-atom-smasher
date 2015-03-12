@@ -2,14 +2,14 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry", "vas/core/base/component"], 
+	["jquery", "vas/core/registry", "vas/core/base/component", "vas/core/user", "core/analytics/analytics"], 
 
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
  	 * @exports vas-basic/overlay/flash
 	 */
-	function(config, R, Component) {
+	function(config, R, Component, User, Analytics) {
 
 		/**
 		 * The default tunable body class
@@ -41,8 +41,18 @@ define(
 		 * Select a tab
 		 */
 		MachinePart.prototype.selectTab = function( index ) {
+
+			var partTabTime = Analytics.restartTimer("machinepart-tab");
+			User.triggerEvent("machinepart.tab.change", {
+				"part" : this.partID,
+				"from": this.lastFocusedTab,
+				"to": index,
+				"time": partTabTime
+			});
+
 			// Keep the last focused tab
 			this.lastFocusedTab = index;
+
 			// Focus the particular tab
 			for (var i=0; i<this.containers.length; i++) {
 				if (i == index) {
@@ -119,7 +129,8 @@ define(
 		/**
 		 * The machine part configuration defined
 		 */
-		MachinePart.prototype.onMachinePartDefined = function( config, isEnabled ) {
+		MachinePart.prototype.onMachinePartDefined = function( partID, config, isEnabled ) {
+			this.partID = partID;
 			if (!isEnabled) {
 				
 				// Activate only first tab
@@ -143,6 +154,39 @@ define(
 
 			}
 		};
+
+		/**
+		 * The component is now visile
+		 */
+		MachinePart.prototype.onShown = function() {
+			Analytics.restartTimer("machinepart-tab");
+			Analytics.restartTimer("machinepart");
+
+			User.triggerEvent("machinepart.show", {
+				"part" : this.partID
+			});
+			
+		}
+
+		/**
+		 * The component is now hidden
+		 */
+		MachinePart.prototype.onShown = function() {
+			var partTabTime = Analytics.stopTimer("machinepart-tab"),
+				machineTime = Analytics.stopTimer("machinepart");
+
+			User.triggerEvent("machinepart.tab.change", {
+				"part" : this.partID,
+				"from": this.lastFocusedTab,
+				"to": "",
+				"time": partTabTime
+			});
+			User.triggerEvent("machinepart.hide", {
+				"part" : this.partID,
+				"time" : machineTime
+			});
+
+		}
 
 		// Store overlay component on registry
 		R.registerComponent( 'overlay.machinepart', MachinePart, 1 );

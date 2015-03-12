@@ -32,6 +32,25 @@ define(
 		// Subclass from ObservableWidget
 		ProfileBooks.prototype = Object.create( View.prototype );
 
+		/**
+		 * Update books on show
+		 */
+		ProfileBooks.prototype.onWillShow = function(cb) {
+			User.getProfileBooks((function(books) {
+
+				// Expand states
+				for (var i=0; i<books.length; i++) {
+					books[i].isNew = (books[i]['state'] == 0);
+					books[i].isVisisted = (books[i]['state'] == 1);
+					books[i].isMastered = (books[i]['state'] == 2);
+				}
+
+				this.setViewData('books', books);
+				this.renderView();
+				cb();
+
+			}).bind(this));
+		}
 
 		// Store overlay component on registry
 		R.registerComponent( 'profilepart.book', ProfileBooks, 1 );

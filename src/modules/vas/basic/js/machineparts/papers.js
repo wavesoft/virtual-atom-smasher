@@ -2,14 +2,15 @@ define(
 
 	// Dependencies
 
-	["jquery", "quill", "vas/core/registry", "vas/core/db", "vas/core/user", "vas/core/base/view", "text!vas/basic/tpl/machine/papers.html"], 
+	["jquery", "quill", "vas/core/registry", "vas/core/db", "vas/core/user", "vas/core/base/view", "core/analytics/analytics",
+	 "text!vas/basic/tpl/machine/papers.html"], 
 
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
  	 * @exports vas-basic/machineparts/paper
 	 */
-	function(config, Quill, R, DB, User, ViewComponent, tplContent) {
+	function(config, Quill, R, DB, User, ViewComponent, Analytics, tplContent) {
 
 		/**
 		 * The default tunable body class
@@ -50,6 +51,12 @@ define(
 					// Set focus
 					this.focusedPaper = id;
 
+					// Trigger user event
+					Analytics.restartTimer("paper-time");
+					User.triggerEvent("paper.show", {
+						'paper': id
+					});
+
 				}).bind(this));
 
 			}).bind(this));
@@ -63,6 +70,13 @@ define(
 
 				// Unset focus
 				this.focusedPaper = null;
+
+				// Trigger user event
+				var paperTimer = Analytics.stopTimer("paper-time");
+				User.triggerEvent("paper.hide", {
+					'paper': id,
+					'time': paperTimer
+				});
 
 			}).bind(this));
 			this.handleDoURL('savePaper', (function() {
@@ -93,7 +107,7 @@ define(
 		/**
 		 * Update machine details
 		 */
-		PaperMachinePart.prototype.onMachinePartDefined = function( part, isEnabled ) {
+		PaperMachinePart.prototype.onMachinePartDefined = function( partID, part, isEnabled ) {
 
 			// Update visual interface
 			this.setViewData( 'part', part );

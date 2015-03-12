@@ -131,6 +131,13 @@ define(
 					'scale': Math.abs(fromValue - toValue) / (meta['max'] - meta['min'])
 				});
 
+				// Forward event
+				User.triggerEvent("tuning.values.change", {
+					'parameter': meta['name'],
+					'from': fromValue,
+					'to': toValue
+				});
+
 			}).bind(this));
 
 			// ---------------------------------
@@ -232,39 +239,51 @@ define(
 		 */
 		TuningScreen.prototype.hidePopover = function(callback) {
 
-			// Remove back-blur fx on the machine DOM
-			this.machineDOM.removeClass("fx-backblur");
+			this.machinePartComponent.onWillHide((function() {
 
-			// Hide assistance panels
-			this.machinePartDOM.css({
-				'left': -300
-			});
-			setTimeout((function() {
-				this.descFrame.addClass("visible");
-			}).bind(this), 100);
+				// Remove back-blur fx on the machine DOM
+				this.machineDOM.removeClass("fx-backblur");
 
-			// Hide element
-			this.tunableGroup.addClass("hidden");
-			this.tunableGroup.css(this.popoverPos).css({
-				'transform': '',
-				'oTransform': '',
-				'msTransform': '',
-				'webkitTransform': '',
-				'mozTransform': '',
-			})
+				// Hide assistance panels
+				this.machinePartDOM.css({
+					'left': -300
+				});
+				setTimeout((function() {
+					this.descFrame.addClass("visible");
+				}).bind(this), 100);
 
-			// Cleanup upon animation completion
-			setTimeout((function() {
-				this.tunableGroup.removeClass("animating");
-				this.tuningMask.hide();
-				if (callback) callback();
-			}).bind(this), 200);
+				// Hide element
+				this.tunableGroup.addClass("hidden");
+				this.tunableGroup.css(this.popoverPos).css({
+					'transform': '',
+					'oTransform': '',
+					'msTransform': '',
+					'webkitTransform': '',
+					'mozTransform': '',
+				})
 
-			// Fire analytics			
-			Analytics.fireEvent("tuning.machine.expand_time", {
-				"id": this.focusMachinePartID,
-				"time": Analytics.stopTimer("tuning-machine-part")
-			});
+				// Cleanup upon animation completion
+				setTimeout((function() {
+					this.tunableGroup.removeClass("animating");
+					this.tuningMask.hide();
+					if (callback) callback();
+				}).bind(this), 200);
+
+				// Fire analytics			
+				var expandTime = Analytics.stopTimer("tuning-machine-part");
+				Analytics.fireEvent("tuning.machine.expand_time", {
+					"id": this.focusMachinePartID,
+					"time": expandTime
+				});
+				User.triggerEvent("tuning.machine.collapse", {
+					'part': this.focusMachinePartID,
+					'time': expandTime
+				});
+
+				// The component is now hidden
+				this.machinePartComponent.onHidden();
+
+			}).bind(this));
 
 		}
 
@@ -285,7 +304,7 @@ define(
 			this.tuningPanel.onTuningMarkersDefined( this.markers );
 			this.machinePartComponent.onTunablesDefined( tunables );
 			this.machinePartComponent.onTuningValuesDefined( tunables );
-			this.machinePartComponent.onMachinePartDefined( details, this.machinePartsEnabled[machinePartID] );
+			this.machinePartComponent.onMachinePartDefined( machinePartID, details, this.machinePartsEnabled[machinePartID] );
 
 			// Add back-blur fx on the machine DOM
 			this.machineDOM.addClass("fx-backblur");
@@ -297,6 +316,9 @@ define(
 			Analytics.restartTimer("tuning-machine-part");
 			Analytics.fireEvent("tuning.machine.expand", {
 				"id": machinePartID
+			});
+			User.triggerEvent("tuning.machine.expand", {
+				"part": machinePart
 			});
 
 			// Calculate centered coordinates

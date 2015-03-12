@@ -29,6 +29,7 @@ define(
 			// Register page parts
 			this.paperDOMs = [];
 			this.buttonDOMs = [];
+			this.components = [];
 
 			var components = [
 				[ "profilepart.achievements", 	"Achievements",		"glyphicon glyphicon-tower" 	],
@@ -44,6 +45,7 @@ define(
 				// Reset DOM
 				this.paperDOMs = [];
 				this.buttonDOMs = [];
+				this.components = [];
 
 				// For each component iterate
 				for (var i=0; i<components.length; i++) {
@@ -60,6 +62,10 @@ define(
 					$('<div class="tabs"><div class="tab focused">'+name+'</div></div>')
 						.appendTo(paper);
 
+					// Adopt and forward
+					this.forwardVisualEvents(component);
+					this.adoptEvents(component);
+
 					// Add align classes
 					paper.addClass("r"+this.paperDOMs.length);
 
@@ -74,6 +80,7 @@ define(
 					// Store on paper DOMs
 					this.buttonDOMs.push(btn);
 					this.paperDOMs.push(paper);
+					this.components.push(component);
 
 					// Even on left, odd on right
 					e.append(paper);
@@ -107,42 +114,17 @@ define(
 				if (i == paper) {
 					this.buttonDOMs[i].addClass("active");
 					this.paperDOMs[i].addClass("focused");
+					this.components[i].onWillShow((function() {
+						this.components[i].onShown();
+					}).bind(this));
 				} else {
 					this.buttonDOMs[i].removeClass("active");
 					this.paperDOMs[i].removeClass("focused");
+					this.components[i].onWillHide((function() {
+						this.components[i].onHidden();
+					}).bind(this));
 				}
 			}
-		}
-
-		/**
-		 * Register a new part in the status page
-		 */
-		StatusScreen.prototype.registerPart = function( component, name, icon ) {
-			
-			// Setup paper
-			var paper = $('<div class="com-paper"></div>'),
-				content = $('<div class="content"></div>').appendTo(paper),
-				component = R.instanceComponent(component, paper);
-
-			// Add label
-			$('<div class="tabs"><div class="tab focused">'+name+'</div></div>')
-				.appendTo(paper);
-
-			// Add align classes
-			paper.addClass("r"+this.paperDOMs.length);
-
-			// Create button
-			var btn = $('<div class="profilebtn-large c'+this.paperDOMs.length+'"><span class="'+icon+'"></span></div>');
-			btn.click((function(idx) {
-				return function(e) {
-					this.focusPaper(idx);
-				}
-			})(this.buttonDOMs.length).bind(this));
-
-			// Store on paper DOMs
-			this.buttonDOMs.push(btn);
-			this.paperDOMs.push(paper);
-
 		}
 
 		///////////////////////////////////////////////////////////////////////////////

@@ -185,6 +185,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Trigger an arbitrary user action.
+		 */
+		User.prototype.triggerEvent = function( eventName, data ) {
+			if (!this.accountIO) return;
+			this.accountIO.triggerEvent(eventName, data);
+		}
+
+		/**
 		 * Get the values of a given save slot
 		 */
 		User.prototype.getSlotValues = function( index, callback ) {
@@ -519,10 +527,10 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		/**
 		 * Return a book.
 		 */
-		User.prototype.getBook = function( book_name, callback ) {
+		User.prototype.readBook = function( book_name, callback ) {
 
 			// Query knowledge grid
-			this.accountIO.getBook(book_name, (function(book) {
+			this.accountIO.readBook(book_name, (function(book) {
 
 				// Check for invalid paper
 				if (!book) {
@@ -533,6 +541,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 
 			}).bind(this));
 
+		}
+
+		/**
+		 * Get book profile
+		 */
+		User.prototype.getProfileBooks = function(callback) {
+			// Forward book profile request
+			this.accountIO.getProfileBooks(callback);
 		}
 
 		/**

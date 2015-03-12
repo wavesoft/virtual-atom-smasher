@@ -1297,6 +1297,13 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				"id": name
 			});
 
+			// Trigger server event
+			User.triggerEvent("ui.screen.change", {
+				"to": name,
+				"from": UI.activeScreen,
+				"time": screenTime
+			});
+
 			// Preserve previous screen ID
 			UI.previousScreen = UI.activeScreen;
 

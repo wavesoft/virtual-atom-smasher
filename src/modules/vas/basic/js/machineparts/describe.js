@@ -30,7 +30,7 @@ define(
 		/**
 		 * Update machine details
 		 */
-		DescribeMachinePart.prototype.onMachinePartDefined = function( part, isEnabled ) {
+		DescribeMachinePart.prototype.onMachinePartDefined = function( partID, part, isEnabled ) {
 
 			// Update visual interface
 			this.setViewData( 'part', part );

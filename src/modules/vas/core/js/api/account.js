@@ -25,6 +25,22 @@ define(["vas/core/api/interface", "vas/config"],
 		APIAccount.prototype = Object.create( APIInterface.prototype );
 
 		/**
+		 * Trigger arbitrary events to the server
+		 */
+		APIAccount.prototype.triggerEvent = function(eventName, args) {
+
+			// Compile arguments
+			var kwargs = args || {};
+			kwargs['event'] = eventName;
+
+			// Send the trigger
+			this.sendAction("trigger", kwargs, (function(response) {
+
+			}).bind(this));
+
+		}
+
+		/**
 		 * Perform login 
 		 */
 		APIAccount.prototype.login = function(email, password, callback) {
@@ -135,10 +151,21 @@ define(["vas/core/api/interface", "vas/config"],
 		/**
 		 * Get a particular book
 		 */
-		APIAccount.prototype.getBook = function(book_name, callback) {
+		APIAccount.prototype.readBook = function(book_name, callback) {
 			// Query server
-			this.sendAction("books.get", {
+			this.sendAction("books.read", {
 				'name': book_name
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
+		 * Get a particular book
+		 */
+		APIAccount.prototype.getProfileBooks = function(callback) {
+			// Query server
+			this.sendAction("profile.books", {
 			}, function(data) {
 				if (data && callback) callback(data['data']);
 			});

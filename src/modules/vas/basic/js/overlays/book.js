@@ -141,10 +141,19 @@ define(
 			}
 
 			// Fire tab analytics
+			var bookTabTime = Analytics.restartTimer("book-tab");
 			Analytics.fireEvent("book.tab_metrics", {
 				"id": this.meta['book'],
 				"tab": this.currTab,
-				"time": Analytics.restartTimer("book-tab"),
+				"time": bookTabTime,
+				"coverage": this.coverage[this.currTab]
+			});
+			// Trigger user event
+			User.triggerEvent("book.tab.change", {
+				"book" : this.meta['book'],
+				"from": machinePart,
+				"to": index,
+				"time": bookTabTime,
 				"coverage": this.coverage[this.currTab]
 			});
 
@@ -166,17 +175,31 @@ define(
 			if (!this.meta) return;
 
 			// Fire tab analytics
+			var bookTabTime = Analytics.stopTimer("book-tab");
 			Analytics.fireEvent("book.tab_metrics", {
 				"id": this.meta['book'],
 				"tab": this.currTab,
-				"time": Analytics.stopTimer("book-tab"),
+				"time": bookTabTime,
 				"coverage": this.coverage[this.currTab]
 			});
 
 			// Fire book analytics
+			var bookTime = Analytics.stopTimer("book");
 			Analytics.fireEvent("book.hide", {
 				"id": this.meta['book'],
-				"time": Analytics.stopTimer("book")
+				"time": bookTime
+			});
+
+			User.triggerEvent("book.tab.change", {
+				"book" : this.meta['book'],
+				"from": this.currTab,
+				"to": "",
+				"time": bookTabTime,
+				"coverage": this.coverage[this.currTab]
+			});
+			User.triggerEvent("book.hide", {
+				"book" : this.meta['book'],
+				"time" : bookTime
 			});
 
 		}
@@ -200,7 +223,7 @@ define(
 			this.meta = meta;
 
 			// Load book
-			User.getBook(meta['book'], (function(data, errorMsg) {
+			User.readBook(meta['book'], (function(data, errorMsg) {
 				if (data != null) {
 
 					// Place description tab
@@ -402,6 +425,9 @@ define(
 					Analytics.restartTimer("book-tab");
 					Analytics.fireEvent("book.show", {
 						"id": meta['book']
+					});
+					User.triggerEvent("book.show", {
+						"book" : this.meta['book']
 					});
 
 				} else {

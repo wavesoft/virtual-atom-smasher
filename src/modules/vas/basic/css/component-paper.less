@@ -21,6 +21,87 @@
 		right: 0;
 		bottom: 0;
 		padding: 10px;
+
+		p.discreet {
+			margin: 2px 0 0;
+			color: #666;
+			font-size: 12px;
+		}
+		
+		.title {
+			border-bottom: solid 1px #ddd;
+			padding-bottom: 11px;
+
+			h1, h2 {
+				margin: 0;
+			}
+
+			p {
+				margin: 5px 0 0;
+
+				&.small {
+					color: #999;
+					font-size: 12px;
+				}
+			}
+
+			.close {
+				display: block;
+				text-decoration: none;
+				text-align: center;
+				width: 40px;
+				font-size: 10px;
+				color: #fff;
+				background-color: rgba(0,0,0,0.5);
+				float: right;
+				.border-radius( 4px );
+
+				span {
+					ont-size: 20px;
+				}
+			}
+
+			h2, .flat-h2 {
+				width: 100%;
+			}
+
+			input.flat-h2:focus {
+				outline: none;
+			}
+
+		}
+
+		.enum {
+		}
+
+		.footer {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+
+			&.footer-input {
+				background-color: #FFF;
+				padding: 3px;
+
+				input {
+					border: none;
+					padding: 7px;
+					margin: 0px;
+				}
+
+				button {
+					cursor: pointer;
+					border: none;
+					padding: 7px;
+					margin: 0;
+					color: #fff;
+				}
+
+			}
+
+		}
+
 	}
 
 	div.tabs {

@@ -1,0 +1,28 @@
+<div class="content">
+	<div class="title">
+		<h1>Explored Knowledge</h1>
+		<p class="small">In this window you can see all the papers you and your team has cited in order to use their values as reference. You can also see your own saved values.</p>	
+	</div>
+	<div class="progress-thin">
+		<div class="progress-bar"></div>
+	</div>
+	<div class="knowledge-body">
+		{{#books}}
+		<div class="bookterm bookterm-state-{{state}}">
+			{{#isNew}}
+			<span class="glyphicon glyphicon-lock"></span>
+			{{/isNew}}
+			{{#isVisisted}}
+			<span class="glyphicon glyphicon-ok"></span>
+			{{/isVisisted}}
+			{{#isMastered}}
+			<span class="glyphicon glyphicon-king"></span>
+			{{/isMastered}}
+			{{name}}
+		</div>
+		{{/books}}
+	</div>
+	<div class="footer footer-input ">
+		<button type="submit" class="b-purple pull-right"><span class="glyphicon glyphicon-education"></span> Master Your Knowledge</button>
+	</div>
+</div>
