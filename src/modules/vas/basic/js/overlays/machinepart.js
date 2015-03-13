@@ -31,6 +31,10 @@ define(
 			this.registerTab( 'overlay.machinepart.describe', 'Description' );
 			this.registerTab( 'overlay.machinepart.mypaper', 'My Paper' );
 			this.registerTab( 'overlay.machinepart.paper', 'Paper Archive' );
+			this.registerTab( 'overlay.machinepart.unlock', 'Unlock' );
+
+			// Tabs to show when disabled
+			this.disabledModeTabs = [0,3];
 
 		};
 
@@ -134,13 +138,19 @@ define(
 			if (!isEnabled) {
 				
 				// Activate only first tab
-				for (var i=1; i<this.tabs.length; i++) {
-					this.containers[i].hide();
-					this.tabs[i].hide();
-				}
+				for (var i=0; i<this.tabs.length; i++) {
+					if (this.disabledModeTabs.indexOf(i) < 0) {
 
-				// Select first tab
-				this.selectTab(0);
+						// Hide this tab
+						this.containers[i].hide();
+						this.tabs[i].hide();
+
+						// If this tab was focused, switch to first disabled
+						if (this.lastFocusedTab == i) {
+							this.selectTab(this.disabledModeTabs[0]);
+						}
+					}
+				}
 
 			} else {
 

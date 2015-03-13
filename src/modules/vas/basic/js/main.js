@@ -90,6 +90,7 @@ define([
 	'vas/basic/machineparts/describe',
 	'vas/basic/machineparts/papers',
 	'vas/basic/machineparts/mypaper',
+	'vas/basic/machineparts/unlock',
 
 	// Profile parts
 	'vas/basic/profileparts/achievements',

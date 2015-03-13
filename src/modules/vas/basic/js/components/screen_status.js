@@ -70,7 +70,7 @@ define(
 					paper.addClass("r"+this.paperDOMs.length);
 
 					// Create button
-					var btn = $('<div class="profilebtn-large b-darkblue"><span class="'+icon+'"></span></div>');
+					var btn = $('<div class="profilebtn-large profilebtn-lower"><span class="'+icon+'"></span></div>');
 					btn.click((function(idx) {
 						return function(e) {
 							this.focusPaper(idx);
@@ -91,6 +91,9 @@ define(
 					}
 
 				}
+		
+				// Focus first paper
+				this.focusPaper(0);
 
 			}).bind(this));
 
@@ -101,7 +104,6 @@ define(
 
 			// Render view
 			this.renderView();
-			this.focusPaper(0);
 
 		}
 		StatusScreen.prototype = Object.create( View.prototype );

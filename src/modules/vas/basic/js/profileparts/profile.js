@@ -25,6 +25,7 @@ define(
 			this.loadTemplate(tplBooks);
 
 			// Render view
+			this.setViewData('img', require.toUrl('vas/basic/img'));
 			this.renderView();
 
 		};
