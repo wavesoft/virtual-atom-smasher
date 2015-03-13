@@ -92,8 +92,9 @@ define(
 			}
 
 			// Require existing event
-			if (this.__eventCallbacks[name] == undefined)
+			if (!this.__eventCallbacks[name]) {
 				return;
+			}
 
 			// Fire callbacks
 			for (var i=0; i<this.__eventCallbacks[name].length; i++) {

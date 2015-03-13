@@ -36,6 +36,7 @@ define(
 				.append(this.btnSkip = $('<button class="btn-shaded btn-teal btn-lg">Skip</button>'));
 
 			// Set some default choices
+			/*
 			this.onQuestionaireDefined([
 					{
 						"question": "What does a histogram visualize?",
@@ -67,6 +68,7 @@ define(
 						"correct": 2
 					}
 				]);
+			*/
 
 			// Bind events
 			this.btnSkip.click((function() {
