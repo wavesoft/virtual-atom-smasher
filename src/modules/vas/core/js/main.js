@@ -359,6 +359,9 @@ define(
 					scrStatus.on('hideStatus', function() {
 						VAS.displayTuningScreen(UI.Transitions.DIFF_LEFT);
 					});
+					scrStatus.on('showBook', function(bookID) {
+						VAS.displayBook(bookID);
+					});
 
 					// Complete login
 					prog_status.ok("Results screen ready");
@@ -792,6 +795,23 @@ define(
 
 				// Display tuning screen
 				UI.selectScreen("screen.tuning", anim)
+
+			});
+
+
+		}
+
+		/**
+		 * Display random questions from user's book registry
+		 */
+		VAS.displayExamOverlay = function(anim) {
+
+			// Get tuning configuration
+			User.getBookQuestions(function(questions) {
+
+				// Display questionnaire overlay
+				UI.showOverlay("overlay.questionaire")
+					.onQuestionaireDefined( questions );
 
 			});
 

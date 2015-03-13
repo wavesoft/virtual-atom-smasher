@@ -114,15 +114,19 @@ define(
 				if (i == paper) {
 					this.buttonDOMs[i].addClass("active");
 					this.paperDOMs[i].addClass("focused");
-					this.components[i].onWillShow((function() {
-						this.components[i].onShown();
-					}).bind(this));
+					this.components[i].onWillShow((function(i) {
+						return function() {
+							this.components[i].onShown();
+						}
+					})(i).bind(this));
 				} else {
 					this.buttonDOMs[i].removeClass("active");
 					this.paperDOMs[i].removeClass("focused");
-					this.components[i].onWillHide((function() {
-						this.components[i].onHidden();
-					}).bind(this));
+					this.components[i].onWillHide((function(i) {
+						return function() {
+							this.components[i].onHidden();
+						}
+					})(i).bind(this));
 				}
 			}
 		}

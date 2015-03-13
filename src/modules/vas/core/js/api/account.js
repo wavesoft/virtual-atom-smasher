@@ -161,6 +161,17 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get questionnaire questions for books
+		 */
+		APIAccount.prototype.getBookQuestions = function(callback) {
+			// Query server
+			this.sendAction("books.questions", {
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
 		 * Get a particular book
 		 */
 		APIAccount.prototype.getProfileBooks = function(callback) {

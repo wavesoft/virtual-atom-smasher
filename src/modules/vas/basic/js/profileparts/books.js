@@ -24,6 +24,10 @@ define(
 			hostDOM.addClass("profile-books");
 			this.loadTemplate(tplBooks);
 
+			this.handleDoURL('showBook', (function(paper) {
+				this.trigger('showBook', paper);
+			}).bind(this));
+
 			// Render view
 			this.renderView();
 
@@ -37,15 +41,25 @@ define(
 		 */
 		ProfileBooks.prototype.onWillShow = function(cb) {
 			User.getProfileBooks((function(books) {
+				var seenCount = 0,
+					masterCount = 0;
 
 				// Expand states
 				for (var i=0; i<books.length; i++) {
 					books[i].isNew = (books[i]['state'] == 0);
 					books[i].isVisisted = (books[i]['state'] == 1);
 					books[i].isMastered = (books[i]['state'] == 2);
+					if (books[i]['state'] == 1) {
+						seenCount += 1;
+					} else if (books[i]['state'] == 2) {
+						seenCount += 1;
+						masterCount += 1;
+					}
 				}
 
 				this.setViewData('books', books);
+				this.setViewData('progress_seen', parseInt(seenCount*100/books.length)+'%' );
+				this.setViewData('progress_master', parseInt(masterCount*100/books.length)+'%' );
 				this.renderView();
 				cb();
 

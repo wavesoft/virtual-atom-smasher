@@ -552,6 +552,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Get book questions
+		 */
+		User.prototype.getBookQuestions = function( callback ) {
+			// Get user paper
+			this.accountIO.getBookQuestions( callback );
+		}
+
+		/**
 		 * Return a book.
 		 */
 		User.prototype.readBook = function( book_name, callback ) {

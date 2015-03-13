@@ -10,21 +10,22 @@ define(["require","jquery"],
 		function parseAction(url) {
 
 			// Make sure prefix is do:
-			var parts = url.split(":");
-			if (parts[0] != 'do')
+			if (url.substr(0,3) != 'do:')
 				return false;
 
 			// Get everything after 'do:''
-			parts = parts[1].split("(");
+			var parPos = url.indexOf("(");
+			if (parPos < 0)
+				return false;
 
 			// Get action and arguments
-			var action = parts[0],
+			var action = url.substr(3,parPos-3),
+				argStr = url.substr(parPos+1),
 				args = [];
 
 			// Parse arguments
-			if (parts.length > 1) {
+			if (argStr) {
 				// Trim tailing ')'
-				var argStr = parts[1];
 				if (argStr.charAt(argStr.length-1) == ")")
 					argStr = argStr.substr(0,argStr.length-1);
 				// Parse arguments

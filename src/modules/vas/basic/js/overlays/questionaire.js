@@ -102,10 +102,10 @@ define(
 				h = $('<h2>'+idx+'. '+record['question']+'</h2>').appendTo(q),
 				choices_dom = [], labels_dom = [];
 
-			for (var i=0; i<record['choices'].length; i++) {
+			for (var i=0; i<record['answers'].length; i++) {
 					l = $('<label></label>');
-					c = $('<input type="radio" name="question-'+idx+'" value="'+record['choices'][i]+'" />').appendTo(l),
-					s = $('<span>'+record['choices'][i]+'</span>').appendTo(l);
+					c = $('<input type="radio" name="question-'+idx+'" value="'+record['answers'][i]+'" />').appendTo(l),
+					s = $('<span>'+record['answers'][i]+'</span>').appendTo(l);
 				q.append(l);
 				choices_dom.push(c);
 				labels_dom.push(l);
@@ -114,7 +114,7 @@ define(
 			// Store question record
 			this.questions.push({
 				'correct'  : record['correct'],
-				'choices'  : record['choices'],
+				'answers'  : record['answers'],
 				'elements' : choices_dom,
 				'labels'   : labels_dom,
 				'header'   : h

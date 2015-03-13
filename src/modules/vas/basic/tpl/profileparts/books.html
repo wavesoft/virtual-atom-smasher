@@ -4,25 +4,30 @@
 		<p class="small">In this window you can see all the papers you and your team has cited in order to use their values as reference. You can also see your own saved values.</p>	
 	</div>
 	<div class="progress-thin">
-		<div class="progress-bar"></div>
+		<div class="progress-bar" style="width: {{progress_seen}}"></div>
 	</div>
 	<div class="knowledge-body">
 		{{#books}}
-		<div class="bookterm bookterm-state-{{state}}">
 			{{#isNew}}
-			<span class="glyphicon glyphicon-lock"></span>
+			<div class="bookterm bookterm-state-0">
+				<span class="glyphicon glyphicon-lock"></span> {{name}}
+			</div>
 			{{/isNew}}
 			{{#isVisisted}}
-			<span class="glyphicon glyphicon-ok"></span>
+			<div click="do:showBook('{{name}}')" class="bookterm bookterm-state-1">
+				<span class="glyphicon glyphicon-eye-open"></span> {{name}}
+			</div>
 			{{/isVisisted}}
 			{{#isMastered}}
-			<span class="glyphicon glyphicon-king"></span>
+			<div click="do:showBook('{{name}}')" class="bookterm bookterm-state-2">
+				<span class="glyphicon glyphicon-king"></span> {{name}}
+			</div>
 			{{/isMastered}}
-			{{name}}
-		</div>
 		{{/books}}
 	</div>
-	<div class="footer footer-input ">
-		<button type="submit" class="b-purple pull-right"><span class="glyphicon glyphicon-education"></span> Master Your Knowledge</button>
+	<div class="footer footer-input text-center">
+		<button click="do:takeExam()" type="submit" class="b-purple">
+			<span class="glyphicon glyphicon-education"></span> Master Your Knowledge
+		</button>
 	</div>
 </div>

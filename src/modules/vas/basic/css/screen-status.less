@@ -74,10 +74,12 @@
 				height: 10px;
 				background-color: #FFF;
 				.progress-bar {
-
+					height: 10px;
+					background-color: #9b59b6;
 				}
 			}
 			.knowledge-body {
+				padding: 8px;
 				height: 345px;
 				overflow-y: auto;
 
@@ -85,19 +87,34 @@
 				    padding: 4px;
 				    margin: 4px;
 				    border-radius: 5px;
+					
+					span {
+						font-size: 20px;
+						vertical-align: bottom;
+						margin-right: 5px;
+					}
 
 				    &.bookterm-state-0 {
 				    	cursor: default;
+				    	color: #999;
 				    }
 				    &.bookterm-state-1 {
 					    cursor: pointer;
-					    color: #fff;
-					    background-color: #3498db;
+						&:hover {
+							background-color: #3498db;
+							color: #fff;
+						}
 				    }
 				    &.bookterm-state-2 {
 					    cursor: pointer;
-					    color: #fff;
-					    background-color: #2ecc71;
+					    font-weight: bold;
+						&:hover {
+							background-color: #3498db;
+							color: #fff;
+						}
+					    span {
+							color: #f1c40f;					    	
+					    }
 				    }
 				}
 
