@@ -362,6 +362,9 @@ define(
 					scrStatus.on('showBook', function(bookID) {
 						VAS.displayBook(bookID);
 					});
+					scrStatus.on('takeExam', function() {
+						VAS.displayExamOverlay();
+					});
 
 					// Complete login
 					prog_status.ok("Results screen ready");

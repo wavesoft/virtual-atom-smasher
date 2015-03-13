@@ -2,14 +2,14 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry","vas/core/base/component", "vas/core/db" ], 
+	["jquery", "vas/core/registry","vas/core/base/component", "vas/core/db", "vas/core/user" ], 
 
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
  	 * @exports vas-basic/overlay/flash
 	 */
-	function(config, R, Component, DB) {
+	function(config, R, Component, DB, User) {
 
 		/**
 		 * The default tunable body class
@@ -115,11 +115,12 @@ define(
 
 			// Store question record
 			this.questions.push({
+				'id'	   : record['id'],
 				'correct'  : record['correct'],
 				'answers'  : record['answers'],
 				'elements' : choices_dom,
 				'labels'   : labels_dom,
-				'header'   : h
+				'header'   : h,
 			});
 		}
 
@@ -128,17 +129,24 @@ define(
 		 */
 		OverlayQuestionaire.prototype.evaluate = function() {
 			var good=0, bad=0, total=this.questions.length,
-				checkStatus = [];
+				checkStatus = [], answers = [];
 
 			// First pass
 			for (var i=0; i<this.questions.length; i++) {
 				var q = this.questions[i], is_empty=true;
+
+				// Prepare record
+				var ans_rec = {
+					'choice': 0,
+					'id': q.id
+				};
 
 				// Check status & check for empty
 				for (var j=0; j<q.elements.length; j++) {
 					var e = q.elements[j];
 					if (e.is(":checked")) {
 						checkStatus.push( (q.correct == j) );
+						ans_rec.choice = j;
 						is_empty = false;
 						break;
 					}
@@ -148,6 +156,9 @@ define(
 				if (is_empty) {
 					return null;
 				}
+
+				// Collect record
+				answers.push(ans_rec);
 			}
 
 			// Second pass: Apply statuses
@@ -174,6 +185,9 @@ define(
 					bad++;
 				}
 			}
+
+			// Send results to use
+			User.sendBookAnswers(answers);
 
 			// Return ratio
 			return good / total;

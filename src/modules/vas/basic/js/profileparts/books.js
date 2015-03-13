@@ -27,6 +27,9 @@ define(
 			this.handleDoURL('showBook', (function(paper) {
 				this.trigger('showBook', paper);
 			}).bind(this));
+			this.handleDoURL('takeExam', (function() {
+				this.trigger('takeExam');
+			}).bind(this));
 
 			// Render view
 			this.renderView();

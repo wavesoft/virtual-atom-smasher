@@ -172,6 +172,18 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Send book answers
+		 */
+		APIAccount.prototype.sendBookAnswers = function(answers, callback) {
+			// Query server
+			this.sendAction("books.answers", {
+				'answers': answers,
+			}, function(data) {
+				if (data && callback) callback(data['status'] == 'ok', data['error']);
+			});
+		}
+
+		/**
 		 * Get a particular book
 		 */
 		APIAccount.prototype.getProfileBooks = function(callback) {
