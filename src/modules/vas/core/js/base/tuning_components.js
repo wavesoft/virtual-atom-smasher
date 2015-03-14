@@ -89,6 +89,12 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		TuningPanel.prototype.onTuningPanelDefined = function(title, tunables) {
 		}
 
+		/**
+		 * Update tuning panel
+		 */
+		TuningPanel.prototype.onParameterChanged = function(parameter, value) {	
+		}
+
 		////////////////////////////////////////////////////////////
 		//             Event definitions for JSDoc                //
 		////////////////////////////////////////////////////////////

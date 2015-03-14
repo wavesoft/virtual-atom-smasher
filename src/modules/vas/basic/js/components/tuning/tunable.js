@@ -293,11 +293,15 @@ define(
 		/**
 		 * Update tuning widget value
 		 */
-		DefaultTunableWidget.prototype.onUpdate = function(value) {
+		DefaultTunableWidget.prototype.onUpdate = function(value, animate) {
 			this.value = this.unmapValue( value );
 
 			if (this.dragdealer == null) return;
-			this.dragdealer.setValue( this.value, 0 );
+			if (!animate) {
+				this.dragdealer.setValue( this.value, 0 );
+			} else {
+				this.dragdealer.setValue( this.value );
+			}
 		}
 
 		/**

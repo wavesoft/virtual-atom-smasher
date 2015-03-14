@@ -44,19 +44,9 @@ define(
 				// Get paper details
 				User.readPaper(id, (function(paper) {
 
-					// Get paper values
-					for (var i=0; i<this.tunables.length; i++) {
-						var t = this.tunables[i],
-							v = this.tunables[i].default;
-						
-						// Update value
-						if (paper.tunableValues[t.name] !== undefined)
-							v = paper.tunableValues[t.name];
-
-						// Update value on tunables
-						this.tunables[i]['value'] = v;
-					}
-					this.setViewData('tunables', this.tunables);
+					// Update tunables
+					this.paper = paper;
+					this.applyTunables();
 
 					// Define paper
 					this.setViewData('paper', paper);
@@ -77,6 +67,7 @@ define(
 			this.handleDoURL('closePaper', (function() {
 
 				// Undefine paper
+				this.paper = null;
 				this.setViewData('paper', false);
 				this.reloadPapers({
 					'terms': '%'+this.getViewData("terms")+'%'
@@ -104,6 +95,9 @@ define(
 					'body': this.quill.getHTML(),
 				});
 
+			}).bind(this));
+			this.handleDoURL('changeValue', (function(parameter, value) {
+				this.trigger('changeValue', parameter, value);
 			}).bind(this));
 
 			// Start Quill on possible editable text areas
@@ -150,6 +144,28 @@ define(
 		}
 
 		/**
+		 * Update tunables
+		 */
+		PaperMachinePart.prototype.applyTunables = function() {
+
+			// Get paper values
+			for (var i=0; i<this.tunables.length; i++) {
+				var t = this.tunables[i],
+					v = this.tunables[i].default;
+				
+				// Update value
+				if (this.paper) {
+					if (this.paper.tunableValues[t.name] !== undefined)
+						v = this.paper.tunableValues[t.name];
+				}
+
+				// Update value on tunables
+				this.tunables[i]['value'] = Number(v).toFixed( this.tunables[i].dec );
+			}
+			this.setViewData('tunables', this.tunables);
+		}
+
+		/**
 		 * Render view before show
 		 */
 		PaperMachinePart.prototype.onWillShow = function( cb ) {
@@ -171,7 +187,14 @@ define(
 		 * Define the list of tunables in the machine part
 		 */
 		PaperMachinePart.prototype.onTunablesDefined = function( tunables ) {
+
+			// Update tunables
 			this.tunables = tunables;
+
+			// Apply tunables
+			this.applyTunables();
+			this.renderView();
+
 		};
 
 		/**

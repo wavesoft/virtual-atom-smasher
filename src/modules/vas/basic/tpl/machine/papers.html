@@ -25,9 +25,15 @@
 				{{/paper.editable}}
 			</div>
 			<div class="values">
+				<p class="small">Here are the tunable values in this paper. Click on any value to apply it to your current configuration:</p>
 				<ul>
 					{{#tunables}}
-					<li>{{name}} = <a href="do:applyValue('{{ name }}',{{ value }})" class="{{class}}">{{value}}</a></li>
+					<li>
+						<a href="do:changeValue('{{ name }}',{{ value }})" class="{{class}}">
+							<div class="value">{{value}}</div>
+							<div class="name">{{name}}</div>
+						</a>
+					</li>
 					{{/tunables}}
 				</ul>
 			</div>

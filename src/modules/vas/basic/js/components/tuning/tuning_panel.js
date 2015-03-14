@@ -193,6 +193,14 @@ define(
 
 		}
 
+		/**
+		 * Update a particular parameter
+		 */
+		DefaultTuningPanel.prototype.onParameterChanged = function(parameter, value) {
+			if (!this.tunablesMap[parameter]) return;
+			this.tunablesMap[parameter].onUpdate( value, true );
+		}
+
 		// Store tuning widget component on registry
 		R.registerComponent( 'widget.tunable.tuningpanel', DefaultTuningPanel, 1 );
 

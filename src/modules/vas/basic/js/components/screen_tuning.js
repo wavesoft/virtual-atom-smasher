@@ -153,6 +153,12 @@ define(
 				'left': -300
 			});
 
+			// Handle machine parts event
+			this.machinePartComponent.on('changeValue', (function(k,v) {
+				// Update parameter on machine part component
+				this.tuningPanel.onParameterChanged(k,v);
+			}).bind(this));
+
 			// ---------------------------------
 			// Create machine types
 			// ---------------------------------
