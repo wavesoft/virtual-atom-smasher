@@ -291,11 +291,20 @@ define(
 			// Show/Hide workers
 			this.lab.on('log', (function(logLine, telemetryData) {
 				if (telemetryData['agent_added']) {
-					this.statusScreen.onWorkerAdded(telemetryData['agent_added'],
-					{
-						'lat' : Math.random() * 180 - 90,
-						'lng' : Math.random() * 180
-					});
+					// Parse lat/lng if exist, otherwise use random
+					var lat = String(Math.random() * 180 - 90),
+						lng = String(Math.random() * 180);
+					// Update lat/lng
+					if (telemetryData['agent_added_latlng'] != undefined) {
+						var parts = telemetryData['agent_added_latlng'].split(",");
+						lat = Number(parts[0]);
+						lng = Number(parts[1]);
+					}
+					// Notify the fact that agent was connected
+					this.statusScreen.onWorkerAdded(
+							telemetryData['agent_added'],
+							{'lat' : lat, 'lng' : lng}
+						);
 					this.numConnectedMachines++;
 					this.statusMachinesValue.text(this.numConnectedMachines);
 				} else if (telemetryData['agent_removed']) {
