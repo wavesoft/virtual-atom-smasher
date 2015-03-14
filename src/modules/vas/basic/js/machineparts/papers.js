@@ -44,6 +44,20 @@ define(
 				// Get paper details
 				User.readPaper(id, (function(paper) {
 
+					// Get paper values
+					for (var i=0; i<this.tunables.length; i++) {
+						var t = this.tunables[i],
+							v = this.tunables[i].default;
+						
+						// Update value
+						if (paper.tunableValues[t.name] !== undefined)
+							v = paper.tunableValues[t.name];
+
+						// Update value on tunables
+						this.tunables[i]['value'] = v;
+					}
+					this.setViewData('tunables', this.tunables);
+
 					// Define paper
 					this.setViewData('paper', paper);
 					this.renderView('fade');
@@ -157,7 +171,7 @@ define(
 		 * Define the list of tunables in the machine part
 		 */
 		PaperMachinePart.prototype.onTunablesDefined = function( tunables ) {
-
+			this.tunables = tunables;
 		};
 
 		/**

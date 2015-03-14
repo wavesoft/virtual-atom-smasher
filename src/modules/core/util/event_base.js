@@ -97,8 +97,11 @@ define(
 			}
 
 			// Fire callbacks
-			for (var i=0; i<this.__eventCallbacks[name].length; i++) {
-				this.__eventCallbacks[name][i].apply(this, args);
+			try {
+				for (var i=0; i<this.__eventCallbacks[name].length; i++) {
+					this.__eventCallbacks[name][i].apply(this, args);
+				}
+			} catch (e) {
 			}
 		}
 

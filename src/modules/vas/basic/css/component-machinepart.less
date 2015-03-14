@@ -48,4 +48,67 @@
 
 	}
 
+	.machinepart-unlock {
+
+		ul.unlock-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+
+			li {
+				padding: 5px;
+				margin: 5px 5px 13px;
+				background: #CCCCCC;
+				height: 25px;
+				line-height: 25px;
+				border-radius: 5px;
+				cursor: pointer;
+				color: #999;
+
+				&::after {
+					display: none;
+					position: relative;
+					top: 5px;
+					left: 5px;
+					content: " ";
+					width: 0; 
+					height: 0;
+					border-left: 10px solid transparent;
+					border-right: 10px solid transparent;
+					border-top: 10px solid;
+					border-top-color: #CCCCCC;
+				}
+
+				&.unlocked {
+					background: #16A085;
+					color: #fff;
+					&::after {
+						display: block;
+						border-top-color: #16A085;
+					}
+				}
+
+				&.unlockable {
+					background: #AAA;
+					color: #fff;
+					&::after {
+						border-top-color: #AAA;
+					}
+
+					&:hover {
+						background: #999;
+						color: #fff;
+						&::after {
+							display: block;
+							border-top-color: #999;
+						}
+					}
+				}
+
+			}
+
+		}
+
+	}
+
 }

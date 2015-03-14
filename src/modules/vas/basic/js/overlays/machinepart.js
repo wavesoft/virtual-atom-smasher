@@ -29,12 +29,12 @@ define(
 
 			// Register description tab
 			this.registerTab( 'overlay.machinepart.describe', 'Description' );
-			this.registerTab( 'overlay.machinepart.mypaper', 'My Paper' );
-			this.registerTab( 'overlay.machinepart.paper', 'Paper Archive' );
 			this.registerTab( 'overlay.machinepart.unlock', 'Unlock' );
+			this.registerTab( 'overlay.machinepart.mypaper', 'My Paper' );
+			this.registerTab( 'overlay.machinepart.paper', 'Papers' );
 
 			// Tabs to show when disabled
-			this.disabledModeTabs = [0,3];
+			this.disabledModeTabs = [0,1];
 
 		};
 

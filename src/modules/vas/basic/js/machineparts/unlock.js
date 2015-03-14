@@ -19,7 +19,7 @@ define(
 
 			// Initialize widget
 			ViewComponent.call(this, hostDOM);
-			hostDOM.addClass("machinepart-papers");
+			hostDOM.addClass("machinepart-unlock");
 
 			// Load template
 			this.loadTemplate( tplContent );

@@ -115,17 +115,17 @@ define(
 			for (var i=0; i<this.buttonDOMs.length; i++) {
 				if (i == paper) {
 					this.buttonDOMs[i].addClass("active");
-					this.paperDOMs[i].addClass("focused");
 					this.components[i].onWillShow((function(i) {
 						return function() {
+							this.paperDOMs[i].addClass("focused");
 							this.components[i].onShown();
 						}
 					})(i).bind(this));
 				} else {
 					this.buttonDOMs[i].removeClass("active");
-					this.paperDOMs[i].removeClass("focused");
 					this.components[i].onWillHide((function(i) {
 						return function() {
+							this.paperDOMs[i].removeClass("focused");
 							this.components[i].onHidden();
 						}
 					})(i).bind(this));
