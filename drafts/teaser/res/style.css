@@ -83,7 +83,7 @@ p.subtitle {
 	margin: 0 auto;
 }
 
-#logo .banner {
+#logo h1.banner {
 	color: #FFF;
 	text-shadow: 0 0 8px #000;
 	font-weight: bold;
@@ -91,8 +91,17 @@ p.subtitle {
 	font-size: 24pt;
 }
 
-#logo .banner span {
+#logo h1.banner span {
 	color: #F39C12;
+}
+
+#logo h2.banner {
+	margin-top: 0;
+	color: #454545;
+	text-shadow: 0 0 8px #FFF;
+	font-weight: normal;
+	text-align: center;
+	font-size: 16pt;
 }
 
 #first div#pxback {
