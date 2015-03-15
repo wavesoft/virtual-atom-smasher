@@ -29,7 +29,7 @@
 				<ul>
 					{{#tunables}}
 					<li>
-						<a href="do:changeValue('{{ name }}',{{ value }})" class="{{class}}">
+						<a href="do:changeValue('{{ name }}',{{ value }})" name="{{ cssname }}" class="match-{{match}}">
 							<div class="value">{{value}}</div>
 							<div class="name">{{name}}</div>
 						</a>
@@ -43,10 +43,13 @@
 			<button type="button" class="b-teal" click="do:closePaper()">
 				<span class="glyphicon glyphicon-menu-left"></span> Back to the papers
 			</button>
+			<button type="button" class="b-teal" click="do:applyAll()">
+				Apply All
+			</button>
 			{{/showPapers}}
 			{{#paper.editable}}
-			<button type="submit" class="b-purple pull-right">
-				<span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
+			<button type="button" click="do:deletePaper()" class="b-purple pull-right">
+				<span class="glyphicon glyphicon-trash"></span>
 			</button>
 			{{/paper.editable}}
 		</div>
@@ -66,7 +69,7 @@
 					<tr>
 						<th class="col-6">Title</th>
 						<th class="col-4">Team</th>
-						<th class="col-2">Actions</th>
+						<th class="col-2">Score</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -91,9 +94,7 @@
 							{{/mine}}
 						</td>
 						<td class="col-4">{{team_name}}</td>
-						<td class="col-2 text-center">
-							<a class="btn-flat btn-flat-green" click="do:applyPaper({{id}})">Apply</a>
-						</td>
+						<td class="col-2 text-center">{{fit_formatted}}</td>
 					</tr>
 					{{/papers}}
 					{{^papers}}

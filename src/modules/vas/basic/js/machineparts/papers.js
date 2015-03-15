@@ -24,8 +24,13 @@ define(
 			// Load template
 			this.loadTemplate( tplContent );
 			this.setViewData( 'showPapers', true );
+
+			// Setu properties
 			this.focusedPaper = null;
 			this.quill = null;
+			this.tunables = [];
+			this.paperEditable = false;
+			this.tunableValues = [];
 
 			// Handle DO URLs
 			this.handleDoURL('searchPapers', (function() {
@@ -44,60 +49,60 @@ define(
 				// Get paper details
 				User.readPaper(id, (function(paper) {
 
-					// Update tunables
-					this.paper = paper;
-					this.applyTunables();
-
-					// Define paper
-					this.setViewData('paper', paper);
-					this.renderView('fade');
-
-					// Set focus
-					this.focusedPaper = id;
-
-					// Trigger user event
-					Analytics.restartTimer("paper-time");
-					User.triggerEvent("paper.show", {
-						'paper': id
-					});
+					this.paperEditable = paper['editable'];
+					this.displayPaper( paper );
 
 				}).bind(this));
 
 			}).bind(this));
 			this.handleDoURL('closePaper', (function() {
 
-				// Undefine paper
-				this.paper = null;
-				this.setViewData('paper', false);
-				this.reloadPapers({
-					'terms': '%'+this.getViewData("terms")+'%'
-				}, false, 'fade');
+				// If this is editable, save
+				if (this.paperEditable && this.focusedPaper) {
+					// Update user paper
+					User.updatePaper(this.focusedPaper, {
+						'title': this.forms.paper.title,
+						'body': this.quill.getHTML(),
+					});
+				}
 
-				// Trigger user event
-				var paperTimer = Analytics.stopTimer("paper-time");
-				User.triggerEvent("paper.hide", {
-					'paper': this.focusedPaper,
-					'time': paperTimer
-				});
-				
-				// Unset focus
-				this.focusedPaper = null;
+				// Display list
+				this.displayList();
 
 			}).bind(this));
-			this.handleDoURL('savePaper', (function() {
+			this.handleDoURL('changeValue', (function(parameter, value) {
+
+				this.trigger('changeValue', parameter, value);
+
+			}).bind(this));
+			this.handleDoURL('applyAll', (function() {
+
+				// Apply all values to tunables
+				for (var i=0; i<this.tunables.length; i++) {
+					this.trigger('changeValue', this.tunables[i].name, this.tunables[i].value);
+				}
+
+			}).bind(this));
+			this.handleDoURL('newPaper', (function() {
+
+				// Create new paper
+				User.createPaper((function(paper) {
+					paper.editable = true;
+					this.displayPaper(paper);
+				}).bind(this));
+
+			}).bind(this));
+			this.handleDoURL('deletePaper', (function() {
 
 				// Require a focus
 				if (!this.focusedPaper) return;
 
-				// Update user paper
-				User.updatePaper(this.focusedPaper, {
-					'title': this.forms.paper.title,
-					'body': this.quill.getHTML(),
-				});
+				if (window.confirm("This action is not undoable. This will delete this paper and it's results!")) {
+					User.deletePaper(this.focusedPaper, (function() {
+						this.displayList();
+					}).bind(this));
+				}
 
-			}).bind(this));
-			this.handleDoURL('changeValue', (function(parameter, value) {
-				this.trigger('changeValue', parameter, value);
 			}).bind(this));
 
 			// Start Quill on possible editable text areas
@@ -113,14 +118,48 @@ define(
 		PaperMachinePart.prototype = Object.create( ViewComponent.prototype );
 
 		/**
-		 * Update machine details
+		 * Undefine paper and show papers screen
 		 */
-		PaperMachinePart.prototype.onMachinePartDefined = function( partID, part, isEnabled ) {
+		PaperMachinePart.prototype.displayList = function( ) {
+			// Undefine paper
+			this.paper = null;
+			this.setViewData('paper', false);
+			this.reloadPapers({
+				'terms': '%'+this.getViewData("terms")+'%'
+			}, false, 'fade');
 
-			// Update visual interface
-			this.setViewData( 'part', part );
-			this.setViewData( 'enabled', isEnabled );
-			this.setViewData( 'terms', "" );
+			// Trigger user event
+			var paperTimer = Analytics.stopTimer("paper-time");
+			User.triggerEvent("paper.hide", {
+				'paper': this.focusedPaper,
+				'time': paperTimer
+			});
+			
+			// Unset focus
+			this.focusedPaper = null;
+		}
+
+		/**
+		 * Define a paper and show it's screen
+		 */
+		PaperMachinePart.prototype.displayPaper = function( paper ) {
+
+			// Update tunables
+			this.paper = paper;
+			this.applyTunables();
+
+			// Define paper
+			this.setViewData('paper', paper);
+			this.renderView('fade');
+
+			// Set focus
+			this.focusedPaper = paper['id'];
+
+			// Trigger user event
+			Analytics.restartTimer("paper-time");
+			User.triggerEvent("paper.show", {
+				'paper': paper['id']
+			});
 
 		}
 
@@ -159,10 +198,40 @@ define(
 						v = this.paper.tunableValues[t.name];
 				}
 
-				// Update value on tunables
-				this.tunables[i]['value'] = Number(v).toFixed( this.tunables[i].dec );
+				// Check if this value is the same to user values
+				var match = "equal";
+				if (this.tunableValues[t.name] != undefined) {
+					var refValue = Number( this.tunableValues[t.name] ),
+						distScale = Math.abs(refValue - v) / Math.abs(t.min - t.max);
+
+					// Handle value differences
+					if (refValue == v) {
+						match = "equal";
+					} else if (distScale < 1/5) {
+						match = "close";
+					} else {
+						match = "far";
+					}
+				}
+
+				// Update additional parameters
+				this.tunables[i]['match'] = match;
+				this.tunables[i]['value'] = Number(v).toFixed( t.dec );
+				this.tunables[i]['cssname'] = t['name'].replace(":","_");
 			}
 			this.setViewData('tunables', this.tunables);
+		}
+
+		/**
+		 * Update machine details
+		 */
+		PaperMachinePart.prototype.onMachinePartDefined = function( partID, part, isEnabled ) {
+
+			// Update visual interface
+			this.setViewData( 'part', part );
+			this.setViewData( 'enabled', isEnabled );
+			this.setViewData( 'terms', "" );
+
 		}
 
 		/**
@@ -200,9 +269,39 @@ define(
 		/**
 		 * Define the values on the tunables
 		 */
-		PaperMachinePart.prototype.onTuningValuesDefined = function( tunables ) {
+		PaperMachinePart.prototype.onTuningValuesDefined = function( values ) {
+
+			// Update tunable values
+			this.tunableValues = values;
+
+			// Apply changes
+			this.applyTunables();
+			this.renderView();
 
 		};
+
+		/**
+		 * A tuning parameter value has changed
+		 */
+		PaperMachinePart.prototype.onTuningValueChanged = function( parameter, value ) {	
+
+			// Update & apply tunables
+			this.tunableValues[parameter] = value;
+			this.applyTunables();
+
+			// Update tunables in the UI
+			for (var i=0; i<this.tunables.length; i++) {
+				var t = this.tunables[i],
+					val = this.select("a[name="+t.cssname+"]");
+				if (!val) continue;
+
+				// Update value and class
+				val.find(".value").text( t.value );
+				val.attr("class", "match-" + t.match );
+
+			}
+
+		}
 
 		// Store overlay component on registry
 		R.registerComponent( 'overlay.machinepart.paper', PaperMachinePart, 1 );

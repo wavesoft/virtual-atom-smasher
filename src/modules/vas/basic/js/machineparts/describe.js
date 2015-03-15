@@ -69,6 +69,13 @@ define(
 
 		};
 
+		/**
+		 * A tuning parameter value has changed
+		 */
+		DescribeMachinePart.prototype.onTuningValueChanged = function( parameter, value ) {	
+
+		}
+
 		// Store overlay component on registry
 		R.registerComponent( 'overlay.machinepart.describe', DescribeMachinePart, 1 );
 

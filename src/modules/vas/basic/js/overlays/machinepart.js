@@ -92,7 +92,8 @@ define(
 			this.forwardEvents( com, [
 					'onTunableFocus',
 					'onTunablesDefined',
-					'onTunablesDefined',
+					'onTuningValuesDefined',
+					'onTuningValueChanged',
 					'onMachinePartDefined'
 				]);
 
@@ -130,6 +131,13 @@ define(
 
 		};
 		
+		/**
+		 * A tuning parameter value has changed
+		 */
+		MachinePart.prototype.onTuningValueChanged = function( parameter, value ) {	
+
+		}
+
 		/**
 		 * The machine part configuration defined
 		 */
@@ -197,6 +205,7 @@ define(
 			});
 
 		}
+
 
 		// Store overlay component on registry
 		R.registerComponent( 'overlay.machinepart', MachinePart, 1 );

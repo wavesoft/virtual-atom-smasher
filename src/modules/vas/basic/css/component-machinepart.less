@@ -59,7 +59,8 @@
 						display: block;
 						text-align: center;
 						text-decoration: none;
-						border: solid 1px #CCC;
+						border: solid 1px;
+						border-color: #CCC;
 						color: #000;
 						height: 50px;
 						border-radius: 10px;						
@@ -70,6 +71,26 @@
 						.name {
 							color: #999;
 						}
+
+						&.match-equal {
+							.value {
+								color: #16A085;
+							}
+						}
+						&.match-close {
+							.value {
+								color: #E67E22;
+							}
+						}
+						&.match-far {
+							.value {
+								color: #C0392B;
+							}
+						}
+						&.match-changed {
+							border-color: #E74C3C;
+						}
+
 					}
 				}
 			}

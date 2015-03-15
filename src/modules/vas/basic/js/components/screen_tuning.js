@@ -125,6 +125,9 @@ define(
 			}).bind(this));
 			this.tuningPanel.on('valueChanged', (function(toValue, fromValue, meta) {
 
+				// Forward to machine part
+				this.machinePartComponent.onTuningValueChanged( meta['name'], toValue );
+
 				// A tuning value changed
 				Analytics.fireEvent("tuning.values.change", {
 					'id': meta['name'],
@@ -309,8 +312,8 @@ define(
 			this.tuningPanel.onTuningValuesDefined( this.values );
 			this.tuningPanel.onTuningMarkersDefined( this.markers );
 			this.machinePartComponent.onTunablesDefined( tunables );
-			this.machinePartComponent.onTuningValuesDefined( tunables );
 			this.machinePartComponent.onMachinePartDefined( machinePartID, details, this.machinePartsEnabled[machinePartID] );
+			this.machinePartComponent.onTuningValuesDefined( this.values );
 
 			// Add back-blur fx on the machine DOM
 			this.machineDOM.addClass("fx-backblur");

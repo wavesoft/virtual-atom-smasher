@@ -536,6 +536,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Delete a signle paper.
+		 */
+		User.prototype.deletePaper = function( paper_id, callback ) {
+			// Update paper
+			this.accountIO.deletePaper(paper_id, callback);
+		}
+
+		/**
 		 * Shorthand to get the current user's paper
 		 */
 		User.prototype.getUserPaper = function( callback ) {
@@ -550,6 +558,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			// Get user paper
 			this.updatePaper( this.profile['activePaper'], fields, callback );
 		}
+
+		/**
+		 * Create new paper on the user account
+		 */
+		User.prototype.createPaper = function( callback ) {
+			// Create a new paper
+			this.accountIO.createPaper( callback );
+		};
 
 		/**
 		 * Get book questions

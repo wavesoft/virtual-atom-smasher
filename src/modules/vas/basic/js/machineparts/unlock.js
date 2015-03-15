@@ -71,6 +71,13 @@ define(
 
 		};
 
+		/**
+		 * A tuning parameter value has changed
+		 */
+		UnlockMachinePart.prototype.onTuningValueChanged = function( parameter, value ) {	
+
+		}
+
 		// Store overlay component on registry
 		R.registerComponent( 'overlay.machinepart.unlock', UnlockMachinePart, 1 );
 

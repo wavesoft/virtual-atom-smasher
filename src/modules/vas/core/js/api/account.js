@@ -149,6 +149,29 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Create a new paper
+		 */
+		APIAccount.prototype.createPaper = function( callback) {
+			// Query server
+			this.sendAction("papers.create", {
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
+		 * Delete a particular paper
+		 */
+		APIAccount.prototype.deletePaper = function(paper_id, callback) {
+			// Query server
+			this.sendAction("papers.delete", {
+				'id': paper_id
+			}, function(data) {
+				if (data && callback) callback(data['status'] == 'ok', data['error']);
+			});
+		}
+
+		/**
 		 * Get a particular book
 		 */
 		APIAccount.prototype.readBook = function(book_name, callback) {

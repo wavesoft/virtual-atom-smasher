@@ -96,6 +96,13 @@ define(
 		MyPaperMachinePart.prototype.onTuningValuesDefined = function( tunables ) {
 
 		};
+		
+		/**
+		 * A tuning parameter value has changed
+		 */
+		MyPaperMachinePart.prototype.onTuningValueChanged = function( parameter, value ) {	
+
+		}
 
 		// Store overlay component on registry
 		R.registerComponent( 'overlay.machinepart.mypaper', MyPaperMachinePart, 1 );
