@@ -11,7 +11,7 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		 * @see {@link module:core/api/interface~APIInterface|APIInterface} (Parent class)
 		 * @exports core/api/labsocket
 		 */
-		var APILabSocket = function(apiSocket, labID, config) {
+		var APILabSocket = function(apiSocket, config) {
 
 			// Initialize superclass
 			APIInterface.call(this, apiSocket);
@@ -22,14 +22,12 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 
 			// Setup properties
 			this.running = false;
-
-			// Keep the LabID
-			this.labID = labID;
+			this.focusedJid = 0;
+			this.jobs = [];
 
 			// Prepare handshake frame
 			var handshakeFrame = {
-				"version": LiveQ.version,
-				"labid": labID,
+				"version": LiveQ.version
 			};
 
 			// Append tunables/observables if specified
@@ -59,7 +57,7 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		 */
 		APILabSocket.prototype.handleAction = function(action, data) {
 
-			if (action == "status") {  /* Status message */
+			if (action == "job.status") {  /* Status message */
 				console.log(data['message']);
 
 				// Fire callbacks
@@ -71,7 +69,7 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 				// Fire callbacks
 				this.trigger('error', data['message'], false);
 
-			} else if (action == "sim_completed") { /* Job completed */
+			} else if (action == "job.completed") { /* Job completed */
 				console.log("Job completed");
 
 				// Fire callbacks
@@ -80,7 +78,7 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 				// Simulation is completed
 				this.running = false;
 
-			} else if (action == "sim_failed") { /* Simulation failed */
+			} else if (action == "job.failed") { /* Simulation failed */
 				console.error("Simulation error:", data['message']);
 
 				// Fire callbacks
@@ -94,16 +92,32 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 				// Job added
 				this.trigger('jobAdded', data['job']);
 
+				// Keep jobs
+				this.jobs.push( data['job'] );
+
 			} else if (action == "job.removed") { /* Simulation job removed */
 
 				// Job added
 				this.trigger('jobRemoved', data['job']);
 
-			} else if (action == "job.updated") { /* Simulation job updated */
+				// Remove from jobs
+				var job = data['job'];
+				for (var i=0; i<this.jobs.length; i++) {
+					if (this.jobs[i]['id'] == job['id']) {
+						this.jobs.splice(i,1);
+						break;
+					}
+				}
+
+			} else if (action == "job.details") { /* Simulation job updated */
 
 				// Job added
-				this.trigger('jobUpdated', data['job']);
+				this.trigger('jobDetails', data['job'], data['agents']);
 
+			} else if (action == "job.deactivate") { /* The currently focused job got defocused */
+
+				// Fire callbacks
+				this.trigger('jobDeselected', data['jid']);
 
 			}
 
@@ -139,65 +153,88 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		}
 
 		/**
-		 * Send a tune and begin simulation
+		 * Send a simulation request
 		 *
 		 * @param {object} parameters - An object with the tunable parameter names and their values
-		 * @param {boolean} onlyInterpolate - Request only interpolation, do not run simulation
 		 * @param {array} histograms - A list of histogram names that you want to observe
 		 *
 		 */
-		APILabSocket.prototype.beginSimulation = function(parameters, onlyInterpolate, histograms) {
+		APILabSocket.prototype.submitJob = function(parameters, histograms) {
 
-			// Begin simulation with the given parameters
-			if (onlyInterpolate) {
-				this.sendAction("sim_estimate", {
-					'parameters': parameters,
-					'observables': histograms || []
-				});
-			} else {
-				this.sendAction("sim_start", parameters);
-			}
+			// Submit a job request
+			this.sendAction("job.submit", {
+				'parameters': parameters,
+				'observables': histograms || []
+			});
 
 			// Mark simulation as active
 			this.running = true;
 
 		}
 
+
 		/**
-		 * Abort a previously running simulation
+		 * Send an interpolation request
+		 *
+		 * @param {object} parameters - An object with the tunable parameter names and their values
+		 * @param {array} histograms - A list of histogram names that you want to observe
+		 *
 		 */
-		APILabSocket.prototype.abortSimulation = function(action) {
+		APILabSocket.prototype.estimateJob = function(parameters, histograms) {
 
-			// Begin simulation with the given parameters
-			this.sendAction("sim_abort");
-
-			// Mark simulation as inactive
-			this.running = false;
+			// Send job estimation
+			this.sendAction("job.estimate", {
+				'parameters': parameters,
+				'observables': histograms || []
+			});
 
 		}
-
 
 		/**
 		 * Enumerate all the jobs available for the user
 		 */
 		APILabSocket.prototype.enumJobs = function() {
+
+			// Remove all previous jobs
+			for (var i=0; i<this.jobs.length; i++) {
+				this.trigger('jobRemoved', this.jobs[i]);
+			}
+			this.jobs = [];
+
+			// Request job enumeration
+			this.sendAction("job.enum");
 
 		}
 
 		/**
 		 * Focus on the particular job 
 		 */
-		APILabSocket.prototype.focusJob = function( jobid ) {
+		APILabSocket.prototype.selectJob = function( jobid ) {
 			
+			// Request job focus change
+			this.sendAction("job.select", { 'jid': jobid });
+		
 		}
 
 		/**
-		 * Enumerate all the jobs available for the user
+		 * Abort a the particular job 
 		 */
-		APILabSocket.prototype.enumJobs = function() {
+		APILabSocket.prototype.abortJob = function( jobid ) {
 			
+			// Request job focus change
+			this.sendAction("job.abort", { 'jid': jobid });
+		
 		}
 
+		/**
+		 * Deselect a possible active job 
+		 */
+		APILabSocket.prototype.deselectJob = function() {
+			
+			// Request job focus change
+			this.sendAction("job.deselect");
+		
+		}
 
 		/**
 		 * This event is fired when the socket is connected.

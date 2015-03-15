@@ -1431,7 +1431,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 			// Dynamic parameter population
 			var callback = null,
-				timeout = 0,
+				timeout = 10000,
 				growlClass = "",
 				args = [v_callback, v_timeout, v_growlClass];
 

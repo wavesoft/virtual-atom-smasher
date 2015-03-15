@@ -19,7 +19,10 @@ define(
 			C.HomeScreen.call(this, hostDOM);
 
 			// Prepare propertis
-			this.__debug__jobTune = null;
+			this.activeJob = null;
+			this.labapi = false;
+			this.submitTunables = null;
+			this.submitObservables = null;
 			this.histogramLookup = {};
 			this.lastHistograms = null;
 			this.numConnectedMachines = 0;
@@ -74,9 +77,9 @@ define(
 
 			// Bind callbacks
 			this.btnAbort.click((function() {
-				if (this.lab) {
-					this.lab.abortSimulation();
-					this.interfaceUnbind();
+				if (this.labapi) {
+					this.labapi.abortJob( this.activeJob );
+					this.resetInterface();
 				}
 			}).bind(this));
 			this.btnView.click((function() {
@@ -94,7 +97,7 @@ define(
 			// Prepare list
 			this.eListHost = $('<div class="table-list table-absolute table-scroll table-lg"></div>').appendTo(hostDOM);
 			this.eListTable = $('<table></table>').appendTo(this.eListHost);
-			this.eListHeader = $('<thead><tr><th class="col-6">Date</th><th class="col-3">Score</th><th class="col-3">Actions</th></tr></thead>').appendTo(this.eListTable);
+			this.eListHeader = $('<thead><tr><th class="col-6">Date</th><th class="col-3">Status</th><th class="col-3">Actions</th></tr></thead>').appendTo(this.eListTable);
 			this.eListBody = $('<tbody></tbody>').appendTo(this.eListTable);
 
 			// Prepare the progress status label
@@ -118,26 +121,93 @@ define(
 		 * Add a job in the status screen
 		 */
 		JobsScreen.prototype.addJob = function( job ) {
-			var row = $('<tr></tr>'),
-				c1 = $('<td class="col-6"><span class="glyphicon glyphicon-edit"></span> ' + job['name'] + '</td>').appendTo(row),
-				c2 = $('<td class="col-3">' + job['score'] + '</td>').appendTo(row),
+
+			// Translate status
+			var jobStatus = ['Submitted', 'Running', 'Completed', 'Failed', 'Cancelled', 'Stalled'];
+
+			var row = $('<tr class="joblist-id-'+job['id']+'"></tr>'),
+				c1 = $('<td class="col-6"><span class="glyphicon glyphicon-edit"></span> ' + job['submitted'] + '</td>').appendTo(row),
+				c2 = $('<td class="col-3">' + jobStatus[job['status']] + '</td>').appendTo(row),
 				c3 = $('<td class="col-3 text-right"></td>').appendTo(row)
-				b1 = $('<button class="btn-shaded btn-yellow disabled"><span class="glyphicon glyphicon-eye-open"></span></button>').appendTo(c3);
+				b1 = $('<button class="btn-shaded btn-yellow"><span class="glyphicon glyphicon-eye-open"></span></button>').appendTo(c3);
 
 			// Select on click
-			row.click((function() {
-				this.eListBody.children("tr").removeClass("selected");
-				row.addClass("selected");
-			}).bind(this));
+			row.click((function(job) {
+				return function() {
+					// Select clicked element
+					this.eListBody.children("tr").removeClass("selected");
+					row.addClass("selected");
+					// Focus job activity on that job
+					this.interfaceBind( job['id'] );
+				}
+			})(job).bind(this));
+
+			// Handle click
+			b1.click((function(job) {
+				return function() {
+
+				}
+			})(job).bind(this));
 
 			// Populate fields
 			this.eListBody.append(row);
 		}
 
 		/**
+		 * Remove a job from the status screen
+		 */
+		JobsScreen.prototype.removeJob = function( job ) {
+			this.eListBody.find('tr.joblist-id-'+job['id']).remove();
+		}
+
+		/**
+		 * Apply job details
+		 */
+		JobsScreen.prototype.applyJobDetails = function( job, agents ) {
+
+			// Select
+			this.activeJob = job['id'];
+
+			// Focus to given job item on the list
+			this.eListBody.children("tr").removeClass("selected");
+			this.eListBody.find('tr.joblist-id-'+job['id']).addClass("selected");
+
+			// Change status label of the focused job
+			var jobStatus = ['SUBMITTED', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED', 'STALLED'];
+			this.eStatusLabel.text( jobStatus[job['status']] );
+
+			// Start globe spinning if status is running
+			this.statusScreen.globe.setPaused( !(job['status'] == 1)  );
+			if (job['status'] < 2) this.btnAbort.removeClass("disabled");
+
+			// Parse agents
+			for (var i=0; i<agents.length; i++) {
+				var a = agents[i];
+
+				// Parse lat/lng if exist, otherwise use random
+				var lat = String(Math.random() * 180 - 90),
+					lng = String(Math.random() * 180);
+
+				// Update lat/lng
+				if (a['latlng'] != undefined) {
+					var parts = a['latlng'].split(",");
+					lat = Number(parts[0]);
+					lng = Number(parts[1]);
+				}
+
+				// Update interface
+				this.statusScreen.onWorkerAdded( a['uuid'], {'lat' : lat, 'lng' : lng} );
+				this.numConnectedMachines++;
+				this.statusMachinesValue.text(this.numConnectedMachines);
+
+			}
+
+		}
+
+		/**
 		 * Unbind interface from a job feedback
 		 */
-		JobsScreen.prototype.interfaceUnbind = function() {
+		JobsScreen.prototype.resetInterface = function() {
 
 			// Disable buttons
 			this.btnView.addClass("disabled");
@@ -157,14 +227,38 @@ define(
 			this.lastEventsTime = 0;
 			this.lastEvents = 0;
 			this.rateRing = [];
+			this.activeJob = null;
 
+		}
+
+		/**
+		 * Bind interface to a particular job
+		 */
+		JobsScreen.prototype.interfaceBind = function( job ) {
+
+			// Focus on the given job
+			this.resetInterface();
+			this.labapi.selectJob( job );
+
+			// Focus to job
+			this.activeJob = job;
+
+		}
+
+		/**
+		 * Refresh the job listing
+		 */
+		JobsScreen.prototype.refreshJobListing = function() {
+			this.eListBody.empty();
+			this.labapi.enumJobs();
 		}
 
 		/**
 		 * Add a job in the status screen
 		 */
-		JobsScreen.prototype.__debug__setJobDetails = function( details ) {
-			this.__debug__jobTune = details;
+		JobsScreen.prototype.onSubmitRequest = function( tunables, observables ) {
+			this.submitTunables = tunables;
+			this.submitObservables = observables;
 		}
 
 		/**
@@ -204,10 +298,9 @@ define(
 		 * Abort simulatio on unload
 		 */
 		JobsScreen.prototype.onWillHide = function(cb) {
-			if (this.lab) {
-				this.interfaceUnbind();
-				this.lab.abortSimulation();
-				this.__debug__jobTune = null;
+			if (this.labapi) {
+				this.resetInterface();
+				this.labapi.deselectJob();
 			}
 			cb();
 		}
@@ -220,16 +313,15 @@ define(
 			// Reset observables
 			this.statusScreen.onObservablesReset();
 
-			// Open labsocket for testing
+			// Open labsocket for I/O and database for resolving
 			var DB = APISocket.openDb();
-			this.lab = APISocket.openLabsocket("3782c144f19c41f4bf37160420915e46");
-			//this.lab = APISocket.openLabsocket("3e63661c13854de7a9bdeed71be16bb9");
+			this.labapi = APISocket.openLabsocket();
 
 			// Register histograms
-			this.lab.on('histogramUpdated', (function(data, ref) {
+			this.labapi.on('histogramUpdated', (function(data, ref) {
 				this.statusScreen.onObservableUpdated(data, ref);
 			}).bind(this));
-			this.lab.on('histogramsAdded', (function(histos) {
+			this.labapi.on('histogramsAdded', (function(histos) {
 
 				// Collect names and map histogram ID to object
 				var histoNames = [],
@@ -255,12 +347,12 @@ define(
 				}).bind(this));
 
 			}).bind(this));
-			this.lab.on('histogramsUpdated', (function(histos) {
+			this.labapi.on('histogramsUpdated', (function(histos) {
 				this.lastHistograms = histos;
 				this.btnView.removeClass("disabled");
 				this.eStatusLabel.text("RUNNING");
 			}).bind(this));
-			this.lab.on('metadataUpdated', (function(meta) {
+			this.labapi.on('metadataUpdated', (function(meta) {
 				var currNevts = parseInt(meta['nevts']),
 					progValue = currNevts / 40000;
 				this.statusProgressValue.text( Math.round(progValue) + " %" );
@@ -288,8 +380,8 @@ define(
 
 			}).bind(this));
 
-			// Show/Hide workers
-			this.lab.on('log', (function(logLine, telemetryData) {
+			// Show/Hide workers based on telem
+			this.labapi.on('log', (function(logLine, telemetryData) {
 				if (telemetryData['agent_added']) {
 					// Parse lat/lng if exist, otherwise use random
 					var lat = String(Math.random() * 180 - 90),
@@ -307,29 +399,52 @@ define(
 						);
 					this.numConnectedMachines++;
 					this.statusMachinesValue.text(this.numConnectedMachines);
+
 				} else if (telemetryData['agent_removed']) {
 					this.statusScreen.onWorkerRemoved(telemetryData['agent_removed']);
 					this.numConnectedMachines--;
 					this.statusMachinesValue.text(this.numConnectedMachines);
+
 				}
 				console.log(">>> ",logLine,telemetryData);
 			}).bind(this));
 
+			// Reset interface when current job is deselected
+			this.labapi.on('jobDeselected', (function() {
+				this.resetInterface();
+			}).bind(this));
+
+			// Handle job listings
+			this.labapi.on('jobAdded', (function(job) {
+				this.addJob(job);
+			}).bind(this));
+			this.labapi.on('jobRemoved', (function(job) {
+				this.removeJob(job);
+			}).bind(this));
+
+			// When job details arrive focus
+			this.labapi.on('jobDetails', (function(job, agents) {
+
+				// Apply job details
+				this.applyJobDetails(job, agents);
+
+			}).bind(this));
+
 			// Check if we should start a job
-			this.eListBody.empty();
-			if (this.__debug__jobTune) {
-				this.lab.beginSimulation( this.__debug__jobTune, false );
-				this.eStatusLabel.text("SUBMITTED");
-				this.statusScreen.globe.setPaused(false);
-				this.btnAbort.removeClass("disabled");
+			if (this.submitTunables) {
 
-				this.addJob({
-					'name'   : new Date().toLocaleString(),
-					'score'  : 'running'
-				});
+				// Submit job
+				this.labapi.submitJob( this.submitTunables, this.submitObservables );
 
+				// Reset
+				this.submitTunables = null;
+				this.submitObservables = null;
 			}
 
+			// Refresh job listing AFTER job submission
+			this.refreshJobListing();
+
+			// Show interface
 			cb();
 
 		}

@@ -429,7 +429,7 @@ define(
 			});
 
 			// Pick the appropriate labSocket
-			this.lab = APISocket.openLabsocket("3782c144f19c41f4bf37160420915e46");
+			this.lab = APISocket.openLabsocket();
 			this.lab.on('histogramsUpdated', (function(histos) {
 
 				// Save last histograms
@@ -525,7 +525,7 @@ define(
 		TuningScreen.prototype.estimateResults = function() {
 
 			// Submit for interpolation
-			this.lab.beginSimulation( this.values, true, this.observables );
+			this.lab.estimateJob( this.values, this.observables );
 
 			// Save user values
 			this.snapshotMarkers();

@@ -576,7 +576,7 @@ define(
 					scrTuning.on('submitParameters', function( values, observables ) {
 
 						// Set job detals and display jobs screen
-						VAS.scrJobs.__debug__setJobDetails( values, observables );
+						VAS.scrJobs.onSubmitRequest( values, observables );
 						VAS.displayJobs();
 
 					});
