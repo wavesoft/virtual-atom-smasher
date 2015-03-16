@@ -4,6 +4,7 @@
 This document contains all the visual aids registered in the Virtual Atom Smasher game interface. 
 
 ## Machine Diagram
+
  * __machine.expand.beam__ : The 'Beam' button
  * __machine.expand.issr__ : The 'Initial State Radiation' button   
  * __machine.expand.hard__ : The 'Hard Process' button   
@@ -26,3 +27,6 @@ This document contains all the visual aids registered in the Virtual Atom Smashe
  * __tuning.control.view__ : The 'View' button
  * __tuning.control.status__ : The status panel in the tuning screen
  * __tuning.machine.beam__ : The beam button sets
+
+## 
+
