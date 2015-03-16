@@ -69,56 +69,6 @@
 
 		.content {
 			padding: 5px;
-
-			.progress-thin {
-				height: 10px;
-				background-color: #FFF;
-				.progress-bar {
-					height: 10px;
-					background-color: #9b59b6;
-				}
-			}
-			.knowledge-body {
-				padding: 8px;
-				height: 345px;
-				overflow-y: auto;
-
-				.bookterm {
-				    padding: 4px;
-				    margin: 4px;
-				    border-radius: 5px;
-					
-					span {
-						font-size: 20px;
-						vertical-align: bottom;
-						margin-right: 5px;
-					}
-
-				    &.bookterm-state-0 {
-				    	cursor: default;
-				    	color: #999;
-				    }
-				    &.bookterm-state-1 {
-					    cursor: pointer;
-						&:hover {
-							background-color: #3498db;
-							color: #fff;
-						}
-				    }
-				    &.bookterm-state-2 {
-					    cursor: pointer;
-					    font-weight: bold;
-						&:hover {
-							background-color: #3498db;
-							color: #fff;
-						}
-					    span {
-							color: #f1c40f;					    	
-					    }
-				    }
-				}
-
-			}
 		}
 
 	}
@@ -149,37 +99,6 @@
 		position: absolute;
 		left: 10px;
 		top: 10px;
-	}
-
-	.profilebtn-large {
-		display: inline-block;
-		width: 64px;
-		height: 64px;
-		margin: 0 5px;
-		.border-radius( 40px );
-		cursor: pointer;
-		line-height: 70px;
-		font-size: 32px;
-		text-align: center;
-		color: rgba(255,255,255,0.8);
-
-		&:hover {
-			.transform( scale(1.1) );
-		}
-		&.profilebtn-lower {
-			color: rgba(255,255,255,0.8);
-			background-color: #34495e;
-			&.active {
-				border: solid 4px #34495e;
-				.transform( scale(1.1) );
-				background-color: #ecf0f1;
-				color: #34495e;
-			}
-		}
-		&.profilebtn-upper {
-			background-color: #16a085;
-		}
-
 	}
 
 }

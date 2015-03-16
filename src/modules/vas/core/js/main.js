@@ -599,6 +599,9 @@ define(
 					scrTuning.on('flash', function(title,body,icon) {
 						UI.showFlash(title, body, icon);
 					});
+					scrTuning.on("displayStatus", function() {
+						VAS.displayStatus();
+					});
 
 					// Complete tuning
 					prog_tune.ok("Tuning screen ready");

@@ -1,11 +1,27 @@
 <div class="title">
 	<h1>Unlock</h1>
+	<p class="small">From this screen you can unlock the different parts of the machine!</p>
 </div>
 <div class="body">
 	<ul class="unlock-list">
-		<li class="unlocked"><span class="glyphicon glyphicon-ok"></span> First</li>
-		<li class="unlockable"><span class="glyphicon glyphicon-hand-right"></span> Second</li>
-		<li class=""><span class="glyphicon glyphicon-lock"></span>  Third</li>
-		<li class=""><span class="glyphicon glyphicon-lock"></span>  Fourth</li>
+		{{#stages}}
+			{{#unlocked}}
+			<li class="unlocked"><span class="glyphicon glyphicon-ok"></span> {{ name }}</li>
+			{{/unlocked}}
+			{{^unlocked}}
+				{{#unlockable}}
+				<li class="unlockable" click="do:unlockStage({{id}})"><span class="glyphicon glyphicon-check"></span> {{ name }}</li>
+				{{/unlockable}}
+				{{^unlockable}}
+				<li class=""><span class="glyphicon glyphicon-lock"></span> {{ name }}</li>
+				{{/unlockable}}
+			{{/unlocked}}
+		{{/stages}}
+		{{^stages}}
+		<li>(This part is not available yet)</li>
+		{{/stages}}
 	</ul>
+</div>
+<div class="footer footer-big">
+	
 </div>

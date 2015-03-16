@@ -26,11 +26,13 @@ define(
 			hostDOM.addClass("status");
 			this.loadTemplate(tplStatus);
 
-			// Register page parts
+			// Reset properties
 			this.paperDOMs = [];
 			this.buttonDOMs = [];
 			this.components = [];
+			this.focusedPaper = 0;
 
+			// Register page parts
 			var components = [
 				[ "profilepart.achievements", 	"Achievements",		"glyphicon glyphicon-tower" 	],
 				[ "profilepart.book", 			"Knowledge",		"glyphicon glyphicon-book" 		],
@@ -70,7 +72,7 @@ define(
 					paper.addClass("r"+this.paperDOMs.length);
 
 					// Create button
-					var btn = $('<div class="profilebtn-large profilebtn-lower"><span class="'+icon+'"></span></div>');
+					var btn = $('<div class="profilebtn-large profilebtn-lower"><span class="'+icon+'"></span><div class="title">'+name+'</div></div>');
 					btn.click((function(idx) {
 						return function(e) {
 							this.focusPaper(idx);
@@ -93,7 +95,7 @@ define(
 				}
 		
 				// Focus first paper
-				this.focusPaper(0);
+				this.focusPaper( this.focusedPaper );
 
 			}).bind(this));
 
@@ -112,6 +114,7 @@ define(
 		 * Focus a particular paper
 		 */
 		StatusScreen.prototype.focusPaper = function( paper ) {
+			this.focusedPaper = paper;
 			for (var i=0; i<this.buttonDOMs.length; i++) {
 				if (i == paper) {
 					this.buttonDOMs[i].addClass("active");

@@ -153,7 +153,7 @@ define(
 			this.yScale = d3.scale.log()
 				.range([height, 0])
 				.clamp(true)
-				.domain([0, 1]);
+				.domain([0.5, 1.5]);
 
 			// Prepare axes
 			this.xAxis = d3.svg.axis()
@@ -476,12 +476,9 @@ define(
 				// Update collective bounds
 				if (xMin == null) {
 					xMin = hBounds[0]; xMax = hBounds[1];
-					yMin = hBounds[2]; yMax = hBounds[3];
 				} else {
 					if (hBounds[0]<xMin) xMin=hBounds[0];
 					if (hBounds[1]>xMax) xMax=hBounds[1];
-					if (hBounds[2]<yMin) yMin=hBounds[2];
-					if (hBounds[3]<yMax) yMax=hBounds[3];
 				}
 			}
 

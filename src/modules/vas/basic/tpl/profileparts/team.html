@@ -1,1 +1,51 @@
-<img src="{{img}}/mockups/profile-team.png" />
+<div class="content">
+	<div class="title">
+		<h1>Team</h1>
+		<div class="team-desc">{{{paper.body}}}</div>
+	</div>
+	<div class="enum team-body">
+		<div class="table-list table-scroll table-lg">
+			<table>
+				<thead>
+					<tr>
+						<th class="col-8">Name</th>
+						<th class="col-2">Papers</th>
+						<th class="col-2">Points</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#members}}
+					<tr click="do:viewMember({{id}})">
+						<td class="col-8">
+							<span class="glyphicon glyphicon-user"></span> {{name}}
+						</td>
+						<td class="col-2 text-center">{{papers}}</td>
+						<td class="col-2 text-center">{{points}}</td>
+					</tr>
+					{{/members}}
+					{{^members}}
+					<tr>
+						<td colspan="3" class="col-12 text-center">
+							(No members to display)
+						</td>
+					</tr>
+					{{/members}}
+				</tbody>
+			</table>
+		</table>
+	</div>
+	<div class="footer footer-input">
+		<a class="button b-purple" href="{{vasapi}}&amp;goto=teamforum" target="_blank">
+			Forum
+		</a>
+		<button type="button" class="b-purple" click="do:workQueue()">
+			Work Queue
+		</button>
+		<button type="button" class="b-purple" click="do:manageTeam()">
+			Manage
+		</button>
+		<button type="button" class="b-red pull-right" click="do:changeTeam()">
+			<span class="glyphicon glyphicon-log-out"></span> Change
+		</button>
+	</div>
+</div>

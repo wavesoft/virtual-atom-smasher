@@ -40,6 +40,18 @@ define(
 			this.setViewData( 'enabled', isEnabled );
 			this.setViewData( 'terms', "" );
 
+			// Process part stages
+			var stages = part['stages'], firstLocked = true;
+			for (var i=0; i<stages.length; i++) {
+				if (stages[i].locked) {
+					if (firstLocked) {
+						firstLocked=false;
+						stages[i]['unlockable'] = true;
+					}
+				}
+			}
+			this.setViewData( 'stages', stages );
+
 		}
 
 		/**

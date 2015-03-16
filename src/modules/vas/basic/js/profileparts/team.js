@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	[ "jquery", "require", "vas/core/registry","vas/core/base/view", "vas/core/user",
+	[ "jquery", "vas/config", "require", "vas/core/registry","vas/core/base/view", "vas/core/user",
 	  "text!vas/basic/tpl/profileparts/team.html" ], 
 
 	/**
@@ -10,7 +10,7 @@ define(
 	 *
  	 * @exports vas-basic/profileparts/team
 	 */
-	function(config, require, R, View, User, tplBooks) {
+	function($, Config, require, R, View, User, tplBooks) {
 
 		/**
 		 * The default tunable body class
@@ -25,7 +25,7 @@ define(
 			this.loadTemplate(tplBooks);
 
 			// Render view
-			this.setViewData('img', require.toUrl('vas/basic/img'));
+			this.setViewData( 'vasapi', Config.forum_vas_api + '?auth=' + User.profile['token'] );
 			this.renderView();
 
 		};

@@ -1,1 +1,62 @@
-<img src="{{img}}/mockups/profile-papers.png" />
+<div class="content">
+	<div class="title">
+		<h1>Papers</h1>
+	</div>
+	<div class="enum team-body">
+		<div class="table-list table-scroll table-lg">
+			<table>
+				<thead>
+					<tr>
+						<th class="col-8">Name</th>
+						<th class="col-2">Score</th>
+						<th class="col-2">Cited</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#user_papers}}
+					<tr click="do:viewPaper({{id}})" class="f-orange">
+						<td class="col-8">
+							<span class="glyphicon glyphicon-user"></span> {{title}}
+						</td>
+						<td class="col-2 text-center">{{fit_formatted}}</td>
+						<td class="col-2 text-center">
+							<a href="do:publishPaper({{id}})">Publish</a>
+						</td>
+					</tr>
+					{{/user_papers}}
+					{{^user_papers}}
+					<tr>
+						<td colspan="3" class="col-12 text-center">
+							(You don't have any unpublished paper)
+						</td>
+					</tr>
+					{{/user_papers}}
+					<tr class="separator">
+						<td colspan="3"></td>
+					</tr>
+					{{#team_papers}}
+					<tr click="do:viewPaper({{id}})">
+						<td class="col-8">
+							<span class="glyphicon glyphicon-education"></span> {{title}}
+						</td>
+						<td class="col-2 text-center">{{fit_formatted}}</td>
+						<td class="col-2 text-center">{{citations}}</td>
+					</tr>
+					{{/team_papers}}
+					{{^team_papers}}
+					<tr>
+						<td colspan="3" class="col-12 text-center">
+							(Your team has no papers yet)
+						</td>
+					</tr>
+					{{/team_papers}}
+				</tbody>
+			</table>
+		</table>
+	</div>
+	<div class="footer footer-input">
+		<button type="button" class="b-purple" click="do:viewPapers()">
+			View all published papers
+		</button>
+	</div>
+</div>

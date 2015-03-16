@@ -89,9 +89,6 @@ define(
 			// Reset value
 			this.onUpdate(0);
 
-			// Register visual aid 
-			R.registerVisualAid("running.button.abort", this.abortIcon, { "screen": "screen.running" });
-
 		};
 
 		// Subclass from DataWidget

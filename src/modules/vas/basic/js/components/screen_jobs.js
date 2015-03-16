@@ -71,6 +71,10 @@ define(
 			this.btnAbort = $('<button class="p-abort btn-shaded btn-red btn-striped btn-with-icon"><span class="glyphicon glyphicon-remove-circle"></span><br />Abort</button>').appendTo(this.sideScreenDOM);
 			this.btnView = $('<button class="p-view btn-shaded btn-darkblue btn-with-icon"><span class="glyphicon glyphicon-dashboard"></span><br />View</button>').appendTo(this.sideScreenDOM);
 
+			// Register visual aids
+			R.registerVisualAid("jobs.button.abort", this.btnAbort, { "screen": "screen.jobs" });
+			R.registerVisualAid("jobs.button.view", this.btnView, { "screen": "screen.jobs" });
+
 			// Disable by default
 			this.btnAbort.addClass("disabled");
 			this.btnView.addClass("disabled");
@@ -112,7 +116,7 @@ define(
 
 			// List
 			this.listJobs = $('<div class="list-jobs"></div>').appendTo(this.hostDOM);
-
+			R.registerVisualAid("jobs.list.jobs", this.listJobs, { "screen": "screen.jobs" });
 
 		}
 		JobsScreen.prototype = Object.create( C.HomeScreen.prototype );

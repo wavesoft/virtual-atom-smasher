@@ -483,7 +483,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 */
 		User.prototype.getPapers = function( query, callback ) {
 
-			// Query knowledge grid
+			// Query papers
 			this.accountIO.listPapers(query, (function(papers) {
 
 				// Update all papers and tag which ones are mine
@@ -498,6 +498,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 
 			}).bind(this));
 
+		}
+
+		/**
+		 * Return the user and team papers
+		 */
+		User.prototype.getProfilePapers = function( callback ) {
+			// Query papers
+			this.accountIO.getProfilePapers( callback );
 		}
 
 		/**
@@ -616,6 +624,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		User.prototype.commitUserRecord = function() {
 			// Commit user variables
 			this.accountIO.sendVariables(this.vars);
+		}
+
+		/**
+		 * Shorthand to get the specified part details
+		 */
+		User.prototype.getPartDetails = function( partName, callback ) {
+			// Get part papers
+			this.accountIO.getPartDetails( partName, callback );
 		}
 
 		/**
@@ -901,7 +917,12 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 
 		}
 
-
+		/**
+		 * Handle configuration changes
+		 */
+		User.prototype.onConfigChanged = function( configName, callback ) {
+			
+		}
 
 		/**
 		 * Build and return a flat version of the knowledge tree.

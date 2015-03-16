@@ -186,6 +186,7 @@ define(
 		 * Update tunables
 		 */
 		PaperMachinePart.prototype.applyTunables = function() {
+			if (!this.tunables) return;
 
 			// Get paper values
 			for (var i=0; i<this.tunables.length; i++) {

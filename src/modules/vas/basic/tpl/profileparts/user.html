@@ -1,1 +1,86 @@
-<img src="{{img}}/mockups/profile-user.png" />
+<div class="content">
+	<div class="title">
+		<div class="image" style="background-image: url({{ avatars }}{{ profile.avatar }})"></div>
+		<div class="stats">
+			{{#edit}}
+			<form name="profile" action="do:updateProfile()">
+				<input class="flat-h2 editable-mark" type="text" name="displayName" value="{{ profile.displayName }}" />
+				<table>
+					<tr>
+						<th>Science Points:</th>
+						<td>{{ profile.points }}</td>
+					</tr>
+					<tr>
+						<th>Papers:</th>
+						<td>{{ profile.papers }}</td>
+					</tr>
+					<tr>
+						<th>Team:</th>
+						<td>{{ profile.team }}</td>
+					</tr>
+					<tr>
+						<th>E-Mail:</th>
+						<td><input class="flat editable-mark" type="text" name="email" value="{{ profile.email }}" /></td>
+					</tr>
+				</table>
+			</form>
+			{{/edit}}
+			{{^edit}}
+			<h2>{{ profile.displayName }}</h2>
+			<table>
+				<tr>
+					<th>Science Points:</th>
+					<td>{{ profile.points }}</td>
+				</tr>
+				<tr>
+					<th>Papers:</th>
+					<td>{{ profile.papers }}</td>
+				</tr>
+				<tr>
+					<th>Team:</th>
+					<td>{{ profile.team }}</td>
+				</tr>
+				<tr>
+					<th>E-Mail:</th>
+					<td>{{ profile.email }}</td>
+				</tr>
+			</table>
+			{{/edit}}
+		</div>
+	</div>
+	<div class="pms-body">
+		<div class="table-list table-scroll table-lg">
+			<table>
+				<thead>
+					<tr>
+						<th class="col-10">Subject</th>
+						<th class="col-2">From</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#messages}}
+					<tr click="do:viewPM({{id}})" class="f-orange">
+						<td class="col-10 text-center">{{ subject }}</td>
+						<td class="col-2 text-center">{{ from }}</td>
+					</tr>
+					{{/messages}}
+					{{^messages}}
+					<tr>
+						<td colspan="2" class="col-12 text-center">
+							(You have no private messages)
+						</td>
+					</tr>
+					{{/messages}}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="footer footer-input">
+		<button type="button" class="b-purple" click="do:workQueue()">
+			Send PM
+		</button>
+		<button type="button" class="b-purple pull-right" click="do:editProfile()">
+			<span class="glyphicon glyphicon-pencil"></span>
+		</button>
+	</div>
+</div>

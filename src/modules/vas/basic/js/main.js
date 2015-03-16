@@ -96,7 +96,7 @@ define([
 	'vas/basic/profileparts/achievements',
 	'vas/basic/profileparts/books',
 	'vas/basic/profileparts/papers',
-	'vas/basic/profileparts/profile',
+	'vas/basic/profileparts/user',
 	'vas/basic/profileparts/team',
 
 ], function(require) {

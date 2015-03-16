@@ -25,13 +25,30 @@ define(
 			this.loadTemplate(tplBooks);
 
 			// Render view
-			this.setViewData('img', require.toUrl('vas/basic/img'));
 			this.renderView();
 
 		};
 
 		// Subclass from ObservableWidget
 		ProfilePapers.prototype = Object.create( View.prototype );
+
+		/**
+		 * Update papers before view
+		 */
+		ProfilePapers.prototype.onWillShow = function(cb) {
+
+			// Get user papers
+			User.getProfilePapers((function(user, team) {
+				this.setViewData('user_papers', user);
+				this.setViewData('team_papers', team);
+
+				// Show
+				this.renderView();
+				cb();
+
+			}).bind(this));
+
+		};
 
 
 		// Store overlay component on registry

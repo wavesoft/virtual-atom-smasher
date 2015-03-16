@@ -5,11 +5,18 @@
 
 .screen.tuning2 {
 
+	// Forward icon
+	.forward-icon {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+	}
+
 	// Machine backdrop
 	.r-machine, .r-machine-overlay {
 		position: absolute;
 		left: 50%;
-		top: 40%;
+		top: 50%;
 	}
 
 	// Corner help button
@@ -95,9 +102,16 @@
 
 	// Centered control board
 	.control-board {
+		.transition(bottom 0.2s);
 		.pointer-events(none);
 		position: absolute;
-		bottom: -1px; left: 0; right: 0;
+		bottom: -75px; left: 0; right: 0;
+
+		// For sliding the help panel up
+		&.visible {
+			bottom: -1px;
+		}
+
 		> div {
 			.pointer-events(auto);
 			margin: 0 auto;

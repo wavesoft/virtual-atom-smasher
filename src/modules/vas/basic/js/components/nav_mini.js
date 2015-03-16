@@ -91,7 +91,8 @@ define(
 		 */
 		NavMini.prototype.onPageWillChange = function(from, to) {
 			var valid_screens = [
-				"screen.tuning", "screen.running",
+				"screen.tuning", 
+				"screen.running",
 				"screen.explain", "screen.courseroom",
 				"screen.team.people", "screen.team.machines", 
 				"screen.team.notebook", "screen.team.messages",

@@ -124,6 +124,17 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get profile papers
+		 */
+		APIAccount.prototype.getProfilePapers = function(callback) {
+			// Query server
+			this.sendAction("papers.profile", {
+			}, function(data) {
+				if (data && callback) callback(data['user'], data['team']);
+			});
+		}
+
+		/**
 		 * Get a particular paper
 		 */
 		APIAccount.prototype.readPaper = function(paper_id, callback) {
@@ -212,6 +223,18 @@ define(["vas/core/api/interface", "vas/config"],
 		APIAccount.prototype.getProfileBooks = function(callback) {
 			// Query server
 			this.sendAction("profile.books", {
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
+		 * Get machine part stages
+		 */
+		APIAccount.prototype.getPartDetails = function(name, callback) {
+			// Query server
+			this.sendAction("parts.details", {
+				'part': name
 			}, function(data) {
 				if (data && callback) callback(data['data']);
 			});

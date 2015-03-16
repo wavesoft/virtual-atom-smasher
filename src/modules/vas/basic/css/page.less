@@ -38,6 +38,16 @@ input, textarea, keygen, select, button {
 	border-top: solid 2px #F00;
 }
 
+a {
+	color: #2980B9;
+	text-decoration: none;
+
+	&:hover {
+		color: #3498DB;
+		text-decoration: underline;
+	}
+}
+
 h1 + p.subtitle {
 	margin-top: -15px;
 	font-style: italic;
@@ -95,6 +105,43 @@ h1 {
 .visualaid-focus {
 }
 
+.profilebtn-large {
+	.border-radius( 40px );
+	display: inline-block;
+	width: 64px;
+	height: 64px;
+	margin: 0 5px;
+	cursor: pointer;
+	line-height: 70px;
+	font-size: 32px;
+	text-align: center;
+	color: rgba(255,255,255,0.8);
+	position: relative;
+	z-index: 100;
+
+	div.title {
+		position: absolute;
+		
+	}
+
+	&:hover {
+		.transform( scale(1.1) );
+	}
+	&.profilebtn-lower {
+		color: rgba(255,255,255,0.8);
+		background-color: #34495e;
+		&.active {
+			border: solid 4px #34495e;
+			.transform( scale(1.1) );
+			background-color: #ecf0f1;
+			color: #34495e;
+		}
+	}
+	&.profilebtn-upper {
+		background-color: #16a085;
+	}
+
+}
 
 // ===============================
 // Flat input elements
@@ -116,6 +163,12 @@ input.flat-h2 {
 	background: transparent;
 	font-weight: bold;
 	font-size: 1.5em;
+}
+
+input.flat {
+	border: none;
+	background: transparent;
+	font-size: 13px;
 }
 
 // ===============================
