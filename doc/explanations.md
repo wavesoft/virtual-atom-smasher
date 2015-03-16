@@ -327,7 +327,7 @@ Another property of color force is that it appears to exert little force at shor
 ### Color Force is....
 1. The force that affects our brain cells when we come in contact with a color charged object.
 2. The force that colors quarks inside a proton.
-3. > Color force is the strong interaction that is completely based on color charge. It basically bind the quarks together.
+3. > Color force is the strong interaction that is completely based on color charge. It basically binds the quarks together.
 
 ### What is the relation between color force and distance?
 1. None. Color force has nothing to do with distance.
@@ -338,6 +338,11 @@ Another property of color force is that it appears to exert little force at shor
 ## Color Confinement
 
 Color-charged particles cannot be found individually. For this reason, the color-charged quarks are confined in groups ([[hadrons]]) with other quarks. These composites are color neutral (white). Because quarks, (according to the Standard Model's theory of strong interactions) combine only into baryons and mesons, consisting of three quarks and a pair of [[quark]] - antiquark respectively, we conclude that in order to exist in a stable state they must have in total a neutral color charge (zero color charge).
+### What is the color charge of a hadron?
+1. Blue, because it is a stronger color.
+2. > White (neutral). Quarks exist only in a stable state with neutral ( white) color charge.
+3. Red. Quarks are mostly red color charged.
+
 
 
 ## Carrier Particles ( ατελές )
@@ -367,10 +372,119 @@ Jets are groups of particles that are produced from specific high energy collisi
 ## Asymptotic Freedom
 Due to the fact that the strong force increases with distance, confinement of quarks exists. There are no free quarks; no quarks have the ability to break away from their hadron. However, within a very small area, quarks have the freedom to move anywhere. This property is called asymptotic freedom.
 
+## Parton Showers 
+
+## Initial State Showers ( spacelike sholer )
+
+## Final State Showers ( timelike shower)
+
+## Hard Process
+
+
 String models
 
 A parton is a jet
 
 ProbStoUD
 
+# Questions for the players
 
+## Questions before playing
+
+### What is your relation to physics?
+
+1. University degree
+2. Master's degree
+3. PHD
+4. I am learning physics only as a hobby.
+5. I am doing physics at school.
+6. None
+7. Other (specify)
+
+### If you have a specialization in physics what that may be?
+
+1. Particle Physics
+2. Theoritical Physics
+3. Den kserw kai egw ti yparxei physics
+
+### How did you find about Virtual Atom Smasher?
+
+1. School
+2. University
+3. Social Media
+4. Internet
+5. Cern's webpage
+6. Other (specify)
+
+
+## 10 Questions for the players
+
+### Do you know what hadronization is?
+1. No. I have not heard that term before.
+2. > Yes. Hadronization is the physical process in which quarks and gluons turn into hadrons.
+3. Yes. Hadronizations is the physical process in which photons interact with hadrons.
+4. Yes. Hadronization is the physical process in which electrons interact with hadrons.
+
+
+### Do you know what a Parton Shower is?
+
+1. No. I have not heard that term before.
+2. Yes. It is a rain of photons that decays through time.
+3. > Yes. It is the continuous emission of partons in a branchlike form.
+4. Yes. It is the cloud of partons that form the nucleus.
+
+### Do you know what an Initial State Shower (spacelike shower) is?
+
+1. No. I have not heard that term before.
+2. Yes. It is an early shower like structure of pions.
+3. Yes. It is the initial state of electrons before the collision.
+4. > Yes. It is the branchlike form that develops on an incoming parton of the hard subprocess.
+
+
+### Do you know what jets are?
+
+1. I don't know.
+2. >Jets are groups of particles that are produced from specific high energy collisions. Such collisions produce highly energetic quarks and gluons.
+3. Jets are the thrusts that we give to a parton inside an accelerator.
+4. Jets are the groups of jetons produced in a parton collision.
+
+
+### What kind of particle beams do we colide?
+
+1. I don't know.
+2. Gluon beams.
+3. > Electron-Electron beams and Proton-Proton beams.
+4. Pion beams.
+
+### What is a Monte-Carlo simulation?
+
+1. I don't know.
+2. > Monte Carlo simulation (or Monte Carlo experiments) are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. 
+3. Monte Carlo simulation is a simulation of hadronization first used in the University of Monte Carlo.
+4. Monte Carlo simulation is an optical visualization of the final state shower.
+
+### How do we validate the theoretical models?
+1. I don't know. 
+2. > We run a simulation that uses this model and we compare the results with experimental measurements. 
+3. We create multiple models and discuss the pros and cons.
+4. We run a mind experiment in our head and imagine, combining with what we know until now, what the results may be.  
+
+### what is a histogram? 
+1. I don't know. I have not heard that term before.
+2. > A diagram that visualizes how frequently a particular measurement occurs. 
+3. A diagram that shows the evolution history of a value.
+4. A diagram that shows the route of particle before and after the colision. 
+
+### Do you know what Strong Force is?
+
+1. I don't know.
+2. The strength of the force that we apply on hadron at the accelerator.
+3. The force from the bremsstrahlung radiation when it emits from a lepton.
+4. > Strong Force is the mechanism that keeps nucleus particles bound together. It confines quarks together in order to form hadrons such as protons or neutrons, ensuring stability in ordinary matter.
+
+### Do you know what Color Force is?
+
+1. I don't know.
+2. 1. The force that affects our brain cells when we come in contact with a color charged object.
+3. The force that colors quarks inside a proton.
+4. > Color force is the strong interaction that is completely based on color charge. It basically binds the quarks together.
