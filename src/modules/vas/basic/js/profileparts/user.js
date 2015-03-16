@@ -25,7 +25,9 @@ define(
 			this.loadTemplate(tplBooks);
 
 			// Render view
-			this.setViewData('img', require.toUrl('vas/basic/img'));
+			this.setViewData('avatars', require.toUrl('vas/basic/img/avatars')+'/');
+			this.setViewData('profile', User.profile);
+			this.setViewData('messages', []);
 			this.renderView();
 
 		};
