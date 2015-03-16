@@ -1,7 +1,15 @@
 
-define(["core/util/event_base", "sha1", "vas/config", "vas/core/api/chatroom", "vas/core/api/course"  ], 
+define(
 
-	function( EventBase, SHA1, Config, APIChatroom, APICourseroom ) {
+		// Core dependencies
+		["core/util/event_base", "sha1", "vas/config",
+ 		
+ 		// Interfaces
+ 		"vas/core/api/db", "vas/core/api/account", "vas/core/api/chatroom", "vas/core/api/course",
+ 		"vas/core/api/labsocket", "vas/core/api/labtrain" ], 
+
+	function( EventBase, SHA1, Config,
+			  IDb, IAccount, IChatroom, ICourse, ILabsocket, ILabtrain ) {
 
 		/**
 		 * Bitmask filter
@@ -33,12 +41,12 @@ define(["core/util/event_base", "sha1", "vas/config", "vas/core/api/chatroom", "
 			this.apiInstances = [];
 
 			// Register interfaces
-			this.registerInterface( "db" 		, 0x00, "vas/core/api/db"		,true  );
-			this.registerInterface( "account" 	, 0x00, "vas/core/api/account" 	,true  );
-			this.registerInterface( "chatroom"	, 0x00, "vas/core/api/chatroom" ,false );
-			this.registerInterface( "course" 	, 0x00, "vas/core/api/course" 	,false );
-			this.registerInterface( "labsocket" , 0x01, "vas/core/api/labsocket",false );
-			this.registerInterface( "labtrain"  , 0x02, "vas/core/api/labtrain" ,false );
+			this.registerInterface( "db" 		, 0x00, IDb			,true  );
+			this.registerInterface( "account" 	, 0x00, IAccount 	,true  );
+			this.registerInterface( "chatroom"	, 0x00, IChatroom 	,false );
+			this.registerInterface( "course" 	, 0x00, ICourse 	,false );
+			this.registerInterface( "labsocket" , 0x01, ILabsocket	,false );
+			this.registerInterface( "labtrain"  , 0x02, ILabtrain 	,false );
 
 		}
 
@@ -48,65 +56,60 @@ define(["core/util/event_base", "sha1", "vas/config", "vas/core/api/chatroom", "
 		/**
 		 * Register a dynamic API interface
 		 */
-		APISocket.prototype.registerInterface = function( domain, bitDomain, classPath, reuse ) {
+		APISocket.prototype.registerInterface = function( domain, bitDomain, Interface, reuse ) {
 
 			// Set default value to reuse
 			var reuseInstance = reuse;
 			if (reuseInstance === undefined) reuseInstance = true;
 
-			// Request an interface through require.js
-			require([classPath], (function(Interface) {
+			// Store instance under the specified domain
+			this.apiInterfaces[domain] = Interface;
 
-				// Store instance under the specified domain
-				this.apiInterfaces[domain] = Interface;
+			// Register open function
+			this['open' + domain[0].toUpperCase() + domain.substr(1) ] = (function() {
 
-				// Register open function
-				this['open' + domain[0].toUpperCase() + domain.substr(1) ] = (function() {
+				// Close or reuse previous instance
+				if (this.apiInstances[domain] !== undefined ) {
 
-					// Close or reuse previous instance
-					if (this.apiInstances[domain] !== undefined ) {
-
-						// Check if we should reuse single instance
-						if (reuseInstance) {
-							return this.apiInstances[domain];
-						}
-
-						// Otherwise cleanup
-						try {
-							this.apiInstances[domain].__handleClose();
-						} catch(e) {
-							console.error("Error closing interface '",domain,"':",e);
-						};
-						delete this.apiInstances[domain];
-						
+					// Check if we should reuse single instance
+					if (reuseInstance) {
+						return this.apiInstances[domain];
 					}
 
-					// Prepare arguments by the ones given to openXXXX function
-					var args = [this];
-					for (i = 0; i < arguments.length; i++) {
-						args.push( arguments[i] );
-					}
+					// Otherwise cleanup
+					try {
+						this.apiInstances[domain].__handleClose();
+					} catch(e) {
+						console.error("Error closing interface '",domain,"':",e);
+					};
+					delete this.apiInstances[domain];
+					
+				}
 
-					// Prepare instance proxy
-					function I() {
-						Interface.apply(this, args);
-					}
-					I.prototype = Interface.prototype;
+				// Prepare arguments by the ones given to openXXXX function
+				var args = [this];
+				for (i = 0; i < arguments.length; i++) {
+					args.push( arguments[i] );
+				}
 
-					// Update domain and bitmask
-					I.prototype.domain = domain;
-					I.prototype.bitmask = bitDomain << 16;
+				// Prepare instance proxy
+				function I() {
+					Interface.apply(this, args);
+				}
+				I.prototype = Interface.prototype;
 
-					// Create instance
-					var inst = new I();
-					this.apiInstances[domain] = inst;
+				// Update domain and bitmask
+				I.prototype.domain = domain;
+				I.prototype.bitmask = bitDomain << 16;
 
-					// Return instance
-					return inst;
+				// Create instance
+				var inst = new I();
+				this.apiInstances[domain] = inst;
 
-				}).bind(this);
+				// Return instance
+				return inst;
 
-			}).bind(this));
+			}).bind(this);
 
 		}
 

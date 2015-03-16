@@ -1,9 +1,11 @@
 
-define([
+define(
 
-	// Dependencies
-	'require',
+	// Named alias
+	"vas/basic", [ 'require',
 	
+	// Dependencies
+
 	// Screens
 	'vas/basic/components/screen_bsod',
 	'vas/basic/components/screen_cinematic',

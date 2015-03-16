@@ -29,7 +29,8 @@ define({
 	 */
 	'core' : {
 		//'socket_url'	: 'wss://test4theory.cern.ch/vas/apisocket', //'wss://test4theory.cern.ch/vas/apisocket'
-		'socket_url' : 'ws://test4theory.cern.ch/vas/game/apisocket'
+		//'socket_url' : 'ws://test4theory.cern.ch/vas/game/apisocket'
+		'socket_url' : 'ws://127.0.0.1:8080/vas/apisocket'
 	},
 
 	/**

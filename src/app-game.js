@@ -36,7 +36,7 @@ requirejs.config({
  *
  * NOTE: First load packages and then require() the actual code modules
  */
-requirejs(['require', 'extern', 'core', 'vas', 'tootr', 'less!../app-game'], 
+requirejs(['require', 'extern', 'core', 'vas', 'tootr' ], //'less!../app-game'], 
 	function (require, Extern, Core, VAS, Tootr) {
 
 		require(
