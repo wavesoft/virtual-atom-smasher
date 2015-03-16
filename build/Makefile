@@ -1,11 +1,18 @@
 
 .PHONY: all clean game editor game-css editor-css
 
+# ===========================
 game: r.js game-css
+# ===========================
 	node r.js -o config/build-game.js
+	rm ../src/app-game.css
 
+# ===========================
 editor: r.js editor-css
-	node r.js -o config/build-game.js
+# ===========================
+	node r.js -o config/build-editor.js
+
+##########################################################
 
 all: game editor
 
@@ -14,6 +21,8 @@ dist: dist/game-dist.tar.gz
 clean:
 	rm -rf dist/game
 	rm -rf dist/editor
+
+##########################################################
 
 # Node.js optimizer
 r.js:
@@ -30,3 +39,4 @@ editor-css: ../src/app-editor.less
 # Distribution archive
 dist/game-dist.tar.gz: game
 	(cd dist; tar -zcf game-dist.tar.gz game/)
+

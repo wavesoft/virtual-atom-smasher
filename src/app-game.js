@@ -24,8 +24,8 @@ requirejs.config({
 
 	map: {
 		'*': {
-			'less': 'extern/require-less/js/less',
-			'text': 'extern/require-text/js/text-2.0.14'
+			'less'		: 'extern/require-less/js/less',
+			'text'		: 'extern/require-text/js/text-2.0.14'
 		},
 	}
 
@@ -36,7 +36,7 @@ requirejs.config({
  *
  * NOTE: First load packages and then require() the actual code modules
  */
-requirejs(['require', 'extern', 'core', 'vas', 'tootr' ], //'less!../app-game'], 
+requirejs(['require', 'extern', 'core', 'vas', 'tootr', 'less!../app-game'], 
 	function (require, Extern, Core, VAS, Tootr) {
 
 		require(

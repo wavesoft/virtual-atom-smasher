@@ -28,7 +28,7 @@ define({
 	 * API to LiveQ
 	 */
 	'core' : {
-		'socket_url' : 'ws://127.0.0.1:8080/vas/apisocket'
+		'socket_url' : 'ws://test4theory.cern.ch/vas/game/apisocket'
 	},
 
 	/**
