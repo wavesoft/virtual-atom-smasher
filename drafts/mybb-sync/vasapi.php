@@ -396,6 +396,7 @@ if (!isset($_GET['auth'])) die("ERROR: Please specify user authentication token!
 $db->select_db( DB_LIVEQ );
 $query = $db->query(
 	"SELECT `user`.email, 
+	`user`.displayName,
 	`user`.groups, 
 	team.id AS t_id, 
 	team.uuid AS t_uuid, 
@@ -417,8 +418,8 @@ if (!$details) {
 }
 
 // Fetch the respective user information from the MyBB Database
-$query = $db->simple_select("users", "*", "username='". $details['email'] ."'", array(
-    "order_by" => 'username',
+$query = $db->simple_select("users", "*", "email='". $details['email'] ."'", array(
+    "order_by" => 'email',
     "order_dir" => 'DESC',
     "limit" => 1
 ));
@@ -429,6 +430,16 @@ if (!$mybb_user) {
 
 // Fetch or create user group
 $mybb_group = get_or_sync_group( $details );
+
+// Update display name if it has changed
+if ($mybb_user['username'] != $details['displayName']) {
+
+	// Update username
+	$query = $db->update_query("users", array(
+			'username' => $details['displayName']
+		), 'uid='.$mybb_user['uid'] );
+
+}
 
 // Update usergroup if not match
 if ($mybb_user['usergroup'] != $mybb_group['gid']) {
