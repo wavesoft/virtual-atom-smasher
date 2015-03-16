@@ -9,6 +9,8 @@ editor: r.js editor-css
 
 all: game editor
 
+dist: dist/game-dist.tar.gz
+
 clean:
 	rm -rf dist/game
 	rm -rf dist/editor
@@ -24,3 +26,7 @@ game-css: ../src/app-game.less
 # Resources: app-editor.css
 editor-css: ../src/app-editor.less
 	(cd ../src; lessc app-editor.less --clean-css="--s1 --advanced --compatibility=ie8" > app-editor.css)
+
+# Distribution archive
+dist/game-dist.tar.gz: game
+	(cd dist; tar -zcf game-dist.tar.gz game/)
