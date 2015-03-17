@@ -46,7 +46,7 @@ require.config({
 		{
 			'name'		: 'jquery-knob',
 			'location'	: 'extern/jquery-knob/js',
-			'main'		: 'jquery-knob-1.2.8'
+			'main'		: 'jquery-knob-1.2.11'
 		},
 		{
 			'name'		: 'd3',

@@ -1,0 +1,125 @@
+
+///////////////////////////////////////////////
+// Introduction Game
+///////////////////////////////////////////////
+
+@line-color	: #000;
+@tune-color	: #C0392B;
+@ref-color 	: #0f0;
+
+.intro-game {
+
+	.parm {
+		position: absolute;
+		width: 200px;
+		height: 100px;
+
+		&.parm-left {
+			left: 70px;
+			top: 40px;
+		}
+
+		&.parm-right {
+			right: 70px;
+			top: 40px;
+		}
+
+		.parm-dial {
+			position: absolute;
+			left: 110px;
+			top: 10px;
+		}
+
+		.parm-name {
+			position: absolute;
+			font-size: 60px;
+			left: 10px;
+			top: 15px;
+		}
+	}
+
+	.scale {
+		position: absolute;
+		width: 701px;
+		height: 300px;
+		border-bottom: solid 1px @line-color;
+		padding: 0;
+		margin: 0;
+		bottom: 60px;
+		left: 50%;
+		.transform( translateX(-360px) );
+
+		.scale-label {
+			position: absolute;
+			bottom: -20px;
+			text-indent: -5px;			
+		}
+
+		.scale-bin {
+			position: relative;
+			width: 100px;
+			background: no-repeat bottom left url(modules/vas/basic/img/elements/tickmarks.png);
+			padding: 0;
+			margin: 0;
+			float: left;
+			height: 100%;
+
+			&.scale-bin-last {
+				width: 1px;
+			}
+
+			.scale-value {
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				opacity: 0.5;
+
+				&.scale-tune-value {
+					background-color: @tune-color;
+				}
+				&.scale-ref-value {
+					background-color: @ref-color;
+				}
+			}
+
+		}
+
+		.scale-average {
+			position: absolute;
+			bottom: -10px;
+			top: -10px;
+
+			.scale-label {
+				position: absolute;
+				left: 10px;
+				top: 50px;
+				font-size: 40px;
+			}
+
+			&.scale-tune-value {
+				width: 40px;
+				background: no-repeat center center url(modules/vas/basic/img/elements/tunefit.png);
+				.scale-label {
+					color: @tune-color;
+					top: 90px;
+				}
+			}
+			&.scale-ref-value {
+				width: 3px;
+				background-color: @ref-color;
+				.scale-label {
+					color: @ref-color;
+					top: 150px;
+				}
+			}
+		}
+
+		&.no-histo {
+			.scale-bin > .scale-value {
+				display: none;
+			}
+		}
+	}
+
+}

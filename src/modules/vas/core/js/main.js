@@ -293,41 +293,18 @@ define("vas/core",
 					cb();
 				};
 
-			var prog_tutorials = progressAggregator.begin(1),
-				init_tutorials = function(cb) {
-
-					// Tutorial screens
-					var tutScreens = [
-						'screen.tutorial.stats'
-					];
-
-					// Iterate over tutorial screens
-					for (var i=0; i<tutScreens.length; i++) {
-
-						// Init and place tutorial screen
-						var scrTutorial = UI.initAndPlaceScreen(tutScreens[i]);
-						if (!scrTutorial) {						
-							UI.logError("Core: Unable to initialize tutorial screen '"+tutScreens[i]+"'!");
-							return;
-						}
-
-						// Check tutorial feedback
-						scrTutorial.on('submit', function(value) {
-							if (value >= 0.5) {
-								VAS.displayHome();
-							} else {
-								VAS.displayCinematic( function() {
-									
-								});
-							}
-						});
-
+			var prog_introstats = progressAggregator.begin(1),
+				init_introstats = function(cb) {
+					var scrIntroStats = VAS.scrIntroStats = UI.initAndPlaceScreen("screen.tutorial.introstats");
+					if (!scrIntroStats) {
+						UI.logError("Core: Unable to initialize introduction to statistics minigame screen!");
+						return;
 					}
 
-					// Tutorial screens are ready
-					prog_tutorials.ok("Tutorial screens ready");
+					// Complete login
+					prog_introstats.ok("Statistics tutorial ready");
 					cb();
-				};
+				};	
 
 			var prog_results = progressAggregator.begin(1),
 				init_results = function(cb) {
@@ -614,7 +591,7 @@ define("vas/core",
 
 				var chainRun = [
 						init_api, init_home, init_jobs, init_cinematic, init_courseroom, init_courses, 
-						init_tutorials, init_login, init_status, init_team, init_tune, init_results,
+						init_introstats, init_login, init_status, init_team, init_tune, init_results,
 						init_menu
 					],
 					runChain = function(cb, index) {

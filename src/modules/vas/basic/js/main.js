@@ -27,6 +27,7 @@ define(
 	'vas/basic/components/screen_tuning',
 	'vas/basic/components/screen_tutorial_stats',
 	'vas/basic/components/screen_status',
+	'vas/basic/components/screen_introgame',
 
 	// Subscreens
 	'vas/basic/components/screen_observable_short',
