@@ -92,7 +92,7 @@ define(
 						var domHisto = $('<div class="histogram"></div>').appendTo(targetDOM),
 							domDetails = $('<div class="details"></div>').appendTo(domHisto),
 							chi2fit = Calculate.chi2WithError( histos[j].data, histos[j].ref.data ),
-							hist = R.instanceComponent("dataviz.histogram_full", domHisto);
+							hist = R.instanceComponent("dataviz.histogram_combined", domHisto);
 
 						// Store on histograms
 						hist.onUpdate( histos[j] );

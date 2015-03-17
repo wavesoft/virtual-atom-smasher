@@ -73,8 +73,10 @@ define(
 	// Data vizualization
 	'vas/basic/dataviz/histogram',
 	'vas/basic/dataviz/histogram_full',
+	'vas/basic/dataviz/histogram_fullratio',
 	'vas/basic/dataviz/histogram_plain',
 	'vas/basic/dataviz/histogram_ratio',
+	'vas/basic/dataviz/histogram_combined',
 
 	// Information blocks
 	'vas/basic/infoblock/book',
