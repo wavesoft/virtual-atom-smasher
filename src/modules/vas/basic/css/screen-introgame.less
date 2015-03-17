@@ -32,19 +32,20 @@
 			display: block;
 			position: absolute;
 			opacity: 0;
-			color: #E74C3C;
-			right: 20px;
-			bottom: 20px;
+			color: #000;
+			right: 50px;
+			bottom: 50px;
 			cursor: pointer;
+			font-size: 20px;
 
 			&:hover {
 				color: #E74C3C;
 			}
-
 			&.visible {
 				opacity: 1;
 				.transform( scale(1.0) );
 			}
+
 		}
 
 		.parm {
@@ -234,6 +235,13 @@
 					}
 				}
 			}
+
+			&.no-value {
+				.scale-tune-value {
+					display: none;
+				}
+			}
+
 		}
 	}
 

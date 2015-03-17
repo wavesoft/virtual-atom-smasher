@@ -71,7 +71,7 @@ define(
 			this.maxEvents  =   35;
 			this.parameters = 	{a: 0, b: 0};
 			this.values = 		{ vf:12, vs2:0.2, xf: 15, xs2: 4, h: 300, hofs:20 };
-			this.easeValues = 	{ vf:0,  vs2:0, xf: 0,  xs2: 0, h:0, hofs:0 };
+			this.easeValues = 	{ vf:12,  vs2:0.2, xf: 15,  xs2: 4, h:300, hofs:20 };
 			this.dials = [];
 			this.pendingStatusUpdate = false;
 			this.checkHistos = false;
@@ -111,6 +111,7 @@ define(
 						'step' 				: 1,
 						'displayPrevious'	: true,
 						'fgColor'			: "#3498DB",
+						'bgColor'			: "#BDC3C7",
 						'release' 			: (function(isLeft) {
 
 							return function(v) {
@@ -164,6 +165,7 @@ define(
 
 			// Update result
 			this.select(".result").attr("class", "result blink").text("Simulating");
+			this.select(".scale").removeClass("no-value");
 			this.pendingStatusUpdate = true;
 
 		}
@@ -210,27 +212,32 @@ define(
 		/**
 		 * Update model values
 		 */
-		IntrogameScreen.prototype.animationStep = function() {
+		IntrogameScreen.prototype.animationStep = function( forceRedraw ) {
 
-			// Animate properties and don't do anything
-			// if nothing changed
-			if (!this.animateProperties()) {
+			// Check if we should skip redraw
+			if (!(forceRedraw === true)) {
 
-				// Keep animation
-				this.nextStep();
+				// Animate properties and don't do anything
+				// if nothing changed
+				if (!this.animateProperties()) {
 
-				// Update status when completed
-				if (this.pendingStatusUpdate) {
-					this.updateStatus();
-					this.pendingStatusUpdate = false;
+					// Keep animation
+					this.nextStep();
+
+					// Update status when completed
+					if (this.pendingStatusUpdate) {
+						this.updateStatus();
+						this.pendingStatusUpdate = false;
+					}
+
+					return;
 				}
 
-				return;
-			}
+				// If not visible, do nothing
+				if (!this.visible) {
+					return;
+				}
 
-			// If not visible, do nothing
-			if (!this.visible) {
-				return;
 			}
 
 			// Map [0, 35] to [0, scaleWidth]
@@ -354,6 +361,7 @@ define(
 			this.visible = true;
 			this.renderView();
 			this.nextStep();
+			this.animationStep(true);
 			cb();
 		}
 
