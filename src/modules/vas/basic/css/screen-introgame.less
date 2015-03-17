@@ -4,120 +4,207 @@
 ///////////////////////////////////////////////
 
 @line-color	: #000;
-@tune-color	: #C0392B;
-@ref-color 	: #0f0;
+@tune-color	: #3498DB;
+@ref-color 	: #22B573;
 
-.intro-game {
+.screen-introgame {
+	background-color: #FFF;
 
-	.parm {
+	.intro-game {
+		background: no-repeat center center url(modules/vas/basic/img/backgrounds/whiteboard.jpg);
+		background-size: contain;
+
+		left: 50%; top: 50%;
 		position: absolute;
-		width: 200px;
-		height: 100px;
+		width: 800px;
+		height: 600px;
+		.transform( translateY(-300px) translateX(-400px) );
 
-		&.parm-left {
-			left: 70px;
-			top: 40px;
-		}
 
-		&.parm-right {
-			right: 70px;
-			top: 40px;
-		}
-
-		.parm-dial {
+		.parm {
 			position: absolute;
-			left: 110px;
-			top: 10px;
+			width: 200px;
+			height: 100px;
+
+			&.parm-left {
+				//left: 80px;
+				left: 60px;
+				top: 50px;
+			}
+
+			&.parm-right {
+				//right: 90px;
+				left: 300px;
+				top: 50px;
+			}
+
+			.parm-dial {
+				position: absolute;
+				left: 110px;
+				top: 10px;
+			}
+
+			.parm-name {
+				position: absolute;
+				font-size: 60px;
+				left: 0px;
+				top: 15px;
+			}
 		}
 
-		.parm-name {
+		.parm-submit {
 			position: absolute;
-			font-size: 60px;
-			left: 10px;
-			top: 15px;
+			right: 50px;
+			width: 200px;
+			height: 80px;
+			top: 70px;
+			line-height: 80px;
+			text-decoration: none;
+			color: #000;
+
+			font-size: 20px;
+			text-align: center;
+			display: block;
+			cursor: pointer;
+			
+			background-image: url(modules/vas/basic/img/elements/back-hatch.png);
+			background-repeat: no-repeat;
+
+			&:hover {
+				color: #3498DB;
+			}
 		}
-	}
 
-	.scale {
-		position: absolute;
-		width: 701px;
-		height: 300px;
-		border-bottom: solid 1px @line-color;
-		padding: 0;
-		margin: 0;
-		bottom: 60px;
-		left: 50%;
-		.transform( translateX(-360px) );
-
-		.scale-label {
+		.result {
 			position: absolute;
-			bottom: -20px;
-			text-indent: -5px;			
+			right: 80px;
+			width: 150px;
+			height: 50px;
+			background-color: #0F0;
+			font-size: 21px;
+			text-align: center;
+			top: 250px;
+			.transform( rotate(-20deg) );
+
+			&.good {
+				color: #1ABC9C;
+			}
+			&.bad {
+				color: #E74C3C;
+			}
 		}
 
-		.scale-bin {
-			position: relative;
-			width: 100px;
-			background: no-repeat bottom left url(modules/vas/basic/img/elements/tickmarks.png);
+		.scale {
+			position: absolute;
+			width: 702px;
+			height: 300px;
+			border-bottom: solid 1px @line-color;
 			padding: 0;
 			margin: 0;
-			float: left;
-			height: 100%;
-
-			&.scale-bin-last {
-				width: 1px;
-			}
-
-			.scale-value {
-				position: absolute;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				opacity: 0.5;
-
-				&.scale-tune-value {
-					background-color: @tune-color;
-				}
-				&.scale-ref-value {
-					background-color: @ref-color;
-				}
-			}
-
-		}
-
-		.scale-average {
-			position: absolute;
-			bottom: -10px;
-			top: -10px;
+			bottom: 90px;
+			left: 50%;
+			.transform( translateX(-350px) );
 
 			.scale-label {
 				position: absolute;
-				left: 10px;
-				top: 50px;
-				font-size: 40px;
+				bottom: -25px;
+				text-indent: -5px;			
 			}
 
-			&.scale-tune-value {
-				width: 40px;
-				background: no-repeat center center url(modules/vas/basic/img/elements/tunefit.png);
-				.scale-label {
-					color: @tune-color;
-					top: 90px;
-				}
+			.scale-name {
+				position: absolute;
+				bottom: -45px;
+				text-indent: -5px;
 			}
-			&.scale-ref-value {
-				width: 3px;
-				background-color: @ref-color;
-				.scale-label {
-					color: @ref-color;
-					top: 150px;
-				}
-			}
-		}
 
-		&.no-histo {
-			.scale-bin > .scale-value {
-				display: none;
+			.scale-bin {
+				position: relative;
+				width: 99px;
+				background: no-repeat bottom left url(modules/vas/basic/img/elements/tickmarks.png);
+				padding: 0;
+				margin: 0;
+				float: left;
+				height: 100%;
+				border-left: solid 1px #ccc;
+
+				&.scale-bin-last {
+					width: 1px;
+				}
+
+				.scale-value {
+					position: absolute;
+					left: 0;
+					right: 0;
+					bottom: 0;
+
+					&.scale-tune-value {
+						background-color: rgba(red(@tune-color), green(@tune-color), blue(@tune-color), 0.5);
+					}
+					&.scale-ref-value {
+						background-color: rgba(red(@ref-color), green(@ref-color), blue(@ref-color), 0.5);
+					}
+
+					.scale-value-tollerance {
+						position: absolute;
+						display: block;
+						background: no-repeat bottom left url(modules/vas/basic/img/elements/tunefit-vert.png);
+						width: 100px;
+						height: 25px;
+						left: 0;
+						top: -12.5px;
+					}
+				}
+
+			}
+
+			.scale-average {
+				position: absolute;
+				bottom: 0;
+				top: 0;
+
+				.average-label {
+					position: absolute;
+					text-align: center;
+					font-size: 40px;
+					width: 40px;
+				}
+
+				&.scale-tune-value {
+					width: 3px;
+					background-color: @tune-color;
+					.average-label {
+						color: @tune-color;
+						right: -60px;
+						top: 60px;
+					}
+				}
+				&.scale-ref-value {
+					width: 3px;
+					background-color: @ref-color;
+					.average-label {
+						color: @ref-color;
+						right: -60px;
+						top: 10px;
+					}
+				}
+			}
+
+			&.no-histo {
+				.scale-bin {
+					border-left: none;
+					.scale-value {
+						display: none;
+					}
+				}
+				.scale-average {
+					&.scale-tune-value {
+						width: 40px;
+						background-repeat: no-repeat;
+						background-position: center center;
+						background-image: url(modules/vas/basic/img/elements/tunefit.png);
+						background-color: rgba(red(@tune-color), green(@tune-color), blue(@tune-color), 0.1);
+					}
+				}
 			}
 		}
 	}
