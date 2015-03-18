@@ -1,6 +1,47 @@
 
 # In-Game Narrations
 
+## Machine
+
+- Welcome to the Virtual Atom Smasher interface.
+- Behind me you can see the heart of the particle collision simulation: The Quantum Machine.
+- This is a very special one.
+- When the particles enter the machine, they have already collided in the real world. But here, you can control all the individual stages of their transformation.
+- This machine was built using the latest physics theories, but we want check if they match with reality.
+- You will have access to the real experimental data obtained from big accelerators at CERN and other laboratories and you will have to "tune" this machine when it is not performing as expected.
+- You are given your first amount of science points that you can spent on unlocking various parts of the machine. Are you ready for the challenge?
+
+## Machine Part
+
+- You have just opened a part of the Quantum Machine. From here you can see more details about this part ... or you can unlock one or more tunable parameters in it.
+
+## Unlocked tunable
+
+- You just unlocked you first tunable parameter! You can now start playing around by changing it's value and looking how it affects the simulation result.
+
+## Open Book
+
+- This is the "Book" interface. Here you can read descriptions about the various terms you will find in the game.
+- Always keep in mind that if you want more information about something, you can start a discussion in the forum in the 'Discuss' tab.
+
+## Request estimate
+
+- You just requested an estimation for your tune.
+- Behind the scenes, we are looking at already completed simulations with parameter values similar to yours. Using them as a reference, we can quickly "estimate" how your results are going to be.
+- However keep in mind that these estimations cannot give you exact results, they are just a rough estimate.
+
+## Request validate
+
+- You just placed a simulation request in order to validate your tune.
+- Your request will be handled by hundreds of computers of other players around the globe. They will start the simulation for you and send you back the results.
+- You can see all these in in the jobs screen.
+
+## Jobs screen
+
+- In this screen you can see your currently active requests for simulation.
+- By clicking on an item in the list ... you can see how many machines are working for the simulation ... how many events they are producing per second, and what's the percentage of the completion.
+- You can check your results by moving your mouse over the observable icons and if you see that the results are far from what you expect, you can abort this simulation.
+
 ## Introduction Game/Video
 
 [Camera on the PH/TH Corridor, narrator walking]
