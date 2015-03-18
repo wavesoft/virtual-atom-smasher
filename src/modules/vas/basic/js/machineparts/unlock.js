@@ -47,6 +47,7 @@ define(
 					if (firstLocked) {
 						firstLocked=false;
 						stages[i]['unlockable'] = true;
+						stages[i]['canunlock'] = (User.profile['points'] >= stages[i]['cost'])
 					}
 				}
 			}

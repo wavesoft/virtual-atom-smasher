@@ -12,6 +12,83 @@ define(
 	function($, R,C,UI) {
 
 		/**
+		 * Machine components
+		 */
+		var MachineComponentProgress = function( elmDom ) {
+
+			// Get element and create canvas
+			this.elmDom = elmDom;
+			this.canvas = $('<canvas></canvas>').insertBefore(this.elmDom);
+
+			// Canvas width
+			this.canvasBorder = 2;
+			this.canvasOffset = 2;
+			this.canvasSz = this.canvasSz = $(elmDom).width() + (this.canvasBorder+this.canvasOffset)*2;
+
+			// Resize canvas
+			this.canvas.attr("width", this.canvasSz);
+			this.canvas.attr("height", this.canvasSz);
+
+			// Get context
+			this.context = this.canvas[0].getContext("2d");
+			this.bgColor = "#BDC3C7";
+			this.fgColor = "#2ECC71";
+			this.max = 0;
+			this.value = 0;
+
+			// Render
+			this.render();
+
+		}
+
+		/**
+		 * Realign canvas on element
+		 */
+		MachineComponentProgress.prototype.realign = function() {
+			var elmPos = $(this.elmDom).position();
+			this.canvas.css({
+				'left': elmPos.left - this.canvasBorder - this.canvasOffset,
+				'top' : elmPos.top  - this.canvasBorder - this.canvasOffset
+			});
+		}
+
+		/**
+		 * Render machine component
+		 */
+		MachineComponentProgress.prototype.render = function() {
+
+			// Draw background circle
+			this.context.beginPath();
+			this.context.lineWidth = this.canvasBorder;
+			this.context.strokeStyle = this.bgColor;
+			this.context.arc(
+				this.canvasSz/2,
+				this.canvasSz/2,
+				this.canvasSz/2 - this.canvasBorder/2, 
+				0, 
+				2 * Math.PI, 
+				false);
+			this.context.stroke();
+
+			// Draw foreground circle
+			if (this.max > 0) {
+				var sz = Math.PI*2 * this.value / this.max;
+				this.context.beginPath();
+				this.context.lineWidth = this.canvasBorder;
+				this.context.strokeStyle = this.bgColor;
+				this.context.arc(
+					this.canvasSz/2,
+					this.canvasSz/2,
+					this.canvasSz/2 - this.canvasBorder/2, 
+					1.5 * Math.PI,
+					1.5 * Math.PI + sz, 
+					false);
+				this.context.stroke();
+			}
+
+		}
+
+		/**
 		 * @class
 		 * @classdesc The basic machine backdrop screen
 		 */
@@ -32,7 +109,10 @@ define(
 				this.realignMachine();
 			}).bind(this));
 
- 			// Create drag host
+			// Register machine component progress
+			this.progress = { };
+
+			// Create drag host
 			var dragHost = this.dragHost = $('<div class="fullscreen"></div>').appendTo(hostDOM);
 
 			// Prepare machine
@@ -75,6 +155,11 @@ define(
 			// Aliases for each overlay component
 			var aliases = this.aliases = [ 'beam', 'issr', 'hard', 'remnant', 'fssr', 'hadr', 'decay' ];
 			var aliasComponent = this.aliasComponent = [ [1,2], [3], [4,5], [7,8,9], [6], [10], [0] ];
+
+			// Register progress indicator for each component
+			for (var i=0; i<this.overlayComponents.length; i++) {
+				this.progress[aliases[i]] = new MachineComponentProgress( this.overlayComponents[i] );
+			}
 
 			// Bind callbacks
 			for (var i=0; i<this.overlayComponents.length; i++) {
@@ -149,6 +234,12 @@ define(
 		}
 
 		/**
+		 * Machine parts reconfigured
+		 */
+		MachineBackdrop.prototype.onMachineConfigChanged = function(config) {
+		}
+
+		/**
 		 * Machine parts are enabled
 		 */
 		MachineBackdrop.prototype.onMachinePartsEnabled = function(parts) {
@@ -202,6 +293,13 @@ define(
 					'left': 0
 				});
 			}
+
+			// Realign progress components
+			for (k in this.progress) {
+				this.progress[k].realign();
+				this.progress[k].render();
+			}
+
 		}
 
 		/**

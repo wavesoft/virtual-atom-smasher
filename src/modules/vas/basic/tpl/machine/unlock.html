@@ -4,22 +4,46 @@
 </div>
 <div class="body">
 	<ul class="unlock-list">
+		<li class="header"><div class="icon"></div></li>
 		{{#stages}}
 			{{#unlocked}}
-			<li class="unlocked"><span class="glyphicon glyphicon-ok"></span> {{ name }}</li>
+			<li class="unlocked"><div class="icon"></div> {{ name }}</li>
 			{{/unlocked}}
 			{{^unlocked}}
 				{{#unlockable}}
-				<li class="unlockable" click="do:unlockStage({{id}})"><span class="glyphicon glyphicon-check"></span> {{ name }}</li>
+				<li class="unlockable {{^canunlock}}no-credit{{/canunlock}}" click="do:unlockStage({{id}})">
+					<div class="icon"></div> {{ name }}
+					<span class="points">
+						<span class="glyphicon glyphicon-shopping-cart"></span> 
+						{{#cost}}
+						<strong>{{ cost }}</strong> points
+						{{/cost}}
+						{{^cost}}
+						Free!
+						{{/cost}}
+					</span>
+				</li>
 				{{/unlockable}}
 				{{^unlockable}}
-				<li class=""><span class="glyphicon glyphicon-lock"></span> {{ name }}</li>
+				<li class="locked">
+					<div class="icon"></div> {{ name }}
+					<span class="points">
+						<span class="glyphicon glyphicon-shopping-cart"></span> 
+						{{#cost}}
+						<strong>{{ cost }}</strong> points
+						{{/cost}}
+						{{^cost}}
+						Free!
+						{{/cost}}
+					</span>
+				</li>
 				{{/unlockable}}
 			{{/unlocked}}
 		{{/stages}}
 		{{^stages}}
-		<li>(This part is not available yet)</li>
+			<li class="unlocked"><div class="icon"></div> <em>Nothing to unlock in this part</em></li>
 		{{/stages}}
+		<li class="footer"><div class="icon"></div></li>
 	</ul>
 </div>
 <div class="footer footer-big">

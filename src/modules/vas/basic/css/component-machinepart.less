@@ -113,59 +113,69 @@
 			margin: 0;
 
 			li {
-				padding: 5px;
-				margin: 5px 5px 13px;
-				background: #CCCCCC;
 				height: 25px;
 				line-height: 25px;
-				border-radius: 5px;
-				cursor: pointer;
 				color: #999;
+				position: relative;
+				text-indent: 35px;
 
-				&::after {
-					display: none;
-					position: relative;
-					top: 5px;
-					left: 5px;
-					content: " ";
-					width: 0; 
-					height: 0;
-					border-left: 10px solid transparent;
-					border-right: 10px solid transparent;
-					border-top: 10px solid;
-					border-top-color: #CCCCCC;
+				span.points {
+					float: right;
+					margin-right: 5px;
 				}
 
-				&.unlocked {
-					background: #16A085;
-					color: #fff;
-					&::after {
-						display: block;
-						border-top-color: #16A085;
-					}
+				.icon {
+					position: absolute;
+					display: block;
+					background-image: url(modules/vas/basic/img/sprites/unlock.png);
+					background-repeat: no-repeat;
+					background-position-x: 0;
+					background-position-y: 0;
+					left: 5px;
+					top: -4px;
+					width: 25px;
+					height: 25px;
 				}
 
 				&.unlockable {
-					background: #C0392B;
-					color: #fff;
-					&::after {
-						border-top-color: #C0392B;
-					}
-
+					cursor: pointer;
 					&:hover {
-						background: #999;
-						color: #fff;
-						&::after {
-							display: block;
-							border-top-color: #999;
+						background-color: rgba( 46, 204, 113, 0.25 );
+						color: #000;
+					}
+					.icon {
+						background-position-x: 0;
+					}
+					&.no-credit {
+						.icon {
+							background-position-x: -125px;
 						}
 					}
 				}
 
-				> span.glyphicon {
-				    float: right;
-				    font-size: 20px;
-				    margin: 0 5px;
+				&.locked {
+					.icon {
+						background-position-x: -25px;
+					}
+				}
+
+				&.unlocked {
+					color: #000;
+					.icon {
+						background-position-x: -50px;
+					}
+				}
+
+				&.header {
+					.icon {
+						background-position-x: -75px;
+					}
+				}
+
+				&.footer {
+					.icon {
+						background-position-x: -100px;
+					}
 				}
 				
 			}

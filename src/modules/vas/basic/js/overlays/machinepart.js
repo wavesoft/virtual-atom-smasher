@@ -27,6 +27,7 @@ define(
 			this.components = [];
 			this.lastFocusedTab = 0;
 			this.visible = false;
+			this.tabEnabled = [];
 
 			// Register description tab
 			this.registerTab( 'overlay.machinepart.describe', 'Description' );
@@ -37,12 +38,14 @@ define(
 			// Hide/show machine parts based on configuration
 			User.onConfigChanged("tab-mypaper", (function(isEnabled) {
 				this.setTabVisibility( 2, isEnabled );
+				this.tabEnabled[2] = isEnabled;
 				if (isEnabled) {
 					UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.mypaper");
 				}
 			}).bind(this));
 			User.onConfigChanged("tab-papers", (function(isEnabled) {
 				this.setTabVisibility( 3, isEnabled );
+				this.tabEnabled[3] = isEnabled;
 				if (isEnabled) {
 					UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.paper");
 				}
@@ -61,13 +64,20 @@ define(
 		 */
 		MachinePart.prototype.setTabVisibility = function( index, visible ) {
 			if (!visible) {
+
+				// Hide body
 				this.containers[index].hide();
-				this.tabs[i].hide();
+				// Hide tab
+
+				// Focus away from the tab
+				this.tabs[index].removeClass("focused").hide();
 				if (this.lastFocusedTab == index)
 					this.selectTab(0);
 			} else {
-				this.containers[index].show();
-				this.tabs[i].show();
+
+				// Display tab
+				this.tabs[index].removeClass("focused").show();
+
 			}
 		}
 
@@ -194,15 +204,8 @@ define(
 				// Activate only first tab
 				for (var i=0; i<this.tabs.length; i++) {
 					if (this.disabledModeTabs.indexOf(i) < 0) {
-
 						// Hide this tab
-						this.containers[i].hide();
-						this.tabs[i].hide();
-
-						// If this tab was focused, switch to first disabled
-						if (this.lastFocusedTab == i) {
-							this.selectTab(this.disabledModeTabs[0]);
-						}
+						this.setTabVisibility( i, false );
 					}
 				}
 
@@ -210,7 +213,7 @@ define(
 
 				// Activate all tabs if enabled
 				for (var i=1; i<this.tabs.length; i++) {
-					this.tabs[i].show();
+					this.setTabVisibility( i, true );
 				}
 
 				// Select last focused tab
