@@ -429,72 +429,10 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
-		 * Build and return the user's knowledge information tree
+		 * Build and return the user's achievements information tree
 		 */
-		User.prototype.getKnowledgeTree = function( callback ) {
-
-			// Prepare nodes and links
-			var nodes = [],
-				links = [],
-				node_id = {};
-
-			// Traverse nodes
-			var traverse_node = (function(node, parent, show_edge) {
-
-				/*
-				// Skip invisible nodes
-				if ((parent != null) && !this.vars['explored_knowledge'][node['_id']]) {
-					if (show_edge) {
-						show_edge = false;
-					} else {
-						return;
-					}
-				}
-				*/
-
-				// Store to nodes & it's lookup
-				var curr_node_id = nodes.length;
-				node_id[node['id']] = curr_node_id;
-				nodes.push( node );
-
-				// Check if we should make a link
-				if (parent != null) {
-					var parent_id = node_id[parent['id']];
-					links.push({ 'source': curr_node_id, 'target': parent_id });
-				}
-
-				// Traverse child nodes
-				for (var i=0; i<node.children.length; i++) {
-					traverse_node( node.children[i], node, show_edge );
-				}
-
-			}).bind(this);
-
-			// Query knowledge grid
-			this.accountIO.getKnowledge(function(knowledge) {
-
-				// If tree is empty, do nothing
-				if (!knowledge.id) {
-
-					// Error
-					console.error("Empty knowledge tree obtained by the server!");
-
-				} else {
-
-					// Start node traversal
-					traverse_node( knowledge, null );
-
-					// Return the tree data
-					console.log(nodes, links);
-					callback({
-						'nodes': nodes,
-						'links': links
-					});
-
-				}
-
-			});
-
+		User.prototype.getAchievementsTree = function( callback ) {
+			this.accountIO.getAchievementsTree( callback );
 		}
 
 		/**
@@ -660,6 +598,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		User.prototype.getPartDetails = function( partName, callback ) {
 			// Get part papers
 			this.accountIO.getPartDetails( partName, callback );
+		}
+
+		/**
+		 * Shorthand to unlock the specified part
+		 */
+		User.prototype.unlockMachineStage = function( partName, callback ) {
+			// Get part papers
+			this.accountIO.unlockMachineStage( partName, callback );
 		}
 
 		/**

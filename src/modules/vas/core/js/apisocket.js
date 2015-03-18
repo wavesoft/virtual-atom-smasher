@@ -278,7 +278,7 @@ define(
 
 			// Handle some priority messages
 			if (action == "ui.notification") {
-				this.trigger('notification', parameters['message'], parameters['type']);
+				this.trigger('notification', parameters);
 			}
 
 			// Check if we have a domain handler

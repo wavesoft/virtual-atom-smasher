@@ -6,8 +6,7 @@ define(
 	 * Dependencies
 	 */
 	["jquery", "vas/config", "vas/core/registry", "vas/core/base/view",
-	 "text!vas/basic/tpl/status.html"
-	],
+	 "text!vas/basic/tpl/status.html"],
 
 	/**
 	 * Basic version of the home screen
@@ -34,11 +33,11 @@ define(
 
 			// Register page parts
 			var components = [
-				[ "profilepart.achievements", 	"Achievements",		"glyphicon glyphicon-tower" 	],
+				//[ "profilepart.achievements", 	"Achievements",		"glyphicon glyphicon-tower" 	],
 				[ "profilepart.book", 			"Knowledge",		"glyphicon glyphicon-book" 		],
-				[ "profilepart.papers", 		"Papers",			"glyphicon glyphicon-education" ],
-				[ "profilepart.team", 			"Team",				"glyphicon glyphicon-globe" 	],
-				[ "profilepart.user", 			"My Profile",		"glyphicon glyphicon-user" 		],
+				//[ "profilepart.papers", 		"Papers",			"glyphicon glyphicon-education" ],
+				//[ "profilepart.team", 			"Team",				"glyphicon glyphicon-globe" 	],
+				[ "profilepart.user", 			"User Profile",		"glyphicon glyphicon-user" 		],
 			];
 
 			// When paper hosts becomes available
@@ -61,7 +60,8 @@ define(
 						component 	= R.instanceComponent(component, paper);
 
 					// Add label
-					$('<div class="tabs"><div class="tab focused">'+name+'</div></div>')
+					$('<div class="tabs"></div>')
+						.append($('<div class="tab focused"></div>').text(name))
 						.appendTo(paper);
 
 					// Adopt and forward
@@ -103,9 +103,6 @@ define(
 			this.handleDoURL('hideStatus', (function() {
 				this.trigger('hideStatus');
 			}).bind(this));
-
-			// Render view
-			this.renderView();
 
 		}
 		StatusScreen.prototype = Object.create( View.prototype );

@@ -32,7 +32,7 @@ define(
 			// Get context
 			this.context = this.canvas[0].getContext("2d");
 			this.bgColor = "#BDC3C7";
-			this.fgColor = "#2ECC71";
+			this.fgColor = "#E74C3C";
 			this.max = 0;
 			this.value = 0;
 
@@ -75,7 +75,7 @@ define(
 				var sz = Math.PI*2 * this.value / this.max;
 				this.context.beginPath();
 				this.context.lineWidth = this.canvasBorder;
-				this.context.strokeStyle = this.bgColor;
+				this.context.strokeStyle = this.fgColor;
 				this.context.arc(
 					this.canvasSz/2,
 					this.canvasSz/2,
@@ -106,11 +106,11 @@ define(
 				this.mouseX = e.clientX;
 				this.mouseY = e.clientY;
 				if (this.locked) return;
-				this.realignMachine();
+				this.realignMachine(false);
 			}).bind(this));
 
 			// Register machine component progress
-			this.progress = { };
+			this.progressCounters = { };
 
 			// Create drag host
 			var dragHost = this.dragHost = $('<div class="fullscreen"></div>').appendTo(hostDOM);
@@ -158,7 +158,7 @@ define(
 
 			// Register progress indicator for each component
 			for (var i=0; i<this.overlayComponents.length; i++) {
-				this.progress[aliases[i]] = new MachineComponentProgress( this.overlayComponents[i] );
+				this.progressCounters[aliases[i]] = new MachineComponentProgress( this.overlayComponents[i] );
 			}
 
 			// Bind callbacks
@@ -234,9 +234,17 @@ define(
 		}
 
 		/**
-		 * Machine parts reconfigured
+		 * Machine counters updated
 		 */
-		MachineBackdrop.prototype.onMachineConfigChanged = function(config) {
+		MachineBackdrop.prototype.onMachineCountersUpdated = function(counters) {
+			// Apply counters
+			for (k in counters) {
+				if (this.progressCounters[k] !== undefined) {
+					this.progressCounters[k].max = counters[k]['total'];
+					this.progressCounters[k].value = counters[k]['unlocked'];
+					this.progressCounters[k].render();
+				}
+			}
 		}
 
 		/**
@@ -277,7 +285,7 @@ define(
 		/**
 		 * Realign machine layout
 		 */
-		MachineBackdrop.prototype.realignMachine = function() {
+		MachineBackdrop.prototype.realignMachine = function(realignCounters) {
 			var machineW = this.machine.width() + 80,
 				machineH = this.machine.height();
 
@@ -295,9 +303,11 @@ define(
 			}
 
 			// Realign progress components
-			for (k in this.progress) {
-				this.progress[k].realign();
-				this.progress[k].render();
+			if (realignCounters) {
+				for (k in this.progressCounters) {
+					this.progressCounters[k].realign();
+					this.progressCounters[k].render();
+				}
 			}
 
 		}
@@ -308,14 +318,14 @@ define(
 		MachineBackdrop.prototype.onResize = function(width, height) {
 			this.width = width;
 			this.height = height;
-			this.realignMachine();
+			this.realignMachine(true);
 		}
 
 		/**
 		 * Realign on show
 		 */
 		MachineBackdrop.prototype.onWillShow = function(cb) {
-			this.realignMachine();
+			this.realignMachine(true);
 			cb();
 		}
 
@@ -323,6 +333,7 @@ define(
 		 * DIsplay first-time aids when shown
 		 */
 		MachineBackdrop.prototype.onShown = function() {
+			this.realignMachine(true);
 			UI.showFirstTimeAid("machine.first-topic");
 		}
 

@@ -36,6 +36,7 @@ define(
 			this.lastHistograms = [];
 			this.markers = {};
 			this.focusMachinePartID = null;
+			this.popoverPos = {};
 
 			// Team header
 			$('<h1><span class="highlight">Tuning</span> The Quantum Machine</h1><div class="subtitle">Fiddle with the quantum machine and find the best values</div>').appendTo(hostDOM);
@@ -57,7 +58,14 @@ define(
 
 			// Update status frame on profile update
 			User.on('profile', (function(profile) {
+
+				// Update user credit
 				elmStausCredits.text(profile['points']);
+
+				// Update Machine part counters
+				var counters = profile['state']['partcounters'] || {};
+				this.machine.onMachineCountersUpdated(counters);
+
 			}).bind(this));
 
 			// ---------------------------------
@@ -185,6 +193,16 @@ define(
 				// Update parameter on machine part component
 				this.tuningPanel.onParameterChanged(k,v);
 			}).bind(this));
+			this.machinePartComponent.on('reload', (function() {
+
+				// If we have a focused machine part, reload it
+				if (this.focusMachinePartID) {
+					User.getPartDetails(this.focusMachinePartID, (function(details) {
+						this.setupPopover( details );
+					}).bind(this));
+				}
+				
+			}).bind(this));
 
 			// ---------------------------------
 			// Create machine types
@@ -213,8 +231,8 @@ define(
 			// Create a control board
 			// ---------------------------------
 
-			var boardHost = this.boardHost = $('<div class="control-board"></div>').appendTo(hostDOM),
-				descBoard = $('<div></div>').appendTo(boardHost);
+			var controlBoardHost = this.controlBoardHost = $('<div class="control-board"></div>').appendTo(hostDOM),
+				descBoard = $('<div></div>').appendTo(controlBoardHost);
 
 			this.btnEstimate = $('<button class="btn-shaded btn-with-icon btn-red"><span class="glyphicon glyphicon-unchecked"></span><br />Estimate</button>').appendTo(descBoard);
 			this.btnValidate = $('<button class="btn-shaded btn-with-icon btn-red btn-striped "><span class="glyphicon glyphicon-expand"></span><br />Validate</button>').appendTo(descBoard);
@@ -260,20 +278,13 @@ define(
 		}
 		TuningScreen.prototype = Object.create( C.TuningScreen.prototype );
 
-		/**
-		 * Setup popover with the configuration given
-		 */
-		TuningScreen.prototype.setupPopover = function(config) {
-
-		}
-
 		/** 
 		 * Hide pop-up
 		 */
 		TuningScreen.prototype.hidePopover = function(callback) {
 
 			// Hide control board
-			this.boardHost.removeClass("visible");
+			this.controlBoardHost.removeClass("visible");
 
 			// Hide machine part component
 			this.machinePartComponent.onWillHide((function() {
@@ -285,9 +296,9 @@ define(
 				this.machinePartDOM.css({
 					'left': -300
 				});
-				setTimeout((function() {
-					this.descFrame.addClass("visible");
-				}).bind(this), 100);
+				//setTimeout((function() {
+				//	this.descFrame.addClass("visible");
+				//}).bind(this), 100);
 
 				// Hide element
 				this.tunableGroup.addClass("hidden");
@@ -324,32 +335,122 @@ define(
 
 		}
 
+		/**
+		 * Setup popover with the details given
+		 */
+		TuningScreen.prototype.setupPopover = function(details) {
+
+			// Find out what tunables are in this machine part 
+			var machinePartID = this.focusMachinePartID,
+				tunables = this.machinePartTunables[machinePartID],
+				hasTunables = (tunables && (tunables.length > 0));
+
+			// Setup tuning panel if we have tunables
+			this.tuningPanel.onTuningPanelDefined( details.title, tunables );
+			this.tuningPanel.onTuningValuesDefined( this.values );
+			this.tuningPanel.onTuningMarkersDefined( this.markers );
+			this.machinePartComponent.onTunablesDefined( tunables );
+			this.machinePartComponent.onMachinePartDefined( machinePartID, details, this.machinePartsEnabled[machinePartID] );
+			this.machinePartComponent.onTuningValuesDefined( this.values );
+
+			// Calculate centered coordinates
+			var sz_w = this.tuningPanel.width, 
+				sz_h = this.tuningPanel.height,
+				tX = this.width * 4/6, 
+				tY = this.height / 2 - 100,
+				pX = this.width * 1/4, 
+				pY = this.height / 2;
+
+			// Wrap inside screen coordinates
+			if (tX - sz_w/2 < 0) tX = sz_w/2;
+			if (tY - sz_h/2 < 0) tY = sz_h/2;
+			if (tX + sz_w/2 > this.width) tX = this.width - sz_w/2;
+			if (tY + sz_h/2 > this.height) tY = this.height - sz_h/2;
+
+			// Center screen if no tunables
+			if (!hasTunables) {
+				pX = this.width / 2;
+				//pY -= 40;
+				this.tunableGroup.hide();
+			} else {
+				// Otherwise show animating
+				this.tunableGroup.show();
+				this.tunableGroup.addClass("animating");
+			}
+
+			// Prepare show sequence
+			setTimeout((function() {
+
+				// Display tuning panel if tunables > 0
+				if (hasTunables) {
+
+					// Show tuning panel
+					this.tuningPanel.onResize(sz_w, sz_h);
+					this.tuningPanel.onWillShow((function() {
+						// Make element animated
+						this.tunableGroup.removeClass("hidden");
+						// Add css
+						this.tunableGroup.css({
+							'left': tX,
+							'top': tY
+						});				
+						// Shown
+						this.tuningPanel.onShown();
+
+					}).bind(this));
+
+					// Remove full
+					this.machinePartDOM.removeClass("full");
+
+				} else {
+					// Add full
+					this.machinePartDOM.addClass("full");
+				}
+
+				// Display machine Part Component
+				this.machinePartComponent.onWillShow((function() {
+
+					// Callback Shown
+					this.machinePartComponent.onShown();
+
+					// Move machinePart DOM in place
+					this.machinePartDOM.css({
+						'left': pX,
+						'top' : pY
+					});
+
+				}).bind(this));
+
+				// Show the assistance panels
+				//this.descFrame.removeClass("visible");
+
+				// Show controlBoardHost if visible
+				if (this.machinePartsEnabled[machinePartID]) {
+					this.controlBoardHost.addClass("visible")
+				} else {
+					this.controlBoardHost.removeClass("visible")
+				}
+
+			}).bind(this), 10);
+		}
 
 		/** 
 		 * Show popover over the given coordinates
 		 */
 		TuningScreen.prototype.showPopover = function( pos, machinePartID ) {
 
+			// Keep popover details
+			this.popoverPos = pos;
+			this.focusMachinePartID = machinePartID;
+
 			// Query machine part details
 			User.getPartDetails(machinePartID, (function(details) {
-
-				// Find out what tunables are in this machine part 
-				var tunables = this.machinePartTunables[machinePartID],
-					hasTunables = (tunables && (tunables.length > 0));
-
-				// Setup tuning panel if we have tunables
-				this.tuningPanel.onTuningPanelDefined( details.title, tunables );
-				this.tuningPanel.onTuningValuesDefined( this.values );
-				this.tuningPanel.onTuningMarkersDefined( this.markers );
-				this.machinePartComponent.onTunablesDefined( tunables );
-				this.machinePartComponent.onMachinePartDefined( machinePartID, details, this.machinePartsEnabled[machinePartID] );
-				this.machinePartComponent.onTuningValuesDefined( this.values );
 
 				// Add back-blur fx on the machine DOM
 				this.machineDOM.addClass("fx-backblur");
 
-				// Keep the focused machine part ID
-				this.focusMachinePartID = machinePartID;
+				// Apply position
+				this.tunableGroup.css(this.popoverPos = pos);
 
 				// Fire analytics
 				Analytics.restartTimer("tuning-machine-part");
@@ -360,86 +461,12 @@ define(
 					"part": machinePartID
 				});
 
-				// Calculate centered coordinates
-				var sz_w = this.tuningPanel.width, 
-					sz_h = this.tuningPanel.height,
-					tX = this.width * 4/6, 
-					tY = this.height / 2 - 100,
-					pX = this.width * 1/4, 
-					pY = this.height / 2;
-
-				// Wrap inside screen coordinates
-				if (tX - sz_w/2 < 0) tX = sz_w/2;
-				if (tY - sz_h/2 < 0) tY = sz_h/2;
-				if (tX + sz_w/2 > this.width) tX = this.width - sz_w/2;
-				if (tY + sz_h/2 > this.height) tY = this.height - sz_h/2;
-
-				// Apply position
-				this.tunableGroup.css(this.popoverPos = pos);
-
-				// Center screen if no tunables
-				if (!hasTunables) {
-					pX = this.width / 2;
-					//pY -= 40;
-					this.tunableGroup.hide();
-				} else {
-					// Otherwise show animating
-					this.tunableGroup.show();
-					this.tunableGroup.addClass("animating");
-				}
+				// Setup popover
+				this.setupPopover( details );
 
 				// Prepare show sequence
 				this.tuningMask.show();
-				setTimeout((function() {
 
-					// Display tuning panel if tunables > 0
-					if (hasTunables) {
-
-						// Show tuning panel
-						this.tuningPanel.onResize(sz_w, sz_h);
-						this.tuningPanel.onWillShow((function() {
-							// Make element animated
-							this.tunableGroup.removeClass("hidden");
-							// Add css
-							this.tunableGroup.css({
-								'left': tX,
-								'top': tY
-							});				
-							// Shown
-							this.tuningPanel.onShown();
-
-						}).bind(this));
-
-						// Remove full
-						this.machinePartDOM.removeClass("full");
-
-					} else {
-						// Add full
-						this.machinePartDOM.addClass("full");
-					}
-
-					// Display machine Part Component
-					this.machinePartComponent.onWillShow((function() {
-
-						// Callback Shown
-						this.machinePartComponent.onShown();
-
-						// Move machinePart DOM in place
-						this.machinePartDOM.css({
-							'left': pX,
-							'top' : pY
-						});
-
-					}).bind(this));
-
-					// Show the assistance panels
-					this.descFrame.removeClass("visible");
-
-					// Show boardHost if visible
-					if (this.machinePartsEnabled[machinePartID])
-						this.boardHost.addClass("visible");
-
-				}).bind(this), 10);
 
 			}).bind(this));
 
@@ -462,60 +489,6 @@ define(
 			this.machine.onMachineConfigChanged({
 				'beam': configMode
 			});
-
-			// Pick the appropriate labSocket
-			this.lab = APISocket.openLabsocket();
-			this.lab.on('histogramsUpdated', (function(histos) {
-
-				// Save last histograms
-				this.lastHistograms = histos;
-
-				// Enable view option
-				this.btnView.removeClass("disabled");
-				UI.showFirstTimeAid("tuning.control.view");
-
-				// Calculate the Chi2 over all histograms
-				var chi2 = 0;
-				for (var i=0; i<histos.length; i++) {
-					var v = Calculate.chi2(histos[i].data, histos[i].ref.data);
-					chi2 += v;
-				}
-				chi2 /= histos.length;
-
-				// Classify and display
-				var msg = "Bad",
-					claim = "",
-					claim_reason = "";
-
-				if (chi2 < 1) {
-					msg = "Perfect";
-					claim = "perfect";
-					claim_reason = "for your excellet guess";
-				} else if (chi2 < 2) {
-					msg = "Good";
-					claim = "good";
-					claim_reason = "for your good estimate";
-				} else if (chi2 < 4) {
-					msg = "Fair";
-					claim = "fair";
-					claim_reason = "your fair attempt";
-				}
-				msg += "(" + chi2.toFixed(2) + ")";
-
-				// Print result
-				this.panelStatus.text(msg);
-
-				// Place credits claim request
-				if (claim != "")
-					User.claimCredits("estimate", claim, claim_reason);
-
-				// Fire analytics
-				Analytics.fireEvent("tuning.values.estimate", {
-					"id": this.getTuneID(),
-					"fit": chi2 
-				});
-
-			}).bind(this));
 
 		}
 
@@ -596,6 +569,70 @@ define(
 
 			// Change title
 			this.machinePartComponent.onTunableFocus( tunable );
+
+		}
+
+		/**
+		 * Setup lab before showing
+		 */
+		TuningScreen.prototype.onWillShow = function(cb) {
+
+			// Open/Resume labSocket
+			this.lab = APISocket.openLabsocket();
+			this.lab.on('histogramsUpdated', (function(histos) {
+
+				// Save last histograms
+				this.lastHistograms = histos;
+
+				// Enable view option
+				this.btnView.removeClass("disabled");
+				UI.showFirstTimeAid("tuning.control.view");
+
+				// Calculate the Chi2 over all histograms
+				var chi2 = 0;
+				for (var i=0; i<histos.length; i++) {
+					var v = Calculate.chi2(histos[i].data, histos[i].ref.data);
+					chi2 += v;
+				}
+				chi2 /= histos.length;
+
+				// Classify and display
+				var msg = "Bad",
+					claim = "",
+					claim_reason = "";
+
+				if (chi2 < 1) {
+					msg = "Perfect";
+					claim = "perfect";
+					claim_reason = "for your excellet guess";
+				} else if (chi2 < 2) {
+					msg = "Good";
+					claim = "good";
+					claim_reason = "for your good estimate";
+				} else if (chi2 < 4) {
+					msg = "Fair";
+					claim = "fair";
+					claim_reason = "your fair attempt";
+				}
+				msg += "(" + chi2.toFixed(2) + ")";
+
+				// Print result
+				this.panelStatus.text(msg);
+
+				// Place credits claim request
+				if (claim != "")
+					User.claimCredits("estimate", claim, claim_reason);
+
+				// Fire analytics
+				Analytics.fireEvent("tuning.values.estimate", {
+					"id": this.getTuneID(),
+					"fit": chi2 
+				});
+
+			}).bind(this));
+			
+			// Continue
+			cb();
 
 		}
 

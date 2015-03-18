@@ -28,6 +28,7 @@ define(
 			this.lastFocusedTab = 0;
 			this.visible = false;
 			this.tabEnabled = [];
+			this.tabVisible = [];
 
 			// Register description tab
 			this.registerTab( 'overlay.machinepart.describe', 'Description' );
@@ -39,14 +40,14 @@ define(
 			User.onConfigChanged("tab-mypaper", (function(isEnabled) {
 				this.setTabVisibility( 2, isEnabled );
 				this.tabEnabled[2] = isEnabled;
-				if (isEnabled) {
+				if (isEnabled && this.visible) {
 					UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.mypaper");
 				}
 			}).bind(this));
 			User.onConfigChanged("tab-papers", (function(isEnabled) {
 				this.setTabVisibility( 3, isEnabled );
 				this.tabEnabled[3] = isEnabled;
-				if (isEnabled) {
+				if (isEnabled && this.visible) {
 					UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.paper");
 				}
 			}).bind(this));
@@ -63,22 +64,27 @@ define(
 		 * Set tab visibility
 		 */
 		MachinePart.prototype.setTabVisibility = function( index, visible ) {
+			// Check visibility
+			if (this.tabVisible[index] == visible)
+				return;
+
+			// Handle change
 			if (!visible) {
-
-				// Hide body
-				this.containers[index].hide();
 				// Hide tab
-
+				this.tabs[index].hide();
 				// Focus away from the tab
 				this.tabs[index].removeClass("focused").hide();
 				if (this.lastFocusedTab == index)
 					this.selectTab(0);
 			} else {
-
+				// Hide tab
+				this.tabs[index].show();
 				// Display tab
 				this.tabs[index].removeClass("focused").show();
-
 			}
+
+			// Update visibility
+			this.tabVisible[index] = visible;
 		}
 
 		/**
@@ -125,6 +131,10 @@ define(
 			// Create component
 			var com = R.instanceComponent( docName, dom );
 			this.components.push(com);
+
+			// Put visible and enable array entries
+			this.tabVisible.push(true);
+			this.tabEnabled.push(true);
 
 			// Adopt/Forward events to the client component
 			this.adoptEvents( com );
@@ -213,7 +223,7 @@ define(
 
 				// Activate all tabs if enabled
 				for (var i=1; i<this.tabs.length; i++) {
-					this.setTabVisibility( i, true );
+					this.setTabVisibility( i, this.tabEnabled[i] );
 				}
 
 				// Select last focused tab
@@ -234,10 +244,10 @@ define(
 			});
 
 			this.visible = true;
-			if (this.tabs[2].is(":visible")) {
+			if (this.tabVisible[2]) {
 				UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.mypaper");
 			}
-			if (this.tabs[3].is(":visible")) {
+			if (this.tabVisible[3]) {
 				UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.paper");
 			}
 		}

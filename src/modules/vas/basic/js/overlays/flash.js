@@ -58,6 +58,23 @@ define(
 
 		}
 
+		/**
+		 * Close it after a while automatically
+		 */
+		OverlayFlash.prototype.onShown = function() {
+			this.closeTimeout = setTimeout((function() {
+				this.trigger("close");
+			}).bind(this), 5000);
+		}
+
+		/**
+		 * Abort close timer when closing
+		 */
+		OverlayFlash.prototype.onWillHide = function(cb) {
+			clearTimeout(this.closeTimeout);
+			cb();
+		}
+
 		// Store overlay component on registry
 		R.registerComponent( 'overlay.flash', OverlayFlash, 1 );
 

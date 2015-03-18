@@ -102,11 +102,11 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
-		 * Get knowledge grid configuration
+		 * Get achievements tree
 		 */
-		APIAccount.prototype.getKnowledge = function(callback) {
+		APIAccount.prototype.getAchievementsTree = function(callback) {
 			// Query server
-			this.sendAction("data.knowledge", {}, function(data) {
+			this.sendAction("achievements.tree", {}, function(data) {
 				if (data && callback) callback(data['data']);
 			});
 		}
@@ -241,6 +241,18 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Unlock a particular machine part stage
+		 */
+		APIAccount.prototype.unlockMachineStage = function(stage, callback) {
+			// Unlock machine part
+			this.sendAction("parts.unlock", {
+				'id': stage
+			}, function(data) {
+				if (data && callback) callback(data['status'] == "ok");
+			});
+		}
+
+		/**
 		 * Handle chatroom event
 		 */
 		APIAccount.prototype.handleAction = function(action, data) {
@@ -251,6 +263,7 @@ define(["vas/core/api/interface", "vas/config"],
 
 			}
 		}
+
 
 		// Return the Chatroom class
 		return APIAccount;

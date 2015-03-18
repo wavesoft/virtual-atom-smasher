@@ -6,10 +6,10 @@
 	<ul class="unlock-list">
 		<li class="header"><div class="icon"></div></li>
 		{{#stages}}
-			{{#unlocked}}
+			{{^locked}}
 			<li class="unlocked"><div class="icon"></div> {{ name }}</li>
-			{{/unlocked}}
-			{{^unlocked}}
+			{{/locked}}
+			{{#locked}}
 				{{#unlockable}}
 				<li class="unlockable {{^canunlock}}no-credit{{/canunlock}}" click="do:unlockStage({{id}})">
 					<div class="icon"></div> {{ name }}
@@ -38,10 +38,10 @@
 					</span>
 				</li>
 				{{/unlockable}}
-			{{/unlocked}}
+			{{/locked}}
 		{{/stages}}
 		{{^stages}}
-			<li class="unlocked"><div class="icon"></div> <em>Nothing to unlock in this part</em></li>
+			<li class="locked"><div class="icon"></div> <em>Nothing to unlock in this part</em></li>
 		{{/stages}}
 		<li class="footer"><div class="icon"></div></li>
 	</ul>

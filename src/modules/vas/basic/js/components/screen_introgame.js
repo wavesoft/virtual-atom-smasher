@@ -61,7 +61,7 @@ define(
 		 * @class
 		 * @classdesc The introduction game screen
 		 */
-		var IntrogameScreen = function( hostDOM ) {
+		var IntroGameScreen = function( hostDOM ) {
 			View.call(this, hostDOM);
 
 			hostDOM.addClass("screen-introgame font-handwriting");
@@ -90,7 +90,7 @@ define(
 			this.handleDoURL('continue', (function() {
 
 				// Trigger next action in the sequence
-				this.trigger("sequence.next");
+				this.trigger('sequence.next', 'continue'); // [SEQUENCING]
 
 			}).bind(this));
 
@@ -143,12 +143,12 @@ define(
 			this.renderView();
 
 		}
-		IntrogameScreen.prototype = Object.create( View.prototype );
+		IntroGameScreen.prototype = Object.create( View.prototype );
 
 		/**
 		 * Recalculate values
 		 */
-		IntrogameScreen.prototype.recalculateValues = function() {
+		IntroGameScreen.prototype.recalculateValues = function() {
 
 	//		((a + b)/2)*scale = target
 
@@ -173,7 +173,7 @@ define(
 		/**
 		 * Ease properties
 		 */
-		IntrogameScreen.prototype.animateProperties = function() {
+		IntroGameScreen.prototype.animateProperties = function() {
 			var changed = false,
 				tollerance = 0.08,
 				easeFactor = 25,
@@ -202,7 +202,7 @@ define(
 		/**
 		 * Schedule next animation step
 		 */
-		IntrogameScreen.prototype.nextStep = function() {
+		IntroGameScreen.prototype.nextStep = function() {
 			// Schedule next animation
 			setTimeout((function() {
 				requestAnimationFrame( this.animationStep.bind(this) );
@@ -212,7 +212,7 @@ define(
 		/**
 		 * Update model values
 		 */
-		IntrogameScreen.prototype.animationStep = function( forceRedraw ) {
+		IntroGameScreen.prototype.animationStep = function( forceRedraw ) {
 
 			// Check if we should skip redraw
 			if (!(forceRedraw === true)) {
@@ -279,7 +279,7 @@ define(
 		/**
 		 * Set simulation mode
 		 */
-		IntrogameScreen.prototype.setMode = function( withHistos ) {
+		IntroGameScreen.prototype.setMode = function( withHistos ) {
 			this.checkHistos = withHistos;
 			if (!withHistos) {
 				this.select(".scale").addClass("no-histo");
@@ -291,7 +291,7 @@ define(
 		/**
 		 * Check the results and update status
 		 */
-		IntrogameScreen.prototype.updateStatus = function() {
+		IntroGameScreen.prototype.updateStatus = function() {
 
 			var v_range  = 0.9, // Error bar on v-range
 				s2_range = 9;   // Error bar on s2-range
@@ -306,6 +306,9 @@ define(
 					this.select(".result").attr("class", "result bad").text("Try again!");
 				}
 			}).bind(this);
+
+			// Enable skip
+			this.select(".skip-btn").addClass("visible");
 
 			// Compare just values
 			var delta = Math.abs(this.values.xf - this.values.vf);
@@ -341,15 +344,12 @@ define(
 
 			}
 
-			// Enable skip
-			this.select(".skip-btn").addClass("visible");
-
 		}
 
 		/**
 		 * Prepare before show
 		 */
-		IntrogameScreen.prototype.onWillShow = function(cb) {
+		IntroGameScreen.prototype.onWillShow = function(cb) {
 
 			// Shuffle values
 			this.parameters.a = parseInt(Math.random() * 100);
@@ -362,29 +362,30 @@ define(
 			this.renderView();
 			this.nextStep();
 			this.animationStep(true);
+			this.setMode( this.checkHistos );
 			cb();
 		}
 
 		/**
 		 * Update model values
 		 */
-		IntrogameScreen.prototype.onHidden = function() {
+		IntroGameScreen.prototype.onHidden = function() {
 			this.visible = false;
 		}
 
 		/**
 		 * Make this screen sequencable
 		 */
-		IntrogameScreen.prototype.onSequenceConfig = function( config, cb ) {
+		IntroGameScreen.prototype.onSequenceConfig = function( config, cb ) {
 
 			// Enable/disable histograms
-			this.setMode(config['histograms'] == true);
+			this.setMode( !!config['histograms'] );
 			cb();
 
 		}
 
 		// Register home screen
-		R.registerComponent( "screen.tutorial.introstats", IntrogameScreen, 1 );
+		R.registerComponent( "screen.tutorial.introstats", IntroGameScreen, 1 );
 
 	}
 

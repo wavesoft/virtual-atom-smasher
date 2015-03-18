@@ -613,10 +613,10 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		 * @param {string} text - The text in the window.
 		 * @param {string} icon - The icon message
 		 * @param {array} transition - The transition definition (defaults to UI.Transitions.ZOOM_IN)
-		 * @param {function} cb_ready - The callback to fire when the screen has changed
+		 * @param {function} cb_close - The callback to fire when the message is dismissed
 		 *
 		 */
-		UI.showFlash = function(title, text, icon, transition, cb_ready) {
+		UI.showFlash = function(title, text, icon, transition, cb_close) {
 
 			// Skip on lockdown
 			if (UI.lockdown)
@@ -624,7 +624,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 			// Check for missing arguments
 			if (typeof(transition) == 'function') {
-				cb_ready = transition; transition = null;
+				cb_close = transition; transition = null;
 			}
 			if (!transition) {
 				transition = UI.Transitions.ZOOM_IN;
@@ -636,8 +636,13 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				// Define message
 				com.onMessageDefined( icon, title, text );
 
-				// Fire callback if we have it
-				if (cb_ready) cb_ready(com);
+				// Listen for close events of this component
+				var close_handler = function() {
+					com.off('close', close_handler);
+					// Fire callback if we have it
+					if (cb_close) cb_close(com);
+				};
+				com.on('close', close_handler);
 
 			});
 
@@ -1472,7 +1477,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 			// Dynamic parameter population
 			var callback = null,
-				timeout = 10000,
+				timeout = 5000,
 				growlClass = "",
 				args = [v_callback, v_timeout, v_growlClass];
 

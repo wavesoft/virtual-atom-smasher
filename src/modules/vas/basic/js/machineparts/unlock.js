@@ -21,9 +21,16 @@ define(
 			ViewComponent.call(this, hostDOM);
 			hostDOM.addClass("machinepart-unlock");
 
+			// Handle do url
+			this.handleDoURL('unlockStage', (function(stage) {
+				User.unlockMachineStage(stage, (function(isOK) {
+					// Reload machine part
+					this.trigger('reload');
+				}).bind(this));
+			}).bind(this));
+
 			// Load template
 			this.loadTemplate( tplContent );
-
 
 		};
 

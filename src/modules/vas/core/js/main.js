@@ -180,7 +180,7 @@ define("vas/core",
 					});
 					APISocket.on('error', function(message) {
 						// Generic error message from the socket
-						UI.logError('I/O Error: '+message);
+						UI.logError(message);
 					});
 
 					// Critical socket error
@@ -190,9 +190,22 @@ define("vas/core",
 						prog_api.fail("Could not initialize core I/O socket!" + message, true);
 					});
 
-					// Growl notificataions
-					APISocket.on('notification', function(message, type) {
-						UI.growl(message, type)
+					// Handle notifications
+					APISocket.on('notification', function(evDetails) {
+						if (evDetails['type'] == "flash") {
+							// Flash goes to flash
+							UI.showFlash(
+								evDetails['title'],
+								evDetails['message'],
+								evDetails['icon']
+								);
+						} else {
+							// Any other type goes to growl
+							var msg = evDetails['message'];
+							if (evDetails['title'])
+								msg = "<strong>"+evDetails['title']+":</strong> " + msg;
+							UI.growl(msg, evDetails['type'])
+						}
 					});
 
 					// Connect to core socket
@@ -585,6 +598,13 @@ define("vas/core",
 						VAS.displayStatus();
 					});
 
+					// Reload tuning configuration
+					scrTuning.on('reload', function() {
+						User.getTuningConfiguration(function(config) {
+							scrTuning.onTuningConfigUpdated( config );
+						});
+					});
+
 					// Complete tuning
 					prog_tune.ok("Tuning screen ready");
 					cb();
@@ -746,6 +766,7 @@ define("vas/core",
 		 */
 		VAS.displayKnowledge = function( animateBackwards ) {
 
+			/* DEPRECATED!
 			// Get user's knowledge from database 
 			User.getKnowledgeTree(function(config) {
 
@@ -757,6 +778,7 @@ define("vas/core",
 
 
 			});
+			*/
 
 		}
 
