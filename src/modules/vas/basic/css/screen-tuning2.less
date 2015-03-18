@@ -5,18 +5,37 @@
 
 .screen.tuning2 {
 
-	// Forward icon
-	.forward-icon {
+	// Top-right menu icon
+	.menu-icon {
 		position: absolute;
 		top: 5px;
 		right: 5px;
 	}
 
-	// Mini menu icon
-	.mini-menu {
+	// Mini status frame
+	.status-frame {
 		position: absolute;
-		top: 5px; right: 5px;
-		
+		width: 150px;
+		height: 40px;
+		padding: 5px;
+		right: 10px;
+		bottom: 10px;
+		background-color: #FFF;
+		border: solid 1px #ccc;
+		.border-radius( 5px );
+
+		.row-credits {
+			height: 40px;
+			line-height: 40px;
+			color: #999;
+			background: url(modules/vas/basic/img/icons/credits.png) no-repeat left center;
+			text-indent: 40px;
+			font-size: 14px;
+
+			.value {
+				font-weight: bold;
+			}
+		}
 	}
 
 	// Machine backdrop

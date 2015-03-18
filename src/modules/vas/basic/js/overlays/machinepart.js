@@ -2,14 +2,14 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry", "vas/core/base/component", "vas/core/user", "core/analytics/analytics"], 
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/component", "vas/core/user", "core/analytics/analytics"], 
 
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
  	 * @exports vas-basic/overlay/flash
 	 */
-	function(config, R, Component, User, Analytics) {
+	function(config, R, UI, Component, User, Analytics) {
 
 		/**
 		 * The default tunable body class
@@ -26,12 +26,27 @@ define(
 			this.tabs = [];
 			this.components = [];
 			this.lastFocusedTab = 0;
+			this.visible = false;
 
 			// Register description tab
 			this.registerTab( 'overlay.machinepart.describe', 'Description' );
 			this.registerTab( 'overlay.machinepart.unlock', 'Unlock' );
 			this.registerTab( 'overlay.machinepart.mypaper', 'My Paper' );
 			this.registerTab( 'overlay.machinepart.paper', 'Papers' );
+
+			// Hide/show machine parts based on configuration
+			User.onConfigChanged("tab-mypaper", (function(isEnabled) {
+				this.setTabVisibility( 2, isEnabled );
+				if (isEnabled) {
+					UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.mypaper");
+				}
+			}).bind(this));
+			User.onConfigChanged("tab-papers", (function(isEnabled) {
+				this.setTabVisibility( 3, isEnabled );
+				if (isEnabled) {
+					UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.paper");
+				}
+			}).bind(this));
 
 			// Tabs to show when disabled
 			this.disabledModeTabs = [0,1];
@@ -40,6 +55,21 @@ define(
 
 		// Subclass from ObservableWidget
 		MachinePart.prototype = Object.create( Component.prototype );
+
+		/**
+		 * Set tab visibility
+		 */
+		MachinePart.prototype.setTabVisibility = function( index, visible ) {
+			if (!visible) {
+				this.containers[index].hide();
+				this.tabs[i].hide();
+				if (this.lastFocusedTab == index)
+					this.selectTab(0);
+			} else {
+				this.containers[index].show();
+				this.tabs[i].show();
+			}
+		}
 
 		/**
 		 * Select a tab
@@ -104,6 +134,22 @@ define(
 					this.selectTab(idx);
 				}).bind(this));
 			}).bind(this)(this.tabs.length - 1);
+
+			// Register visual aid
+			R.registerVisualAid("machinepart.tab." + docName, tab, {
+				"screen": "screen.tuning",
+				"onWillShow": function(cb) {
+					tab.trigger("click");
+					cb();
+				}
+			});
+			R.registerVisualAid("machinepart.tabbody." + docName, dom, {
+				"screen": "screen.tuning",
+				"onWillShow": function(cb) {
+					tab.trigger("click");
+					cb();
+				}
+			});
 
 			// Focus first tab
 			this.selectTab(0);
@@ -183,13 +229,20 @@ define(
 			User.triggerEvent("machinepart.show", {
 				"part" : this.partID
 			});
-			
+
+			this.visible = true;
+			if (this.tabs[2].is(":visible")) {
+				UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.mypaper");
+			}
+			if (this.tabs[3].is(":visible")) {
+				UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.paper");
+			}
 		}
 
 		/**
 		 * The component is now hidden
 		 */
-		MachinePart.prototype.onShown = function() {
+		MachinePart.prototype.onHidden = function() {
 			var partTabTime = Analytics.stopTimer("machinepart-tab"),
 				machineTime = Analytics.stopTimer("machinepart");
 
@@ -204,6 +257,7 @@ define(
 				"time" : machineTime
 			});
 
+			this.visible = false;
 		}
 
 

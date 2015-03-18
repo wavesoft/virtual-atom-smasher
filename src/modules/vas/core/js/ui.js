@@ -174,6 +174,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		var visualAidCurrent = false,
 			visualAidTimer = 0,
 			visualAidWasVisible = false,
+			visualAidMeta = {},
 			visualAidClasses = "",
 			tutorialOriginalScreen = "",
 			tutorialCompleteListener = false,
@@ -1039,6 +1040,9 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			// Merge classes with the metadata from aid
 			var classStr = (classes || "") + " " + (aid.classes || "");
 
+			// Keep the metadata of the current visual aid
+			visualAidMeta = aid;
+
 			//
 			// Asynchronous function for waiting until a possible
 			// screen transition is completed.
@@ -1064,13 +1068,31 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				// Fire callback
 				if (cb_completed) cb_completed();
 
+				// Call onShown
+				if (typeof(aid.onShown) == 'function') {
+					aid.onShown();
+				}
+
+
+			}
+
+			//
+			// Asynchronous function to check if we have a visual aid
+			// pre-display callback.
+			//
+			var __continuePreDisplay = function() {
+				if (typeof(aid.onWillShow) == 'function') {
+					aid.onWillShow( __continueVisualAidPresentation );
+				} else {
+					__continueVisualAidPresentation();
+				}
 			}
 
 			// Check if we should switch screen
 			if (aid['screen'] && (UI.activeScreen != aid['screen'])) {
-				UI.selectScreen( aid['screen'], UI.Transitions.ZOOM_OUT, __continueVisualAidPresentation );
+				UI.selectScreen( aid['screen'], UI.Transitions.ZOOM_OUT, __continuePreDisplay );
 			} else {
-				__continueVisualAidPresentation();
+				__continuePreDisplay();
 			}
 
 
@@ -1081,9 +1103,10 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		 */
 		UI.blurVisualAid = function() {
 
-			// Reset previous entry
-			clearTimeout(visualAidTimer);
-			if (visualAidCurrent) {
+			//
+			// Asynchronous function to continue visual aid blurring
+			//
+			var __continueVisualAidBlur = function() {
 				var e = $(visualAidCurrent);
 
 				// Reset previous visual aid
@@ -1095,6 +1118,24 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 				// Reset overlay mask
 				overlaymasks_apply_element(false);
+
+				// Call onHidden
+				if (typeof(visualAidMeta.onHidden) == 'function') {
+					visualAidMeta.onHidden();
+				}
+
+			}
+
+			// Reset previous entry
+			clearTimeout(visualAidTimer);
+			if (visualAidCurrent) {
+
+				// Check if we have to call onWillHide
+				if (typeof(visualAidMeta.onWillHide) == 'function') {
+					visualAidMeta.onWillHide( __continueVisualAidBlur );
+				} else {
+					__continueVisualAidBlur();
+				}
 
 			}
 

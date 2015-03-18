@@ -377,6 +377,10 @@ define(
 		 */
 		IntrogameScreen.prototype.onSequenceConfig = function( config, cb ) {
 
+			// Enable/disable histograms
+			this.setMode(config['histograms'] == true);
+			cb();
+
 		}
 
 		// Register home screen

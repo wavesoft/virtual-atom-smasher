@@ -28,5 +28,15 @@ This document contains all the visual aids registered in the Virtual Atom Smashe
  * __tuning.control.status__ : The status panel in the tuning screen
  * __tuning.machine.beam__ : The beam button sets
 
-## 
+## Tuning screen machine parts
+
+ * __machinepart.tabbody.overlay.machinepart.describe__ - Tab body of 'Describe'
+ * __machinepart.tab.overlay.machinepart.describe__ - Tab header of 'Describe'
+ * __machinepart.tabbody.overlay.machinepart.unlock__ - Tab body of 'Unlock'
+ * __machinepart.tab.overlay.machinepart.unlock__ - Tab header of 'Unlock'
+ * __machinepart.tabbody.overlay.machinepart.mypaper__ - Tab body of 'My Paper'
+ * __machinepart.tab.overlay.machinepart.mypaper__ - Tab header of 'My Paper'
+ * __machinepart.tabbody.overlay.machinepart.paper__ - Tab body of 'Papers'
+ * __machinepart.tab.overlay.machinepart.paper__ - Tab header of 'Papers'
+
 

@@ -27,6 +27,16 @@ define(
 			this.started = false;
 			this.userMap = {};
 
+			// Abort icon
+			var btnHost = $('<div class="menu-icon"></div>').appendTo(hostDOM),
+				btnForward = $('<div class="profilebtn-large profilebtn-upper"><span class="glyphicon glyphicon-remove"></span></div>').appendTo(btnHost);
+
+			// Register forward 
+			btnForward.click((function() {
+				this.trigger('completed');
+				this.trigger('sequence.next', 'completed'); // [SEQUENCING]
+			}).bind(this));
+
 			// ---------------------------------
 			// Create screen
 			// ---------------------------------
@@ -268,7 +278,7 @@ define(
 
 			setTimeout(function() {
 			chatElm.fadeOut(function() {
-				chatElm.dispose();
+				chatElm.remove();
 			})
 			}, 5000);
 		}

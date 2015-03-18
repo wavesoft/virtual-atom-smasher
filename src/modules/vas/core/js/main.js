@@ -550,6 +550,11 @@ define("vas/core",
 					scrTuning.on('showBook', function(bookID) {
 						VAS.displayBook(bookID);
 					});
+					scrTuning.on('showCourse', function(courseName) {
+						VAS.displayCourse(courseName, function() {
+							VAS.displayTuningScreen();
+						});
+					});
 					scrTuning.on('submitParameters', function( values, observables ) {
 
 						// Set job detals and display jobs screen

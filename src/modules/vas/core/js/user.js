@@ -30,6 +30,12 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			this.vars = { };
 
 			/**
+			 * User state as received from the server
+			 * @type {object}
+			 */
+			this.state = { };
+
+			/**
 			 * Pile of events
 			 * @type {array}
 			 */
@@ -40,6 +46,11 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			 * @type {object}
 			 */
 			this.accountIO = null;
+
+			/**
+			 * Callbacks for various config parameters
+			 */
+			this.accountConfigCallbacks = [];
 
 			/**
 			 * The socket used for database I/O
@@ -60,8 +71,11 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 					// Update profile and variables
 					this.profile = profile;
 					this.vars = profile['vars'];
-					this.state = profile['state'];
 					this.initVars();
+
+					// Trigger state changes
+					this.triggerStateChange( profile['state'], this.state );
+					this.state = profile['state'];
 
 					// Send pile of events
 					this.sendEventPile();
@@ -164,6 +178,20 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 				}).bind(this));
 
 			}).bind(this));
+
+		}
+
+		/**
+		 * Handle state changes and trigger the appropriate actions
+		 */
+		User.prototype.triggerStateChange = function( fromState, toState ) {
+
+			// Fire all config callbacks
+			var cfg = this.state['config'] || [];
+			for (var i=0; i<this.accountConfigCallbacks.length; i++) {
+				var cb = this.accountConfigCallbacks[i];
+				cb.callback( cfg.indexOf(cb.name) >= 0 );
+			}
 
 		}
 
@@ -922,6 +950,16 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 */
 		User.prototype.onConfigChanged = function( configName, callback ) {
 			
+			// Register callback for the given configuration parameter
+			this.accountConfigCallbacks.push({
+				'name': configName,
+				'callback' : callback
+			});
+
+			// Fire it now
+			var cfg = this.state['config'] || [];
+			callback( cfg.indexOf(configName) >= 0 );
+
 		}
 
 		/**

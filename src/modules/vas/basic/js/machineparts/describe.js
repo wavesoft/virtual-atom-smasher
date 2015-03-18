@@ -18,9 +18,18 @@ define(
 
 			// Initialize widget
 			ViewComponent.call(this, hostDOM);
+			hostDOM.addClass("machinepart-describe")
 
 			// Load template
 			this.loadTemplate( tplContent );
+
+			// Handle DO URLs
+			this.handleDoURL('showBook', (function(bookID) {
+				this.trigger("showBook", bookID);
+			}).bind(this));
+			this.handleDoURL('showCourse', (function(courseID) {
+				this.trigger("showCourse", courseID);
+			}).bind(this));
 
 		};
 

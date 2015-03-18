@@ -41,12 +41,23 @@ define(
 			$('<h1><span class="highlight">Tuning</span> The Quantum Machine</h1><div class="subtitle">Fiddle with the quantum machine and find the best values</div>').appendTo(hostDOM);
 
 			// Forward icon
-			var btnHost = $('<div class="forward-icon"></div>').appendTo(hostDOM),
+			var btnHost = $('<div class="menu-icon"></div>').appendTo(hostDOM),
 				btnForward = $('<div class="profilebtn-large profilebtn-upper"><span class="glyphicon glyphicon-menu-right"></span></div>').appendTo(btnHost);
 
 			// Register forward 
 			btnForward.click((function() {
 				this.trigger("displayStatus");
+			}).bind(this));
+
+			// Create status frame
+			var elmStatus = this.elmStatus = $('<div class="status-frame"></div>').appendTo(hostDOM),
+				eCreditsRow = $('<div class="row-credits"></div>').appendTo(elmStatus),
+				eCreditsLbl = $('<span class="label">Science Points: </span>').appendTo(eCreditsRow)
+				elmStausCredits = $('<span class="value"></span>').appendTo(eCreditsRow);
+
+			// Update status frame on profile update
+			User.on('profile', (function(profile) {
+				elmStausCredits.text(profile['points']);
 			}).bind(this));
 
 			// ---------------------------------
@@ -132,6 +143,9 @@ define(
 			this.tuningPanel.on('showBook', (function(book) { // Incoming events 
 				this.trigger('showBook', book);
 			}).bind(this));
+			this.tuningPanel.on('showCourse', (function(course) { // Incoming events 
+				this.trigger('showCourse', course);
+			}).bind(this));
 			this.tuningPanel.on('valueChanged', (function(toValue, fromValue, meta) {
 
 				// Forward to machine part
@@ -159,6 +173,7 @@ define(
 			// Create a assistance frame
 			this.machinePartDOM = $('<div class="machinepart-frame"></div>').appendTo(hostDOM);
 			this.machinePartComponent = R.instanceComponent( "overlay.machinepart", this.machinePartDOM );
+			this.adoptEvents(this.machinePartComponent);
 
 			// Hide explain frame
 			this.machinePartDOM.css({
