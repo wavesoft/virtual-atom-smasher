@@ -83,53 +83,102 @@
           <option value="female">
             Female
           </option>
-          <option value="other">
-            Other
-          </option>
         </select>
+        <div class="details">&nbsp;</div>
+      </div>
 
+      <!-- Age -->
+      <div class="row">
+        <label for="f-birth-day">Age:</label>
+        <select id="f-birth-year" name="ageGroup">
+          <option value="17">17 or under</option>
+          <option value="20">18 to 24</option>
+          <option value="30">25 to 34</option>
+          <option value="40">35 to 34</option>
+          <option value="50">45 to 34</option>
+          <option value="60">55 to 34</option>
+          <option value="70">65 to 34</option>
+          <option value="80">75 or older</option>
+        </select>
+        <div class="details">&nbsp;</div>
+      </div>
+
+      <!-- Occupation -->
+      <div class="row">
+        <label for="f-occupation">Occupation:</label>
+        <select id="f-occupation" name="occupation">
+          <option value="Voluntary work">Voluntary work</option>
+          <option value="Student">Student</option>
+          <option value="Full-time employed">Full-time employed</option>
+          <option value="Retired">Retired</option>
+          <option value="Part-time employed">Part-time employed</option>
+          <option value="Unemployed">Unemployed</option>
+          <option value="Other">Other</option>
+        </select>
         <div class="details">
-          In order to customize the messages for you.
+          What is your current occupation?
         </div>
       </div>
 
-      <!-- Birth Year -->
+      <!-- Previous Knowledge -->
       <div class="row">
-        <label for="f-birth-day">Birth Year:</label>
-        <select id="f-birth-year" name="birthYear">
-          {{#birth_year}}
-          <option value="{{.}}">{{.}}</option>
-          {{/birth_year}}
+        <label for="f-knowledge-pp">Knowledge of particle physics:</label>
+        <select id="f-knowledge-pp" name="knowledge">
+          <option value="I have studied particle physics">I have studied particle physics</option>
+          <option value="I have no previous knowledge of particle physics">I have no previous knowledge of particle physics</option>
+          <option value="My current occupation is related to particle physics">My current occupation is related to particle physics</option>
+          <option value="I have read articles/books about particle physics">I have read articles/books about particle physics</option>
+          <option value="I have studied particle physics at college">I have studied particle physics at college</option>
+          <option value="Other">Other</option>
         </select>
         <div class="details">
-          The year you were born.
+          Do you have previous knowledge about particle physics?
         </div>
       </div>
 
-      <!-- Source -->
+      <!-- How did you find out -->
       <div class="row">
-        <label for="f-birth-day">I found this game:</label>
-        <select id="f-birth-year" name="audienceSource">
-          <option value="school">My school teacher mentioned it</option>
-          <option value="university">My university proffessor mentioned it</option>
-          <option value="internet">I found it on the internet</option>
+        <label for="f-findout">How did you find out about this game:</label>
+        <select id="f-findout" name="foundout">
+          <option value="Invited by a friend / colleague">Invited by a friend / colleague</option>
+          <option value="Google search">Google search</option>
+          <option value="Twitter">Twitter</option>
+          <option value="Facebook">Facebook</option>
+          <option value="CERN Website">CERN Website</option>
+          <option value="Citizen Cyberlab Website">Citizen Cyberlab Website</option>
+          <option value="Other">Other</option>
         </select>
         <div class="details">
-          How did you hear about this game.
+          How did you find out about the Virtual Atom Smasher game?
         </div>
       </div>
 
-      <!-- Source -->
+      <!-- Hopes -->
       <div class="row">
-        <label for="f-birth-day">I am registering:</label>
-        <select id="f-birth-year" name="audienceInterests">
-          <option value="university">My university proffessor mentioned it</option>
-          <option value="school">Because particle physics is my university topic</option>
-          <option value="internet">I found it on the internet</option>
-        </select>
-        <div class="details">
-          Why would you like to join this game?
+        <label for="f-hopes">What do you hope to get out of participating in the game:</label>
+        <div class="questions-panel form-multiple-choices" data-name="hopes">
+          <label><input type="checkbox" value="I am excited to contribute to original scientific research"> I am excited to contribute to original scientific research</label>
+          <label><input type="checkbox" value="I think I will find the game helpful in learning about particle physics"> I think I will find the game helpful in learning about particle physics</label>
+          <label><input type="checkbox" value="I can look at experimental data that a few people have seen before"> I can look at experimental data that a few people have seen before</label>
+          <label><input type="checkbox" value="I can meet other people with similar interests"> I can meet other people with similar interests</label>
+          <label><input type="checkbox" value="I think Virtual Atom Smasher is a useful resource for teaching other people"> I think Virtual Atom Smasher is a useful resource for teaching other people</label>
+          <label><input type="checkbox" value="I like to be a member of the virtual CERN community"> I like to be a member of the virtual CERN community</label>
+          <label><input type="checkbox" value="I want to learn more about what happens at CERN"> I want to learn more about what happens at CERN</label>
+          <label><input type="checkbox" value="I am happy to help"> I am happy to help</label>
+          <label><input type="checkbox" value="I am interested in the Virtual Atom Smasher Game"> I am interested in the Virtual Atom Smasher Game</label>
+          <label><input type="checkbox" value="I am interested in particle physics"> I am interested in particle physics</label>
+          <label><input type="checkbox" value="I am interested in science"> I am interested in science</label>
         </div>
+      </div>
+
+      <!-- Simmilar projects -->
+      <div class="row">
+        <label for="f-similar-projects">Previous participation:</label>
+        <select id="f-similar-projects" name="similar">
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </select>
+        <div class="details">Have you taken part in any similar projects before?</div>
       </div>
 
     </div>

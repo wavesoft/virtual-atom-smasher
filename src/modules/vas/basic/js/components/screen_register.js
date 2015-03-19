@@ -97,6 +97,9 @@ define(
 					if (!profile) return;
 					console.log(profile);
 					this.trigger('register', profile);
+	
+					localStorage.setItem("vas-login", profile['email']);
+
 				}).bind(this));
 			}).bind(this));
 
@@ -191,9 +194,12 @@ define(
 			if (this.forms[0].research) {
 				profile.analytics = {
 					'gender': this.forms[0].gender,
-					'birthYear': this.forms[0].birthYear,
-					'audienceSource': this.forms[0].audienceSource,
-					'audienceInterests': this.forms[0].audienceInterests,
+					'ageGroup': this.forms[0].ageGroup,
+					'occupation': this.forms[0].occupation,
+					'knowledge': this.forms[0].knowledge,
+					'foundout': this.forms[0].foundout,
+					'hopes': this.forms[0].hopes.join(","),
+					'similar': this.forms[0].similar,
 				};
 			}
 

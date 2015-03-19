@@ -73,29 +73,34 @@
 					</tr>
 				</thead>
 				<tbody>
-					{{#activePaper}}
-					<tr>
-						<td class="col-6">
-							<span class="glyphicon glyphicon-user"></span> {{activePaper.title}}
-						</td>
-						<td class="col-2 text-center">
-							<a class="btn-flat btn-flat-yellow" click="do:viewPaper({{id}})">Edit</a>
-						</td>
-					</tr>
-					{{/activePaper}}
 					{{#papers}}
-					<tr click="do:viewPaper({{id}})">
-						<td class="col-6">
-							{{#mine}}
-							<span class="glyphicon glyphicon-user"></span> {{title}}
-							{{/mine}}
-							{{^mine}}
-							<span class="glyphicon glyphicon-education"></span> {{title}}
-							{{/mine}}
-						</td>
-						<td class="col-4">{{team_name}}</td>
-						<td class="col-2 text-center">{{fit_formatted}}</td>
-					</tr>
+						{{#active}}
+						<tr click="do:viewPaper({{id}})">
+							<td class="col-6">
+								<span class="glyphicon glyphicon-user"></span> {{title}}
+							</td>
+							<td class="col-2 text-center">
+								Selected Paper
+							</td>
+						</tr>
+						<tr class="separator">
+							<td colspan="3"></td>
+						</tr>
+						{{/active}}
+						{{^active}}
+						<tr click="do:viewPaper({{id}})">
+							<td class="col-6">
+								{{#mine}}
+								<span class="glyphicon glyphicon-user"></span> {{title}}
+								{{/mine}}
+								{{^mine}}
+								<span class="glyphicon glyphicon-education"></span> {{title}}
+								{{/mine}}
+							</td>
+							<td class="col-4">{{team_name}}</td>
+							<td class="col-2 text-center">{{fit_formatted}}</td>
+						</tr>
+						{{/active}}
 					{{/papers}}
 					{{^papers}}
 					<tr>

@@ -5,6 +5,7 @@ define(
 	[
 		"jquery", "jquery-knob",
 		"vas/core/registry", 
+		"vas/core/ui",
 		"vas/core/base/view", 
 		"vas/core/user",
 		"core/analytics/analytics",
@@ -16,7 +17,7 @@ define(
 	 *
 	 * @exports basic/components/screen_introgame
 	 */
-	function($, jqKnob, R, View, User, Analytics, tplIntroGame ) {
+	function($, jqKnob, R, UI, View, User, Analytics, tplIntroGame ) {
 
 		/**
 		 * Normal Distribution Probability Density Function
@@ -102,6 +103,8 @@ define(
 				dom.each((function(i,elm) {
 					var dom = $(elm);
 
+					var isLeft = dom.hasClass("parm-left");
+
 					// Create the input dial
 					var dial = dom.find("input.dial").knob({
 						'width'				: 100,
@@ -123,14 +126,32 @@ define(
 								}
 							}
 
-						})(dom.hasClass("parm-left")).bind(this)
+						})(isLeft).bind(this)
 					});
+
+					// Register visual aids
+					if (isLeft) {
+						R.registerVisualAid("introgame.tunable.a", dom);
+					} else {
+						R.registerVisualAid("introgame.tunable.b", dom);
+					}
 
 					this.dials.push(dial);
 
 				}).bind(this));
 
 			}).bind(this));
+
+			// Register other visual aids
+			this.select(".btn-skip", function(dom) {
+				R.registerVisualAid("introgame.continue", dom);
+			});
+			this.select(".btn-submit", function(dom) {
+				R.registerVisualAid("introgame.submit", dom);
+			});
+			this.select(".scale", function(dom) {
+				R.registerVisualAid("introgame.results", dom);
+			});
 
 			// Blink blinkable elements
 			setInterval((function() {
@@ -299,7 +320,15 @@ define(
 			// Handle status change
 			var handleStatus = (function(status) {
 				if (status == 0) {
+
+					// Update to "Good"
 					this.select(".result").attr("class", "result good").text("Correct!");
+
+					// Good results also trigger "Next" sequence
+					setTimeout((function() {
+						this.trigger('sequence.next', 'continue');
+					}).bind(this), 500);
+
 				} else if (status == 1) {
 					this.select(".result").attr("class", "result average").text("Almost there!");
 				} else {
@@ -308,21 +337,27 @@ define(
 			}).bind(this);
 
 			// Enable skip
-			this.select(".skip-btn").addClass("visible");
+			this.select(".btn-skip").addClass("visible");
+			UI.showFirstTimeAid("introgame.continue");
 
 			// Compare just values
 			var delta = Math.abs(this.values.xf - this.values.vf);
-			if (delta <= v_range/2) {
-				handleStatus(0);
-				return;
-			} else if (delta <= v_range) {
-				handleStatus(1);
+			if (delta > v_range) {
+				handleStatus(2);
 				return;
 			}
 
-			// Double-check case '2'
+			// Double-check good cases when we are also
+			// checking histograms.
 			if (!this.checkHistos) {
-				handleStatus(2);
+
+				// Handle average and good value cases
+				if (delta > v_range/2) {
+					handleStatus(1);
+				} else {
+					handleStatus(0);
+				}
+				return;
 
 			} else {
 
@@ -331,7 +366,7 @@ define(
 				for (var i=0; i<this.vbins.length; i++) {
 					var delta = Math.abs(this.xbins[i] - this.vbins[i]);
 					if (delta <= s2_range/2) {
-						// We are good
+						// We are good, don't do anything
 					} else if (delta <= s2_range) {
 						// If not 2, switch to 1
 						if (status < 1) status = 1;
@@ -365,6 +400,14 @@ define(
 			this.setMode( this.checkHistos );
 			cb();
 		}
+
+		/**
+		 * When shown, show visual aids
+		 */
+		IntroGameScreen.prototype.onShown = function() {
+			// Show all introgame.* first-time aids
+			UI.showAllFirstTimeAids("introgame.");
+		};
 
 		/**
 		 * Update model values

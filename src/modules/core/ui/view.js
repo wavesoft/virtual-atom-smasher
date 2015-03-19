@@ -48,6 +48,17 @@ define(["require", "mustache", "jquery",
 			} else if (elm.is(".form-raw-text")) {
 				return elm.text();
 
+			// If htis is a multiple choice, collect checked inputs
+			} else if (elm.is(".form-multiple-choices")) {
+				var ans = [];
+				
+				// Collect checked input values
+				var elms = elm.find("input:checked");
+				for (var i=0; i<elms.length; i++) {
+					ans.push($(elms[i]).val());
+				}
+				return ans;
+
 			}
 
 		}
@@ -306,7 +317,7 @@ define(["require", "mustache", "jquery",
 						});
 
 						// Iterate over input or input-like elements
-						elm.find("input,textarea,datalist,select,.form-input-list,.form-raw-html,.form-raw-text").each(function(i, inpElm) {
+						elm.find("input,textarea,datalist,select,.form-input-list,.form-raw-html,.form-raw-text,.form-multiple-choices").each(function(i, inpElm) {
 							
 							// Get field name from the fields:
 							// [ name=, data-name=, or id= ]

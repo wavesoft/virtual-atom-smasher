@@ -48,4 +48,10 @@ This document contains all the visual aids registered in the Virtual Atom Smashe
  * __book.tab.material__ : Material tab of overlay book
  * __book.tab.discuss__ : Discussion tab of overlay book
 
+## Mini-game interface
 
+ * __introgame.tunable.a__ : The 'a' tunable parameter
+ * __introgame.tunable.b__ : The 'b' tunable parameter
+ * __introgame.submit__ : The 'submit' button
+ * __introgame.continue__ : The 'continue' button
+ * __introgame.results__ : The results frame

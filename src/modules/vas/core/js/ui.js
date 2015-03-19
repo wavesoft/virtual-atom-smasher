@@ -769,6 +769,47 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		}
 
 		/**
+		 * Show all first-time visual aids on the specified prefix
+		 *
+		 * @param {string} aid_prefix - The visual aid ID prefix.
+		 * @param {function} checkFn - A function to use for checking to show or not an element
+		 *
+		 */
+		UI.showAllFirstTimeAids = function(aid_prefix, checkFn) {
+
+			// Default check function
+			if (!checkFn) {
+				var checkFn = function(meta, name) {
+					var elm = $(meta['element']);
+					// If ":visible" is not resolvable,
+					// check for "display" and "visibility" css attribute
+					if (elm.css("display") == "none") return false;
+					if (elm.css("visibility") == "hidden") return false;
+					if (parseInt(elm.css("opacity")) == 0) return false;
+					// Then check for size
+					if (elm.width() <= 0) return false;
+					if (elm.height() <= 0) return false;
+					// Otherwise we are good
+					return true;
+				};
+			}
+
+			// Iterate over visual aids
+			for (var k in R.visualAids) {
+				if (k.substr(0,aid_prefix.length) == aid_prefix) {
+
+					// Check if we should show this aid
+					var visualAid = R.getVisualAidMeta(k);
+					if (checkFn(visualAid, k)) {
+						UI.showFirstTimeAid(k);
+					}
+					
+				}
+			}
+
+		}
+
+		/**
 		 * Show first-time pop-up on a visual aid.
 		 *
 		 * @param {string} aid_id - The visual aid to pop-up something upon.

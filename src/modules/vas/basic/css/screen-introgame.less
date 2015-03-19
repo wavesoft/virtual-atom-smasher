@@ -26,7 +26,7 @@
 		height: 600px;
 		.transform( translateY(-300px) translateX(-400px) );
 
-		.skip-btn {
+		.btn-skip {
 			.transition( all 0.5s );
 			.transform( scale(2.0) );
 			display: block;
@@ -46,6 +46,29 @@
 				.transform( scale(1.0) );
 			}
 
+		}
+
+		.btn-submit {
+			position: absolute;
+			right: 50px;
+			width: 200px;
+			height: 81px;
+			top: 50px;
+			line-height: 80px;
+			text-decoration: none;
+			color: #000;
+
+			font-size: 20px;
+			text-align: center;
+			display: block;
+			cursor: pointer;
+			
+			background-image: url(modules/vas/basic/img/elements/back-hatch.png);
+			background-repeat: no-repeat;
+
+			&:hover {
+				color: #3498DB;
+			}
 		}
 
 		.parm {
@@ -76,29 +99,6 @@
 				font-size: 60px;
 				left: 0px;
 				top: 15px;
-			}
-		}
-
-		.parm-submit {
-			position: absolute;
-			right: 50px;
-			width: 200px;
-			height: 81px;
-			top: 50px;
-			line-height: 80px;
-			text-decoration: none;
-			color: #000;
-
-			font-size: 20px;
-			text-align: center;
-			display: block;
-			cursor: pointer;
-			
-			background-image: url(modules/vas/basic/img/elements/back-hatch.png);
-			background-repeat: no-repeat;
-
-			&:hover {
-				color: #3498DB;
 			}
 		}
 
