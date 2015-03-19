@@ -27,6 +27,11 @@ clean:
 	rm -rf dist/game
 	rm -rf dist/editor
 
+deploy: dist/game-dist.tar.gz
+	# Deploy to webservers
+	scp dist/game-dist.tar.gz root@t4tc-vas-web-1.cern.ch:/home/vas/vas-dist
+	scp dist/game-dist.tar.gz root@t4tc-vas-web-2.cern.ch:/home/vas/vas-dist
+
 ##########################################################
 
 # Node.js optimizer
