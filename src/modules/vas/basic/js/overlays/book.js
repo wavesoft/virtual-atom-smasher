@@ -2,14 +2,14 @@ define(
 
 	// Dependencies
 
-	["jquery", "require", "vas/config", "vas/core/user", "vas/core/registry","vas/core/base/data_widget", "vas/core/db", "core/analytics/analytics", "vas/core/main" ], 
+	["jquery", "require", "vas/config", "vas/core/user", "vas/core/registry", "vas/core/ui", "vas/core/base/data_widget", "vas/core/db", "core/analytics/analytics", "vas/core/main" ], 
 
 	/**
 	 * This is the default component for displaying information regarding a tunable
 	 *
  	 * @exports vas-basic/infoblock/tunable
 	 */
-	function($, require, Config, User, R, DataWidget, DB, Analytics, VAS) {
+	function($, require, Config, User, R, UI, DataWidget, DB, Analytics, VAS) {
 
 		/**
 		 * Find base directory for images
@@ -45,9 +45,6 @@ define(
 			this.tabs = [];
 			this.coverage = [];
 			this.currTab = 0;
-			this.createTab($('<p>This is a test</p>'), "cs-blue", '<span class="uicon uicon-info"></span> Explain' );
-			this.createTab($('<p>This is a another test</p>'), "cs-purple", '<span class="uicon uicon-game"></span> Material' );
-			this.createTab($('<p>This is a yet another test</p>'), "cs-green", '<span class="uicon uicon-find"></span> Research' );
 
 			// Prepare error tab
 			this.errorTab = $('<div class="tab tab-error"><h1>Error loading book</h1><p>It was not possible to find a book under the specified ID!</p></div>')
@@ -74,7 +71,7 @@ define(
 		/**
 		 * Define the metadata to use for description
 		 */
-		BookBody.prototype.createTab = function( content, colorScheme, buttonText, buttonCb ) {
+		BookBody.prototype.createTab = function( aidName, content, colorScheme, buttonText, buttonCb ) {
 			var tab = $('<div class="tab"></div>'),
 				tabBtn = $('<a href="do:show-more" class="'+colorScheme+'">'+buttonText+'</a>'),
 				tabID = this.tabs.length;
@@ -91,6 +88,13 @@ define(
 					}
 				}
 			})(tabID).bind(this));
+
+			// Register visual aid
+			R.registerVisualAid("book.tab."+aidName, tabBtn, {
+				'onShown': function() {
+					tabBtn.click();
+				}
+			});
 
 			// Append tab content
 			tab.append(content);
@@ -169,6 +173,20 @@ define(
 		}
 
 		/**
+		 * Handle shown event
+		 */
+		BookBody.prototype.onShown = function() {
+			if (!this.meta) return;
+			
+			// Check if user has not seen the tuning part tutorial
+			if (!User.isFirstTimeSeen("ui.book")) {
+				UI.showTutorial("ui.book", function() {
+					User.markFirstTimeAsSeen("ui.book");
+				});
+			}
+		}
+
+		/**
 		 * Handle hidden event
 		 */
 		BookBody.prototype.onHidden = function() {
@@ -228,7 +246,7 @@ define(
 
 					// Place description tab
 					var body = $('<div class="content"><h1><span class="glyphicon glyphicon-book"></span> ' + data['name'] + '</h1><div>'+replace_macros(data['description'])+'</div></div>');
-					this.createTab(body, 'cs-blue', '<span class="uicon uicon-explain"></span> Description');
+					this.createTab("description", body, 'cs-blue', '<span class="uicon uicon-explain"></span> Description');
 
 					// Handle book-links inside body
 					body.find("a.book-link").click((function(e) {
@@ -305,7 +323,7 @@ define(
 							})(game);
 
 						}
-						this.createTab(games_host, 'cs-purple', '<span class="uicon uicon-game"></span> Material')
+						this.createTab("games", games_host, 'cs-purple', '<span class="uicon uicon-game"></span> Material')
 							.addClass("tab-noscroll").addClass("tab-fullheight");
 
 						// Click on the first item
@@ -356,7 +374,7 @@ define(
 						}
 
 						// Create tab
-						this.createTab(material_host, 'cs-green', '<span class="uicon uicon-find"></span> Research')
+						this.createTab("material", material_host, 'cs-green', '<span class="uicon uicon-find"></span> Research')
 							.addClass("tab-noscroll").addClass("tab-fullheight");
 							
 						// Click on the first item
@@ -417,7 +435,7 @@ define(
 						}
 
 						// Create tab
-						this.createTab(discuss_host, 'cs-yellow', '<span class="glyphicon glyphicon-comment glyphicon-uicon"></span> Discuss')
+						this.createTab("discuss", discuss_host, 'cs-yellow', '<span class="glyphicon glyphicon-comment glyphicon-uicon"></span> Discuss')
 							.addClass("tab-noscroll").addClass("tab-fullheight");
 							
 						// Click on the first item

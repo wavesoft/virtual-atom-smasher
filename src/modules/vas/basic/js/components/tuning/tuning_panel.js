@@ -23,6 +23,7 @@ define(
 			// Map of tunables
 			this.tunablesMap = {};
 			this.valuesMap = {};
+			this.firstTunable = false;
 
 			// Dimentions of the panel
 			this.panelSize = {
@@ -46,6 +47,12 @@ define(
 			var container = $('<div class="tunable"></div>').appendTo(this.tunablesElm),
 				com = R.instanceComponent("widget.tunable.tuning", container);
 			if (!com) return;
+
+			// Register first tunable
+			if (this.firstTunable) {
+				this.firstTunable = false;
+				R.registerVisualAid( 'tuning.firsttunable', com );				
+			}
 
 			// Initialize tunable
 			com.onMetaUpdate(metadata);
@@ -120,7 +127,8 @@ define(
 		 */
 		DefaultTuningPanel.prototype.onTuningPanelDefined = function(title, tunables) {
 
-			// First, reset the panel
+			// Reset everything
+			this.firstTunable = true;
 			this.tunablesElm.empty();
 
 			// If we don't have tunables, display an error page

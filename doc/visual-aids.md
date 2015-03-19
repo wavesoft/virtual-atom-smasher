@@ -27,6 +27,8 @@ This document contains all the visual aids registered in the Virtual Atom Smashe
  * __tuning.control.view__ : The 'View' button
  * __tuning.control.status__ : The status panel in the tuning screen
  * __tuning.machine.beam__ : The beam button sets
+ * __tuning.menu.credits__ : The credits window
+ * __tuning.firsttunable__ : The first tunable parameter in the active panel
 
 ## Tuning screen machine parts
 
@@ -38,5 +40,12 @@ This document contains all the visual aids registered in the Virtual Atom Smashe
  * __machinepart.tab.overlay.machinepart.mypaper__ - Tab header of 'My Paper'
  * __machinepart.tabbody.overlay.machinepart.paper__ - Tab body of 'Papers'
  * __machinepart.tab.overlay.machinepart.paper__ - Tab header of 'Papers'
+
+## Overlay book
+
+ * __book.tab.description__ : Description tab of overlay book
+ * __book.tab.games__ : Games tab of overlay book
+ * __book.tab.material__ : Material tab of overlay book
+ * __book.tab.discuss__ : Discussion tab of overlay book
 
 
