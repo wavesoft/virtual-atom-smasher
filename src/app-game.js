@@ -19,7 +19,8 @@ requirejs.config({
 	],
 
 	paths: {
-		'tootr/img': 'tootr/img'
+		'tootr/img' 	: 'tootr/img',
+		'vas/config' 	: 'vas/config-debug'
 	},
 
 	map: {
@@ -31,12 +32,25 @@ requirejs.config({
 
 });
 
+
 /**
  * Start application
  *
  * NOTE: First load packages and then require() the actual code modules
  */
-requirejs(['require', 'extern', 'core', 'vas', 'tootr', 'less!../app-game'], 
+requirejs(['require', 'extern', 'core', 'vas', 'tootr'
+
+// ------------------------------------------------------
+// When building release version, the LESS code is pre-compiled
+// However in debug version, we are using less plugin for dynamic
+// re-creation of the css
+// ------------------------------------------------------
+//>>excludeStart("releaseBuild", pragmas.releaseBuild)
+	,'less!../app-game'
+//>>excludeEnd("releaseBuild")
+// ------------------------------------------------------
+
+	],
 	function (require, Extern, Core, VAS, Tootr) {
 
 		require(

@@ -28,7 +28,14 @@
      * - Some unused externals: require-less
      * - Debug version of the VAS configuratino file
      */
-    fileExclusionRegExp: /^.*?-editor\..*|\.less$|require-less|vas\/config-debug/,
+    fileExclusionRegExp: /^.*?-editor\..*|\.less$|require-less/,
+
+    /**
+     * Pragmas to inform for the release build
+     */
+    pragmas: {
+		releaseBuild: true
+    },
 
     /**
      * Modules to build
@@ -183,19 +190,20 @@
 
 	paths: {
 		'tootr/img' 	: 'tootr/img',
-		
 		'vas/core/img'	: 'vas/core/img',
-
 		'vas/basic/img' : 'vas/basic/img',
 		'vas/basic/tpl' : 'vas/basic/tpl',
 		'vas/basic/css' : 'vas/basic/css',
+
+		// Use the production config
+		'vas/config' 	: 'vas/config-prod',
+
 	},
 
 	map: {
 		'*': {
 			'less' 		: 'extern/require-less/js/less',
 			'text' 		: 'extern/require-text/js/text-2.0.14',
-			'vas/config': 'vas/config-prod',
 		},
 	}
 
