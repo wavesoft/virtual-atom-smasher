@@ -438,7 +438,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			// Place an overlay DOM
 			UI.overlayDOM = $('<div class="'+config.css['overlay']+'"></div>');
 			UI.overlayDOM.hide();
-			UI.host.append(UI.overlayDOM);
+			UI.gameFrame.append(UI.overlayDOM);
 			overlaymasks_prepare( UI.overlayDOM );
 			overlaymasks_apply( false );
 

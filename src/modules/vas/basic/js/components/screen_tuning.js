@@ -273,7 +273,8 @@ define(
 			R.registerVisualAid("tuning.control.status", this.panelStatus, { "screen": "screen.tuning" });
 			R.registerVisualAid("tuning.control.view", this.btnView, { "screen": "screen.tuning" });
 			R.registerVisualAid("tuning.machine.beam", this.machineConfigBtns[1], { "screen": "screen.tuning" });
-
+			R.registerVisualAid("tuning.menu.credits", elmStatus, { "screen": "screen.tuning" });
+			
 
 		}
 		TuningScreen.prototype = Object.create( C.TuningScreen.prototype );
@@ -700,16 +701,16 @@ define(
 			}
 
 			// Then update UI to reflect the configurations
-			if (!this.machineConfigurationsEnabled['sim-interpolate']) {
-				this.btnEstimate.addClass("disabled");
-			} else {
+			//if (!this.machineConfigurationsEnabled['sim-interpolate']) {
+			//	this.btnEstimate.addClass("disabled");
+			//} else {
 				this.btnEstimate.removeClass("disabled");
-			}
-			if (!this.machineConfigurationsEnabled['sim-run']) {
-				this.btnValidate.addClass("disabled");
-			} else {
+			//}
+			//if (!this.machineConfigurationsEnabled['sim-run']) {
+			//	this.btnValidate.addClass("disabled");
+			//} else {
 				this.btnValidate.removeClass("disabled");
-			}
+			//}
 
 			// Update machine modes
 			for (var i=0; i<this.machineConfigBtns.length; i++) {
