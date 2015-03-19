@@ -33,10 +33,10 @@ define(
 
 			// Register page parts
 			var components = [
-				[ "profilepart.achievements", 	"Achievements",		"glyphicon glyphicon-tower" 	],
+				//[ "profilepart.achievements", 	"Achievements",		"glyphicon glyphicon-tower" 	],
 				[ "profilepart.book", 			"Knowledge",		"glyphicon glyphicon-book" 		],
-				[ "profilepart.papers", 		"Papers",			"glyphicon glyphicon-education" ],
-				[ "profilepart.team", 			"Team",				"glyphicon glyphicon-globe" 	],
+				//[ "profilepart.papers", 		"Papers",			"glyphicon glyphicon-education" ],
+				//[ "profilepart.team", 			"Team",				"glyphicon glyphicon-globe" 	],
 				[ "profilepart.user", 			"User Profile",		"glyphicon glyphicon-user" 		],
 			];
 

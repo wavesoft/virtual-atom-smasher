@@ -4,8 +4,13 @@
 # ===========================
 game: r.js game-css
 # ===========================
+	# Build game
 	node r.js -o config/build-game.js
+	# Cleanup
 	rm ../src/app-game.css
+	#find dist/game -type -f -name '.DS_Store' -exec rm {} \;
+	#find dist/game/modules/vas -type f -name '*.js' -exec rm {} \;
+	#find dist/game/modules/vas -type d -empty -exec rmdir {} \;
 
 # ===========================
 editor: r.js editor-css

@@ -28,7 +28,7 @@
      * - Some unused externals: require-less
      * - Debug version of the VAS configuratino file
      */
-    fileExclusionRegExp: /^.*?-editor\..*|\.less$|require-less/,
+    fileExclusionRegExp: /^.*?-editor\..*|\.less$|require-less|config-debug/,
 
     /**
      * Pragmas to inform for the release build
