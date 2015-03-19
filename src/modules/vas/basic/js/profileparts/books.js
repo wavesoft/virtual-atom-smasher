@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	[ "jquery", "require", "vas/core/registry","vas/core/base/view", "vas/core/user",
+	[ "jquery", "require", "vas/core/registry", "vas/core/base/view", "vas/core/user",
 	  "text!vas/basic/tpl/profileparts/books.html" ], 
 
 	/**
@@ -10,7 +10,17 @@ define(
 	 *
  	 * @exports vas-basic/profileparts/books
 	 */
-	function(config, require, R, View, User, tplBooks) {
+	function($, require, R, View, User, tplBooks) {
+
+		/**
+		 * Helper to format time
+		 */
+		function formatTime(totalSec) {
+			var hours = parseInt( totalSec / 3600 ) % 24;
+			var minutes = parseInt( totalSec / 60 ) % 60;
+			var seconds = totalSec % 60;
+			return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
+		}
 
 		/**
 		 * The default tunable body class
@@ -31,6 +41,52 @@ define(
 				this.trigger('takeExam');
 			}).bind(this));
 
+			// Cooldown timer
+			this.cooldownTimeLeft = 0;
+
+			// Handle profile changes in order to check if we
+			// can (or cannot) take an exam
+			var applyProfile = (function(profile) {
+
+				// Check if cooldown timer is there
+				var cooldowns = profile['state']['cooldown'] || {};
+				if (!cooldowns['book-exam']) {
+					this.cooldownTimeLeft = 0;
+					this.updateTakeTest();
+					return;
+				}
+
+				// Get difference
+				this.cooldownTimeLeft = parseInt(cooldowns['book-exam']) - parseInt(Date.now()/1000);
+				if (this.cooldownTimeLeft < 0) {
+					this.cooldownTimeLeft = 0;
+				}
+
+				// Update the take test button
+				this.updateTakeTest();
+
+			}).bind(this);
+
+			User.on('profile', (function(profile) {
+				applyProfile(profile);
+				setTimeout((function() {
+					this.reloadBooks();
+				}).bind(this), 500);
+			}).bind(this));
+			applyProfile(User.profile);
+
+			// Update cooldown timer
+			setInterval((function() {
+				
+				// When zero this is not functional
+				if (this.cooldownTimeLeft == 0) return;
+
+				// Cooldown
+				this.cooldownTimeLeft--;
+				this.updateTakeTest();
+
+			}).bind(this), 1000);
+
 			// Render view
 			this.renderView();
 
@@ -40,9 +96,25 @@ define(
 		ProfileBooks.prototype = Object.create( View.prototype );
 
 		/**
+		 * Update cooldown timer
+		 */
+		ProfileBooks.prototype.updateTakeTest = function() {
+			var btnExam = this.select("button.btn-master");
+			if (this.cooldownTimeLeft == 0) {
+				btnExam.attr("class", "btn-master b-purple");
+				btnExam.removeAttr("disabled");
+				btnExam.html('<span class="glyphicon glyphicon-education"></span> Master Your Knowledge');
+			} else {
+				btnExam.attr("class", "btn-master b-gray");
+				btnExam.attr("disabled", "disabled");
+				btnExam.html('<span class="glyphicon glyphicon-education"></span> You can take an exam again in '+formatTime(this.cooldownTimeLeft));
+			}
+		}
+
+		/**
 		 * Update books on show
 		 */
-		ProfileBooks.prototype.onWillShow = function(cb) {
+		ProfileBooks.prototype.reloadBooks = function(cb) {
 			User.getProfileBooks((function(books) {
 				var seenCount = 0,
 					masterCount = 0;
@@ -64,9 +136,17 @@ define(
 				this.setViewData('progress_seen', parseInt(seenCount*100/books.length)+'%' );
 				this.setViewData('progress_master', parseInt(masterCount*100/books.length)+'%' );
 				this.renderView();
-				cb();
+				this.updateTakeTest();
+				if (cb) cb();
 
 			}).bind(this));
+		}
+
+		/**
+		 * Update books on show
+		 */
+		ProfileBooks.prototype.onWillShow = function(cb) {
+			this.reloadBooks( cb );
 		}
 
 		// Store overlay component on registry

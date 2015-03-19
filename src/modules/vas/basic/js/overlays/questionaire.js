@@ -2,14 +2,14 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry","vas/core/base/component", "vas/core/db", "vas/core/user" ], 
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/component", "vas/core/db", "vas/core/user" ], 
 
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
  	 * @exports vas-basic/overlay/flash
 	 */
-	function(config, R, Component, DB, User) {
+	function(config, R, UI, Component, DB, User) {
 
 		/**
 		 * The default tunable body class
@@ -35,51 +35,20 @@ define(
 				.append(this.btnSubmit = $('<button class="btn-shaded btn-blue btn-lg">Send</button>'))
 				.append(this.btnSkip = $('<button class="btn-shaded btn-teal btn-lg">Skip</button>'));
 
-			// Set some default choices
-			/*
-			this.onQuestionaireDefined([
-					{
-						"question": "What does a histogram visualize?",
-						"choices": [
-							"The value of some measurement",
-							"How frequent a value of a measurement occures",
-							"How good or how bad a measurement is",
-							"The time the measurement was taken"
-						],
-						"correct": 1
-					},
-					{
-						"question": "What is the meaning of an error bar in the histogram?",
-						"choices": [
-							"It's the value range of each measurement",
-							"It's the quality of the data on the given measurement",
-							"It's the time interval when each measurement was taken",
-							"It's the uncertainty of a particular value"
-						],
-						"correct": 3
-					},
-					{
-						"question": "When we compare two histograms, when we consider the error bars?",
-						"choices": [
-							"Never",
-							"When the error is big",
-							"Always"
-						],
-						"correct": 2
-					}
-				]);
-			*/
-
 			// Bind events
 			this.btnSkip.click((function() {
 				this.trigger('close');
 			}).bind(this));
 			this.btnSubmit.click((function() {
 				var ans = this.evaluate();
-				if (ans == null) return;
+				if (ans == null) {
+					UI.growl("You have to reply to all of the questions!");
+					return;
+				}
 
 				// Replace Send
 				this.btnSubmit.hide();
+				this.btnSkip.show();
 				this.btnSkip.text("Close")
 			}).bind(this));
 
@@ -197,11 +166,15 @@ define(
 		/**
 		 * Reposition flashDOM on resize
 		 */
-		OverlayQuestionaire.prototype.onQuestionaireDefined = function( questions ) {
+		OverlayQuestionaire.prototype.onQuestionaireDefined = function( questions, canSkip ) {
 			this.resetQuestions();
 			for (var i=0; i<questions.length; i++) {
 				this.addQuestion( questions[i] );
 			}
+
+			// If the user cannot skip, hide the skip button
+			if (!canSkip) this.btnSkip.hide();
+
 		}
 
 		// Store overlay component on registry

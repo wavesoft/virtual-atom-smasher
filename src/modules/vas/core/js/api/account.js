@@ -195,11 +195,11 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
-		 * Get questionnaire questions for books
+		 * Get an exam for the currently known books
 		 */
-		APIAccount.prototype.getBookQuestions = function(callback) {
+		APIAccount.prototype.getBookExam = function(callback) {
 			// Query server
-			this.sendAction("books.questions", {
+			this.sendAction("books.exam", {
 			}, function(data) {
 				if (data && callback) callback(data['data']);
 			});

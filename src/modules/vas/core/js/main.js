@@ -817,11 +817,17 @@ define("vas/core",
 		VAS.displayExamOverlay = function(anim) {
 
 			// Get tuning configuration
-			User.getBookQuestions(function(questions) {
+			User.getBookExam(function(questions) {
+
+				// Check for missing questions
+				if (!questions) {
+					UI.growl("There are no questions available for the knowledge you have explored so far!")
+					return;
+				}
 
 				// Display questionnaire overlay
 				UI.showOverlay("overlay.questionaire")
-					.onQuestionaireDefined( questions );
+					.onQuestionaireDefined( questions, false );
 
 			});
 

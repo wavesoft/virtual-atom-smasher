@@ -544,9 +544,9 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		/**
 		 * Get book questions
 		 */
-		User.prototype.getBookQuestions = function( callback ) {
+		User.prototype.getBookExam = function( callback ) {
 			// Get user paper
-			this.accountIO.getBookQuestions( callback );
+			this.accountIO.getBookExam( callback );
 		}
 
 		/**

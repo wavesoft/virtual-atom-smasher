@@ -96,13 +96,19 @@ define(
 				return;
 			}
 
+			// We clone the callbacks in order to compensate modifications
+			// of the array by callbacks
+			var callbacks = this.__eventCallbacks[name].slice();
+
 			// Fire callbacks
-			try {
-				for (var i=0; i<this.__eventCallbacks[name].length; i++) {
-					this.__eventCallbacks[name][i].apply(this, args);
+			for (var i=0; i<callbacks.length; i++) {
+				try {
+					callbacks[i].apply(this, args);
+				} catch (e) {
+					console.error("Exception while triggering event", name);
 				}
-			} catch (e) {
 			}
+
 		}
 
 		/**

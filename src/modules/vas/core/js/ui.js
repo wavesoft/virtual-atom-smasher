@@ -682,6 +682,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 					// Fire callback
 					if (cb_ready) cb_ready();
+
 				});
 			});
 
