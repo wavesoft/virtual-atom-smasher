@@ -15,6 +15,11 @@ require.config({
 			'main'		: 'jquery-ui-1.11.0'
 		},
 		{
+			'name'		: 'jquery-transition-event',
+			'location'	: 'extern/jquery-transition-event/js',
+			'main'		: 'jquery-transition-event'
+		},
+		{
 			'name'		: 'fabric',
 			'location'	: 'extern/fabric/js',
 			'main'		: 'fabric-1.4.9'

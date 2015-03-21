@@ -3,7 +3,7 @@ define(
 
 	// Requirements
 	[
-		"jquery", "d3", 
+		"jquery", "jquery-transition-event", "d3", 
 		"vas/core/db", "vas/core/ui", "sha1", "vas/config", 
 		"vas/core/registry", "vas/core/base/components", 
 		"vas/core/user", "vas/core/apisocket", 
@@ -15,7 +15,7 @@ define(
 	 *
 	 * @exports basic/components/explain_screen
 	 */
-	function($, d3, DB, UI, SHA1, config, R,C, User, APISocket, Calculate, Analytics ) {
+	function($, $te, d3, DB, UI, SHA1, config, R,C, User, APISocket, Calculate, Analytics ) {
 
 		/**
 		 * @class
@@ -291,7 +291,11 @@ define(
 			this.machinePartComponent.onWillHide((function() {
 
 				// Remove back-blur fx on the machine DOM
-				this.machineDOM.removeClass("fx-backblur");
+				this.machine.onWillShow((function() {
+					this.machineDOM.removeClass("fx-backblur").afterTransition((function() {
+						this.machine.onShown();
+					}).bind(this));
+				}).bind(this));
 
 				// Hide assistance panels
 				this.machinePartDOM.css({
@@ -463,7 +467,11 @@ define(
 				}
 
 				// Add back-blur fx on the machine DOM
-				this.machineDOM.addClass("fx-backblur");
+				this.machine.onWillHide((function() {
+					this.machineDOM.addClass("fx-backblur").afterTransition((function() {
+						this.machine.onHidden();
+					}).bind(this));
+				}).bind(this));
 
 				// Apply position
 				this.tunableGroup.css(this.popoverPos = pos);
