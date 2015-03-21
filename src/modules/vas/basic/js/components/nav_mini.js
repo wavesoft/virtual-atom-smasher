@@ -100,7 +100,7 @@ define(
 				"screen.team.notebook", 
 				"screen.team.messages",
 				"screen.knowledge", 
-				"screen.jobs", 
+				//"screen.jobs", 
 				"screen.team"
 			];
 

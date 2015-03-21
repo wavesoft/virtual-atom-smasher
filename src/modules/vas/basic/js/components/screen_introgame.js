@@ -387,10 +387,16 @@ define(
 		IntroGameScreen.prototype.onWillShow = function(cb) {
 
 			// Shuffle values
+			/*
 			this.parameters.a = parseInt(Math.random() * 100);
 			this.parameters.b = parseInt(Math.random() * 100);
-			this.select(".parm-left input").val( this.parameters.a ).trigger("change");
-			this.select(".parm-right input").val( this.parameters.b ).trigger("change");
+			this.select(".parm-left input", (function(elm) {
+				elm.val( this.parameters.a ).trigger("change")
+			}).bind(this));
+			this.select(".parm-right input", (function(elm) {
+				elm.val( this.parameters.b ).trigger("change")
+			}).bind(this));
+			*/
 
 			// Display
 			this.visible = true;

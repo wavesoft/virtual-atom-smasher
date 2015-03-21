@@ -36,33 +36,36 @@ define(
 				this.targetY = 1-(e.pageY / $("body").height());
 			}).bind(this));
 
-			setInterval((function() {
+			var animationStep = (function() {
+				requestAnimationFrame((function() {
 
-				// Check for damp
-				if ((Math.abs(this.targetX - this.currX) <= 0.1) &&
-					(Math.abs(this.targetY - this.currY) <= 0.1)) return;
+					// Check for damp
+					if ((Math.abs(this.targetX - this.currX) > 0.01) ||
+						(Math.abs(this.targetY - this.currY) > 0.01)) {
 
-				this.currX += (this.targetX - this.currX) / 50;
-				this.currY += (this.targetY - this.currY) / 50;
-				var x = this.currX, y = this.currY;
+						this.currX += (this.targetX - this.currX) / 50;
+						this.currY += (this.targetY - this.currY) / 50;
+						var x = this.currX, y = this.currY;
 
-				window.requestAnimationFrame((function() {
-					// Apply parallax
-					this.backPx1.css({
-						'left': ((x*5)-5)+'%',
-						'top': ((y*5)-5)+'%'
-					});
-					this.backPx2.css({
-						'left': ((x*10)-10)+'%',
-						'top': ((y*10)-10)+'%'
-					});
-					this.backPx3.css({
-						'left': ((x*20)-20)+'%',
-						'top': ((y*20)-20)+'%'
-					});
+						// Apply parallax
+						this.backPx1.css({
+							'transform': 'translateX('+((x*5)-5)+'%) translateY(' + ((y*5)-5)+'%)'
+						});
+						this.backPx2.css({
+							'transform': 'translateX('+((x*10)-10)+'%) translateY(' + ((y*10)-10)+'%)'
+						});
+						this.backPx3.css({
+							'transform': 'translateX('+((x*20)-20)+'%) translateY(' + ((y*20)-20)+'%)'
+						});
+
+					}
+
+					// Schedule next step
+					setTimeout(animationStep, 30);
+
 				}).bind(this));
-
-			}).bind(this), 33);
+			}).bind(this);
+			setTimeout(animationStep, 30);
 
 		}
 		LoginBackdrop.prototype = Object.create( C.Backdrop.prototype );
