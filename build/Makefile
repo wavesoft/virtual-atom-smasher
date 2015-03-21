@@ -12,6 +12,14 @@ game: r.js game-css
 	#find dist/game/modules/vas -type f -name '*.js' -exec rm {} \;
 	#find dist/game/modules/vas -type d -empty -exec rmdir {} \;
 
+deploy-game: dist/game-dist.tar.gz
+	# Deploy to webservers
+	scp dist/game-dist.tar.gz root@t4tc-vas-web-1.cern.ch:/home/vas/vas-dist
+	scp dist/game-dist.tar.gz root@t4tc-vas-web-2.cern.ch:/home/vas/vas-dist
+	# Deploy website
+	ssh root@t4tc-vas-web-1.cern.ch '(cd /home/vas/vas-dist; tar -zxf game-dist.tar.gz)'
+	ssh root@t4tc-vas-web-2.cern.ch '(cd /home/vas/vas-dist; tar -zxf game-dist.tar.gz)'
+
 # ===========================
 editor: r.js editor-css
 # ===========================
@@ -27,10 +35,7 @@ clean:
 	rm -rf dist/game
 	rm -rf dist/editor
 
-deploy: dist/game-dist.tar.gz
-	# Deploy to webservers
-	scp dist/game-dist.tar.gz root@t4tc-vas-web-1.cern.ch:/home/vas/vas-dist
-	scp dist/game-dist.tar.gz root@t4tc-vas-web-2.cern.ch:/home/vas/vas-dist
+deploy: deploy-game
 
 ##########################################################
 

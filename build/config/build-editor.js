@@ -96,7 +96,7 @@
 		{
 			'name'		: 'popcorn',
 			'location'	: 'extern/popcorn/js',
-			'main'		: 'popcorn-1.5.6'
+			'main'		: 'popcorn-19cb6b0'
 		},
 		{
 			'name'		: 'jquery-knob',
