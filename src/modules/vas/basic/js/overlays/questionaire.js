@@ -30,7 +30,7 @@ define(
 
 			// Prepare header & Footer
 			this.eHeader
-				.append($('<h1><span class="glyphicon glyphicon-ok-circle"></span> Take out a pen and paper!</h1><p>Here is a quick questionaire. If you successfuly pass this you can get <strong>8</strong> credits!</p>'));
+				.append($('<h1><span class="glyphicon glyphicon-ok-circle"></span> Take out a pen and paper!</h1><p>Here is a quick questionaire. If you successfuly pass this you can get <strong>5</strong> science points!</p>'));
 			this.eFooter
 				.append(this.btnSubmit = $('<button class="btn-shaded btn-blue btn-lg">Send</button>'))
 				.append(this.btnSkip = $('<button class="btn-shaded btn-teal btn-lg">Skip</button>'));

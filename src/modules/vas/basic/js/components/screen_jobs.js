@@ -29,6 +29,8 @@ define(
 			this.lastEvents = 0;
 			this.lastEventsTime = 0;
 			this.rateRing = [];
+			this.listingTimer = 0;
+			this.maxEvents = 1000;
 
 			// Prepare host
 			hostDOM.addClass("jobs");
@@ -36,6 +38,15 @@ define(
 			// Setup the registration form
 			$('<h1><span class="highlight">Validation</span> Dashboard</h1>').appendTo(hostDOM);
 			$('<p>Here you can see the current validation status and your past attempts.</p>').appendTo(hostDOM);
+
+			// Forward icon
+			var btnHost = $('<div class="menu-icon"></div>').appendTo(hostDOM),
+				btnBackward = $('<div class="profilebtn-large profilebtn-upper"><span class="glyphicon glyphicon-menu-down"></span></div>').appendTo(btnHost);
+
+			// Register backward 
+			btnBackward.click((function() {
+				this.trigger("hideJobs");
+			}).bind(this));
 
 			// ---------------------------------
 			// Create status sidescreen
@@ -107,9 +118,6 @@ define(
 			// Prepare the progress status label
 			this.eStatusLabel = $('<div class="panel-shaded p-run-status">---</div>').appendTo(hostDOM);
 
-			// Submit
-			this.btnSubmit = $('<button class="p-submit btn-shaded btn-red btn-with-icon disabled"><span></span><br />Submit for evaluation</button>').appendTo(hostDOM);
-
 			// ---------------------------------
 			// Jobs list
 			// ---------------------------------
@@ -134,6 +142,10 @@ define(
 				c2 = $('<td class="col-3">' + jobStatus[job['status']] + '</td>').appendTo(row),
 				c3 = $('<td class="col-3 text-right"></td>').appendTo(row)
 				b1 = $('<button class="btn-shaded btn-yellow"><span class="glyphicon glyphicon-eye-open"></span></button>').appendTo(c3);
+
+			// Check if selected
+			if (job['id'] == this.activeJob)
+				row.addClass("selected");
 
 			// Select on click
 			row.click((function(job) {
@@ -171,6 +183,9 @@ define(
 
 			// Select
 			this.activeJob = job['id'];
+
+			// Update maximum number of events
+			this.maxEvents = job['maxEvents'];
 
 			// Focus to given job item on the list
 			this.eListBody.children("tr").removeClass("selected");
@@ -302,11 +317,20 @@ define(
 		 * Abort simulatio on unload
 		 */
 		JobsScreen.prototype.onWillHide = function(cb) {
+
+			// Disconnect from LabAPI
 			if (this.labapi) {
 				this.resetInterface();
 				this.labapi.deselectJob();
 			}
+
+			// Clear listing timer
+			clearInterval( this.listingTimer );
+			this.listingTimer = 0;
+
+			// Fire callback
 			cb();
+
 		}
 
 		/**
@@ -358,7 +382,7 @@ define(
 			}).bind(this));
 			this.labapi.on('metadataUpdated', (function(meta) {
 				var currNevts = parseInt(meta['nevts']),
-					progValue = currNevts / 40000;
+					progValue = currNevts * 100 / this.maxEvents;
 				this.statusProgressValue.text( Math.round(progValue) + " %" );
 
 				// Calculate rate
@@ -447,6 +471,11 @@ define(
 
 			// Refresh job listing AFTER job submission
 			this.refreshJobListing();
+
+			// And scheduler update listing every 5 seconds
+			this.listingTimer = setInterval(function() {
+				this.refreshJobListing();
+			}.bind(this), 5000);
 
 			// Show interface
 			cb();

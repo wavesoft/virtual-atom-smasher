@@ -91,6 +91,16 @@ require.config({
 		{
 			'name'		: 'google-tag-manager',
 			'location'	: 'extern/google-tag-manager/js'
+		},
+		{
+			'name'		: 'html2canvas',
+			'location'	: 'extern/html2canvas/js',
+			'main'		: 'html2canvas'
+		},
+		{
+			'name'		: 'feedback',
+			'location'	: 'extern/feedback/js',
+			'main'		: 'feedback'
 		}
 	],
 

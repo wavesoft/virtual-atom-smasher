@@ -4,9 +4,9 @@
  */
 define("vas/core",
 
-	["jquery", "vas/config",  "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/apisocket", "vas/core/base/components", "core/util/progress_aggregator", "vas/core/liveq/core", "vas/core/liveq/Calculate" ], 
+	["jquery", "feedback", "vas/config",  "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/apisocket", "vas/core/base/components", "core/util/progress_aggregator", "vas/core/liveq/core", "vas/core/liveq/Calculate" ], 
 
-	function($, config, R, UI, DB, User, APISocket, Components, ProgressAggregator, LiveQCore, LiveQCalc) {
+	function($, $fb, config, R, UI, DB, User, APISocket, Components, ProgressAggregator, LiveQCore, LiveQCalc) {
 		var VAS = { };
 
 		/**
@@ -441,6 +441,11 @@ define("vas/core",
 						return;
 					}
 
+					// Bind events
+					scrJobs.on('hideJobs', function() {
+						VAS.displayTuningScreen(UI.Transitions.DIFF_BOTTOM);
+					});
+
 					// Complete login
 					prog_jobs.ok("Jobs screen ready");
 					cb();
@@ -594,8 +599,11 @@ define("vas/core",
 					scrTuning.on('flash', function(title,body,icon) {
 						UI.showFlash(title, body, icon);
 					});
-					scrTuning.on("displayStatus", function() {
+					scrTuning.on('displayStatus', function() {
 						VAS.displayStatus();
+					});
+					scrTuning.on('displayJobs', function() {
+						VAS.displayJobs();
 					});
 
 					// Reload tuning configuration
@@ -756,7 +764,7 @@ define("vas/core",
 		VAS.displayJobs = function( animateBackwards ) {
 
 			// Select jobs screen
-			UI.selectScreen("screen.jobs", animateBackwards ? UI.Transitions.ZOOM_OUT : UI.Transitions.ZOOM_IN);
+			UI.selectScreen("screen.jobs", animateBackwards ? UI.Transitions.DIFF_BOTTOM : UI.Transitions.DIFF_TOP);
 
 		}
 
@@ -898,8 +906,12 @@ define("vas/core",
 
 		}
 
-		window.markCompleted = function() {
-				User.markTaskCompleted( VAS.runningTask, VAS.runningTopic );
+		/**
+		 * Send feedback regarding our currently visible interface
+		 */
+		VAS.sendFeedback = function() {
+			
+			
 		}
 
 		/**

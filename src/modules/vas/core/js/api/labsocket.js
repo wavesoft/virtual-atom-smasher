@@ -157,15 +157,16 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		 *
 		 * @param {object} parameters - An object with the tunable parameter names and their values
 		 * @param {array} histograms - A list of histogram names that you want to observe
+		 * @param {function} callback - The callback to fire when a response arrives
 		 *
 		 */
-		APILabSocket.prototype.submitJob = function(parameters, histograms) {
+		APILabSocket.prototype.submitJob = function(parameters, histograms, callback) {
 
 			// Submit a job request
 			this.sendAction("job.submit", {
 				'parameters': parameters,
 				'observables': histograms || []
-			});
+			}, callback);
 
 			// Mark simulation as active
 			this.running = true;

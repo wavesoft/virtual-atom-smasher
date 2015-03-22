@@ -43,11 +43,15 @@ define(
 
 			// Forward icon
 			var btnHost = $('<div class="menu-icon"></div>').appendTo(hostDOM),
+				btnUpward = $('<div class="profilebtn-large profilebtn-upper"><span class="glyphicon glyphicon-menu-up"></span></div>').appendTo(btnHost),
 				btnForward = $('<div class="profilebtn-large profilebtn-upper"><span class="glyphicon glyphicon-menu-right"></span></div>').appendTo(btnHost);
 
 			// Register forward 
 			btnForward.click((function() {
 				this.trigger("displayStatus");
+			}).bind(this));
+			btnUpward.click((function() {
+				this.trigger("displayJobs");
 			}).bind(this));
 
 			// Create status frame
