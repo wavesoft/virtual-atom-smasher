@@ -4,9 +4,9 @@
  */
 define("vas/core",
 
-	["jquery", "feedback", "vas/config",  "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/apisocket", "vas/core/base/components", "core/util/progress_aggregator", "vas/core/liveq/core", "vas/core/liveq/Calculate" ], 
+	["jquery", "vas/config",  "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/apisocket", "vas/core/base/components", "core/util/progress_aggregator", "vas/core/liveq/core", "vas/core/liveq/Calculate" ], 
 
-	function($, $fb, config, R, UI, DB, User, APISocket, Components, ProgressAggregator, LiveQCore, LiveQCalc) {
+	function($, config, R, UI, DB, User, APISocket, Components, ProgressAggregator, LiveQCore, LiveQCalc) {
 		var VAS = { };
 
 		/**
