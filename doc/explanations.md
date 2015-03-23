@@ -2,12 +2,25 @@
 # Hadronization ( or Fragmentation )
 
 Hadronization is the physical process by which quarks and gluons turn into hadrons. 
+
+
 If one of the quarks in a given hadron is pulled away from its neighbors, the color-force field "stretches" between that quark and its neighbors. In so doing, more and more energy is added to the color-force field as the quarks are pulled apart. At some point, it is energetically cheaper for the color-force field to "snap" into a new quark-antiquark pair. In so doing, energy is conserved because the energy of the color-force field is converted into the mass of the new quarks, and the color-force field can "relax" back to an unstretched state.
 
 Free quarks are never observed, i.e. a quark never exists on its own for a time longer
 than ∼ 1/Λ: up, down, strange, charm, and bottom quarks all hadronize, i.e. become part
 of a meson or baryon, on a timescale ∼ 1/Λ; the top quark instead decays before it has
 time to hadronize.
+
+apo manual to pythia
+hadronization process, wherein the coloured partons are transformed into
+jets of colourless hadrons, photons and leptons. The hadronization can be further subdivided
+into fragmentation and decays, where the former describes the way the creation
+of new quark-antiquark pairs can break up a high-mass system into lower-mass ones, ultimately
+hadrons. (The word ‘fragmentation’ is also sometimes used in a broader sense,
+but we will here use it with this specific meaning.)
+
+the hard process is used as input to generate bremsstrahlung corrections,
+and that the result of this exercise is thereafter left to hadronize.
 
 
 ## Hadron
@@ -158,7 +171,6 @@ Strong Coupling Constant Alpha S (As) is a parameter that measures the strength 
 ###
 
 
-## Lund String Model Parameters.
 
 ## Boson
 
@@ -294,7 +306,7 @@ Quarks are fundamental structural elements of matter. They are found inside the 
 
 ## Quantum Chromo Dynamics
 
-Quantum Chromo Dynamics (QCD) is the current local gauge theory used to describe how quarks have strong interactions.
+Quantum Chromo Dynamics (QCD) is the current local gauge theory used to describe how quarks have strong interactions. 
 
 ## Color Charge 
 
@@ -374,117 +386,79 @@ Due to the fact that the strong force increases with distance, confinement of qu
 
 ## Parton Showers 
 
-## Initial State Showers ( spacelike sholer )
+A Parton Shower is the continuous emission of partons in a branchlike form.
+
+## Initial State Showers ( spacelike shower )
 
 ## Final State Showers ( timelike shower)
 
 ## Hard Process
 
+### Monte Carlo simulation
+
+
+Monte Carlo simulation (or Monte Carlo experiments) are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. Specifically, the Monte Carlo method is fundamentally a technique for numerical integration using random numbers, or, in practice, numbers from a pseudorandom number generator. ( The next centece is from pythia manual) In generators, Monte Carlo techniques are used to select all relevant variables according to the desired probability distributions, and thereby ensure (quasi-)randomness in the final events. A further advantage of the Monte Carlo method is that we can use the points generated to represent simulated events, since each point corresponds to a set of momenta for the particles involved. These simulated events can be used to histogram the distributions of observables of interest or passed to a detector simulation to study the response of the detector.
+### Monte Carlo simulation is...
+
+1. > Monte Carlo simulation (or Monte Carlo experiments) are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. 
+2. Monte Carlo simulation is a simulation of hadronization first used in the University of Monte Carlo.
+3. Monte Carlo simulation is an optical visualization of the final state shower.
+
+
+## Lund String Model.
+
+Lund String Model is a model of [[hadronization]] that is based on empirical observations of the phenomenon. It deals with high energy gluons when, according to [[Quantum Chromo Dynamics]] (QCD), for large charge separation between [[quarks]], field lines seem to be compressed to tube-like regions named strings.  It is widely used in [[Monte Carlo]] simulation events that are encountered in event generators like [[PYTHIA]].
+### Lund String Model is...
+
+1. >A hadronization Model that is based on empirical observations of the phenomenon. 
+2. A string theory model.
+3. A model that is based on strings of protons.
+
+
+
+
+## aLund
+
+aLund is a suppresion parameter for high-energy particles. For large values of aLund fewer high-energy particles.
+### What is aLund?
+
+1. A nucleic number.
+2. >A suppression parameter for high-energy particles.
+3. The first type of Lund string model.
+
+
+## bLund
+
+bLund is a suppression parameter for low-energy particles. For large values of bLund we have fewer low-energy particles.
+### What is bLund?
+
+1. > A suppression parameter for low-energy particles.
+2. A boson value in Lund string model.
+3. A color force parameter.
+
+Diquark - Antiquark --> simple model or baryon production
+
+## Diquark Model
+
+It accounts for a strong increase with energy in the baryon to meson ratio ( which is not only a kinematical effect) as well as an inreased baryon fraction in gluon jets. 
+
+## aExtraDiquark
+
+Extra suppresion parameter for high - energy baryons. In large values there are fewer high-energy baryons. 
+
+
 
 String models
+
+
+
 
 A parton is a jet
 
 ProbStoUD
 
-# Questions for the players
-
-## Questions before playing
-
-### What is your relation to physics?
-
-1. University degree
-2. Master's degree
-3. PHD
-4. I am learning physics only as a hobby.
-5. I am doing physics at school.
-6. None
-7. Other (specify)
-
-### If you have a specialization in physics what that may be?
-
-1. Particle Physics
-2. Theoritical Physics
-3. Den kserw kai egw ti yparxei physics
-
-### How did you find about Virtual Atom Smasher?
-
-1. School
-2. University
-3. Social Media
-4. Internet
-5. Cern's webpage
-6. Other (specify)
+Fragmentation starts in the middle and spreads outwards
 
 
-## 10 Questions for the players
-
-### Do you know what hadronization is?
-1. No. I have not heard that term before.
-2. > Yes. Hadronization is the physical process in which quarks and gluons turn into hadrons.
-3. Yes. Hadronizations is the physical process in which photons interact with hadrons.
-4. Yes. Hadronization is the physical process in which electrons interact with hadrons.
 
 
-### Do you know what a Parton Shower is?
-
-1. No. I have not heard that term before.
-2. Yes. It is a rain of photons that decays through time.
-3. > Yes. It is the continuous emission of partons in a branchlike form.
-4. Yes. It is the cloud of partons that form the nucleus.
-
-### Do you know what an Initial State Shower (spacelike shower) is?
-
-1. No. I have not heard that term before.
-2. Yes. It is an early shower like structure of pions.
-3. Yes. It is the initial state of electrons before the collision.
-4. > Yes. It is the branchlike form that develops on an incoming parton of the hard subprocess.
-
-
-### Do you know what jets are?
-
-1. I don't know.
-2. >Jets are groups of particles that are produced from specific high energy collisions. Such collisions produce highly energetic quarks and gluons.
-3. Jets are the thrusts that we give to a parton inside an accelerator.
-4. Jets are the groups of jetons produced in a parton collision.
-
-
-### What kind of particle beams do we colide?
-
-1. I don't know.
-2. Gluon beams.
-3. > Electron-Electron beams and Proton-Proton beams.
-4. Pion beams.
-
-### What is a Monte-Carlo simulation?
-
-1. I don't know.
-2. > Monte Carlo simulation (or Monte Carlo experiments) are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. 
-3. Monte Carlo simulation is a simulation of hadronization first used in the University of Monte Carlo.
-4. Monte Carlo simulation is an optical visualization of the final state shower.
-
-### How do we validate the theoretical models?
-1. I don't know. 
-2. > We run a simulation that uses this model and we compare the results with experimental measurements. 
-3. We create multiple models and discuss the pros and cons.
-4. We run a mind experiment in our head and imagine, combining with what we know until now, what the results may be.  
-
-### what is a histogram? 
-1. I don't know. I have not heard that term before.
-2. > A diagram that visualizes how frequently a particular measurement occurs. 
-3. A diagram that shows the evolution history of a value.
-4. A diagram that shows the route of particle before and after the colision. 
-
-### Do you know what Strong Force is?
-
-1. I don't know.
-2. The strength of the force that we apply on hadron at the accelerator.
-3. The force from the bremsstrahlung radiation when it emits from a lepton.
-4. > Strong Force is the mechanism that keeps nucleus particles bound together. It confines quarks together in order to form hadrons such as protons or neutrons, ensuring stability in ordinary matter.
-
-### Do you know what Color Force is?
-
-1. I don't know.
-2. 1. The force that affects our brain cells when we come in contact with a color charged object.
-3. The force that colors quarks inside a proton.
-4. > Color force is the strong interaction that is completely based on color charge. It basically binds the quarks together.
