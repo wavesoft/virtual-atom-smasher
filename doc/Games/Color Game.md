@@ -36,18 +36,18 @@ Anti-green colour charge is #FF00FF
 
  - When the level starts, the user sees a scattered set of quarks, with various colours.
 
-![](https://github.com/wavesoft/virtual-atom-smasher/blob/master/doc/Games/Images/Color Game/layout-1.jpg)
+![](https://github.com/wavesoft/virtual-atom-smasher/blob/master/doc/Games/Images/Color%20Game/layout-1.png)
 
  - The user clicks (or clicks and drags) through individual quarks in order to select them. Each "Selected" quak gets highlighted. If any of the following conditions is met, the process is abruptly terminated and the appropriate course of action is taken:
      + _(TWO quarks in the selection) AND (the one is the anti-colour of the other (ex. Red + Anti-Red)):_ The two quarks are linked with each other with a continuous line, forming a **meson**.
      + _(TWO quarks in the selection) AND (they are NOT (either both colour OR both anti-colours)):_ The user input is cancelled because this will not match neither a meson nor a baryon.
      + _(THREE quarks in the selection) AND (they contain [R,G,B] OR [~R,~G,~B])_: The three quarks are linked with each other using a Y-Shape connection. The mid-point of the Y is the centre of the coordinates of the three edges: [(x1+x2+x3)/3, (y1+y2+y3)/3]
 
-![](https://github.com/wavesoft/virtual-atom-smasher/blob/master/doc/Games/Images/Color Game/layout-2.jpg)
+![](https://github.com/wavesoft/virtual-atom-smasher/blob/master/doc/Games/Images/Color%20Game/layout-2.png)
 
  - When a line of the link to be formed intersects with the line of an already existing link, the selection is aborted.   
 
-![](https://github.com/wavesoft/virtual-atom-smasher/blob/master/doc/Games/Images/Color Game/layout-3.jpg)
+![](https://github.com/wavesoft/virtual-atom-smasher/blob/master/doc/Games/Images/Color%20Game/layout-3.png)
 
  - The level finishes when the user has linked all coloured quarks with each-other.
 
