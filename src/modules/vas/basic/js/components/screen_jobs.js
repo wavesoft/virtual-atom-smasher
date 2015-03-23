@@ -150,6 +150,8 @@ define(
 			// Select on click
 			row.click((function(job) {
 				return function() {
+					// Skip if active is already selected
+					if (this.activeJob == job['id']) return;
 					// Select clicked element
 					this.eListBody.children("tr").removeClass("selected");
 					row.addClass("selected");
