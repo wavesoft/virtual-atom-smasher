@@ -158,8 +158,10 @@ define(
 			if (!this.animating)
 				return;
 
-			// Request animation
-			requestAnimationFrame( this.animate.bind(this) );
+			// Request animation after timeout
+			setTimeout((function() {
+				requestAnimationFrame( this.animate.bind(this) );
+			}).bind(this), 30);
 
 			// Render
 			this.render();

@@ -448,6 +448,13 @@ define(
 					this.controlBoardHost.removeClass("visible")
 				}
 
+				
+				// Fire first-time interface aids
+				if (!this.btnEstimate.hasClass("disabled"))
+					UI.showFirstTimeAid("tuning.control.estimate");
+				if (!this.btnValidate.hasClass("disabled"))
+					UI.showFirstTimeAid("tuning.control.validate");
+
 			}).bind(this), 10);
 		}
 
@@ -668,12 +675,6 @@ define(
 		 * Display visual aids when shown
 		 */
 		TuningScreen.prototype.onShown = function() {
-
-			// Fire first-time interface aids
-			if (!this.btnEstimate.hasClass("disabled"))
-				UI.showFirstTimeAid("tuning.control.estimate");
-			if (!this.btnValidate.hasClass("disabled"))
-				UI.showFirstTimeAid("tuning.control.validate");
 
 			// Check if user has not seen the intro tutorial
 			if (!User.isFirstTimeSeen("tuning.intro")) {
