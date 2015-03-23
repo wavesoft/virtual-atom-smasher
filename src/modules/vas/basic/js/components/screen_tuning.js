@@ -443,18 +443,19 @@ define(
 
 				// Show controlBoardHost if visible
 				if (this.machinePartsEnabled[machinePartID]) {
-					this.controlBoardHost.addClass("visible")
+					this.controlBoardHost.addClass("visible").afterTransition((function() {
+						// Fire first-time interface aids
+						if (!this.btnEstimate.hasClass("disabled"))
+							UI.showFirstTimeAid("tuning.control.estimate");
+						if (!this.btnValidate.hasClass("disabled"))
+							UI.showFirstTimeAid("tuning.control.validate");
+
+					}).bind(this));
 				} else {
 					this.controlBoardHost.removeClass("visible")
 				}
 
 				
-				// Fire first-time interface aids
-				if (!this.btnEstimate.hasClass("disabled"))
-					UI.showFirstTimeAid("tuning.control.estimate");
-				if (!this.btnValidate.hasClass("disabled"))
-					UI.showFirstTimeAid("tuning.control.validate");
-
 			}).bind(this), 10);
 		}
 

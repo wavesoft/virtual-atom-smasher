@@ -824,72 +824,80 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			if (UI.lockdown)
 				return;
 
-			// Skip missing visual aid definitions
-			if (!visualAid) return;
-			if (!userAids[aid_id]) return;
-			if (userAids[aid_id].shown) return;
-			if ((visualAid.screen != "") && (visualAid.screen != UI.activeScreen)) return;
+			// Callback to actually display the aid
+			var __showAid = (function() {
 
-			// Show first-time aids only once
-			if (UI.firstTimeAidsShown[aid_id]) return;
+				// Skip missing visual aid definitions
+				if (!visualAid) return;
+				if (!userAids[aid_id]) return;
+				if (userAids[aid_id].shown) return;
+				if ((visualAid.screen != "") && (visualAid.screen != UI.activeScreen)) return;
 
-			// We got everything, prepare display
-			var popup = $('<div class="newitem-popup"></div>'),
-				popupBody = $('<div class="text"></div>').appendTo(popup);
-			UI.host.append(popup);
+				// Show first-time aids only once
+				if (UI.firstTimeAidsShown[aid_id]) return;
 
-			// Get element coordinates
-			var elm = $(visualAid.element),
-				pos = elm.offset(), 
-				w = parseInt(elm.attr("width")) || elm.width(), 
-				h = parseInt(elm.attr("height")) || elm.height(), 
-				x = pos.left + w*2/3 + 5,
-				y = pos.top + h/2 - popup.height();
+				// We got everything, prepare display
+				var popup = $('<div class="newitem-popup"></div>'),
+					popupBody = $('<div class="text"></div>').appendTo(popup);
+				UI.host.append(popup);
 
-			// Check flipping
-			if (x + popup.width() > UI.host.width()) {
-				x = pos.left + w/3 - popup.width() - 5;
-				popup.addClass("flip-x");
-			}
-			if (y < 0) {
-				y = pos.top + h/2;
-				popup.addClass("flip-y");
-			}
+				// Get element coordinates
+				var elm = $(visualAid.element),
+					pos = elm.offset(), 
+					w = parseInt(elm.attr("width")) || elm.width(), 
+					h = parseInt(elm.attr("height")) || elm.height(), 
+					x = pos.left + w*2/3 + 5,
+					y = pos.top + h/2 - popup.height();
 
-			// Update content
-			popupBody.html( userAids[aid_id].text );
-			popup.css({
-				'left': x,
-				'top': y
-			});
+				// Check flipping
+				if (x + popup.width() > UI.host.width()) {
+					x = pos.left + w/3 - popup.width() - 5;
+					popup.addClass("flip-x");
+				}
+				if (y < 0) {
+					y = pos.top + h/2;
+					popup.addClass("flip-y");
+				}
 
-			// Add click handler
-			popup.click(function() {
-
-				// Fadeout and remove aid
-				popup.fadeOut(function() {
-					popup.remove();
+				// Update content
+				popupBody.html( userAids[aid_id].text );
+				popup.css({
+					'left': x,
+					'top': y
 				});
 
-				// Remove from firstTimeAids
-				var i = UI.firstTimeAids.indexOf(popup);
-				UI.firstTimeAids.splice(i,1);
+				// Add click handler
+				popup.click(function() {
 
-				// Mark as seen
-				User.markFirstTimeAsSeen( aid_id );
+					// Fadeout and remove aid
+					popup.fadeOut(function() {
+						popup.remove();
+					});
 
-				// Update collided aids
+					// Remove from firstTimeAids
+					var i = UI.firstTimeAids.indexOf(popup);
+					UI.firstTimeAids.splice(i,1);
+
+					// Mark as seen
+					User.markFirstTimeAsSeen( aid_id );
+
+					// Update collided aids
+					UI.testCollidingFirstTimeAids();
+
+				});
+
+				// Fade-in with a random delay
+				popup.hide();
+
+				// Store on pending & show the ones not colliding
+				popup.prop("aid_id", aid_id);
+				UI.firstTimeAidsPending.push( popup );
 				UI.testCollidingFirstTimeAids();
 
-			});
-
-			// Fade-in with a random delay
-			popup.hide();
-
-			// Store on pending & show the ones not colliding
-			popup.prop("aid_id", aid_id);
-			UI.firstTimeAidsPending.push( popup );
-			UI.testCollidingFirstTimeAids();
+			}).bind(this);
+			
+			// Show visual aid after an adbitrary timeout
+			setTimeout(__showAid, Math.random() * 1000 + 100);
 
 		}
 
