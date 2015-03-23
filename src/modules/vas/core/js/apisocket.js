@@ -178,9 +178,9 @@ define(
 				// -----------------------------------------------------------
 				// If for any reason the socket is closed, retry connection
 				//
-				this.socket.onclose = (function() {
+				this.socket.onclose = (function(reason) {
 					this.connected = false;
-					this.trigger('critical', 'Disconnected from the APISocket socket!');
+					this.trigger('critical', 'Disconnected from the APISocket socket! Reason: '+reason);
 					clearInterval(this.keepaliveTimer);
 
 					// Cleanup dynamic API instances

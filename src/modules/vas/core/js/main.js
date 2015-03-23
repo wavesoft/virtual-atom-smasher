@@ -911,7 +911,6 @@ define("vas/core",
 		 */
 		VAS.sendFeedback = function() {
 			
-			
 		}
 
 		/**
