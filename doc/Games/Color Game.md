@@ -51,3 +51,28 @@ Both of them are summing-up to form the colour White.
 
  * The level finishes when the user has linked all coloured quarks with each-other.
 
+# Game Assets
+
+ * All the particles are plain circle objects with diameter 36 pixel
+ * The background has the appropriate quark colour. 
+ * The foreground is either white or black, according to the 'perceptive luminance' function (or by just keeping a table of appropriate foreground/background combinations)
+
+```javascript
+// Luminance function
+var a = 1 - ( 0.299 * color.r + 0.587 * color.g + 0.114 * color.b)/255
+if (a < 0.5) {
+    fcolor = "#000";
+} else {
+    fcolor = "#fff";
+}
+```
+ * The border is always 1 pixel, black
+ * The links are 2 pixel, white straight lines
+
+## Images & Other Assets
+
+**NOTE:** Currently in DRAFT. You can safely assume that the final images will have the same dimensions.
+
+ * Upon proper re-design of the graphics, each particle will be replaced with a PNG image
+ * The lines will still remain 1-pixel white.
+ * The background image is available on `doc/Games/Images/Color Game/assets/background.jpg`
