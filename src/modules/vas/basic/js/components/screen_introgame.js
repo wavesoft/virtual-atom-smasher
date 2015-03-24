@@ -143,9 +143,6 @@ define(
 			}).bind(this));
 
 			// Register other visual aids
-			this.select(".btn-skip", function(dom) {
-				R.registerVisualAid("introgame.continue", dom);
-			});
 			this.select(".btn-submit", function(dom) {
 				R.registerVisualAid("introgame.submit", dom);
 			});
@@ -337,7 +334,6 @@ define(
 			}).bind(this);
 
 			// Enable skip
-			this.select(".btn-skip").addClass("visible");
 			UI.showFirstTimeAid("introgame.continue");
 
 			// Compare just values

@@ -80,10 +80,15 @@ define(
 			this.hostDOM.addClass("tvhead");
 			this.tvHead = $('<div class="head"></div>');
 			this.tvBody = $('<div class="body"></div>');
-			this.escBtn = $('<img class="escIcon" src="' + require.toUrl("tootr/img/escape.png") + '" />')
 			this.hostDOM.append( this.tvHead );
 			this.hostDOM.append( this.tvBody );
-			this.hostDOM.append( this.escBtn );
+
+			// Add skip button
+			this.skipBtn = $('<a class="navbtn-skip">Skip <span class="glyphicon glyphicon-menu-right"></span></a>').appendTo(this.hostDOM.parent());
+			this.skipBtn.click((function() {
+				this.onStop();
+				this.trigger('completed');
+			}).bind(this));
 
 		}
 		TVhead.prototype = Object.create( VisualAgent.prototype );
@@ -200,9 +205,6 @@ define(
 		 */
 		VisualAgent.prototype.onSequenceDefined = function(sequence, cb) {
 
-			// Show escape button
-			this.escBtn.show();
-
 			// Validate sequence structure
 			if (!sequence) {
 				console.error("TVhead: Invalid sequence specified");
@@ -280,11 +282,6 @@ define(
 		 */
 		VisualAgent.prototype.onStart = function() {
 
-			// Show ESC and fade-out after a while
-			this.escBtn.show();
-			setTimeout((function() {
-				this.escBtn.fadeOut();
-			}).bind(this), 2000);
 
 			// Start the video
 			this.eExplainPopcorn.play();
