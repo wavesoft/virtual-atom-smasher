@@ -45,6 +45,30 @@ define(
 		}
 
 		/**
+		 * Register a handler that will be called when the specified
+		 * named event is fired with the {@link module:core/util/event_base~EventBase#trigger|trigger()}.
+		 *
+		 * When the event is triggered, this handler will be automatically de-registered.
+		 *
+		 * @param {String} name - The name of the event
+		 * @param {function} handler - The handler to add to the listeners
+		 */
+		EventBase.prototype.onOnce = function(name, handler) {
+
+			// Prepare a temporary callback
+			var _callback = (function() {
+				// Deregister the callback
+				this.off(name, _callback);
+				// Fire the handler
+				handler();
+			}).bind(this);
+
+			// Register temporary callback
+			this.on(name, _callback);
+
+		}
+
+		/**
 		 * Unregister from the event list.
 		 *
 		 * @param {String} name - The name of the event

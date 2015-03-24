@@ -29,6 +29,7 @@ define(
 			this.visible = false;
 			this.tabEnabled = [];
 			this.tabVisible = [];
+			this.canShowFirstTimeAids = false;
 
 			// Register description tab
 			this.registerTab( 'overlay.machinepart.describe', 'Description' );
@@ -117,6 +118,10 @@ define(
 						}
 					}
 
+					// Fire this on the active component
+					if (this.canShowFirstTimeAids)
+						this.components[index].onShowFirstTimeAids();
+
 				}).bind(this));
 
 			}).bind(this);
@@ -201,6 +206,20 @@ define(
 		};
 
 		/**
+		 * We are ready to show the first-time aids
+		 */
+		MachinePart.prototype.onShowFirstTimeAids = function() {
+			// We can show first time aids
+			this.canShowFirstTimeAids = true;
+
+			// Show my first-time aids
+			UI.showAllFirstTimeAids("machinepart.tab.");
+
+			// Fire this on the active component
+			this.components[ this.lastFocusedTab ].onShowFirstTimeAids();
+		}
+
+		/**
 		 * User focused on tunable
 		 */
 		MachinePart.prototype.onTunableFocus = function( tunable ) {
@@ -268,12 +287,6 @@ define(
 			});
 
 			this.visible = true;
-			if (this.tabVisible[2]) {
-				UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.mypaper");
-			}
-			if (this.tabVisible[3]) {
-				UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.paper");
-			}
 		}
 
 		/**

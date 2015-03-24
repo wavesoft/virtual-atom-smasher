@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	["jquery", "quill", "vas/core/registry", "vas/core/db", "vas/core/user", "vas/core/base/view", 
+	["jquery", "quill", "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/base/view", 
 	 "text!vas/basic/tpl/machine/results.html"], 
 
 	/**
@@ -10,7 +10,7 @@ define(
 	 *
  	 * @exports vas-basic/machineparts/results
 	 */
-	function(config, Quill, R, DB, User, ViewComponent, tplContent) {
+	function(config, Quill, R, UI, DB, User, ViewComponent, tplContent) {
 
 		/**
 		 * The default tunable body class
@@ -89,6 +89,14 @@ define(
 		ResultsMachinePart.prototype.onTuningValueChanged = function( parameter, value ) {	
 
 		}
+
+		/**
+		 * Display firs-time aids when possible
+		 */
+		ResultsMachinePart.prototype.onShowFirstTimeAids = function() {	
+			UI.showAllFirstTimeAids("machinepart.tabcontent.results");
+		}
+
 
 		// Store overlay component on registry
 		R.registerComponent( 'overlay.machinepart.results', ResultsMachinePart, 1 );

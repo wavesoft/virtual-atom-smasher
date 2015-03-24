@@ -46,7 +46,12 @@ define(
 		OverlayFlash.prototype.onMessageDefined = function( image, title, body ) {
 			this.domImg.css("background-image", "url("+img_dir+'/'+image+")");
 			this.domTitle.html(title);
-			this.domBody.html(body);
+			this.domBody.empty()
+			if (typeof(body) == "object") {
+				this.domBody.append(body);
+			} else {
+				this.domBody.html(body);				
+			}
 		}
 
 		/**
@@ -62,16 +67,18 @@ define(
 		 * Close it after a while automatically
 		 */
 		OverlayFlash.prototype.onShown = function() {
+			/*
 			this.closeTimeout = setTimeout((function() {
 				this.trigger("close");
 			}).bind(this), 5000);
+			*/
 		}
 
 		/**
 		 * Abort close timer when closing
 		 */
 		OverlayFlash.prototype.onWillHide = function(cb) {
-			clearTimeout(this.closeTimeout);
+			if (this.closeTimeout) clearTimeout(this.closeTimeout);
 			cb();
 		}
 

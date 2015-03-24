@@ -2,14 +2,14 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry", "vas/core/base/view", "text!vas/basic/tpl/machine/describe.html"], 
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/view", "text!vas/basic/tpl/machine/describe.html"], 
 
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
  	 * @exports vas-basic/machineparts/describe
 	 */
-	function(config, R, ViewComponent, tplContent) {
+	function(config, R, UI, ViewComponent, tplContent) {
 
 		/**
 		 * The default tunable body class
@@ -30,6 +30,16 @@ define(
 			this.handleDoURL('showCourse', (function(courseID) {
 				this.trigger("showCourse", courseID);
 			}).bind(this));
+
+			// Register visual aids
+			this.select(".-btn-learn", function(elm) {
+				if (elm.length == 0) return;
+				R.registerVisualAid("machinepart.tabcontent.describe.learn", elm);
+			});
+			this.select(".-btn-course", function(elm) {
+				if (elm.length == 0) return;
+				R.registerVisualAid("machinepart.tabcontent.describe.course", elm);
+			});
 
 		};
 
@@ -83,6 +93,13 @@ define(
 		 */
 		DescribeMachinePart.prototype.onTuningValueChanged = function( parameter, value ) {	
 
+		}
+
+		/**
+		 * Display firs-time aids when possible
+		 */
+		DescribeMachinePart.prototype.onShowFirstTimeAids = function() {	
+			UI.showAllFirstTimeAids("machinepart.tabcontent.describe");
 		}
 
 		// Store overlay component on registry

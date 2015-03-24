@@ -41,6 +41,15 @@ This document contains all the visual aids registered in the Virtual Atom Smashe
  * __machinepart.tabbody.overlay.machinepart.paper__ - Tab body of 'Papers'
  * __machinepart.tab.overlay.machinepart.paper__ - Tab header of 'Papers'
 
+## Tuning screen mahine part tabs
+
+ * __machinepart.tabcontent.describe.course__ - The "Take the course" button in the describe tab of the machine part
+ * __machinepart.tabcontent.describe.learn__ - The "Learn more" button in the describe tab of the machine part
+ * __machinepart.tabcontent.unlock.first__ - The first item in the unlock screen
+ * __machinepart.tabcontent.unlock.unlocked__ - The first unlocked item in the unlock screen
+ * __machinepart.tabcontent.unlock.unlockable__ - The first unlockable item in the unlock screen
+ * __machinepart.tabcontent.unlock.locked__ - The first locked item in the unlock screen (not enough credits)
+
 ## Overlay book
 
  * __book.tab.description__ : Description tab of overlay book

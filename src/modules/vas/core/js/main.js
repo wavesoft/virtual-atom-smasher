@@ -71,6 +71,56 @@ define("vas/core",
 		}
 
 		/**
+		 * Show introduction tutorial if not yet seen
+		 */
+		var showIntroIfNeeded = function( readyCallback ) {
+
+			// If not first time seen
+			if (!User.isFirstTimeSeen("intro")) {
+
+					// Ask user if he/she wants to take the intro tutorial
+					UI.showFlashPrompt(
+						"Welcome to V.A.S.", 
+						"Is this your first time you see the Virtual Atom Smasher game?", 
+						[
+							{ 
+								"label"    : "Yes, guide me!",
+							  	"callback" : function(){
+									// Display the intro sequence
+									UI.displaySequence( DB.cache['definitions']['intro-sequence']['sequence'] , function() {
+										// Mark introduction sequence as shown
+										User.markFirstTimeAsSeen("intro");
+
+										// Fire ready callback when finished
+										if (readyCallback) readyCallback();
+
+									});
+								}
+							},
+							{
+								"label"    : "Later",
+								"class"    : "btn-darkblue",
+								"callback" : function(){
+									// Mark introduction sequence as shown
+									User.markFirstTimeAsSeen("intro");
+									// Fire ready callback
+									if (readyCallback) readyCallback();
+								}
+							}
+						],
+						"logo.png"
+					);
+
+			} else {
+
+				// Fire ready callback right away
+				if (readyCallback) readyCallback();
+
+			}
+
+		}
+
+		/**
 		 * Initialize VAS to the given DOM element
 		 */
 		VAS.initialize = function( readyCallback ) {
@@ -240,17 +290,10 @@ define("vas/core",
 
 									// User is logged-in, check if he has sheen the introduction
 									// sequence
-									if (!User.isFirstTimeSeen("intro")) {
-											// Display the intro sequence
-											UI.displaySequence( DB.cache['definitions']['intro-sequence']['sequence'] , function() {
-												// Mark introduction sequence as shown
-												User.markFirstTimeAsSeen("intro");
-												// Display home page
-												VAS.displayTuningScreen();
-											});
-									} else {
+									showIntroIfNeeded(function() {
+										// Display home page
 										VAS.displayTuningScreen();
-									}
+									});
 
 								});
 
@@ -285,9 +328,7 @@ define("vas/core",
 											UI.hideOverlay();
 
 											// Display the intro sequence
-											UI.displaySequence( DB.cache['definitions']['intro-sequence']['sequence'] , function() {
-												// Mark introduction sequence as shown
-												User.markFirstTimeAsSeen("intro");
+											showIntroIfNeeded(function() {
 												// Display home page
 												VAS.displayTuningScreen();
 											});
@@ -591,10 +632,6 @@ define("vas/core",
 							}
 						);
 
-					});
-					scrTuning.on('course', function(name) {
-						UI.screens["screen.courseroom"].onCourseDefined(name);
-						UI.selectScreen("screen.courseroom");
 					});
 					scrTuning.on('flash', function(title,body,icon) {
 						UI.showFlash(title, body, icon);

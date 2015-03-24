@@ -116,7 +116,7 @@ define(
 								.removeClass("disabled")
 								.off('click')
 								.on('click', (function(e) {
-									this.trigger("course", details['description']['course']);
+									this.trigger("showCourse", details['description']['course']);
 								}).bind(this));
 						}
 					}
@@ -444,11 +444,15 @@ define(
 				// Show controlBoardHost if visible
 				if (this.machinePartsEnabled[machinePartID]) {
 					this.controlBoardHost.addClass("visible").afterTransition((function() {
-						// Fire first-time interface aids
-						if (!this.btnEstimate.hasClass("disabled"))
-							UI.showFirstTimeAid("tuning.control.estimate");
-						if (!this.btnValidate.hasClass("disabled"))
-							UI.showFirstTimeAid("tuning.control.validate");
+						setTimeout((function() {
+
+							// Fire first-time interface aids
+							if (!this.btnEstimate.hasClass("disabled"))
+								UI.showFirstTimeAid("tuning.control.estimate");
+							if (!this.btnValidate.hasClass("disabled"))
+								UI.showFirstTimeAid("tuning.control.validate");
+
+						}).bind(this), 100);
 
 					}).bind(this));
 				} else {
@@ -471,11 +475,60 @@ define(
 			// Query machine part details
 			User.getPartDetails(machinePartID, (function(details) {
 
+				// Check if this machine part has an introduction course, and
+				// prompt the user to show it
+				var _showMachineAnimation = (function() {
+					if (details['animation']) {
+
+						// Show the prompt once
+						UI.showOnce("course-" + details['animation'], (function(cbCompleted) {
+
+							// Ask user if he/she wants to take the intro tutorial
+							UI.showFlashPrompt(
+								details['title'], 
+								"Would you like to see a short course explaining this part?", 
+								[
+									{ 
+										"label"    : "Yes, show it!",
+									  	"callback" : (function(){
+									  		// Trigger the course display
+									  		this.trigger("showCourse", details['animation']);
+											// Mark introduction sequence as shown
+											cbCompleted();
+										}).bind(this)
+									},
+									{
+										"label"    : "Later",
+										"class"    : "btn-darkblue",
+										"callback" : (function(){
+											// Mark introduction sequence as shown
+											cbCompleted();
+											// Show the first-time aid of the course
+											UI.showFirstTimeAid("tuning.machinepart.course");
+											// We can now show first-time aids on the machine part
+											this.machinePartComponent.onShowFirstTimeAids();
+										}).bind(this)
+									}
+								],
+								"flash-icons/course.png"
+							);
+
+						}).bind(this));
+
+					} else {
+						// We can now show first-time aids on the machine part
+						this.machinePartComponent.onShowFirstTimeAids();
+					}
+				}).bind(this);
+
 				// Check if user has not seen the machine part tutorial
 				if (!User.isFirstTimeSeen("tuning.machinepart")) {
 					UI.showTutorial("ui.tuning.machinepart", function() {
 						User.markFirstTimeAsSeen("tuning.machinepart");
+						_showMachineAnimation();
 					});
+				} else {
+					_showMachineAnimation();
 				}
 
 				// Add back-blur fx on the machine DOM

@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	["jquery", "quill", "vas/core/registry", "vas/core/db", "vas/core/user", "vas/core/base/view", "core/analytics/analytics",
+	["jquery", "quill", "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/base/view", "core/analytics/analytics",
 	 "text!vas/basic/tpl/machine/papers.html"], 
 
 	/**
@@ -10,7 +10,7 @@ define(
 	 *
  	 * @exports vas-basic/machineparts/paper
 	 */
-	function(config, Quill, R, DB, User, ViewComponent, Analytics, tplContent) {
+	function(config, Quill, R, UI, DB, User, ViewComponent, Analytics, tplContent) {
 
 		/**
 		 * The default tunable body class
@@ -320,6 +320,13 @@ define(
 
 			}
 
+		}
+		
+		/**
+		 * Display firs-time aids when possible
+		 */
+		PaperMachinePart.prototype.onShowFirstTimeAids = function() {	
+			UI.showAllFirstTimeAids("machinepart.tabcontent.papers");
 		}
 
 		// Store overlay component on registry

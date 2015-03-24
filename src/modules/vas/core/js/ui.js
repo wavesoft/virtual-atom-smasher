@@ -649,6 +649,61 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		}
 
 		/**
+		 * Show a flash prompt message
+		 *
+		 * @param {string} title - The name of the module to focus.
+		 * @param {string} text - The text in the window.
+		 * @param {string} options - The options to display, as an array of [{label:"", callback:function()}]
+		 * @param {string} icon - The icon message
+		 * @param {array} transition - The transition definition (defaults to UI.Transitions.ZOOM_IN)
+		 * @param {function} cb_close - The callback to fire when the message is dismissed
+		 *
+		 */
+		UI.showFlashPrompt = function(title, text, options, icon, transition, cb_close) {
+
+			// Skip on lockdown
+			if (UI.lockdown)
+				return;
+
+			// Check for missing arguments
+			if (typeof(transition) == 'function') {
+				cb_close = transition; transition = null;
+			}
+			if (!transition) {
+				transition = UI.Transitions.ZOOM_IN;
+			}
+
+			// Return component instance
+			return UI.showOverlay("overlay.flash", transition, function(com) {
+
+				// Build body
+				var bodyDOM = $('<div></div>').append( $('<div></div>').html(text) ),
+					optDOM = $('<div></diV>').appendTo( bodyDOM );
+
+				// Build options
+				for (var i=0; i<options.length; i++) {
+					var btnClass = options[i]['class'] || "btn-teal",
+						btn = $('<button class="btn-shaded '+btnClass+'"></button>').text(options[i].label);
+					btn.click(options[i].callback);
+					btn.appendTo( optDOM );
+				}
+
+				// Define message
+				com.onMessageDefined( icon, title, bodyDOM );
+
+				// Listen for close events of this component
+				var close_handler = function() {
+					com.off('close', close_handler);
+					// Fire callback if we have it
+					if (cb_close) cb_close(com);
+				};
+				com.on('close', close_handler);
+
+			});
+
+		}
+
+		/**
 		 * Hide the overlay module from screen
 		 */
 		UI.hideOverlay = function( transition, cb_ready ) {
@@ -908,10 +963,10 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		 * @param {function} callback - The function to call
 		 *
 		 */
-		UI.showFirstTime = function(once_id, callback) {
+		UI.showOnce = function(once_id, callback) {
 			// If first time aid was not seen, fire callback
 			if (!User.isFirstTimeSeen(once_id)) {
-				// Fire callback & Register a second depth
+				// Fire callback & Register a second depth callback
 				if (callback) callback(function() {
 					// Mark as seen
 					User.markFirstTimeAsSeen( once_id );
@@ -1238,8 +1293,13 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				// Start visual agent animation
 				UI.visualAgent.onStart();
 
-				// The tutorial has started
-				if (cb_completed) cb_completed();
+				// Unblur a possible blur in the background
+				// TODO: Unhack this
+				UI.host.removeClass("fx-blur");
+
+				// Fire callback when completed
+				if (cb_completed)
+					UI.visualAgent.onOnce("completed", cb_completed);
 
 				// Fire analytics
 				Analytics.restartTimer("ui.tutorial");
@@ -1277,7 +1337,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			// Asynchronous function to stop previous tutorial and start this one
 			var __stopPrevStartThis = function(sequence) {
 				if (tutorialActive) {
-					UI.hideTutorial( __prepareTutorial );
+					UI.hideTutorial(function(){ __prepareTutorial(sequence); });
 				} else {
 					__prepareTutorial(sequence);
 				}

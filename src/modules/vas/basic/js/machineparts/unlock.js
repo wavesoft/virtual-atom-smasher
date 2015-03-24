@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry", "vas/core/user", "vas/core/base/view", "core/analytics/analytics",
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/user", "vas/core/base/view", "core/analytics/analytics",
 	 "text!vas/basic/tpl/machine/unlock.html"], 
 
 	/**
@@ -10,7 +10,7 @@ define(
 	 *
  	 * @exports vas-basic/machineparts/paper
 	 */
-	function(config, R, User, ViewComponent, Analytics, tplContent) {
+	function(config, R, UI, User, ViewComponent, Analytics, tplContent) {
 
 		/**
 		 * The default tunable body class
@@ -21,6 +21,9 @@ define(
 			ViewComponent.call(this, hostDOM);
 			hostDOM.addClass("machinepart-unlock");
 
+			// Load template
+			this.loadTemplate( tplContent );
+
 			// Handle do url
 			this.handleDoURL('unlockStage', (function(stage) {
 				User.unlockMachineStage(stage, (function(isOK) {
@@ -29,8 +32,23 @@ define(
 				}).bind(this));
 			}).bind(this));
 
-			// Load template
-			this.loadTemplate( tplContent );
+			// Register visual aids
+			this.select("ul li:not(.header):first-child", function(elm) {
+				if (elm.length == 0) return;
+				R.registerVisualAid("machinepart.tabcontent.unlock.first", elm);
+			});
+			this.select("ul li.unlocked:first-child", function(elm) {
+				if (elm.length == 0) return;
+				R.registerVisualAid("machinepart.tabcontent.unlock.unlocked", elm);
+			});
+			this.select("ul li.unlockable:first-child", function(elm) {
+				if (elm.length == 0) return;
+				R.registerVisualAid("machinepart.tabcontent.unlock.unlockable", elm);
+			});
+			this.select("ul li.locked:first-child", function(elm) {
+				if (elm.length == 0) return;
+				R.registerVisualAid("machinepart.tabcontent.unlock.locked", elm);
+			});
 
 		};
 
@@ -96,6 +114,13 @@ define(
 		 */
 		UnlockMachinePart.prototype.onTuningValueChanged = function( parameter, value ) {	
 
+		}
+
+		/**
+		 * Display firs-time aids when possible
+		 */
+		UnlockMachinePart.prototype.onShowFirstTimeAids = function() {	
+			UI.showAllFirstTimeAids("machinepart.tabcontent.unlock");
 		}
 
 		// Store overlay component on registry
