@@ -43,8 +43,8 @@ define(
 
 			// Forward icon
 			var btnHost = $('<div class="menu-icon"></div>').appendTo(hostDOM),
-				btnUpward = $('<div class="profilebtn-large profilebtn-upper"><span class="glyphicon glyphicon-menu-up"></span></div>').appendTo(btnHost),
-				btnForward = $('<div class="profilebtn-large profilebtn-upper"><span class="glyphicon glyphicon-menu-right"></span></div>').appendTo(btnHost);
+				btnUpward = $('<div class="navbtn-large navbtn-upper"><span class="glyphicon glyphicon-menu-up icon-direction icon-direction-up"></span><span class="glyphicon glyphicon-cog"></span><div class="title">Simulation</div></div>').appendTo(btnHost),
+				btnForward = $('<div class="navbtn-large navbtn-upper"><span class="glyphicon glyphicon-menu-right icon-direction icon-direction-right"></span><span class="glyphicon glyphicon-user"></span><div class="title">Status</div></div>').appendTo(btnHost);
 
 			// Register forward 
 			btnForward.click((function() {

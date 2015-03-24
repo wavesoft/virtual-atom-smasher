@@ -147,6 +147,18 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Focus on a particular paper
+		 */
+		APIAccount.prototype.focusPaper = function(paper_id, callback) {
+			// Query server
+			this.sendAction("papers.focus", {
+				'id': paper_id
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
 		 * Update a particular paper
 		 */
 		APIAccount.prototype.updatePaper = function(paper_id, fields, callback) {
@@ -176,6 +188,18 @@ define(["vas/core/api/interface", "vas/config"],
 		APIAccount.prototype.deletePaper = function(paper_id, callback) {
 			// Query server
 			this.sendAction("papers.delete", {
+				'id': paper_id
+			}, function(data) {
+				if (data && callback) callback(data['status'] == 'ok', data['error']);
+			});
+		}
+
+		/**
+		 * Cite a particular paper
+		 */
+		APIAccount.prototype.citePaper = function(paper_id, callback) {
+			// Query server
+			this.sendAction("papers.cite", {
 				'id': paper_id
 			}, function(data) {
 				if (data && callback) callback(data['status'] == 'ok', data['error']);

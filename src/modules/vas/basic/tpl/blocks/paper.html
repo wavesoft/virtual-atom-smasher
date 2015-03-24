@@ -1,0 +1,64 @@
+{{#paper}}
+	<form data-name="paper" action="do:savePaper()">
+		<div class="title">
+
+			{{#paper.editable}}
+			<input class="flat-h2 editable-mark" name="title" value="{{paper.title}}" type="text" />
+			{{/paper.editable}}
+			{{^paper.editable}}
+			<h2>{{ paper.title }}</h2>
+			{{/paper.editable}}
+		</div>
+		<div class="full-body">
+			<p class="discreet">Notes:</p>
+			<div class="abstract">
+				{{#paper.editable}}
+				<div class="quill editable-mark form-raw-html" name="body">{{{paper.body}}}</div>
+				{{/paper.editable}}
+				{{^paper.editable}}
+					{{#paper.body}}
+						{{{paper.body}}}
+					{{/paper.body}}
+					{{^paper.body}}
+						(This paper has no notes, just results!)
+					{{/paper.body}}
+				{{/paper.editable}}
+			</div>
+			<div class="values">
+				<p class="small">Here are the tunable values in this paper. Click on any value to apply it to your current configuration:</p>
+				<ul>
+					{{#tunables}}
+					<li>
+						<a href="do:changeValue('{{ name }}',{{ value }})" name="{{ cssname }}" class="match-{{match}}">
+							<div class="value">{{value}}</div>
+							<div class="name">{{name}}</div>
+						</a>
+					</li>
+					{{/tunables}}
+				</ul>
+			</div>
+		</div>
+		<div class="footer footer-input">
+			{{#showPapers}}
+			<button type="button" class="b-teal" click="do:closePaper()">
+				<span class="glyphicon glyphicon-menu-left"></span> Back to the papers
+			</button>
+			<button type="button" class="b-teal" click="do:applyAll()">
+				Apply All
+			</button>
+			{{/showPapers}}
+			{{#paper.editable}}
+			<button type="button" click="do:deletePaper()" class="b-purple pull-right">
+				<span class="glyphicon glyphicon-trash"></span>
+			</button>
+			{{/paper.editable}}
+		</div>
+	</form>
+{{/paper}}
+{{^paper}}
+	<div class="title">
+		<h2>(No paper)</h2>
+	</div>
+	<div class="footer footer-input">
+	</div>
+{{/paper}}

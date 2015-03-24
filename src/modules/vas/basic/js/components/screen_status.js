@@ -35,8 +35,8 @@ define(
 			var components = [
 				//[ "profilepart.achievements", 	"Achievements",		"glyphicon glyphicon-tower" 	],
 				[ "profilepart.book", 			"Knowledge",		"glyphicon glyphicon-book" 		],
-				//[ "profilepart.papers", 		"Papers",			"glyphicon glyphicon-education" ],
-				//[ "profilepart.team", 			"Team",				"glyphicon glyphicon-globe" 	],
+				[ "profilepart.papers", 		"Papers",			"glyphicon glyphicon-education" ],
+				[ "profilepart.team", 			"Team",				"glyphicon glyphicon-globe" 	],
 				[ "profilepart.user", 			"User Profile",		"glyphicon glyphicon-user" 		],
 			];
 
@@ -72,7 +72,7 @@ define(
 					paper.addClass("r"+this.paperDOMs.length);
 
 					// Create button
-					var btn = $('<div class="profilebtn-large profilebtn-lower"><span class="'+icon+'"></span><div class="title">'+name+'</div></div>');
+					var btn = $('<div class="navbtn-large navbtn-lower"><span class="'+icon+'"></span><div class="title title-top">'+name+'</div></div>');
 					btn.click((function(idx) {
 						return function(e) {
 							this.focusPaper(idx);

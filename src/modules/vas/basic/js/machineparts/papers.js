@@ -104,6 +104,23 @@ define(
 				}
 
 			}).bind(this));
+			this.handleDoURL('focusPaper', (function() {
+
+				// Require a focus
+				if (!this.focusedPaper) return;
+
+				// Focus on paper
+				User.focusPaper(this.focusedPaper, (function() {
+
+					// Reload paper
+					User.readPaper(this.focusedPaper, (function(paper) {
+						this.paperEditable = paper['editable'];
+						this.displayPaper( paper );
+					}).bind(this));
+
+				}).bind(this));
+
+			}).bind(this));
 
 			// Start Quill on possible editable text areas
 			this.select('.quill', (function(dom) {
@@ -242,7 +259,8 @@ define(
 
 			// Reload papers (and re-render view)
 			// When done, fire callback
-			this.reloadPapers({}, cb);
+			this.reloadPapers({
+			}, cb);
 
 		}
 

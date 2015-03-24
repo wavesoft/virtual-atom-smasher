@@ -41,17 +41,32 @@
 		<div class="footer footer-input">
 			{{#showPapers}}
 			<button type="button" class="b-teal" click="do:closePaper()">
-				<span class="glyphicon glyphicon-menu-left"></span> Back to the papers
+				<span class="glyphicon glyphicon-menu-left"></span> Back
 			</button>
+			{{/showPapers}}
 			<button type="button" class="b-teal" click="do:applyAll()">
 				Apply All
 			</button>
-			{{/showPapers}}
+			{{#showPapers}}
 			{{#paper.editable}}
-			<button type="button" click="do:deletePaper()" class="b-purple pull-right">
-				<span class="glyphicon glyphicon-trash"></span>
-			</button>
+				{{^paper.active}}
+				<button type="button" click="do:focusPaper({{paper.id}})" class="b-purple">
+					<span class="glyphicon glyphicon-ok"></span> Work on this paper
+				</button>
+				<button type="button" click="do:deletePaper()" class="b-purple pull-right">
+					<span class="glyphicon glyphicon-trash"></span>
+				</button>
+				{{/paper.active}}
+				{{#paper.active}}
+				<span class="input-label pull-right">(This is your active paper)</span>
+				{{/paper.active}}
 			{{/paper.editable}}
+			{{/showPapers}}
+			{{^showPapers}}
+			<button type="button" class="b-purple pull-right" click="do:savePaper()">
+				<span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
+			</button>
+			{{/showPapers}}
 		</div>
 	</form>
 {{/paper}}
@@ -75,13 +90,14 @@
 				<tbody>
 					{{#papers}}
 						{{#active}}
-						<tr click="do:viewPaper({{id}})">
+						<tr class="f-blue" click="do:viewPaper({{id}})">
 							<td class="col-6">
 								<span class="glyphicon glyphicon-user"></span> {{title}}
 							</td>
-							<td class="col-2 text-center">
-								Selected Paper
+							<td class="col-4 text-center">
+								(Selected Paper)
 							</td>
+							<td class="col-2 text-center">{{fit_formatted}}</td>
 						</tr>
 						<tr class="separator">
 							<td colspan="3"></td>

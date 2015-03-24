@@ -49,6 +49,10 @@ define(
 			// Prepare error tab
 			this.errorTab = $('<div class="tab tab-error"><h1>Error loading book</h1><p>It was not possible to find a book under the specified ID!</p></div>')
 
+			// Create first tab
+			this.createTab("description", $("<div></div>"), 'cs-blue', '<span class="uicon uicon-explain"></span> Description');
+
+
 			// Prpare properties
 			this.meta = null; 
 

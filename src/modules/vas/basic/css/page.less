@@ -110,7 +110,60 @@ h1 {
 .visualaid-focus {
 }
 
-.profilebtn-large {
+// ===============================
+// Round-framed overlays
+// ===============================
+
+.overlay-rounded-frame {
+	.border-radius(20px);
+	background: #fff;
+	border: solid 5px #DDD;
+	padding: 10px;
+}
+
+// ===============================
+// Uniform skip button
+// ===============================
+
+.navbtn-skip {
+	.border-radius( 20px );
+	position: absolute;
+	display: block;
+	z-index: 20000;
+	background-color: #FFF;
+	border: solid 1px #95A5A6;
+	color: #95A5A6;
+	height: 20px;
+	cursor: pointer;
+
+	right: 10px;
+	bottom: 10px;
+	padding: 5px 12px 9px;
+	font-size: 18px;
+}
+
+.navbtn-playback {
+	.border-radius( 20px );
+	position: absolute;
+	display: block;
+	z-index: 20001;
+	background-color: #FFF;
+	border: solid 1px #95A5A6;
+	color: #95A5A6;
+	height: 20px;
+	cursor: pointer;
+
+	right: 10px;
+	bottom: 10px;
+	padding: 6px 8px 8px;
+	font-size: 18px;
+}
+
+// ===============================
+// Big navigation buttons
+// ===============================
+
+.navbtn-large {
 	.border-radius( 40px );
 	display: inline-block;
 	width: 64px;
@@ -125,14 +178,32 @@ h1 {
 	z-index: 100;
 
 	div.title {
+		.transition( opacity 0.25s );
+		.pointer-events( none );
 		position: absolute;
-		
+		width: 100px;
+		left: -22px;
+		font-size: 16px;
+		margin: 0;
+		padding: 4px;
+		line-height: 16px;
+		top: 65px;
+		color: #333;
+		opacity: 0;
+
+		&.title-top {
+			top: -28px;
+		}
 	}
 
 	&:hover {
 		.transform( scale(1.1) );
+		div.title {
+			opacity: 1;
+		}
 	}
-	&.profilebtn-lower {
+
+	&.navbtn-lower {
 		color: rgba(255,255,255,0.8);
 		background-color: #34495e;
 		&.active {
@@ -141,9 +212,54 @@ h1 {
 			background-color: #ecf0f1;
 			color: #34495e;
 		}
+		div.title {
+			color: #2c3e50;
+		}
 	}
-	&.profilebtn-upper {
+	&.navbtn-upper {
 		background-color: #16a085;
+		div.title {
+			color: #16a085;
+		}
+	}
+
+	span.icon-direction {
+	    font-size:20px;
+	    position: absolute;
+	    opacity: 0.6;
+
+	    &.icon-direction-up {
+		    left: 22px;
+		    top: 2px;
+		    + span {
+			    top: 6px;
+			}
+		}
+
+	    &.icon-direction-down {
+		    left: 22px;
+		    top: 42px;
+		    + span {
+			    top: -6px;
+			}
+		}
+
+	    &.icon-direction-left {
+		    top: 22px;
+		    left: 2px;
+		    + span {
+			    left: 6px;
+			}
+		}
+
+	    &.icon-direction-right {
+		    top: 22px;
+		    left: 42px;
+		    + span {
+			    left: -6px;
+			}
+		}
+
 	}
 
 }

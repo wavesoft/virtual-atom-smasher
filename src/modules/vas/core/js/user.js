@@ -518,6 +518,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Cite a signle paper.
+		 */
+		User.prototype.citePaper = function( paper_id, callback ) {
+			// Cite paper
+			this.accountIO.citePaper(paper_id, callback);
+		}
+
+		/**
 		 * Shorthand to get the current user's paper
 		 */
 		User.prototype.getUserPaper = function( callback ) {
@@ -539,6 +547,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		User.prototype.createPaper = function( callback ) {
 			// Create a new paper
 			this.accountIO.createPaper( callback );
+		};
+
+		/**
+		 * Focus on a particular paper
+		 */
+		User.prototype.focusPaper = function( paper_id, callback ) {
+			// Create a new paper
+			this.accountIO.focusPaper( paper_id, callback );
 		};
 
 		/**

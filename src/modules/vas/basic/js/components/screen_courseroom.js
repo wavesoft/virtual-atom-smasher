@@ -29,7 +29,7 @@ define(
 
 			// Abort icon
 			var btnHost = $('<div class="menu-icon"></div>').appendTo(hostDOM),
-				btnForward = $('<div class="profilebtn-large profilebtn-upper"><span class="glyphicon glyphicon-remove"></span></div>').appendTo(btnHost);
+				btnForward = $('<div class="navbtn-large navbtn-upper"><span class="glyphicon glyphicon-remove"></span></div>').appendTo(btnHost);
 
 			// Register forward 
 			btnForward.click((function() {

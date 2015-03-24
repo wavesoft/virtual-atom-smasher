@@ -36,12 +36,12 @@ define(
 			hostDOM.addClass("jobs");
 
 			// Setup the registration form
-			$('<h1><span class="highlight">Validation</span> Dashboard</h1>').appendTo(hostDOM);
-			$('<p>Here you can see the current validation status and your past attempts.</p>').appendTo(hostDOM);
+			$('<h1><span class="highlight">Simulations</span> Dashboard</h1>').appendTo(hostDOM);
+			$('<p>Here you can see your active simulation jobs.</p>').appendTo(hostDOM);
 
 			// Forward icon
 			var btnHost = $('<div class="menu-icon"></div>').appendTo(hostDOM),
-				btnBackward = $('<div class="profilebtn-large profilebtn-upper"><span class="glyphicon glyphicon-menu-down"></span></div>').appendTo(btnHost);
+				btnBackward = $('<div class="navbtn-large navbtn-upper"><span class="glyphicon glyphicon-menu-down icon-direction icon-direction-down"></span><span class="glyphicon glyphicon-wrench"></span><div class="title title-top">Tuning</div></div>').appendTo(btnHost);
 
 			// Register backward 
 			btnBackward.click((function() {
@@ -162,8 +162,12 @@ define(
 
 			// Handle click
 			b1.click((function(job) {
-				return function() {
-
+				return function(e) {
+					// Cancel event
+					e.stopPropagation();
+					e.preventDefault();
+					// Show job details
+					
 				}
 			})(job).bind(this));
 

@@ -25,7 +25,7 @@ define(
 			this.containers = [];
 			this.tabs = [];
 			this.components = [];
-			this.lastFocusedTab = 0;
+			this.lastFocusedTab = null;
 			this.visible = false;
 			this.tabEnabled = [];
 			this.tabVisible = [];
@@ -33,10 +33,11 @@ define(
 			// Register description tab
 			this.registerTab( 'overlay.machinepart.describe', 'Description' );
 			this.registerTab( 'overlay.machinepart.unlock', 'Unlock' );
-			this.registerTab( 'overlay.machinepart.mypaper', 'My Paper' );
+			this.registerTab( 'overlay.machinepart.results', 'Current Results' );
 			this.registerTab( 'overlay.machinepart.paper', 'Papers' );
 
 			// Hide/show machine parts based on configuration
+			/*
 			User.onConfigChanged("tab-mypaper", (function(isEnabled) {
 				this.setTabVisibility( 2, isEnabled );
 				this.tabEnabled[2] = isEnabled;
@@ -51,6 +52,7 @@ define(
 					UI.showFirstTimeAid("machinepart.tab.overlay.machinepart.paper");
 				}
 			}).bind(this));
+*/
 
 			// Tabs to show when disabled
 			this.disabledModeTabs = [0,1];
@@ -70,13 +72,17 @@ define(
 
 			// Handle change
 			if (!visible) {
+
 				// Hide tab
 				this.tabs[index].hide();
+
 				// Focus away from the tab
 				this.tabs[index].removeClass("focused").hide();
 				if (this.lastFocusedTab == index)
 					this.selectTab(0);
+
 			} else {
+
 				// Hide tab
 				this.tabs[index].show();
 				// Display tab
@@ -92,6 +98,30 @@ define(
 		 */
 		MachinePart.prototype.selectTab = function( index ) {
 
+			var __continueShow = (function() {
+
+				// Keep the last focused tab
+				this.lastFocusedTab = index;
+
+				// Show the current component
+				this.components[index].show((function() {
+
+					// Focus the particular tab
+					for (var i=0; i<this.containers.length; i++) {
+						if (i == index) {
+							this.containers[i].show();
+							this.tabs[i].addClass('focused');
+						} else {
+							this.containers[i].hide();
+							this.tabs[i].removeClass('focused');
+						}
+					}
+
+				}).bind(this));
+
+			}).bind(this);
+
+			// Fire analytics
 			var partTabTime = Analytics.restartTimer("machinepart-tab");
 			User.triggerEvent("machinepart.tab.change", {
 				"part" : this.partID,
@@ -100,19 +130,13 @@ define(
 				"time": partTabTime
 			});
 
-			// Keep the last focused tab
-			this.lastFocusedTab = index;
-
-			// Focus the particular tab
-			for (var i=0; i<this.containers.length; i++) {
-				if (i == index) {
-					this.containers[i].show();
-					this.tabs[i].addClass('focused');
-				} else {
-					this.containers[i].hide();
-					this.tabs[i].removeClass('focused');
-				}
+			// Hide previous component
+			if (this.lastFocusedTab !== null) {
+				this.components[this.lastFocusedTab].hide( __continueShow );
+			} else {
+				__continueShow();
 			}
+
 		}
 
 		/**

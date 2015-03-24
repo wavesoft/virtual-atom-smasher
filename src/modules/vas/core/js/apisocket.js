@@ -4,7 +4,7 @@ define(
 		// Core dependencies
 		["core/util/event_base", "sha1", "vas/config",
  		
- 		// Interfaces
+ 		// Interfaces of socket APIs
  		"vas/core/api/db", "vas/core/api/account", "vas/core/api/chatroom", "vas/core/api/course",
  		"vas/core/api/labsocket", "vas/core/api/labtrain" ], 
 
@@ -180,7 +180,7 @@ define(
 				//
 				this.socket.onclose = (function(e) {
 					this.connected = false;
-					this.trigger('critical', 'Disconnected from the APISocket socket! ('+e.reason+')');
+					this.trigger('critical', 'Disconnected from the APISocket socket! (#'+e.code+')');
 					clearInterval(this.keepaliveTimer);
 
 					// Cleanup dynamic API instances
