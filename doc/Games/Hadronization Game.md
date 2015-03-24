@@ -10,7 +10,15 @@ The game will have a similar approach to "fruit ninja": You slice strings, parti
 
 The game takes place a femtosecond after the collision of two particles. A very quick animation of two beams colliding will be shown and half second later a bunch of coloured quarks will appear. These quarks are linked with each other with strings, in a similar manner to the [[Color Game]] This means that red-green-blue quarks are linked with an Y-like string, and red-cyan, green-magenta, blue-yellow quark pairs are linked with a single, straight line.
 
-The time is slowed down (a lot) and the particles are slowly moving away from the collision point. The strings they have formed are stretching along. The strings will never break by themselves, rather the user is expected to click on them at will. When breaking a short string (= a few energy), very few or no other smaller quark-antiquark pairs will be produced. When breaking a longer string (= more energy), more and/or heavier particles will be produced. Check the game details for more information here.
+![](https://github.com/wavesoft/virtual-atom-smasher/blob/master/doc/Games/Images/Hadronization%20Game/layout-1.jpg)
+
+The time is slowed down (a lot) and the particles are slowly moving away from the collision point. The strings they have formed are stretching along. 
+
+![](https://github.com/wavesoft/virtual-atom-smasher/blob/master/doc/Games/Images/Hadronization%20Game/layout-2.jpg)
+
+The strings will never break by themselves, rather the user is expected to click on them at will. When breaking a short string (= a few energy), very few or no other smaller quark-antiquark pairs will be produced. When breaking a longer string (= more energy), more and/or heavier particles will be produced. Check the game details for more information here.
+
+![](https://github.com/wavesoft/virtual-atom-smasher/blob/master/doc/Games/Images/Hadronization%20Game/layout-3.jpg)
 
 Each one of the particles produced are still flying away from the collision point, but this time with smaller speed. The moment a particle touches the edge of the screen the level is finished.
 
