@@ -34,16 +34,32 @@ define(
 			// Set a null completed callback
 			this.completedCallback = null;
 			this.popcorn = null;
+			this.isPlaying = false;
 
 			// Handle skip video
 			this.skipVideo.click((function(e) {
 				e.stopPropagation();
 				e.preventDefault();
 
+				this.isPlaying = false;
 				this.trigger('completed');
 				this.trigger('sequence.next', 'completed'); // [SEQUENCING]
 				if (this.completedCallback)
 					this.completedCallback();
+			}).bind(this));
+
+			// Add pause and rewind
+			this.pauseResumeBtn = $('<a href="javascript:;" class="navbtn-playback"><span class="glyphicon glyphicon-pause"></span></a>').appendTo(this.hostDOM);
+			this.pauseResumeBtn.click((function() {
+				if (this.isPlaying) {
+					if (this.popcorn) this.popcorn.pause();
+					this.isPlaying = false;
+					this.pauseResumeBtn.html('<span class="glyphicon glyphicon-play"></span>');
+				} else {
+					if (this.popcorn) this.popcorn.play();
+					this.isPlaying = true;
+					this.pauseResumeBtn.html('<span class="glyphicon glyphicon-pause"></span>');
+				}
 			}).bind(this));
 
 		}
@@ -91,6 +107,9 @@ define(
 		 */
 		CinematicScreen.prototype.onWillShow = function(cb) {
 
+			// Reset playback button status
+			this.pauseResumeBtn.html('<span class="glyphicon glyphicon-pause"></span>');
+
 			// Create a popcorn video wrapper
 			var videoWrapper = Popcorn.HTMLYouTubeVideoElement( "#cinematic-video-host" );
 			videoWrapper.src = this.videoURL;
@@ -103,6 +122,7 @@ define(
 			this.popcorn.on('ended', (function() {
 				this.trigger('completed');
 				this.trigger('sequence.next', 'completed'); // [SEQUENCING]
+				this.isPlaying = false;
 				if (this.completedCallback)
 					this.completedCallback();
 			}).bind(this));
@@ -114,13 +134,15 @@ define(
 		 */
 		CinematicScreen.prototype.onShown = function() {
 			if (this.popcorn) this.popcorn.play();
-		}		
+			this.isPlaying = true;
+		}
 
 		/**
 		 * Start video when to be hidden
 		 */
 		CinematicScreen.prototype.onWillHide = function(cb) {
 			if (this.popcorn) this.popcorn.pause();
+			this.isPlaying = false;
 			cb();
 		}
 
