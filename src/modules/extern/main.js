@@ -101,6 +101,10 @@ require.config({
 			'name'		: 'feedback',
 			'location'	: 'extern/feedback/js',
 			'main'		: 'feedback'
+		},
+		{
+			'name'		: 'mathjax',
+			'location'	: 'extern/mathjax/js'
 		}
 	],
 

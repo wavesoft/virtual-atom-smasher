@@ -189,6 +189,10 @@
 		{
 			'name'		: 'google-tag-manager',
 			'location'	: 'extern/google-tag-manager/js'
+		},
+		{
+			'name'		: 'mathjax',
+			'location'	: 'extern/mathjax/js'
 		}
 
 	],

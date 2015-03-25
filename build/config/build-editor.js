@@ -137,6 +137,10 @@
 			'name'		: 'mustache',
 			'location'	: 'extern/mustache/js',
 			'main'		: 'mustache'
+		},
+		{
+			'name'		: 'mathjax',
+			'location'	: 'extern/mathjax/js'
 		}
 
 	],
