@@ -15,23 +15,23 @@
 					</tr>
 				</thead>
 				<tbody>
-					{{#histograms}}
+					{{#paper.observables}}
 					<tr>
-						<td class="col-10">
-							{{name}}
+						<td class="col-10 latex-field">
+							{{title}}
 						</td>
 						<td class="col-2">
 							{{fit}}
 						</td>
 					</tr>
-					{{/histograms}}
-					{{^histograms}}
+					{{/paper.observables}}
+					{{^paper.observables}}
 					<tr>
 						<td colspan="2" class="col-12 text-center">
 							(No histograms to display)
 						</td>
 					</tr>
-					{{/histograms}}
+					{{/paper.observables}}
 				</tbody>
 			</table>
 		</div>

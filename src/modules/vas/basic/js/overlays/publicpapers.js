@@ -2,8 +2,8 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry", "vas/core/base/view", "vas/core/user"
-	 "vas/basic/tpl/overlays/publicpapers.html"
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/view", "vas/core/user",
+	 "text!vas/basic/tpl/overlay/publicpapers.html"
 	],
 
 	/**
@@ -11,7 +11,7 @@ define(
 	 *
  	 * @exports vas-basic/overlay/publicpapers
 	 */
-	function(config, R, View, User, tplPublicpapers) {
+	function($, R, UI, View, User, tplPublicpapers) {
 
 		/**
 		 * The default tunable body class
@@ -70,7 +70,7 @@ define(
 		/**
 		 * Undefine paper and show papers screen
 		 */
-		PaperMachinePart.prototype.displayList = function( cb ) {
+		PublicPapers.prototype.displayList = function( cb ) {
 			// Undefine paper
 			this.paper = null;
 			this.setViewData('paper', false);
@@ -94,7 +94,7 @@ define(
 		/**
 		 * Define a paper and show it's screen
 		 */
-		PaperMachinePart.prototype.displayPaper = function( paper ) {
+		PublicPapers.prototype.displayPaper = function( paper ) {
 
 			// Get active paper if paper parameter is missing
 			if (!paper) {
@@ -126,7 +126,7 @@ define(
 		/**
 		 * Render view before show
 		 */
-		PaperMachinePart.prototype.reloadPapers = function( query, cb, transition ) {
+		PublicPapers.prototype.reloadPapers = function( query, cb, transition ) {
 
 			// Request papers
 			User.getPapers(query, (function(papers) {
@@ -145,7 +145,7 @@ define(
 		/**
 		 * Render before show
 		 */
-		PublicPapers.onWillShow = function(cb) {
+		PublicPapers.prototype.onWillShow = function(cb) {
 			this.displayList(cb);
 		}
 

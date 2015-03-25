@@ -91,6 +91,7 @@ define(
 	'vas/basic/overlays/questionaire',
 	'vas/basic/overlays/machinepart',
 	'vas/basic/overlays/jobstatus',
+	'vas/basic/overlays/publicpapers',
 
 	// Machine parts
 	'vas/basic/machineparts/describe',

@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	[ "jquery", "require", "vas/core/registry","vas/core/base/view", "vas/core/user",
+	[ "jquery", "require", "vas/core/registry", "vas/core/ui", "vas/core/base/view", "vas/core/user",
 	  "text!vas/basic/tpl/profileparts/papers.html" ], 
 
 	/**
@@ -10,7 +10,7 @@ define(
 	 *
  	 * @exports vas-basic/profileparts/papers
 	 */
-	function(config, require, R, View, User, tplBooks) {
+	function(config, require, R, UI, View, User, tplBooks) {
 
 		/**
 		 * The default tunable body class
@@ -23,6 +23,15 @@ define(
 			// Initialize view
 			hostDOM.addClass("profile-papers");
 			this.loadTemplate(tplBooks);
+
+			// Handle DO urls
+			this.handleDoURL('viewPapers', (function() {
+
+				// Show histograms overlay
+				UI.showOverlay("overlay.publicpapers", (function(com) {
+				}).bind(this));
+
+			}).bind(this));
 
 			// Render view
 			this.renderView();
