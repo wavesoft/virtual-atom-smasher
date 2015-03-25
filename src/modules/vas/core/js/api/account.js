@@ -230,6 +230,17 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get team details
+		 */
+		APIAccount.prototype.getUserTeamDetails = function( callback) {
+			// Query server
+			this.sendAction("team.details", {
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
 		 * Get an exam for the currently known books
 		 */
 		APIAccount.prototype.getBookExam = function(callback) {

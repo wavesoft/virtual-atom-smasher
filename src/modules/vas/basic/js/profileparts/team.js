@@ -33,6 +33,24 @@ define(
 		// Subclass from ObservableWidget
 		ProfileTeam.prototype = Object.create( View.prototype );
 
+		/**
+		 * Refresh team upon showing
+		 */
+		ProfileTeam.prototype.onWillShow = function(cb) {
+
+			User.getUserTeamDetails((function(team) {
+
+				// Update team details
+				this.setViewData('team', team);
+				this.renderView();
+
+				// Fire callback
+				cb();
+
+			}).bind(this));
+
+		}
+
 
 		// Store overlay component on registry
 		R.registerComponent( 'profilepart.team', ProfileTeam, 1 );

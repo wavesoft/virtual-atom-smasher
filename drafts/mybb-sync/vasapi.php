@@ -529,6 +529,11 @@ if (isset($_GET['term'])) {
 	// Redirect
 	header("Location: private.php?action=read&pmid=".$_GET['pm']);
 
+} else if (isset($_GET['profile'])) {
+
+	// Redirect
+	header("Location: member.php?action=profile&uid=".$_GET['profile']);
+
 
 } else if (isset($_GET['goto'])) {
 	$target = $_GET['goto'];

@@ -1,7 +1,7 @@
 <div class="content">
 	<div class="title">
-		<h1>Team</h1>
-		<div class="team-desc">{{{paper.body}}}</div>
+		<h1>{{team.name}}</h1>
+		<div class="team-desc">{{{team.description}}}</div>
 	</div>
 	<div class="enum team-body">
 		<div class="table-list table-scroll table-lg">
@@ -14,22 +14,22 @@
 					</tr>
 				</thead>
 				<tbody>
-					{{#members}}
-					<tr click="do:viewMember({{id}})">
+					{{#team.members}}
+					<tr>
 						<td class="col-8">
-							<span class="glyphicon glyphicon-user"></span> {{name}}
+							<a href="{{ vasapi }}&amp;profile={{id}}" target="_blank"><span class="glyphicon glyphicon-user"></span> {{name}}</a>
 						</td>
 						<td class="col-2 text-center">{{papers}}</td>
-						<td class="col-2 text-center">{{points}}</td>
+						<td class="col-2 text-center">{{totalPoints}}</td>
 					</tr>
-					{{/members}}
-					{{^members}}
+					{{/team.members}}
+					{{^team.members}}
 					<tr>
 						<td colspan="3" class="col-12 text-center">
 							(No members to display)
 						</td>
 					</tr>
-					{{/members}}
+					{{/team.members}}
 				</tbody>
 			</table>
 		</table>
@@ -38,9 +38,11 @@
 		<a class="button b-purple" href="{{vasapi}}&amp;goto=teamforum" target="_blank">
 			Forum
 		</a>
+		{{#team.is_moderator}}
 		<button type="button" class="b-purple" click="do:manageTeam()">
 			Manage
 		</button>
+		{{/team.is_moderator}}
 		<button type="button" class="b-red pull-right" click="do:changeTeam()">
 			<span class="glyphicon glyphicon-log-out"></span> Change
 		</button>

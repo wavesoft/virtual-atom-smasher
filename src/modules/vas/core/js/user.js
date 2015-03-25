@@ -542,6 +542,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Shorthand to get user team details
+		 */
+		User.prototype.getUserTeamDetails = function( callback ) {
+			// Get team details
+			this.accountIO.getUserTeamDetails( callback );
+		}
+
+		/**
 		 * Shorthand to update the current user's paper
 		 */
 		User.prototype.updateUserPaper = function( fields, callback ) {
