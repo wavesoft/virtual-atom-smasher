@@ -161,7 +161,7 @@ define(
 			// Request animation after timeout
 			setTimeout((function() {
 				requestAnimationFrame( this.animate.bind(this) );
-			}).bind(this), 30);
+			}).bind(this), 40);
 
 			// Render
 			this.render();

@@ -1,0 +1,99 @@
+<div>
+	<h1>Status of job <em class="f-red">#{{ job.id }}</em></h1>
+	<p></p>
+</div>
+<div>
+	<table class="split">
+		<tr>
+			<td class="align-top">
+
+				<!-- Job details -->
+				<table>
+					<tr>
+						<td colspan="2" class="text-left">
+							<h2 class="f-yellow">Job Details</h2>
+						</td>
+					</tr>
+					<tr>
+						<th class="text-right" style="width: 120px;">Submitted at:</th>
+						<td>{{ job.submitted }}</td>
+					</tr>
+					<tr>
+						<th class="text-right">Last update at:</th>
+						<td>{{ job.lastEvent }}</td>
+					</tr>
+					<tr>
+						<th class="text-right">Job status:</th>
+						<td>{{ job.status_str }}</td>
+					</tr>
+					<tr>
+						<th class="text-right">Total events:</th>
+						<td>{{ job.events }}</td>
+					</tr>
+					<tr>
+						<th class="text-right">Job queue name:</th>
+						<td>{{ job.group }}</td>
+					</tr>
+					<tr>
+						<th class="text-right">Updating paper:</th>
+						<td><a href="do:viewPaper({{ job.paper.id }})">{{ job.paper.title }}</a></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+										
+							<h2 class="f-yellow">Worker Nodes</h2>
+
+							<!-- Workers -->
+							<div class="table-list table-lg">
+								<table>
+									<thead>
+										<tr>
+											<th class="col-7">UUID</th>
+											<th class="col-3">Location</th>
+											<th class="col-2">Events</th>
+										</tr>
+									</thead>
+									<tbody>
+										{{#job.agents}}
+										<tr>
+											<td class="col-7">{{ uuid }}</td>
+											<td class="col-3"><a href="https://www.google.com/maps?q={{ latlng }}" target="_blank">See on map</a></td>
+											<td class="col-2">{{ activeJobEvents }}</td>
+										</tr>
+										{{/job.agents}}
+									</tbody>
+								</table>
+							</div>
+
+						</td>
+					</tr>
+				</table>
+
+			</td>
+			<td class="align-top">
+				<h2 class="f-yellow">Tune Values</h2>
+
+				<!-- Tunes -->
+				<div class="table-list">
+					<table>
+						<thead>
+							<tr>
+								<th class="col-8">Parameter</th>
+								<th class="col-4">Value</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#tunables}}
+							<tr>
+								<td class="col-8">{{ name }}</td>
+								<td class="col-4">{{ value }}</td>
+							</tr>
+							{{/tunables}}
+						</tbody>
+					</table>
+				</div>
+
+			</td>
+		</tr>
+	</table>
+</div>

@@ -238,6 +238,20 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		}
 
 		/**
+		 * Get details about the specified job
+		 */
+		APILabSocket.prototype.getJobDetails = function( jobid, callback ) {
+
+			// Submit a job request
+			this.sendAction("job.details", {
+				'jid': jobid
+			}, function(data) {
+				if (callback) callback(data['data']);
+			});
+
+		}
+
+		/**
 		 * This event is fired when the socket is connected.
 		 *
 		 * @event module:core/api/labsocket~APILabSocket#connected		

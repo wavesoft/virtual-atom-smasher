@@ -31,6 +31,7 @@ define(
 			this.rateRing = [];
 			this.listingTimer = 0;
 			this.maxEvents = 1000;
+			this.overlayComponent = null;
 
 			// Prepare host
 			hostDOM.addClass("jobs");
@@ -100,8 +101,10 @@ define(
 			this.btnView.click((function() {
 				if (this.lastHistograms) {
 					// Show histograms overlay
-					UI.showOverlay("overlay.histograms", (function(com) {
-					}).bind(this)).onHistogramsDefined( this.lastHistograms );
+					this.overlayComponent = UI.showOverlay("overlay.histograms", (function(com) {
+					}).bind(this));
+					// Update histograms
+					this.overlayComponent.onHistogramsDefined( this.lastHistograms );
 				}
 			}).bind(this));
 
@@ -167,7 +170,13 @@ define(
 					e.stopPropagation();
 					e.preventDefault();
 					// Show job details
-					
+					this.labapi.getJobDetails(job['id'], (function(details) {
+
+						// Show job details overlay
+						UI.showOverlay("overlay.jobstatus", (function(com) {
+						}).bind(this)).onJobDetailsUpdated( details );
+
+					}).bind(this));
 				}
 			})(job).bind(this));
 
@@ -253,6 +262,7 @@ define(
 			this.lastEvents = 0;
 			this.rateRing = [];
 			this.activeJob = null;
+			this.overlayComponent = null;
 
 		}
 
@@ -385,6 +395,12 @@ define(
 				this.lastHistograms = histos;
 				this.btnView.removeClass("disabled");
 				this.eStatusLabel.text("RUNNING");
+
+				// Update overlay component
+				if (this.overlayComponent) {
+					this.overlayComponent.onHistogramsDefined( histos );
+				}
+
 			}).bind(this));
 			this.labapi.on('metadataUpdated', (function(meta) {
 				var currNevts = parseInt(meta['nevts']),
