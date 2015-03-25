@@ -11,12 +11,12 @@
 						<td>{{ profile.points }}</td>
 					</tr>
 					<tr>
-						<th>Papers:</th>
-						<td>{{ profile.papers }}</td>
+						<th>Total Points:</th>
+						<td>{{ profile.totalPoints }}</td>
 					</tr>
 					<tr>
-						<th>Team:</th>
-						<td>{{ profile.team }}</td>
+						<th>Papers:</th>
+						<td>{{ profile.papers }}</td>
 					</tr>
 					<tr>
 						<th>E-Mail:</th>
@@ -33,16 +33,16 @@
 					<td>{{ profile.points }}</td>
 				</tr>
 				<tr>
+					<th>Total Points:</th>
+					<td>{{ profile.totalPoints }}</td>
+				</tr>
+				<tr>
 					<th>Papers:</th>
 					<td>{{ profile.papers }}</td>
 				</tr>
 				<tr>
 					<th>Team:</th>
 					<td>{{ profile.team }}</td>
-				</tr>
-				<tr>
-					<th>E-Mail:</th>
-					<td>{{ profile.email }}</td>
 				</tr>
 			</table>
 			{{/edit}}
@@ -59,15 +59,18 @@
 				</thead>
 				<tbody>
 					{{#messages}}
-					<tr click="do:viewPM({{id}})" class="f-orange">
-						<td class="col-10 text-center">{{ subject }}</td>
+					<tr class="f-orange">
+						<td class="col-10 text-left">
+							<span class="glyphicon glyphicon-envelope"></span>
+							<a href="{{ vasapi }}&amp;pm={{ id }}" target="_blank">{{ subject }}</a>
+						</td>
 						<td class="col-2 text-center">{{ from }}</td>
 					</tr>
 					{{/messages}}
 					{{^messages}}
 					<tr>
 						<td colspan="2" class="col-12 text-center">
-							(You have no private messages)
+							(You have no unread messages)
 						</td>
 					</tr>
 					{{/messages}}
@@ -76,9 +79,9 @@
 		</div>
 	</div>
 	<div class="footer footer-input">
-		<button type="button" class="b-purple" click="do:workQueue()">
+		<a class="button b-purple" href="{{ vasapi }}&amp;goto=compose" target="_blank">
 			Send PM
-		</button>
+		</a>
 		<button type="button" class="b-purple pull-right" click="do:editProfile()">
 			<span class="glyphicon glyphicon-pencil"></span>
 		</button>

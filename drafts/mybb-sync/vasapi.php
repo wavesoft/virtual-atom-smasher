@@ -524,13 +524,25 @@ if (isset($_GET['term'])) {
 
 	}
 
+} else if (isset($_GET['pm'])) {
+
+	// Redirect
+	header("Location: private.php?action=read&pmid=".$_GET['pm']);
+
+
 } else if (isset($_GET['goto'])) {
 	$target = $_GET['goto'];
+
 	if ($target == 'teamforum') {
 
 		// Go to team forum
 		$fid = get_or_create_team_forum( $details, FORUM_PARENT_TEAM, $mybb_group['gid'] );
 		header("Location: forumdisplay.php?fid=" . $fid );
+
+	} else if ($target == 'compose') {
+
+		// Compose a new PM
+		header("Location: private.php?action=send");
 
 	}
 

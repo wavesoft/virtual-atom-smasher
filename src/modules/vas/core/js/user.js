@@ -534,6 +534,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Shorthand to get the current user's private messages
+		 */
+		User.prototype.getUserMessages = function( callback ) {
+			// Get user messages
+			this.accountIO.getUserMessages( callback );
+		}
+
+		/**
 		 * Shorthand to update the current user's paper
 		 */
 		User.prototype.updateUserPaper = function( fields, callback ) {

@@ -92,6 +92,17 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get user messages
+		 */
+		APIAccount.prototype.getUserMessages = function( callback ) {
+			// Query server
+			this.sendAction("messages", {
+			}, function(data) {
+				if (data && callback) callback(data['messages']);
+			});
+		}
+
+		/**
 		 * Get tuning configuration for this user
 		 */
 		APIAccount.prototype.getTuningConfiguration = function(callback) {
