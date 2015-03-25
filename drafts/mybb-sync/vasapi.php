@@ -63,6 +63,25 @@ function get_forum_id( $t_name, $pid ) {
 }
 
 /**
+ * Get mybb user ID forum by user e-mail
+ */
+function get_user_by_username( $t_name ) {
+	global $db;
+
+	// Fetch the respective user information from the MyBB Database
+	$query = $db->simple_select("users", "uid", "username='" . $t_name . "'", array(
+	    "order_by" => 'uid',
+	    "order_dir" => 'DESC',
+	    "limit" => 1
+	));
+	$user_details = $db->fetch_array($query);
+
+	// Return forum ID or false on error
+	if (!$user_details) return false;
+	return $user_details['uid'];
+}
+
+/**
  * Get usergroup
  */
 function get_usergroup_byid( $g_id ) {
@@ -531,8 +550,14 @@ if (isset($_GET['term'])) {
 
 } else if (isset($_GET['profile'])) {
 
+	// Display the profile of the user with the specified username
+	$username = mysql_escape_string($_GET['profile']);
+
+	// Get user ID
+	$uid = get_user_by_username($username);
+
 	// Redirect
-	header("Location: member.php?action=profile&uid=".$_GET['profile']);
+	header("Location: member.php?action=profile&uid=".$uid);
 
 
 } else if (isset($_GET['goto'])) {
