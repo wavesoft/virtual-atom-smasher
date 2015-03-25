@@ -1,14 +1,14 @@
 define(
 
 	// Dependencies
-	["jquery", "dragdealer", "vas/core/registry", "vas/core/ui", "vas/core/base/tuning_components", "core/util/spinner", "core/analytics/analytics" ], 
+	["jquery", "dragdealer", "vas/core/registry", "vas/core/ui", "vas/core/user", "vas/core/base/tuning_components", "core/util/spinner", "core/analytics/analytics" ], 
 
 	/**
 	 * This is the default tunable widget component for the base interface.
 	 *
  	 * @exports base/components/tuning/tunable
 	 */
-	function($, Dragdealer, R, UI, TC, Spinner, Analytics) {
+	function($, Dragdealer, R, UI, User, TC, Spinner, Analytics) {
 
 		var DefaultTunableWidget = function(hostDOM) {
 
@@ -54,52 +54,13 @@ define(
 			this.dragdealer = null;
 
 			// Pop-up description of the element on hover
-			var hoverTimer = 0;
+			this.hoverTimer = 0;
 			this.elmTitle.mouseenter((function() {
-				clearTimeout(hoverTimer);
-				hoverTimer = setTimeout((function() {
-
-					// Show pop-up
-					UI.showPopup( 
-						"widget.onscreen", 
-						this.hostDOM,
-						(function(hostDOM) {
-
-							// Fire analytics event
-							Analytics.fireEvent("tuning.values.explain", {
-								'id': this.meta['name']
-							});
-
-							// Start analytics timer
-							Analytics.restartTimer("info-popup");
-
-							// Prepare the body
-							var comBody = R.instanceComponent("infoblock.tunable", hostDOM);
-							if (comBody) {
-
-								// Update infoblock 
-								comBody.onMetaUpdate( this.meta );
-								comBody.onUpdate( this.getValue() );
-
-								// Adopt events from infoblock as ours
-								this.adoptEvents( comBody );
-
-							} else {
-								console.warn("Could not instantiate tunable infoblock!");
-							}
-
-						}).bind(this),
-						{ 
-							'offset': $(this.hostDOM).width()/2+20,
-							'title' : this.meta['name']
-						}
-					);
-
-				}).bind(this), 250);
+				this.triggerPopup();
 			}).bind(this));
 			this.hostDOM.mouseleave((function() {
-				clearTimeout(hoverTimer);
-				hoverTimer = setTimeout((function() {
+				clearTimeout(this.hoverTimer);
+				this.hoverTimer = setTimeout((function() {
 					UI.hidePopup((function() {
 
 						// Fire analytics event
@@ -124,6 +85,62 @@ define(
 		////////////////////////////////////////////////////////////
 		//                    Helper Functions                    //
 		////////////////////////////////////////////////////////////
+
+		/**
+		 * Trigger the description pop-up
+		 */
+		DefaultTunableWidget.prototype.triggerPopup = function() {
+			clearTimeout(this.hoverTimer);
+			this.hoverTimer = setTimeout((function() {
+
+				// Show pop-up
+				UI.showPopup( 
+					"widget.onscreen", 
+					this.hostDOM,
+					(function(hostDOM) {
+
+						// Fire analytics event
+						Analytics.fireEvent("tuning.values.explain", {
+							'id': this.meta['name']
+						});
+
+						// Start analytics timer
+						Analytics.restartTimer("info-popup");
+
+						// Prepare the body
+						var comBody = R.instanceComponent("infoblock.tunable", hostDOM);
+						if (comBody) {
+
+							// Update infoblock 
+							comBody.onMetaUpdate( this.meta );
+							comBody.onUpdate( this.getValue() );
+
+							// Adopt events from infoblock as ours
+							this.adoptEvents( comBody );
+
+						} else {
+							console.warn("Could not instantiate tunable infoblock!");
+						}
+
+					}).bind(this),
+					{ 
+						'offset': $(this.hostDOM).width()/2+20,
+						'title' : this.meta['name']
+					}
+				);
+
+				// Remove highlight
+				if (this.hostDOM.hasClass("highlight")) {
+					// Mark first-time as seen
+					User.markFirstTimeAsSeen("tunable-desc."+this.meta['name']);
+					// Remove highlight
+					this.hostDOM.removeClass("highlight");
+				}
+
+
+			}).bind(this), 250);
+
+		}
 
 		/**
 		 * Handle a value update from the interface
@@ -393,6 +410,28 @@ define(
 
 			});	
 			this.dragdealer.setValue( this.value, 0 );
+
+			// If this is the first time we see such tunable,
+			// make hovering over it more obvious
+			if (!User.isFirstTimeSeen("tunable-desc."+this.meta['name'])) {
+
+				// Highlight this
+				this.hostDOM.addClass("highlight");
+
+				// Highlight only once
+				var highlightCb = (function() {
+
+					// Show trigger popup when highlighted
+					if (this.hostDOM.hasClass("highlight"))
+						this.triggerPopup();
+
+				}).bind(this);
+
+				// Register callback
+				this.hostDOM.on("mouseenter", highlightCb);
+
+			}
+
 		}
 
 		// Store tuning widget component on registry

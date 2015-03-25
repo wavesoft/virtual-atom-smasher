@@ -907,6 +907,10 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 */
 		User.prototype.markFirstTimeAsSeen = function(aid_id) {
 
+			// If already seen, don't do anything
+			if ((this.vars['first_time'] !== undefined) &&
+				(this.vars['first_time'][aid_id])) return;
+
 			// Update first_time aid status
 			this.vars['first_time'][aid_id] = 1;
 
