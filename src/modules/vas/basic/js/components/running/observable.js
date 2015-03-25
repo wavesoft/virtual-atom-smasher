@@ -113,7 +113,7 @@ define(
 					}).bind(this),
 					{ 
 						'offset': 50,
-						'title' : this.meta['name']
+						'title' : this.meta['title']
 					}
 				);				
 

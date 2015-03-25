@@ -9,7 +9,7 @@ define("mathjax", ['jquery'], function($) {
 	/**
 	 * Asynchronously load MathJax from CDN
 	 */
-	require("//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML", function() {
+	require(["//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"], function(dummy) {
 
 		// Configure MathJax Hub
 		MathJax.Hub.Config({

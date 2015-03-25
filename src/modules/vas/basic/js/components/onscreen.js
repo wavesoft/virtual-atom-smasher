@@ -1,7 +1,7 @@
 define(
 
 	// Dependencies
-	["jquery", "vas/core/registry","vas/core/base/components" ], 
+	["jquery", "mathjax", "vas/core/registry","vas/core/base/components" ], 
 
 	/**
 	 * This is the default onscreen pop-up component for the tunables and
@@ -9,7 +9,7 @@ define(
 	 *
  	 * @exports vas-basic/components/onscreen
 	 */
-	function(config, R, Components) {
+	function(config, MathJax, R, Components) {
 
 		var DefaultOnScreen = function(hostDOM) {
 
@@ -120,6 +120,11 @@ define(
 		 */
 		DefaultOnScreen.prototype.onWillShow = function(cb) {
 			if (!this.visible) {
+
+				// Typeset math
+				MathJax.typeset( this.hostDOM );
+
+				// Show
 				this.element.addClass("visible");
 				this.visible = true;
 			}

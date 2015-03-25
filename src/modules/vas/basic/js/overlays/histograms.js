@@ -2,14 +2,14 @@ define(
 
 	// Dependencies
 
-	["jquery", "sha1", "vas/core/registry","vas/core/base/component", "vas/core/apisocket", "vas/core/liveq/Calculate", "core/analytics/analytics"], 
+	["jquery", "mathjax", "sha1", "vas/core/registry","vas/core/base/component", "vas/core/apisocket", "vas/core/liveq/Calculate", "core/analytics/analytics"], 
 
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
  	 * @exports vas-basic/overlay/flash
 	 */
-	function(config, SHA1, R, Component, APISocket, Calculate, Analytics) {
+	function(config, MathJax, SHA1, R, Component, APISocket, Calculate, Analytics) {
 
 		/**
 		 * The default tunable body class
@@ -130,6 +130,10 @@ define(
 							.append($('<div class="status">'+status_msg+'</div>'))
 							.append($('<div class="detail"><div><strong>Events:</strong> ' + histos[j].data.nevts + '</div><div><strong>Error:</strong> ' + chi2fit[0].toFixed(2) + ' ± ' + chi2fit[1].toFixed(2) + '</div></div>'))
 							.appendTo(domDetails);
+
+
+						// (Re)typeset math
+						MathJax.typeset( domHisto );
 
 						// Show category
 						this.elmCategories[i].show();
