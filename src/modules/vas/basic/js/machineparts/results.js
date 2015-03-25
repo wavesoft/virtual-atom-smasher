@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	["jquery", "quill", "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/base/view", 
+	["jquery", "quill", "mathjax", "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/base/view", 
 	 "text!vas/basic/tpl/machine/results.html"], 
 
 	/**
@@ -10,7 +10,7 @@ define(
 	 *
  	 * @exports vas-basic/machineparts/results
 	 */
-	function(config, Quill, R, UI, DB, User, ViewComponent, tplContent) {
+	function(config, Quill, MathJax, R, UI, DB, User, ViewComponent, tplContent) {
 
 		/**
 		 * The default tunable body class
@@ -56,6 +56,11 @@ define(
 				// Set view data
 				this.setViewData('paper', paper);
 				this.renderView();
+
+				// Typeset math
+				MathJax.typeset( this.hostDOM );
+
+				// We are ready
 				cb();
 
 			}).bind(this));
