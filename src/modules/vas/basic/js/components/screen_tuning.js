@@ -481,7 +481,7 @@ define(
 					if (details['animation']) {
 
 						// Show the prompt once
-						UI.showOnce("course-" + details['animation'], (function(cbCompleted) {
+						if (!User.isFirstTimeSeen("course-" + details['animation'])) {
 
 							// Ask user if he/she wants to take the intro tutorial
 							UI.showFlashPrompt(
@@ -491,10 +491,10 @@ define(
 									{ 
 										"label"    : "Yes, show it!",
 									  	"callback" : (function(){
+											// Mark introduction sequence as shown
+											User.markFirstTimeAsSeen("course-" + details['animation']);
 									  		// Trigger the course display
 									  		this.trigger("showCourse", details['animation']);
-											// Mark introduction sequence as shown
-											cbCompleted();
 										}).bind(this)
 									},
 									{
@@ -502,7 +502,7 @@ define(
 										"class"    : "btn-darkblue",
 										"callback" : (function(){
 											// Mark introduction sequence as shown
-											cbCompleted();
+											User.markFirstTimeAsSeen("course-" + details['animation']);
 											// Show the first-time aid of the course
 											UI.showFirstTimeAid("tuning.machinepart.course");
 											// We can now show first-time aids on the machine part
@@ -513,7 +513,10 @@ define(
 								"flash-icons/course.png"
 							);
 
-						}).bind(this));
+						} else {
+							// We can now show first-time aids on the machine part
+							this.machinePartComponent.onShowFirstTimeAids();
+						}
 
 					} else {
 						// We can now show first-time aids on the machine part

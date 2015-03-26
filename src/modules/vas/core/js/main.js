@@ -81,10 +81,11 @@ define("vas/core",
 					// Ask user if he/she wants to take the intro tutorial
 					UI.showFlashPrompt(
 						"Welcome to V.A.S.", 
-						"Is this your first time you see the Virtual Atom Smasher game?", 
+						"Is this your first time you join the Virtual Atom Smasher game?", 
 						[
 							{ 
 								"label"    : "Yes, guide me!",
+								"class"    : "btn-yellow",
 							  	"callback" : function(){
 									// Display the intro sequence
 									UI.displaySequence( DB.cache['definitions']['intro-sequence']['sequence'] , function() {

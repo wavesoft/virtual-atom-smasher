@@ -18,7 +18,7 @@ define(
 
 			// Get element and create canvas
 			this.elmDom = elmDom;
-			this.canvas = $('<canvas></canvas>').insertBefore(this.elmDom);
+			this.canvas = $('<canvas></canvas>').appendTo(this.elmDom);
 
 			// Canvas width
 			this.canvasBorder = 2;
@@ -26,8 +26,8 @@ define(
 			this.canvasSz = this.canvasSz = $(elmDom).width() + (this.canvasBorder+this.canvasOffset)*2;
 
 			// Resize canvas
-			this.canvas.attr("width", this.canvasSz);
-			this.canvas.attr("height", this.canvasSz);
+			this.canvas.attr("width", this.canvasSz+2);
+			this.canvas.attr("height", this.canvasSz+2);
 
 			// Get context
 			this.context = this.canvas[0].getContext("2d");
@@ -39,17 +39,6 @@ define(
 			// Render
 			this.render();
 
-		}
-
-		/**
-		 * Realign canvas on element
-		 */
-		MachineComponentProgress.prototype.realign = function() {
-			var elmPos = $(this.elmDom).position();
-			this.canvas.css({
-				'left': elmPos.left - this.canvasBorder - this.canvasOffset,
-				'top' : elmPos.top  - this.canvasBorder - this.canvasOffset
-			});
 		}
 
 		/**
@@ -97,6 +86,10 @@ define(
  
 			// The enabled machine parts
 			this.enabledMachineParts = {};
+
+			// Animation timers
+			this.animationTimer = 0;
+			this.animationCompleted = 0;
 
 			// Handle mouse movement
 			this.mouseX = 0;
@@ -305,7 +298,6 @@ define(
 			// Realign progress components
 			if (realignCounters) {
 				for (k in this.progressCounters) {
-					this.progressCounters[k].realign();
 					this.progressCounters[k].render();
 				}
 			}
@@ -336,7 +328,6 @@ define(
 			this.realignMachine(true);
 			UI.showFirstTimeAid("machine.first-topic");
 		}
-
 
 		// Register machine backdrop screen
 		R.registerComponent( "backdrop.machine", MachineBackdrop, 1 );

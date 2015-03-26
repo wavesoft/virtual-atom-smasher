@@ -212,11 +212,14 @@ define(
 			// We can show first time aids
 			this.canShowFirstTimeAids = true;
 
-			// Show my first-time aids
-			UI.showAllFirstTimeAids("machinepart.tab.");
-
-			// Fire this on the active component
-			this.components[ this.lastFocusedTab ].onShowFirstTimeAids();
+			// If we can show first-time aids, show them now
+			if (this.visible) {
+				// Show my first-time aids
+				UI.showAllFirstTimeAids("machinepart.tab.");
+				// SHow first-time aids on the active tab
+				this.components[ this.lastFocusedTab ].onShowFirstTimeAids();
+			}
+			
 		}
 
 		/**
@@ -287,6 +290,14 @@ define(
 			});
 
 			this.visible = true;
+
+			// If we can show first-time aids, show them now
+			if (this.showFirstTimeAid) {
+				// Show my first-time aids
+				UI.showAllFirstTimeAids("machinepart.tab.");
+				// SHow first-time aids on the active tab
+				this.components[ this.lastFocusedTab ].onShowFirstTimeAids();
+			}
 		}
 
 		/**

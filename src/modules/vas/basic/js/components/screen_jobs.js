@@ -253,7 +253,7 @@ define(
 			// Reset status messages
 			this.eStatusLabel.text("---");
 			this.statusMachinesValue.text("0");
-			this.statusEventsValue.text("0");
+			this.statusEventsValue.text("in a sec");
 			this.statusProgressValue.text("0 %");
 
 			// Reset properties

@@ -728,7 +728,8 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			// Transition current screen and blank
 			UI.activeOverlayComponent.onWillHide(function() {
 				pageTransition( UI.activeOverlayComponent.hostDOM, UI.blankOverlayScreen, transition, function() {
-					UI.activeOverlayComponent.onHidden();
+					if (UI.activeOverlayComponent)
+						UI.activeOverlayComponent.onHidden();
 					
 					// Reset overlay
 					UI.activeOverlayComponent.hostDOM.remove();

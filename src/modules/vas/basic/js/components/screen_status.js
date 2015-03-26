@@ -30,6 +30,7 @@ define(
 			this.buttonDOMs = [];
 			this.components = [];
 			this.focusedPaper = 0;
+			this.rendered = false;
 
 			// Register page parts
 			var components = [
@@ -79,6 +80,17 @@ define(
 						}
 					})(this.buttonDOMs.length).bind(this));
 
+					// Focus paper when clicking on content
+					paper.click((function( paper_id ) {
+						return function(e) {
+							if (this.focusedPaper != paper_id) {
+								e.preventDefault();
+								e.stopPropagation();
+								this.focusPaper( paper_id );
+							}
+						}
+					})(i).bind(this));
+
 					// Store on paper DOMs
 					this.buttonDOMs.push(btn);
 					this.paperDOMs.push(paper);
@@ -90,7 +102,7 @@ define(
 						this.select(".buttons-left").append(btn);
 					} else {
 						this.select(".buttons-right").append(btn);
-					}
+					}					
 
 				}
 		
@@ -145,7 +157,16 @@ define(
 		StatusScreen.prototype.onWillShow = function(cb) {
 
 			// Render view before showing
-			this.renderView();
+			if (!this.rendered) {
+				this.rendered = true;
+
+				// Render and pre-cache view
+				this.renderView();
+				for (var i=0; i<this.components.length; i++) {
+					this.components[i].show();
+				}
+
+			}
 			cb();
 
 		}

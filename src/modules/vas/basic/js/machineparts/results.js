@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	["jquery", "quill", "mathjax", "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/base/view", 
+	["jquery", "quill", "mathjax", "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/apisocket", "vas/core/base/view", 
 	 "text!vas/basic/tpl/machine/results.html"], 
 
 	/**
@@ -10,7 +10,7 @@ define(
 	 *
  	 * @exports vas-basic/machineparts/results
 	 */
-	function(config, Quill, MathJax, R, UI, DB, User, ViewComponent, tplContent) {
+	function(config, Quill, MathJax, R, UI, DB, User, APISocket, ViewComponent, tplContent) {
 
 		/**
 		 * The default tunable body class
@@ -19,14 +19,14 @@ define(
 
 			// Initialize widget
 			ViewComponent.call(this, hostDOM);
-			hostDOM.addClass("machinepart-results")
+			hostDOM.addClass("machinepart-results");
 
 			// Load template
 			this.loadTemplate( tplContent );
 
 			// Handle DO URLs
-			this.handleDoURL('viewHistograms', (function() {
-
+			this.handleDoURL('viewHistograms', (function(job_id) {
+				this.showResults( job_id );
 			}).bind(this));
 
 		};
@@ -100,6 +100,24 @@ define(
 		 */
 		ResultsMachinePart.prototype.onShowFirstTimeAids = function() {	
 			UI.showAllFirstTimeAids("machinepart.tabcontent.results");
+		}
+
+		/**
+		 * Show the results of the specified job
+		 */
+		ResultsMachinePart.prototype.showResults = function(job_id) {
+			// Open/Resume labSocket
+			var lab = APISocket.openLabsocket();
+			lab.on('histogramsUpdated', (function(histos) {
+
+				// Show histograms overlay
+				UI.showOverlay("overlay.histograms", (function(com) {
+				}).bind(this)).onHistogramsDefined( histos );
+
+			}).bind(this));
+
+			// Request results
+			lab.getJobResults( job_id );
 		}
 
 

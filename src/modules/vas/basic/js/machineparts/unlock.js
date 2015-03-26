@@ -33,21 +33,25 @@ define(
 			}).bind(this));
 
 			// Register visual aids
-			this.select("ul li:not(.header):first-child", function(elm) {
+			this.select("ul li:not(.header)", function(elm) {
 				if (elm.length == 0) return;
-				R.registerVisualAid("machinepart.tabcontent.unlock.first", elm);
+				R.registerVisualAid("machinepart.tabcontent.unlock.first", elm.first());
 			});
-			this.select("ul li.unlocked:first-child", function(elm) {
+			this.select("ul li.unlocked", function(elm) {
 				if (elm.length == 0) return;
-				R.registerVisualAid("machinepart.tabcontent.unlock.unlocked", elm);
+				R.registerVisualAid("machinepart.tabcontent.unlock.unlocked", elm.first());
 			});
-			this.select("ul li.unlockable:first-child", function(elm) {
+			this.select("ul li.unlockable:not(.no-credit)", function(elm) {
 				if (elm.length == 0) return;
-				R.registerVisualAid("machinepart.tabcontent.unlock.unlockable", elm);
+				R.registerVisualAid("machinepart.tabcontent.unlock.unlockable", elm.first());
 			});
-			this.select("ul li.locked:first-child", function(elm) {
+			this.select("ul li.locked", function(elm) {
 				if (elm.length == 0) return;
-				R.registerVisualAid("machinepart.tabcontent.unlock.locked", elm);
+				R.registerVisualAid("machinepart.tabcontent.unlock.locked", elm.first());
+			});
+			this.select("ul li.unlockable.no-credit", function(elm) {
+				if (elm.length == 0) return;
+				R.registerVisualAid("machinepart.tabcontent.unlock.nocredit", elm.first());
 			});
 
 		};

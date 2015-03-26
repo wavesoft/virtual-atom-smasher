@@ -28,7 +28,7 @@ define({
 	 * API to LiveQ
 	 */
 	'core' : {
-		'socket_url' :  ((window.location.protocol=="https:") ? 'wss:' : 'wss:') + '//test4theory.cern.ch/vas/game/apisocket'
+		'socket_url' :  ((window.location.protocol=="https:") ? 'wss:' : 'ws:') + '//test4theory.cern.ch/vas/game/apisocket'
 	},
 
 	/**
