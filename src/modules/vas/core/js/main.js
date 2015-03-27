@@ -212,7 +212,11 @@ define("vas/core",
 
 			// Listen to global user events
 			User.on('notification', function(message, type) {
-				UI.growl(message, 5000, type || "success")
+				if (type == "critical") {
+					UI.growl(message, 0, "alert")
+				} else {
+					UI.growl(message, 5000, type || "success")
+				}
 			});
 			User.on('flash', function(title,body,icon) {
 				UI.showFlash(title, body, icon);

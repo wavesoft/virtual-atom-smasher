@@ -115,7 +115,7 @@ define(
 			// Prepare list
 			this.eListHost = $('<div class="table-list table-absolute table-scroll table-lg"></div>').appendTo(hostDOM);
 			this.eListTable = $('<table></table>').appendTo(this.eListHost);
-			this.eListHeader = $('<thead><tr><th class="col-6">Date</th><th class="col-3">Status</th><th class="col-3">Actions</th></tr></thead>').appendTo(this.eListTable);
+			this.eListHeader = $('<thead><tr><th class="col-3 text-center">Job</th><th class="col-4 text-center">Status</th><th class="col-3 text-center">Events</th><th class="col-2 text-center">View</th></tr></thead>').appendTo(this.eListTable);
 			this.eListBody = $('<tbody></tbody>').appendTo(this.eListTable);
 
 			// Prepare the progress status label
@@ -141,9 +141,10 @@ define(
 			var jobStatus = ['Submitted', 'Running', 'Completed', 'Failed', 'Cancelled', 'Stalled'];
 
 			var row = $('<tr class="joblist-id-'+job['id']+'"></tr>'),
-				c1 = $('<td class="col-6"><span class="glyphicon glyphicon-edit"></span> ' + job['submitted'] + '</td>').appendTo(row),
-				c2 = $('<td class="col-3">' + jobStatus[job['status']] + '</td>').appendTo(row),
-				c3 = $('<td class="col-3 text-right"></td>').appendTo(row)
+				c1 = $('<td class="col-3 text-center"><span class="glyphicon glyphicon-edit"></span> Job #' + job['id'] + '</td>').appendTo(row),
+				c2 = $('<td class="col-4 text-center">' + jobStatus[job['status']] + '</td>').appendTo(row),
+				c2 = $('<td class="col-3 text-center">' + job['events'] + '</td>').appendTo(row),
+				c3 = $('<td class="col-2 text-center"></td>').appendTo(row)
 				b1 = $('<button class="btn-shaded btn-yellow"><span class="glyphicon glyphicon-eye-open"></span></button>').appendTo(c3);
 
 			// Check if selected
@@ -470,6 +471,11 @@ define(
 			}).bind(this));
 			this.labapi.on('jobRemoved', (function(job) {
 				this.removeJob(job);
+			}).bind(this));
+
+			// When job is completed, reset interface
+			this.labapi.on('runCompleted', (function() {
+				this.resetInterface();
 			}).bind(this));
 
 			// When job details arrive focus

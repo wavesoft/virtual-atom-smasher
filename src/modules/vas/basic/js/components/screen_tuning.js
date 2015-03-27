@@ -160,6 +160,9 @@ define(
 			}).bind(this));
 			this.tuningPanel.on('valueChanged', (function(toValue, fromValue, meta) {
 
+				// Update value
+				this.values[meta['name']] = toValue;
+
 				// Forward to machine part
 				this.machinePartComponent.onTuningValueChanged( meta['name'], toValue );
 
