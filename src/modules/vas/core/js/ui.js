@@ -593,16 +593,43 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				var close_handler = function() {
 					s.off('close', close_handler);
 					UI.hideOverlay();
+					// Unblock sequencer
+					Sequencer.unblock();
 				};
 				s.on('close', close_handler);
 
 			}
+
+			// Block sequencer to prohibit interactions
+			Sequencer.block();
 
 			// If we have a previous overlay screen, hide it
 			UI.hideOverlay(doShowOverlay);
 
 			// Return component instance
 			return s;
+
+		}
+
+		/**
+		 * Schedule a showFlash execution
+		 *
+		 * This function will fire a showFlash in a manner that won't block
+		 * the current UI state. 
+		 *
+		 * @param {string} title - The name of the module to focus.
+		 * @param {string} text - The text in the window.
+		 * @param {string} icon - The icon message
+		 * @param {array} transition - The transition definition (defaults to UI.Transitions.ZOOM_IN)
+		 * @param {function} cb_close - The callback to fire when the message is dismissed
+		 *
+		 */
+		UI.scheduleFlash = function(title, text, icon, transition, cb_close) {
+
+			// Put on sqeuencer
+			Sequencer.schedule((function() {
+				this.showFlash(title, text, icon, transition, cb_close);
+			}).bind(this));
 
 		}
 
@@ -645,6 +672,29 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				com.on('close', close_handler);
 
 			});
+
+		}
+
+		/**
+		 * Schedule a showFlashPrompt execution
+		 *
+		 * This function will fire a showFlashPrompt in a manner that won't block
+		 * the current UI state. 
+		 *
+		 * @param {string} title - The name of the module to focus.
+		 * @param {string} text - The text in the window.
+		 * @param {string} options - The options to display, as an array of [{label:"", callback:function()}]
+		 * @param {string} icon - The icon message
+		 * @param {array} transition - The transition definition (defaults to UI.Transitions.ZOOM_IN)
+		 * @param {function} cb_close - The callback to fire when the message is dismissed
+		 *
+		 */
+		UI.scheduleFlashPrompt = function(title, text, options, icon, transition, cb_close) {
+
+			// Put on sqeuencer
+			Sequencer.schedule((function() {
+				this.showFlashPrompt(title, text, options, icon, transition, cb_close);
+			}).bind(this));
 
 		}
 
@@ -1256,6 +1306,24 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		}
 
 		/**
+		 * Schedule a showTutorial execution
+		 *
+		 * This function will fire a showTutorial in a manner that won't block
+		 * the current UI state. 
+		 *
+		 * @param {objects|string} sequence - The animation sequence to present or the ID of the tutorial to fetch from the database.
+		 * @param {function} cb_completed - The callback to fire when the tutorial has started
+		 */
+		UI.scheduleTutorial = function( sequence, cb_completed ) {
+
+			// Put on sqeuencer
+			Sequencer.schedule((function() {
+				this.showTutorial(sequence, cb_completed);
+			}).bind(this));
+
+		}
+
+		/**
 		 * Show an agent and start the specified tutorial sequence.
 		 *
 		 * @example <caption>Sample animation sequence</caption>
@@ -1298,9 +1366,13 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				// TODO: Unhack this
 				UI.host.removeClass("fx-blur");
 
-				// Fire callback when completed
-				if (cb_completed)
-					UI.visualAgent.onOnce("completed", cb_completed);
+				// Handle completed event
+				UI.visualAgent.onOnce("completed", function() {
+					// Fire callback when completed
+					if (cb_completed) cb_completed();
+					// Unblock sequencer
+					Sequencer.unblock();
+				});
 
 				// Fire analytics
 				Analytics.restartTimer("ui.tutorial");
@@ -1312,6 +1384,9 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 			// Asynchronous callback for preparing the elements
 			var __prepareTutorial = function( sequence ) {
+
+				// Block sequencer
+				Sequencer.block();
 
 				// We have an active tutorial
 				tutorialActive = true;
@@ -1327,9 +1402,10 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 					var vc = 2;
 
 					// Fade-in & initialize in the same time
-					UI.visualAgentDOM.show();
-					UI.overlayDOM.fadeIn(500, function() { if (--vc==0) __startTutorial(); } );
-					UI.visualAgent.onSequenceDefined( sequence, function() { if (--vc==0) __startTutorial(); } );
+					UI.visualAgentDOM.show(function() {
+						UI.overlayDOM.fadeIn(500, function() { if (--vc==0) __startTutorial(); } );
+						UI.visualAgent.onSequenceDefined( sequence, function() { if (--vc==0) __startTutorial(); } );
+					});
 
 				});
 
@@ -1658,6 +1734,24 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		}
 
 		/**
+		 * Schedule a displaySequence execution
+		 *
+		 * This function will fire a displaySequence in a manner that won't block
+		 * the current UI state. 
+		 *
+		 * @param {array} sequences - The configuration of the sequences
+		 * @param {function} callback - The callback function to be fired when the sequence is completed
+		 */
+		UI.scheduleSequence = function( sequences, callback ) {
+
+			// Put on sqeuencer
+			Sequencer.schedule((function() {
+				this.displaySequence(sequences, callback);
+			}).bind(this));
+
+		}
+
+		/**
 		 * Display a configurable sequence of screens
 		 *
 		 * Each screen should trigger the event 'sequence' when it's completed,
@@ -1707,6 +1801,8 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 							if ((routing_table[key] == undefined) || (routing_table[key] < 0)) {
 								// We are completed
 								if (callback) callback();
+								// Unblock sequencer
+								Sequencer.unblock();								
 							} else {
 								// Apply routing
 								var index = routing_table[key];
@@ -1727,6 +1823,8 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 						scr.off('sequence.exit');
 						scr.on('sequence.exit', function(key) {
 							if (callback) callback();
+							// Unblock sequencer
+							Sequencer.unblock();								
 						});
 
 					});
@@ -1740,6 +1838,9 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 					sequenceContinueFn();
 
 			};
+
+			// Block sequencer to prohibit interactions
+			Sequencer.block();
 
 			// Start with the first sequence
 			handeSequence();

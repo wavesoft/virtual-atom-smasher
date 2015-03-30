@@ -6,7 +6,10 @@ require.config({
 	packages: [
 		"core/db",
 		"core/util",
-		"core/analytics",
+		{
+			'name' 	: 'core/analytics',
+			'main'	: 'analytics'
+		},
 		"core/ui",
 	]
 

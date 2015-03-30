@@ -75,6 +75,8 @@ define(
 			this.activeAid = false;
 			this.lastAid = false;
 			this.lastSeed = Math.random();
+			this.boundCallback = null;
+			this.stopped = false;
 
 			// Prepare host dom
 			this.hostDOM.addClass("tvhead");
@@ -86,7 +88,6 @@ define(
 			// Add skip button
 			this.skipBtn = $('<a class="navbtn-skip">Skip <span class="glyphicon glyphicon-menu-right"></span></a>').appendTo(this.hostDOM.parent());
 			this.skipBtn.click((function() {
-				this.onStop();
 				this.trigger('completed');
 			}).bind(this));
 
@@ -95,9 +96,27 @@ define(
 
 
 		/**
+		 * Reset in order to prepare for new animation
+		 */
+		VisualAgent.prototype.reset = function() {
+
+			// If we are already reset, do nothing
+			if (!this.eExplainPopcorn) return;
+
+			// Remove listeners & release popcorn instance
+			this.eExplainPopcorn.off('ended', this.boundCallback);
+			this.eExplainPopcorn = undefined;
+
+			// Empty tvhead
+			this.tvHead.empty();
+
+		}
+
+		/**
 		 * Aligh with the visual aid
 		 */
 		VisualAgent.prototype.realign = function( aid ) {
+
 			this.activeAid = aid;
 
 			// Reset fancy classes
@@ -205,6 +224,9 @@ define(
 		 */
 		VisualAgent.prototype.onSequenceDefined = function(sequence, cb) {
 
+			// We are not stopped
+			this.stopped = false;
+
 			// Validate sequence structure
 			if (!sequence) {
 				console.error("TVhead: Invalid sequence specified");
@@ -271,9 +293,10 @@ define(
 			}
 
 			// Bind to ended event
-			this.eExplainPopcorn.on('ended', (function() {
+			this.boundCallback = (function() {
 				this.trigger('completed');
-			}).bind(this));
+			}).bind(this);
+			this.eExplainPopcorn.on('ended', this.boundCallback);
 
 		}
 
@@ -282,9 +305,12 @@ define(
 		 */
 		VisualAgent.prototype.onStart = function() {
 
+			// If we are stopped, exit
+			if (this.stopped) return;
 
 			// Start the video
-			this.eExplainPopcorn.play();
+			if (this.eExplainPopcorn)
+				this.eExplainPopcorn.play();
 
 		};
 
@@ -294,8 +320,16 @@ define(
 		 */
 		VisualAgent.prototype.onStop = function() {
 
+			// We are now stopped
+			if (this.stopped) return;
+			this.stopped = true;
+
 			// Stop the video
-			this.eExplainPopcorn.pause();
+			if (this.eExplainPopcorn)
+				this.eExplainPopcorn.pause();
+
+			// Reset video
+			this.reset();
 
 		};
 
@@ -322,6 +356,7 @@ define(
 		 * The host element has changed dimentions
 		 */
 		TVhead.prototype.onResize = function( width, height ) {
+
 			this.width = width;
 			this.height = height;
 

@@ -79,7 +79,7 @@ define("vas/core",
 			if (!User.isFirstTimeSeen("intro")) {
 
 					// Ask user if he/she wants to take the intro tutorial
-					UI.showFlashPrompt(
+					UI.scheduleFlashPrompt(
 						"Welcome to V.A.S.", 
 						"Is this your first time you join the Virtual Atom Smasher game?", 
 						[
@@ -88,7 +88,7 @@ define("vas/core",
 								"class"    : "btn-yellow",
 							  	"callback" : function(){
 									// Display the intro sequence
-									UI.displaySequence( DB.cache['definitions']['intro-sequence']['sequence'] , function() {
+									UI.scheduleSequence( DB.cache['definitions']['intro-sequence']['sequence'] , function() {
 										// Mark introduction sequence as shown
 										User.markFirstTimeAsSeen("intro");
 
@@ -219,7 +219,7 @@ define("vas/core",
 				}
 			});
 			User.on('flash', function(title,body,icon) {
-				UI.showFlash(title, body, icon);
+				UI.scheduleFlash(title, body, icon);
 			});
 
 
@@ -249,7 +249,7 @@ define("vas/core",
 					APISocket.on('notification', function(evDetails) {
 						if (evDetails['type'] == "flash") {
 							// Flash goes to flash
-							UI.showFlash(
+							UI.scheduleFlash(
 								evDetails['title'],
 								evDetails['message'],
 								evDetails['icon']
@@ -261,6 +261,17 @@ define("vas/core",
 								msg = "<strong>"+evDetails['title']+":</strong> " + msg;
 							UI.growl(msg, evDetails['type'])
 						}
+					});
+
+					// Handle commands
+					APISocket.on('command', function(cmdDetails) {
+
+						// Display a tutorial
+						if (cmdDetails['type'] == "tutorial") {
+							// Schedule tutorial
+							UI.scheduleTutorial( cmdDetails['name'] );
+						}
+						
 					});
 
 					// Connect to core socket
@@ -455,7 +466,7 @@ define("vas/core",
 						VAS.displayJobs();
 					});
 					scrHome.on('flash', function(title,body,icon) {
-						UI.showFlash(title, body, icon);
+						UI.scheduleFlash(title, body, icon);
 					});
 
 					// Fire the basic state change events
@@ -553,7 +564,7 @@ define("vas/core",
 							if (knowlegeDetails) {
 
 								// Show flash banner
-								UI.showFlash(
+								UI.scheduleFlash(
 									'Knowledge expanded',
 									'You have just expanded your knowlege and unlocked the topic <em>'+knowlegeDetails['title']+'</em>',
 									'/flash-icons/books.png'
@@ -584,7 +595,7 @@ define("vas/core",
 						});
 					});
 					scrKnowledge.on('flash', function(title,body,icon) {
-						UI.showFlash(title, body, icon);
+						UI.scheduleFlash(title, body, icon);
 					});
 					scrKnowledge.on('course', function(name) {
 						VAS.displayCourse(name, function() {
@@ -639,7 +650,7 @@ define("vas/core",
 
 					});
 					scrTuning.on('flash', function(title,body,icon) {
-						UI.showFlash(title, body, icon);
+						UI.scheduleFlash(title, body, icon);
 					});
 					scrTuning.on('displayStatus', function() {
 						VAS.displayStatus();

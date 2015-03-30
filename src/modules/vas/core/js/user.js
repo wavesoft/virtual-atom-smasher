@@ -186,11 +186,23 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 */
 		User.prototype.triggerStateChange = function( fromState, toState ) {
 
-			// Fire all config callbacks
-			var cfg = this.state['config'] || [];
+			// Get from/to state change
+			var fromCfg = toState['config'] || [],
+				toCfg = fromState['config'] || [];
+
+			// Handle changes
 			for (var i=0; i<this.accountConfigCallbacks.length; i++) {
-				var cb = this.accountConfigCallbacks[i];
-				cb.callback( cfg.indexOf(cb.name) >= 0 );
+
+				// Detect switches
+				var cb = this.accountConfigCallbacks[i],
+					wasFrom = (fromCfg.indexOf(cb.name) >= 0),
+					isTo    = (toCfg.indexOf(cb.name) >= 0);
+
+				// Handle switches
+				if (wasFrom != isTo) {
+					cb.callback( isTo );
+				}
+
 			}
 
 		}

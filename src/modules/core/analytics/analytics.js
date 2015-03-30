@@ -90,6 +90,7 @@ define(["core/analytics/transaction"],
 			if (!this.enabled || this.expired) return;
 
 			// Append globals
+			if (!data) data={};
 			for (k in this.globals)
 				data[k] = this.globals[k];
 
@@ -100,7 +101,6 @@ define(["core/analytics/transaction"],
 			if (this.expired) return;
 
 			// Forward or stack it
-			if (!data) data=[];
 			if (this.enabled) {
 				this.send(eventName, data);
 			} else {

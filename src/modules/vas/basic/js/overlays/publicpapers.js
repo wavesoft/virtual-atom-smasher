@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/view", "vas/core/user",
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/view", "vas/core/user", "core/analytics",
 	 "text!vas/basic/tpl/overlay/publicpapers.html"
 	],
 
@@ -11,7 +11,7 @@ define(
 	 *
  	 * @exports vas-basic/overlay/publicpapers
 	 */
-	function($, R, UI, View, User, tplPublicpapers) {
+	function($, R, UI, View, User, Analytics, tplPublicpapers) {
 
 		/**
 		 * The default tunable body class

@@ -278,7 +278,11 @@ define(
 
 			// Handle some priority messages
 			if (action == "ui.notification") {
+				// A server-triggered notification
 				this.trigger('notification', parameters);
+			} else if (action == "ui.command") {
+				// A server-triggered command
+				this.trigger('command', parameters);
 			}
 
 			// Check if we have a domain handler

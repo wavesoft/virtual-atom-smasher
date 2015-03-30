@@ -268,7 +268,7 @@ define(
 			this.btnHelp = $('<button class="btn-help btn-shaded btn-teal btn-with-icon"><span class="glyphicon glyphicon-bookmark"></span><br />Help</button>').appendTo(this.hostDOM);
 			this.btnHelp.click((function() {
 				//this.descFrame.toggleClass("visible");
-				UI.showTutorial("ui.tuning");
+				UI.scheduleTutorial("ui.tuning");
 			}).bind(this));
 
 			// ---------------------------------
@@ -391,7 +391,7 @@ define(
 
 				// Check if user has not seen the tuning part tutorial
 				if (!User.isFirstTimeSeen("tuning.firsttunable")) {
-					UI.showTutorial("ui.tuning.firsttunable", function() {
+					UI.scheduleTutorial("ui.tuning.firsttunable", function() {
 						User.markFirstTimeAsSeen("tuning.firsttunable");
 					});
 				}
@@ -487,7 +487,7 @@ define(
 						if (!User.isFirstTimeSeen("course-" + details['animation'])) {
 
 							// Ask user if he/she wants to take the intro tutorial
-							UI.showFlashPrompt(
+							UI.scheduleFlashPrompt(
 								details['title'], 
 								"Would you like to see a short course explaining this part?", 
 								[
@@ -529,7 +529,7 @@ define(
 
 				// Check if user has not seen the machine part tutorial
 				if (!User.isFirstTimeSeen("tuning.machinepart")) {
-					UI.showTutorial("ui.tuning.machinepart", function() {
+					UI.scheduleTutorial("ui.tuning.machinepart", function() {
 						User.markFirstTimeAsSeen("tuning.machinepart");
 						_showMachineAnimation();
 					});
@@ -627,17 +627,21 @@ define(
 		 */
 		TuningScreen.prototype.estimateResults = function() {
 
-			// Submit for interpolation
-			this.lab.estimateJob( this.values, this.observables );
-
-			// Save user values
-			this.snapshotMarkers();
-
 			// Commit estimate transaction
 			Analytics.fireEvent("tuning.values.will_estimate", {
 				"id": this.getTuneID(),
 				"time": Analytics.restartTimer("tuning")
 			});
+
+			// Forward event
+			User.triggerEvent("tuning.values.estimate", {
+			});
+
+			// Submit for interpolation
+			this.lab.estimateJob( this.values, this.observables );
+
+			// Save user values
+			this.snapshotMarkers();
 
 		}
 
@@ -646,14 +650,18 @@ define(
 		 */
 		TuningScreen.prototype.validateResults = function() {
 
+			// Commit estimate transaction
+			Analytics.fireEvent("tuning.values.will_estimate");
+
+			// Forward event
+			User.triggerEvent("tuning.values.validate", {
+			});
+			
 			// Submit for interpolation
 			this.trigger( 'submitParameters', this.values, this.observables );
 
 			// Save user values
 			this.snapshotMarkers();
-
-			// Commit estimate transaction
-			Analytics.fireEvent("tuning.values.will_estimate");
 
 		}
 
@@ -739,7 +747,7 @@ define(
 			// Check if user has not seen the intro tutorial
 			if (!User.isFirstTimeSeen("tuning.intro")) {
 				// Display the intro sequence
-				UI.showTutorial("ui.tuning", function() {
+				UI.scheduleTutorial("ui.tuning", function() {
 					// Mark introduction sequence as shown
 					User.markFirstTimeAsSeen("tuning.intro");
 				});
@@ -777,12 +785,30 @@ define(
 			//if (!this.machineConfigurationsEnabled['sim-interpolate']) {
 			//	this.btnEstimate.addClass("disabled");
 			//} else {
-				this.btnEstimate.removeClass("disabled");
+			User.onConfigChanged("sim-interpolate", (function(isEnabled) {
+				if (isEnabled) {
+					this.btnEstimate.removeClass("disabled");
+					if (this.controlBoardHost.hasClass("visible")) {
+						UI.showFirstTimeAid("tuning.control.estimate");
+					}
+				} else {
+					this.btnEstimate.addClass("disabled");
+				}
+ 			}).bind(this));
 			//}
 			//if (!this.machineConfigurationsEnabled['sim-run']) {
 			//	this.btnValidate.addClass("disabled");
 			//} else {
-				this.btnValidate.removeClass("disabled");
+			User.onConfigChanged("sim-validate", (function(isEnabled) {
+				if (isEnabled) {
+					this.btnValidate.removeClass("disabled");
+					if (this.controlBoardHost.hasClass("visible")) {
+						UI.showFirstTimeAid("tuning.control.validate");
+					}
+				} else {
+					this.btnValidate.addClass("disabled");
+				}
+			}).bind(this));
 			//}
 
 			// Update machine modes
