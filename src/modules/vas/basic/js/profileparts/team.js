@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	[ "jquery", "vas/config", "require", "vas/core/registry","vas/core/base/view", "vas/core/user",
+	[ "jquery", "vas/config", "require", "vas/core/registry", "vas/core/ui", "vas/core/base/view", "vas/core/user",
 	  "text!vas/basic/tpl/profileparts/team.html" ], 
 
 	/**
@@ -10,7 +10,7 @@ define(
 	 *
  	 * @exports vas-basic/profileparts/team
 	 */
-	function($, Config, require, R, View, User, tplBooks) {
+	function($, Config, require, R, UI, View, User, tplBooks) {
 
 		/**
 		 * The default tunable body class
@@ -23,6 +23,15 @@ define(
 			// Initialize view
 			hostDOM.addClass("profile-team");
 			this.loadTemplate(tplBooks);
+
+			// Handle change team
+			this.handleDoURL('changeTeam', (function() {
+
+				// Show histograms overlay
+				UI.showOverlay("overlay.switchteam", (function(com) {
+				}).bind(this));
+
+			}).bind(this));
 
 			// Render view
 			this.setViewData( 'vasapi', Config.forum_vas_api + '?auth=' + User.profile['token'] );

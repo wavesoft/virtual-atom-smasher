@@ -1,0 +1,35 @@
+<h1>Change Team</h1>
+<p>The following list contains the list of teams currently registered in the Virtual Atom Smasher game. During alpha-testing of the game, you are free to join any of these teams:</p>
+<div class="table-list table-scroll table-lg teams">
+	<table>
+		<thead>
+			<tr>
+				<th class="col-6">Team Name</th>
+				<th class="col-2 text-center">Members</th>
+				<th class="col-2 text-center">Papers</th>
+				<th class="col-2 text-center">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#teams}}
+			<tr>
+				<td class="col-6">
+					<span class="glyphicon glyphicon-heart-empty"></span> {{name}}
+				</td>
+				<td class="col-2 text-center">{{members}}</td>
+				<td class="col-2 text-center">{{papers}}</td>
+				<td class="col-2 text-center">
+					<button class="btn-shaded btn-teal" href="do:joinTeam({{id}})"><span class="glyphicon glyphicon glyphicon-ok"></span> Join</button>
+				</td>
+			</tr>
+			{{/teams}}
+			{{^teams}}
+			<tr>
+				<td colspan="4" class="col-12 text-center">
+					(There are no teams available)
+				</td>
+			</tr>
+			{{/teams}}
+		</tbody>
+	</table>
+</div>

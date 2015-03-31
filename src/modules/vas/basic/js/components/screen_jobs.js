@@ -148,8 +148,16 @@ define(
 				b1 = $('<button class="btn-shaded btn-yellow"><span class="glyphicon glyphicon-eye-open"></span></button>').appendTo(c3);
 
 			// Check if selected
-			if (job['id'] == this.activeJob)
+			if (job['id'] == this.activeJob) {
+
+				// Select row
 				row.addClass("selected");
+
+				// Change status label of the focused job
+				var jobStatus = ['SUBMITTED', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED', 'STALLED'];
+				this.eStatusLabel.text( jobStatus[job['status']] );
+
+			}
 
 			// Select on click
 			row.click((function(job) {

@@ -299,6 +299,29 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get team listing
+		 */
+		APIAccount.prototype.getTeamListing = function(callback) {
+			// Query server
+			this.sendAction("team.listing", {
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
+		 * Get team listing
+		 */
+		APIAccount.prototype.requestToJoinTeam = function(team, callback) {
+			// Query server
+			this.sendAction("team.join", {
+				'team': team
+			}, function(data) {
+				if (data && callback) callback(data['status'] == "ok");
+			});
+		}
+
+		/**
 		 * Handle chatroom event
 		 */
 		APIAccount.prototype.handleAction = function(action, data) {

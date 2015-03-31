@@ -441,6 +441,20 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Return a list of teams in the game
+		 */
+		User.prototype.getTeamListing = function( callback ) {
+			this.accountIO.getTeamListing( callback );
+		}
+
+		/**
+		 * Request to change team
+		 */
+		User.prototype.requestToJoinTeam = function( teamID, callback ) {
+			this.accountIO.requestToJoinTeam( teamID, callback );
+		}
+
+		/**
 		 * Build and return the user's achievements information tree
 		 */
 		User.prototype.getAchievementsTree = function( callback ) {
