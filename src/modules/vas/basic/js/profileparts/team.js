@@ -29,6 +29,9 @@ define(
 
 				// Show histograms overlay
 				UI.showOverlay("overlay.switchteam", (function(com) {
+					com.onOnce('close', (function() {
+						this.updateTeam();
+					}).bind(this));
 				}).bind(this));
 
 			}).bind(this));
@@ -45,8 +48,7 @@ define(
 		/**
 		 * Refresh team upon showing
 		 */
-		ProfileTeam.prototype.onWillShow = function(cb) {
-
+		ProfileTeam.prototype.updateTeam = function(cb) {
 			User.getUserTeamDetails((function(team) {
 
 				// Update team details
@@ -54,10 +56,16 @@ define(
 				this.renderView();
 
 				// Fire callback
-				cb();
+				if (cb) cb();
 
 			}).bind(this));
+		}
 
+		/**
+		 * Refresh team upon showing
+		 */
+		ProfileTeam.prototype.onWillShow = function(cb) {
+			this.updateTeam( cb );
 		}
 
 
