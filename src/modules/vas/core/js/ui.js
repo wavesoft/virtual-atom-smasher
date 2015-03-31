@@ -590,13 +590,10 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				},100);
 
 				// Listen for close events of this component
-				var close_handler = function() {
-					s.off('close', close_handler);
+				s.onOnce('close', function() {
+					// Hide overlay
 					UI.hideOverlay();
-					// Unblock sequencer
-					Sequencer.unblock();
-				};
-				s.on('close', close_handler);
+				});
 
 			}
 
@@ -769,6 +766,8 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			// If we are already hidden don't do anything
 			if (!UI.activeOverlayComponent) {
 				if (cb_ready) cb_ready();
+				// Unblock sequencer
+				Sequencer.unblock();
 				return;
 			}
 
@@ -782,12 +781,17 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 						UI.activeOverlayComponent.onHidden();
 					
 					// Reset overlay
-					UI.activeOverlayComponent.hostDOM.remove();
-					UI.activeOverlayComponent = null;
+					if (UI.activeOverlayComponent) {
+						UI.activeOverlayComponent.hostDOM.remove();
+						UI.activeOverlayComponent = null;
+					}
 					UI.hostOverlay.hide();
 
 					// Fire callback
 					if (cb_ready) cb_ready();
+
+					// Unblock sequencer
+					Sequencer.unblock();
 
 				});
 			});
@@ -1385,9 +1389,6 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			// Asynchronous callback for preparing the elements
 			var __prepareTutorial = function( sequence ) {
 
-				// Block sequencer
-				Sequencer.block();
-
 				// We have an active tutorial
 				tutorialActive = true;
 
@@ -1431,6 +1432,9 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 					}
 				});
 			}
+			
+			// Block sequencer
+			Sequencer.block();
 
 			// If we were given a string, load the tutorial from the database
 			if (typeof(sequence) == 'string') {

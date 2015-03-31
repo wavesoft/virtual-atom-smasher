@@ -70,7 +70,7 @@ define(
 
 			// The two parameter values
 			this.maxEvents  =   35;
-			this.parameters = 	{a: 0, b: 0};
+			this.parameters = 	{a: 0.333333, b: 0.666666};
 			this.values = 		{ vf:12, vs2:0.2, xf: 15, xs2: 4, h: 300, hofs:20 };
 			this.easeValues = 	{ vf:12,  vs2:0.2, xf: 15,  xs2: 4, h:300, hofs:20 };
 			this.dials = [];

@@ -391,7 +391,6 @@ define(
 				ofsX = width;
 				ofsY = height - this.style.titlePad*2 - 20;
 			}
-			console.log("log:",placeAt,ofsX, ofsY, rightAlign, yDirection);
 
 			// Set legend alignment
 			this.svgLegend

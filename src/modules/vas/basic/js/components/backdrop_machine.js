@@ -33,8 +33,10 @@ define(
 			this.context = this.canvas[0].getContext("2d");
 			this.bgColor = "#BDC3C7";
 			this.fgColor = "#E74C3C";
+			this.hlColor = "#F39C12";
 			this.max = 0;
 			this.value = 0;
+			this.highlight = 0;
 
 			// Render
 			this.render();
@@ -59,8 +61,25 @@ define(
 				false);
 			this.context.stroke();
 
+
 			// Draw foreground circle
 			if (this.max > 0) {
+
+				// Draw highlight circle
+				var sz = Math.PI*2 * (this.value + this.highlight) / this.max;
+				this.context.beginPath();
+				this.context.lineWidth = this.canvasBorder;
+				this.context.strokeStyle = this.hlColor;
+				this.context.arc(
+					this.canvasSz/2,
+					this.canvasSz/2,
+					this.canvasSz/2 - this.canvasBorder/2, 
+					1.5 * Math.PI,
+					1.5 * Math.PI + sz, 
+					false);
+				this.context.stroke();
+
+				// Draw forceground circle
 				var sz = Math.PI*2 * this.value / this.max;
 				this.context.beginPath();
 				this.context.lineWidth = this.canvasBorder;
@@ -230,12 +249,24 @@ define(
 		 * Machine counters updated
 		 */
 		MachineBackdrop.prototype.onMachineCountersUpdated = function(counters) {
+
+			var firstUnlockable = false;
+
 			// Apply counters
 			for (k in counters) {
 				if (this.progressCounters[k] !== undefined) {
 					this.progressCounters[k].max = counters[k]['total'];
 					this.progressCounters[k].value = counters[k]['unlocked'];
+					this.progressCounters[k].highlight = counters[k]['unlockable'];
 					this.progressCounters[k].render();
+
+					// Register first unlockable
+					if (!firstUnlockable && (counters[k]['unlockable'] > 0)) {
+						var i = this.aliases.indexOf(k);
+						if (i >=0) R.registerVisualAid("machine.first-unlockable", this.overlayComponents[i]);
+						firstUnlockable = false;
+ 					}
+
 				}
 			}
 		}
@@ -327,6 +358,7 @@ define(
 		MachineBackdrop.prototype.onShown = function() {
 			this.realignMachine(true);
 			UI.showFirstTimeAid("machine.first-topic");
+			UI.showFirstTimeAid("machine.first-unlockable");
 		}
 
 		// Register machine backdrop screen

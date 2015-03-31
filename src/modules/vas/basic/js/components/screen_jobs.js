@@ -213,7 +213,7 @@ define(
 
 			// Start globe spinning if status is running
 			this.statusScreen.globe.setPaused( !(job['status'] == 1)  );
-			if (job['status'] < 2) this.btnAbort.removeClass("disabled");
+			if ((job['status'] < 2) || (job['status'] == 5)) this.btnAbort.removeClass("disabled");
 
 			// Parse agents
 			for (var i=0; i<agents.length; i++) {
@@ -395,7 +395,7 @@ define(
 			this.labapi.on('histogramsUpdated', (function(histos) {
 				this.lastHistograms = histos;
 				this.btnView.removeClass("disabled");
-				this.eStatusLabel.text("RUNNING");
+				//this.eStatusLabel.text("RUNNING");
 
 				// Update overlay component
 				if (this.overlayComponent) {
