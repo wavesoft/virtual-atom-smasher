@@ -1,6 +1,11 @@
 
 # In-Game Narrations
 
+## Feedback Button
+
+- Hello there. My name is Ioannis. I am the lead developer of this game. As you may have noticed, this game is not yet finished. There might be some parts which are not very easy to understand or to use. 
+- When you feel that's the case, you can click on this button and send your feedback directly to me. You are not only helping us create a better game, but you are actively contributing on it's development!
+
 ## Machine
 
 - Welcome to the Virtual Atom Smasher interface.

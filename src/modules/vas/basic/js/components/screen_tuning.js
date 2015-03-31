@@ -41,12 +41,18 @@ define(
 			// Team header
 			$('<h1><span class="highlight">Tuning</span> The Quantum Machine</h1><div class="subtitle">Fiddle with the quantum machine and find the best values</div>').appendTo(hostDOM);
 
-			// Forward icon
+			// Menu icons
 			var btnHost = $('<div class="menu-icon"></div>').appendTo(hostDOM),
+				btnFeedback = $('<div class="navbtn-large navbtn-upper navbtn-feedback"><span class="glyphicon glyphicon-bullhorn"></span><div class="title">Feedback</div></div>').appendTo(btnHost),
 				btnUpward = $('<div class="navbtn-large navbtn-upper"><span class="glyphicon glyphicon-menu-up icon-direction icon-direction-up"></span><span class="glyphicon glyphicon-cog"></span><div class="title">Simulation</div></div>').appendTo(btnHost),
 				btnForward = $('<div class="navbtn-large navbtn-upper"><span class="glyphicon glyphicon-menu-right icon-direction icon-direction-right"></span><span class="glyphicon glyphicon-user"></span><div class="title">Status</div></div>').appendTo(btnHost);
 
-			// Register forward 
+			// Register click handlers
+			btnFeedback.click((function() {
+				this.trigger("feedback", {
+					"screen": "jobs"
+				});
+			}).bind(this));
 			btnForward.click((function() {
 				this.trigger("displayStatus");
 			}).bind(this));

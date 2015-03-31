@@ -42,9 +42,15 @@ define(
 
 			// Forward icon
 			var btnHost = $('<div class="menu-icon"></div>').appendTo(hostDOM),
+				btnFeedback = $('<div class="navbtn-large navbtn-upper navbtn-feedback"><span class="glyphicon glyphicon-bullhorn"></span><div class="title title-top">Feedback</div></div>').appendTo(btnHost),
 				btnBackward = $('<div class="navbtn-large navbtn-upper"><span class="glyphicon glyphicon-menu-down icon-direction icon-direction-down"></span><span class="glyphicon glyphicon-wrench"></span><div class="title title-top">Tuning</div></div>').appendTo(btnHost);
 
 			// Register backward 
+			btnFeedback.click((function() {
+				this.trigger("feedback", {
+					"screen": "jobs"
+				});
+			}).bind(this));
 			btnBackward.click((function() {
 				this.trigger("hideJobs");
 			}).bind(this));

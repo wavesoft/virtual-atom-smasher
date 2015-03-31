@@ -412,6 +412,9 @@ define("vas/core",
 					scrStatus.on('takeExam', function() {
 						VAS.displayExamOverlay();
 					});
+					scrStatus.on('feedback', function(data) {
+						VAS.sendFeedback(data);
+					});
 
 					// Complete login
 					prog_status.ok("Results screen ready");
@@ -501,6 +504,9 @@ define("vas/core",
 					// Bind events
 					scrJobs.on('hideJobs', function() {
 						VAS.displayTuningScreen(UI.Transitions.DIFF_BOTTOM);
+					});
+					scrJobs.on('feedback', function(data) {
+						VAS.sendFeedback(data);
 					});
 
 					// Complete login
@@ -657,6 +663,9 @@ define("vas/core",
 					});
 					scrTuning.on('displayJobs', function() {
 						VAS.displayJobs();
+					});
+					scrTuning.on('feedback', function(data) {
+						VAS.sendFeedback(data);
 					});
 
 					// Reload tuning configuration
@@ -962,8 +971,12 @@ define("vas/core",
 		/**
 		 * Send feedback regarding our currently visible interface
 		 */
-		VAS.sendFeedback = function() {
+		VAS.sendFeedback = function(details) {
 			
+			// Show feedback overlay and define details
+			UI.showOverlay("overlay.feedback", function(com) {
+			}).onFeedbackDetailsDefined(details);
+
 		}
 
 		/**

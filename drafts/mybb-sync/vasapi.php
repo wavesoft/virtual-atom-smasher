@@ -540,6 +540,41 @@ if (isset($_GET['term'])) {
 	// Redirect
 	header("Location: member.php?action=profile&uid=".$user['uid']);
 
+} else if (isset($_GET['feedback'])) {
+
+	// Decode parameters
+	$params = json_decode( $_GET['feedback'] );
+
+	// Create a submit form and submit
+	begin_page();
+	end_header();
+	?>
+	<form id="newthread_form" method="post" action="newthread.php?fid=<?php echo FORUM_FEEDBACK; ?>&amp;processed=1">
+		<input type="hidden" name="my_post_key" value="<?php echo generate_post_check(); ?>" />
+		<input type="hidden" name="subject" value="... Write a short description ..." />
+		<input type="hidden" name="icon" value="-1" />
+		<input type="hidden" name="action" value="do_newthread" />
+		<input type="hidden" name="posthash" value="<?php md5($mybb_user['uid'].random_str()); ?>" />
+		<input type="hidden" name="tid" value="0" />
+		<input type="hidden" name="previewpost" value="Preview Post" />
+		<textarea name="message" style="visibility:hidden;"><?php
+
+		echo "... Write your feedback here ...\n";
+		echo "\n";
+		echo "-----------------\n";
+		echo "The following information are automaticaly provided in order to help the developer. Please don't modify:\n";
+		echo "[code]";
+		foreach ($params as $k => $v) {
+			echo "$k: $v\n";
+		}
+		echo "[/code]";
+
+		?></textarea>
+	</form>
+	<script type="text/javascript">document.getElementById('newthread_form').submit();</script>
+	<?php
+	end_body();
+
 
 } else if (isset($_GET['goto'])) {
 	$target = $_GET['goto'];

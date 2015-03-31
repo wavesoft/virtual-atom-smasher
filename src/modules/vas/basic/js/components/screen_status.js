@@ -5,7 +5,7 @@ define(
 	/**
 	 * Dependencies
 	 */
-	["jquery", "vas/config", "vas/core/registry", "vas/core/base/view",
+	["jquery", "vas/config", "vas/core/registry", "vas/core/user", "vas/core/base/view",
 	 "text!vas/basic/tpl/status.html"],
 
 	/**
@@ -13,7 +13,7 @@ define(
 	 *
 	 * @exports vas-basic/components/tuning_screen
 	 */
-	function($, config, R, View, tplStatus) {
+	function($, config, R, User, View, tplStatus) {
 
 		/**
 		 * Tuning dashboard screen
@@ -114,6 +114,11 @@ define(
 			// Go back
 			this.handleDoURL('hideStatus', (function() {
 				this.trigger('hideStatus');
+			}).bind(this));
+			this.handleDoURL('sendFeedback', (function() {
+				this.trigger("feedback", {
+					"screen": "jobs"
+				});
 			}).bind(this));
 
 		}

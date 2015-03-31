@@ -10,6 +10,7 @@ define("PREFIX_TERM",			""); 	  		// The prefix for the term threads created by 
 define("FORUM_PARENT_PUBLIC",	5);       		// The parent forum/category where public discussion happens
 define("FORUM_PARENT_TEAM",		6);       		// The parent forum/category in which team forums are created
 define("FORUM_PARENT_EXPERTS",	7);      		// The parent forum/category where expert threads are created
+define("FORUM_FEEDBACK",		2);      		// The forum where to send feedback details
 
 define("DESC_TEAM_FORUM",						// The default description to a team forum created by VAS sync script
 	"This is the private forum of your team. Only you and your team members have access here!");

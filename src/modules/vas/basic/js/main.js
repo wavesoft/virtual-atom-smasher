@@ -93,6 +93,7 @@ define(
 	'vas/basic/overlays/jobstatus',
 	'vas/basic/overlays/publicpapers',
 	'vas/basic/overlays/switchteam',
+	'vas/basic/overlays/feedback',
 
 	// Machine parts
 	'vas/basic/machineparts/describe',
