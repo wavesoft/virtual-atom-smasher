@@ -29,6 +29,9 @@ define(
 
 				// Show histograms overlay
 				UI.showOverlay("overlay.publicpapers", (function(com) {
+					com.onOnce('close', (function() {
+						this.onWillShow();
+					}).bind(this));
 				}).bind(this));
 
 			}).bind(this));

@@ -497,12 +497,54 @@ define(
 			// Check if we should start a job
 			if (this.submitTunables) {
 
-				// Submit job
-				this.labapi.submitJob( this.submitTunables, this.submitObservables );
+				// Validate jobs
+				this.labapi.verifyJob( this.submitTunables, this.submitObservables, (function(status) {
 
-				// Reset
-				this.submitTunables = null;
-				this.submitObservables = null;
+					// Helper to submit the job
+					var do_submit = (function() {
+
+						// Submit job
+						this.labapi.submitJob( this.submitTunables, this.submitObservables );
+
+						// Reset
+						this.submitTunables = null;
+						this.submitObservables = null;
+
+					}).bind(this);
+
+					// We are good, submit it now!
+					if (status == "ok") {
+						do_submit();
+					} else if (status == "conflict") {
+
+						// Warn
+						UI.scheduleFlashPrompt(
+							"Multiple submission", 
+							"You are already running a validation. This will overwrite your previous request!", 
+							[
+								{ 
+									"label"    : "Continue",
+									"class"    : "btn-red",
+								  	"callback" : function(){
+								  		// Confirm
+								  		do_submit();
+									}
+								},
+								{
+									"label"    : "Cancel",
+									"class"    : "btn-darkblue",
+									"callback" : function(){
+									}
+								}
+							],
+							"flash-icons/alert.png"
+						);
+
+
+					}
+
+				}).bind(this));
+
 			}
 
 			// Refresh job listing AFTER job submission

@@ -173,6 +173,27 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 
 		}
 
+		/**
+		 * Validate job request
+		 *
+		 * @param {object} parameters - An object with the tunable parameter names and their values
+		 * @param {array} histograms - A list of histogram names that you want to observe
+		 * @param {function} callback - The callback to fire when a response arrives
+		 *
+		 */
+		APILabSocket.prototype.verifyJob = function(parameters, histograms, callback) {
+
+			// Submit a job request
+			this.sendAction("job.verify", {
+				'parameters': parameters,
+				'observables': histograms || []
+			}, function(data) {
+				// Fire callback
+				if (callback) callback(data['status'], data);
+			});
+
+
+		}
 
 		/**
 		 * Send an interpolation request

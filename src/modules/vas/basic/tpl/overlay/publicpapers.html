@@ -1,0 +1,48 @@
+{{^paper}}
+<h1>Published Papers</h1>
+<p>The following list contains all the papers published by various teams in the game. They have published it, because they belive they have found the best tune for the results. You can <em>cite</em> them, which allows you to read their values. Note that this will cost you and will also increase the ranking of the team that authored that paper!</p>
+<div class="table-list table-scroll table-lg papers">
+	<table>
+		<thead>
+			<tr>
+				<th class="col-4">Paper Name</th>
+				<th class="col-2 text-center">Team</th>
+				<th class="col-1 text-center">Citations</th>
+				<th class="col-1 text-center">Score</th>
+				<th class="col-4 text-center">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#papers}}
+			<tr>
+				<td class="col-4">
+					<span class="glyphicon glyphicon-list-alt"></span> {{title}}
+				</td>
+				<td class="col-2 text-center">{{team_name}}</td>
+				<td class="col-1 text-center">{{citations}}</td>
+				<td class="col-1 text-center">{{fit_formatted}}</td>
+				<td class="col-4 text-right">
+					{{#cited}}
+					<button class="btn-shaded btn-darkblue" click="do:viewPaper({{id}})"><span class="glyphicon glyphicon-eye-open"></span> Read Full Paper</button>
+					{{/cited}}
+					{{^cited}}
+					<button class="btn-shaded btn-blue" click="do:viewPaper({{id}})"><span class="glyphicon glyphicon-eye-open"></span> Read</button>
+					<button class="btn-shaded btn-yellow" click="do:citePaper({{id}})"><span class="glyphicon glyphicon-shopping-cart"></span> Cite ({{cost}} points)</button>
+					{{/cited}}
+				</td>
+			</tr>
+			{{/papers}}
+			{{^papers}}
+			<tr>
+				<td colspan="5" class="col-12 text-center">
+					(There are no papers published)
+				</td>
+			</tr>
+			{{/papers}}
+		</tbody>
+	</table>
+</div>
+{{/paper}}
+{{#paper}}
+
+{{/paper}}

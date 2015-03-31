@@ -25,6 +25,7 @@ define(
 
 			this.paper = null;
 			this.focusedPaper = null;
+			this.setViewData("terms", "");
 
 			// Handle DO URLs
 			this.handleDoURL('searchPapers', (function() {
@@ -37,7 +38,7 @@ define(
 			this.handleDoURL('viewPaper', (function(id) {
 
 				// Get paper details
-				this.displayPaper( paper );
+				this.displayPaper( id );
 
 			}).bind(this));
 			this.handleDoURL('closePaper', (function() {
@@ -52,8 +53,9 @@ define(
 				User.citePaper(id, (function(ok) {
 
 					// Refresh parameter so we can see details
-					if (ok) 
+					if (ok) {
 						this.displayPaper()
+					}
 
 				}).bind(this));
 
@@ -75,8 +77,10 @@ define(
 			this.paper = null;
 			this.setViewData('paper', false);
 			this.reloadPapers({
-				'public' : true, // Get public papers only
-				'cost'   : true, // Estimate cost of each paper
+				'public' : true,  // Get public papers only
+				'cost'   : true,  // Estimate cost of each paper
+				'sort'	 : 'fit', // Sort by fit descending
+				'cited'	 : true,  // Include cited papers
 				'terms': '%'+this.getViewData("terms")+'%'
 			}, cb, 'fade');
 

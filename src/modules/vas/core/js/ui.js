@@ -1007,7 +1007,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			}).bind(this);
 			
 			// Show visual aid after an adbitrary timeout
-			setTimeout(__showAid, Math.random() * 1000 + 100);
+			setTimeout(__showAid, Math.random() * 100);
 
 		}
 
