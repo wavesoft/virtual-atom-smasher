@@ -144,7 +144,7 @@ define(
 		JobsScreen.prototype.addJob = function( job ) {
 
 			// Translate status
-			var jobStatus = ['Submitted', 'Running', 'Completed', 'Failed', 'Cancelled', 'Stalled'];
+			var jobStatus = ['Queued', 'Running', 'Completed', 'Failed', 'Cancelled', 'Stalled'];
 
 			var row = $('<tr class="joblist-id-'+job['id']+'"></tr>'),
 				c1 = $('<td class="col-3 text-center"><span class="glyphicon glyphicon-edit"></span> Job #' + job['id'] + '</td>').appendTo(row),
@@ -160,7 +160,7 @@ define(
 				row.addClass("selected");
 
 				// Change status label of the focused job
-				var jobStatus = ['SUBMITTED', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED', 'STALLED'];
+				var jobStatus = ['QUEUED', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED', 'STALLED'];
 				this.eStatusLabel.text( jobStatus[job['status']] );
 
 			}
@@ -222,7 +222,7 @@ define(
 			this.eListBody.find('tr.joblist-id-'+job['id']).addClass("selected");
 
 			// Change status label of the focused job
-			var jobStatus = ['SUBMITTED', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED', 'STALLED'];
+			var jobStatus = ['QUEUED', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED', 'STALLED'];
 			this.eStatusLabel.text( jobStatus[job['status']] );
 
 			// Start globe spinning if status is running

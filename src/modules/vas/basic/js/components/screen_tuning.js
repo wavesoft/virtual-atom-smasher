@@ -60,6 +60,17 @@ define(
 				this.trigger("displayJobs");
 			}).bind(this));
 
+			// Show feedback video when user moves mouse over
+			btnFeedback.mouseenter((function() {
+				setTimeout((function() {
+					if (!User.isFirstTimeSeen("ui.button.feedback")) {
+						User.markFirstTimeAsSeen("ui.button.feedback");
+						UI.scheduleTutorial("ui.button.feedback", function() {
+						});
+					}
+				}).bind(this), 500);
+			}).bind(this));
+
 			// Create status frame
 			var elmStatus = this.elmStatus = $('<div class="status-frame"></div>').appendTo(hostDOM),
 				eCreditsRow = $('<div class="row-credits"></div>').appendTo(elmStatus),
@@ -287,7 +298,7 @@ define(
 			R.registerVisualAid("tuning.control.view", this.btnView, { "screen": "screen.tuning" });
 			R.registerVisualAid("tuning.machine.beam", this.machineConfigBtns[1], { "screen": "screen.tuning" });
 			R.registerVisualAid("tuning.menu.credits", elmStatus, { "screen": "screen.tuning" });
-			
+			R.registerVisualAid("ui.button.feedback", btnFeedback, { "screen": "screen.tuning" });
 
 		}
 		TuningScreen.prototype = Object.create( C.TuningScreen.prototype );
