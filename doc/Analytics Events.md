@@ -8,7 +8,7 @@ Each analytics event has it's own particularities, as seen below:
 
 ## book.show
 A book overlay screen was displayed to the user.
-```json
+```javascript
 {
     "id": "",       // The book ID
 }
@@ -17,7 +17,7 @@ A book overlay screen was displayed to the user.
 ## book.hide
 The book overlay screen was dismissed.
 
-```json
+```javascript
 {
     "id": "",       // The book ID
     "time": 0,      // Time in seconds spent on this tab
@@ -27,7 +27,7 @@ The book overlay screen was dismissed.
 ## book.tab_change
 A tab was changed in the book screen.
 
-```json
+```javascript
 {
     "id": "",       // The book ID
     "tab": "",      // The Tab ID
@@ -37,7 +37,7 @@ A tab was changed in the book screen.
 ## book.tab_metrics
 Before the tab is dismissed, the following metrics were collected.
 
-```json
+```javascript
 {
     "id": "",       // The book ID
     "tab": "",      // The Tab ID
@@ -49,7 +49,7 @@ Before the tab is dismissed, the following metrics were collected.
 ## course.percent
 A course was interrupted or completed, conveying `percent` % of it's content.
 
-```json
+```javascript
 {
     "id": "",       // The course ID
     "percent": 0    // The percentage of the course shown to the user
@@ -59,7 +59,7 @@ A course was interrupted or completed, conveying `percent` % of it's content.
 ## course.show
 A course screen was shown to the user.
 
-```json
+```javascript
 {
     "id": "",       // The course ID
 }
@@ -68,7 +68,7 @@ A course screen was shown to the user.
 ## course.start
 The course in the course screen is started.
 
-```json
+```javascript
 {
     "id": "",       // The course ID
 }
@@ -77,7 +77,7 @@ The course in the course screen is started.
 ## interface_tutorial.start
 An interface tutorial (Tootr TVHead) has started.
 
-```json
+```javascript
 {
     "id": "",       // The interface tutorial ID
 }
@@ -86,7 +86,7 @@ An interface tutorial (Tootr TVHead) has started.
 ## interface_tutorial.completed
 An interface tutorial (Tootr TVHead) has completed.
 
-```json
+```javascript
 {
     "id": "",       // The course ID
     "time": 0       // The time (in seconds) spent in the tutorial
@@ -96,7 +96,7 @@ An interface tutorial (Tootr TVHead) has completed.
 ## observables.shown
 The overlay where histograms (observables) are rendered is shown to the user.
 
-```json
+```javascript
 {
     "id": "",       // A checksum of the histogram names
     "histos":[],    // The names of the histograms in the overlay
@@ -106,7 +106,7 @@ The overlay where histograms (observables) are rendered is shown to the user.
 ## observables.hidden
 The histograms overlay was dismissed.
 
-```json
+```javascript
 {
     "id": "",       // A checksum of the histogram names
     "time": 0,      // The time (in seconds) spent in the observables screen
@@ -116,7 +116,7 @@ The histograms overlay was dismissed.
 ## tuning.machine.expand
 The specified machine part was expanded. (The user clicked on an expandable machine part where he/she can change the tunes).
 
-```json
+```javascript
 {
     "id": "",       // The machine part ID
 }
@@ -125,7 +125,7 @@ The specified machine part was expanded. (The user clicked on an expandable mach
 ## tuning.machine.expand_time
 The machine part component was dismissed.
 
-```json
+```javascript
 {
     "id": "",       // The machine part ID
     "time": 0,      // The time (in seconds) that the machine part was open
@@ -135,7 +135,7 @@ The machine part component was dismissed.
 ## tuning.values.change
 The user has changed the value of a particular tunable parameter.
 
-```json
+```javascript
 {
     "id": "",       // The name of the tunable
     "scale": 0      // The scale of the change (where 1.0=From min to max)
@@ -145,7 +145,7 @@ The user has changed the value of a particular tunable parameter.
 ## tuning.values.will_estimate
 The user requested for an estimation. When the response arrives, the event `tuning.values.estimate` will be fired.
 
-```json
+```javascript
 {
     "id": "",       // A unique identifier of the current run
     "time": 0,      // The time spent in the interface before clicking estimate
@@ -156,7 +156,7 @@ The user requested for an estimation. When the response arrives, the event `tuni
 ## tuning.values.estimate
 A response arrived from the server to a will_estimate request.
 
-```json
+```javascript
 {
     "id": "",       // A unique identifier of the current run
     "fit": 0,       // The chi-squared fit between reference and simulation
@@ -166,7 +166,7 @@ A response arrived from the server to a will_estimate request.
 ## tuning.values.will_validate
 The user requested a validation. This will switch the screen to `jobs` an present the progress of the validation.
 
-```json
+```javascript
 {
     "id": "",       // A unique identifier of the current run
     "time": 0,      // The time spent in the interface before clicking estimate
@@ -177,7 +177,7 @@ The user requested a validation. This will switch the screen to `jobs` an presen
 ## tuning.values.explain
 The user moved the mouse over the name of a tunable and the explaination pop-over appeared.
 
-```json
+```javascript
 {
     "id": "",       // The name of the tunable
 }
@@ -186,7 +186,7 @@ The user moved the mouse over the name of a tunable and the explaination pop-ove
 ## tuning.values.explain_time
 The dismissed the explaination popover.
 
-```json
+```javascript
 {
     "id": "",       // The name of the tunable
     "time": 0,      // The time spent having the popover visible
@@ -196,7 +196,7 @@ The dismissed the explaination popover.
 ## tuning.values.learn
 User clicked on `Learn more...` in the tunable infoblock screen.
 
-```json
+```javascript
 {
     "id": "",       // The name of the tunable
 }
@@ -205,7 +205,7 @@ User clicked on `Learn more...` in the tunable infoblock screen.
 ## ui.screen.change
 A screen in the game UI has changed. 
 
-```json
+```javascript
 {
     "id": "",       // The name of the new screen
 }
@@ -214,7 +214,7 @@ A screen in the game UI has changed.
 ## ui.screen.time
 Before the screen is changed, this event is fired to send analytics details regarding the time spent on the screen.
 
-```json
+```javascript
 {
     "id": "",       // The name of the new screen
     "time": 0,      // The time spent on the specified screen
