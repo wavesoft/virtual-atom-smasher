@@ -551,7 +551,7 @@ if (isset($_GET['term'])) {
 	?>
 	<form id="newthread_form" method="post" action="newthread.php?fid=<?php echo FORUM_FEEDBACK; ?>&amp;processed=1">
 		<input type="hidden" name="my_post_key" value="<?php echo generate_post_check(); ?>" />
-		<input type="hidden" name="subject" value="... Write a short description ..." />
+		<input type="hidden" name="subject" value="" />
 		<input type="hidden" name="icon" value="-1" />
 		<input type="hidden" name="action" value="do_newthread" />
 		<input type="hidden" name="posthash" value="<?php md5($mybb_user['uid'].random_str()); ?>" />
