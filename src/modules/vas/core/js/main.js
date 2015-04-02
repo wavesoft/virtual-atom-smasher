@@ -303,14 +303,8 @@ define("vas/core",
 
 								// Post-login initialize
 								VAS.postLoginInitialize(function() {
-
-									// User is logged-in, check if he has sheen the introduction
-									// sequence
-									showIntroIfNeeded(function() {
-										// Display home page
-										VAS.displayTuningScreen();
-									});
-
+									// Display home page
+									VAS.displayTuningScreen();
 								});
 
 							}
@@ -337,18 +331,16 @@ define("vas/core",
 										// The user is registered and logged in
 										/////////////
 
+										// Alert on unload
+										VAS.alertUnload = true;
+
+										// Hide overlay
+										UI.hideOverlay();
+
 										// Post-login initialize
 										VAS.postLoginInitialize(function() {
-
-											// Hide overlay
-											UI.hideOverlay();
-
-											// Display the intro sequence
-											showIntroIfNeeded(function() {
-												// Display home page
-												VAS.displayTuningScreen();
-											});
-
+											// Display home page
+											VAS.displayTuningScreen();
 										});
 
 									}
@@ -741,15 +733,31 @@ define("vas/core",
 						DB.cacheTable("first_time", function() {
 							cb();
 						});
+					},
+					function(cb) {
+						// Show pre-evaluation questionnaire
+						if (!User.isFirstTimeSeen("learningeval.pre")) {
+							VAS.displayLearningEval(function() {
+								User.markFirstTimeAsSeen("learningeval.pre");
+								cb();
+							});
+						} else {
+							cb();
+						}
+					},
+					function(cb) {
+						// Show introduction screen if needed, otherwise
+						// fire the callback right away
+						showIntroIfNeeded( cb );
 					}
 				],
-				seq_index = 0,
+				seq_index = -1,
 				seq_next = function() {
-					if (seq_index >= sequence.length) {
+					if (seq_index >= sequence.length-1) {
 						cb();
 					} else {
-						sequence[seq_index]( seq_next );
 						seq_index += 1;
+						sequence[seq_index]( seq_next );
 					}
 				};
 
@@ -865,7 +873,7 @@ define("vas/core",
 		/**
 		 * Check user's configuration and display the appropriate tuning screen
 		 */
-		VAS.displayTuningScreen = function(anim) {
+		VAS.displayTuningScreen = function( anim ) {
 
 			// Get tuning configuration
 			User.getTuningConfiguration(function(config) {
@@ -884,7 +892,7 @@ define("vas/core",
 		/**
 		 * Display random questions from user's book registry
 		 */
-		VAS.displayExamOverlay = function(anim) {
+		VAS.displayExamOverlay = function( cb_completed ) {
 
 			// Get tuning configuration
 			User.getBookExam(function(questions) {
@@ -896,11 +904,60 @@ define("vas/core",
 				}
 
 				// Display questionnaire overlay
-				UI.showOverlay("overlay.questionaire")
-					.onQuestionaireDefined( questions, false );
+				var qOvr = UI.showOverlay("overlay.questionaire");
+				qOvr.onQuestionaireDefined({
+					'title' 	: '<span class="glyphicon glyphicon-ok-circle"></span> Take out a pen and paper!',
+					'subtitle'	: 'Here is a quick questionaire. If you successfuly pass this you can get up to <strong>10</strong> science points!',
+					'questions'	: questions,
+					'validate'	: true,
+					'skip' 		: false,
+				})
+				qOvr.on("answers", function(answers) {
+					User.sendBookAnswers(answers);
+				});
+				qOvr.on("close", function() {
+					if (cb_completed) cb_completed();
+				});
 
 			});
 
+
+		}
+
+		/**
+		 * Display learning evaluation questionnaire
+		 */
+		VAS.displayLearningEval = function( cb_completed ) {
+
+			// Get tuning configuration
+			User.getLearningEvalQuestions(function(data) {
+
+				// Check for missing questions
+				if (!data) {
+					window.console.error("There are no learning evaluation questions!");
+					return;
+				}
+
+				// Get questionnaire ID
+				var qID = data['id'];
+
+				// Display questionnaire overlay
+				var qOvr = UI.showOverlay("overlay.questionaire");
+				qOvr.onQuestionaireDefined({
+					'title' 	: '<span class="glyphicon glyphicon-education"></span> Evaluation Questionnaire',
+					'subtitle'	: "Thank you for your interest in the Virtual Atom Smasher game! In order to evaluate if the platform succeeds on it's goal, we would like you to fill the following questionnaire in order to check what's your current understanding on various terms that you will see in the game. It will only take 2 minutes!",
+					'questions'	: data['questions'],
+					'validate'	: false,
+					'skip' 		: false,
+				})
+				qOvr.on("answers", function(answers) {
+					User.sendLearningEvalAnswers(answers, qID);
+				});
+				qOvr.on("close", function() {
+					if (cb_completed) cb_completed();
+				});
+
+			});
 
 		}
 

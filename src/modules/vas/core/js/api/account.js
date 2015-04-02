@@ -264,6 +264,30 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Query and return learning evaluation questions
+		 */
+		APIAccount.prototype.getLearningEvalQuestions = function( callback ) {
+			// Query server
+			this.sendAction("learning.evaluation", {
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+		
+		/**
+		 * Send back evaluation questions
+		 */
+		APIAccount.prototype.sendLearningEvalAnswers = function( answers, id, callback ) {
+			// Query server
+			this.sendAction("learning.answers", {
+				'id': id,
+				'answers': answers
+			}, function(data) {
+				if (data && callback) callback(data['status'] == 'ok', data['error']);
+			});
+		}
+
+		/**
 		 * Get a particular book
 		 */
 		APIAccount.prototype.getProfileBooks = function(callback) {

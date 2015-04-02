@@ -110,7 +110,8 @@ define(["core/util/event_base"],
 						try {
 							cb[i].callback(parameters);
 						} catch(e) {
-							console.error("Error handing callback action '",action,"':",e);
+							console.error("Error handing callback action '",action);
+							console.error(e.stack);
 						}
 					}
 				}

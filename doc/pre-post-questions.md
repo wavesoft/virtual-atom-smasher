@@ -6,7 +6,6 @@
 3. Yes. Hadronizations is the physical process in which photons interact with hadrons.
 4. Yes. Hadronization is the physical process in which electrons interact with hadrons.
 
-
 ### Do you know what a Parton Shower is?
 
 1. No. I have not heard that term before.
@@ -50,7 +49,7 @@
 3. We create multiple models and discuss the pros and cons.
 4. We run a mind experiment in our head and imagine, combining with what we know until now, what the results may be.  
 
-### what is a histogram? 
+### What is a histogram? 
 1. I don't know. I have not heard that term before.
 2. > A diagram that visualizes how frequently a particular measurement occurs. 
 3. A diagram that shows the evolution history of a value.
@@ -66,6 +65,6 @@
 ### Do you know what Color Force is?
 
 1. I don't know.
-2. 1. The force that affects our brain cells when we come in contact with a color charged object.
+2. The force that affects our brain cells when we come in contact with a color charged object.
 3. The force that colors quarks inside a proton.
 4. > Color force is the strong interaction that is completely based on color charge. It basically binds the quarks together.

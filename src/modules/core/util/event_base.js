@@ -130,6 +130,7 @@ define(
 					callbacks[i].apply(this, args);
 				} catch (e) {
 					console.error("Exception while triggering event", name);
+					console.error(e.stack);
 				}
 			}
 

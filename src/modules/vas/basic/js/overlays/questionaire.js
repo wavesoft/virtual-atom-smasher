@@ -5,7 +5,7 @@ define(
 	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/component", "vas/core/db", "vas/core/user" ], 
 
 	/**
-	 * This is the default component for displaying flash overlay messages
+	 * This is the default component for displaying questionnaires
 	 *
  	 * @exports vas-basic/overlay/flash
 	 */
@@ -23,6 +23,7 @@ define(
 
 			// Local properties
 			this.questions = [];
+			this.validateAnswers = false;
 
 			// Core DOM structuring
 			this.eHeader = $('<div class="questions-header"></div>').appendTo(hostDOM);
@@ -30,8 +31,8 @@ define(
 			this.eFooter = $('<div class="questions-footer"></div>').appendTo(hostDOM);
 
 			// Prepare header & Footer
-			this.eHeader
-				.append($('<h1><span class="glyphicon glyphicon-ok-circle"></span> Take out a pen and paper!</h1><p>Here is a quick questionaire. If you successfuly pass this you can get up to <strong>10</strong> science points!</p>'));
+			this.eHeaderTitle = $('<h1><span class="glyphicon glyphicon-ok-circle"></span> Take out a pen and paper!</h1>').appendTo(this.eHeader);
+			this.eHeaderSubtitle = $('<p>Here is a quick questionaire. If you successfuly pass this you can get up to <strong>10</strong> science points!</p>').appendTo(this.eHeader);
 			this.eFooter
 				.append(this.btnSubmit = $('<button class="btn-shaded btn-blue btn-lg">Send</button>'))
 				.append(this.btnSkip = $('<button class="btn-shaded btn-teal btn-lg">Skip</button>'));
@@ -41,16 +42,34 @@ define(
 				this.trigger('close');
 			}).bind(this));
 			this.btnSubmit.click((function() {
-				var ans = this.evaluate();
+
+				// Get answers
+				var ans = this.getAnswers();
 				if (ans == null) {
 					UI.growl("You have to reply to all of the questions!");
 					return;
 				}
 
-				// Replace Send
-				this.btnSubmit.hide();
-				this.btnSkip.show();
-				this.btnSkip.text("Close")
+				// If we are asked to perform validation, 
+				// show the user the responses first
+
+				if (this.validateAnswers) {
+
+					// Evaluate answers
+					this.evaluate( ans );
+
+					// Replace Send
+					this.btnSubmit.hide();
+					this.btnSkip.show();
+					this.btnSkip.text("Close")
+
+				} else {
+
+					// Otherwise just close
+					this.trigger('close');
+
+				}
+
 			}).bind(this));
 
 		};
@@ -95,13 +114,12 @@ define(
 		}
 
 		/**
-		 * Evaluate questionaire
+		 * Collect answers
 		 */
-		OverlayQuestionaire.prototype.evaluate = function() {
-			var good=0, bad=0, total=this.questions.length,
-				checkStatus = [], answers = [];
+		OverlayQuestionaire.prototype.getAnswers = function() {
+			var answers = [];
 
-			// First pass
+			// Collect answers
 			for (var i=0; i<this.questions.length; i++) {
 				var q = this.questions[i], is_empty=true;
 
@@ -115,7 +133,6 @@ define(
 				for (var j=0; j<q.elements.length; j++) {
 					var e = q.elements[j];
 					if (e.is(":checked")) {
-						checkStatus.push( (q.correct == j) );
 						ans_rec.choice = j;
 						is_empty = false;
 						break;
@@ -131,8 +148,24 @@ define(
 				answers.push(ans_rec);
 			}
 
+			// Return answers
+			return answers;
+		}
+
+		/**
+		 * Evaluate questionaire
+		 */
+		OverlayQuestionaire.prototype.evaluate = function( answers ) {
+			var good=0, bad=0, total=this.questions.length,
+				checkStatus = [];
+
+			// First pass: Check answer status
+			for (var i=0; i<this.questions.length; i++) {
+				var q = this.questions[i];
+				checkStatus.push( (q.correct == answers[i].choice) );
+			}
+
 			// Second pass: Apply statuses
-			// First pass
 			for (var i=0; i<this.questions.length; i++) {
 				var q = this.questions[i], is_correct=checkStatus[i];
 
@@ -157,7 +190,7 @@ define(
 			}
 
 			// Send results to use
-			User.sendBookAnswers(answers);
+			this.trigger("answers", answers);
 
 			// Return ratio
 			return good / total;
@@ -167,14 +200,31 @@ define(
 		/**
 		 * Reposition flashDOM on resize
 		 */
-		OverlayQuestionaire.prototype.onQuestionaireDefined = function( questions, canSkip ) {
+		OverlayQuestionaire.prototype.onQuestionaireDefined = function( config ) {
 			this.resetQuestions();
+
+			// Get questions
+			var questions = config['questions'] || [],
+				canSkip = (config['skip'] !== undefined) ? config['skip'] : true;
+
+			// Apply questions
 			for (var i=0; i<questions.length; i++) {
 				this.addQuestion( questions[i] );
 			}
 
 			// If the user cannot skip, hide the skip button
 			if (!canSkip) this.btnSkip.hide();
+
+			// Update title & subtitle
+			if (config['title'] !== undefined) {
+				this.eHeaderTitle.html(config['title']);
+			}
+			if (config['subtitle'] !== undefined) {
+				this.eHeaderSubtitle.html(config['subtitle']);
+			}
+
+			// Validate answers
+			this.validateAnswers = (config['validate'] !== undefined) ? config['validate'] : false;
 
 		}
 

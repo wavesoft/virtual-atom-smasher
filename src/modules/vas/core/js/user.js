@@ -615,6 +615,23 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			this.accountIO.sendBookAnswers( answers, callback );
 		}
 
+
+		/**
+		 * Query and return learning evaluation questions
+		 */
+		User.prototype.getLearningEvalQuestions = function( callback ) {
+			// Forward to account IO
+			this.accountIO.getLearningEvalQuestions( callback );
+		}
+		
+		/**
+		 * Send back evaluation questions
+		 */
+		User.prototype.sendLearningEvalAnswers = function( answers, id, callback ) {
+			// Forward to account IO
+			this.accountIO.sendLearningEvalAnswers( answers, id, callback );
+		}
+
 		/**
 		 * Return a book.
 		 */
@@ -969,6 +986,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			callback( cfg.indexOf(configName) >= 0 );
 
 		}
+
 
 		/**
 		 * Build and return a flat version of the knowledge tree.
