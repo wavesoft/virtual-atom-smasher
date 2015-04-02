@@ -117,7 +117,7 @@ define(
 			}).bind(this));
 			this.handleDoURL('sendFeedback', (function() {
 				this.trigger("feedback", {
-					"screen": "jobs"
+					"screen": "status"
 				});
 			}).bind(this));
 

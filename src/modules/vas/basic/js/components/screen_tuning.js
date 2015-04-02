@@ -50,7 +50,7 @@ define(
 			// Register click handlers
 			btnFeedback.click((function() {
 				this.trigger("feedback", {
-					"screen": "jobs"
+					"screen": "tuning"
 				});
 			}).bind(this));
 			btnForward.click((function() {
