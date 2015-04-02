@@ -647,7 +647,8 @@ define(
 			// Commit estimate transaction
 			Analytics.fireEvent("tuning.values.will_estimate", {
 				"id": this.getTuneID(),
-				"time": Analytics.restartTimer("tuning")
+				"time": Analytics.restartTimer("tuning"),
+				"values": this.values
 			});
 
 			// Forward event
@@ -668,7 +669,11 @@ define(
 		TuningScreen.prototype.validateResults = function() {
 
 			// Commit estimate transaction
-			Analytics.fireEvent("tuning.values.will_estimate");
+			Analytics.fireEvent("tuning.values.will_validate", {
+				"id": this.getTuneID(),
+				"time": Analytics.restartTimer("tuning"),
+				"values": this.values
+			});
 
 			// Forward event
 			User.triggerEvent("tuning.values.validate", {

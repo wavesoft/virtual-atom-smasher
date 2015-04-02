@@ -59,7 +59,8 @@ define(
 			DB.getMultipleRecords("observable", histoNames, (function(unused, observables) {
 
 				var histoGroups = [[], [], []];
-				var hashData = "";
+				var hashData = "",
+					analyticsHistograms = [];
 
 				// Scan histograms and sort them into groups
 				for (var i=0; i<histograms.length; i++) {
@@ -73,7 +74,9 @@ define(
 					}
 
 					// Collect ID for checksum calculation
-					hashData += histograms[i].id + ";";
+					if (hashData != "") hashData += ";";
+					hashData += histograms[i].id;
+					analyticsHistograms.push( histograms[i].id );
 
 				}
 
@@ -147,7 +150,8 @@ define(
 				// Fire analytics
 				Analytics.restartTimer("observables")
 				Analytics.fireEvent("observables.shown", {
-					'id': this.checksumID
+					'id': this.checksumID,
+					'histos': analyticsHistograms
 				});
 
 			}).bind(this));

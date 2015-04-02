@@ -135,22 +135,6 @@ define(
 		BookBody.prototype.onHidden = function() {
 			if (!this.meta) return;
 
-			// Fire tab analytics
-			Analytics.fireEvent("book.tab_time", {
-				"id": meta['book'],
-				"tab": this.currTab,
-				"time": Analytics.stopTimer("book-tab")
-			});
-
-			// Fire book analytics
-			Analytics.fireEvent("book.time", {
-				"id": meta['book'],
-				"time": Analytics.stopTimer("book")
-			});
-			Analytics.fireEvent("book.hide", {
-				"id": meta['book'],
-			});
-
 		}
 
 		/**

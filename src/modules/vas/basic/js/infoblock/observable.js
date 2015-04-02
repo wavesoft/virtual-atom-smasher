@@ -1,14 +1,14 @@
 define(
 
 	// Dependencies
-	["jquery", "vas/core/registry","vas/core/base/data_widget" ], 
+	["jquery", "vas/core/registry","vas/core/base/data_widget", "core/analytics/analytics" ], 
 
 	/**
 	 * This is the default component for displaying information regarding a observable
 	 *
  	 * @exports vas-basic/infoblock/observable
 	 */
-	function(config, R, DataWidget) {
+	function($, R, DataWidget, Analytics) {
 
 		// Keep in memory the last active tab
 		var lastActiveTab = 0;
@@ -168,7 +168,14 @@ define(
 				l.click((function(e) {
 					e.preventDefault();
 					e.stopPropagation();
+
+					// Fire analytics event
+					Analytics.fireEvent("running.observables.learn", {
+						'id': meta['name']
+					});
+
 					this.trigger('explain', meta['book'] );
+
 				}).bind(this));
 				this.moreLinks.append( l );
 			}
