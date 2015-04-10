@@ -554,23 +554,24 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				}
 			}
 
-			// Create host DOM for the component
-			var comDOM = $('<div class="'+config.css['screen']+'"></div>');
-			UI.hostOverlayWindow.append(comDOM);
-
-			// Create screen instance
-			var s = R.instanceComponent(name, comDOM), valid = true;
-			if (!s) {
-				console.error("[Overlay] Unable to load overlay '"+name+"'");
-				comDOM.remove();
-				return;
-			}
-
-			// Perserve the original classes
-			comDOM.data("originalClasses", comDOM.attr("class"));
 
 			// Delay-execute showOverlay if required
 			var doShowOverlay = function() {
+
+				// Create host DOM for the component
+				var comDOM = $('<div class="'+config.css['screen']+'"></div>');
+				UI.hostOverlayWindow.append(comDOM);
+
+				// Create screen instance
+				var s = R.instanceComponent(name, comDOM), valid = true;
+				if (!s) {
+					console.error("[Overlay] Unable to load overlay '"+name+"'");
+					comDOM.remove();
+					return;
+				}
+
+				// Perserve the original classes
+				comDOM.data("originalClasses", comDOM.attr("class"));
 
 				// Select active overlay
 				UI.activeOverlayComponent = s;

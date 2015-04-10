@@ -340,9 +340,6 @@ define("vas/core",
 										// Alert on unload
 										VAS.alertUnload = true;
 
-										// Hide overlay
-										UI.hideOverlay();
-
 										// Post-login initialize
 										VAS.postLoginInitialize(function() {
 											// Display home page
