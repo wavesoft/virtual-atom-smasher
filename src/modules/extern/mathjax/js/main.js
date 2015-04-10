@@ -25,7 +25,8 @@ define("mathjax", ['jquery'], function($) {
 
 		// Typeset every element in the selection
 		$(dom).each(function(i, elm) {
-			MathJax.Hub.Queue(["Typeset",MathJax.Hub,elm]);
+			if (window.MathJax)
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub,elm]);
 		});
 
 	}
@@ -36,7 +37,8 @@ define("mathjax", ['jquery'], function($) {
 	AMD_MathJax.typeset = function() {
 
 		// Typeset every element in the selection
-		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+		if (window.MathJax)
+			MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 
 	}
 

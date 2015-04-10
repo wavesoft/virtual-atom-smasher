@@ -123,6 +123,14 @@ define(
 		}
 
 		/**
+		 * Pre-populate profile fields
+		 */
+		RegisterScreen.prototype.onProfileDefined = function(fields) {
+			this.setViewData('defaults', fields);
+			this.renderView();
+		}
+
+		/**
 		 * Mark particular field as invalid
 		 */
 		RegisterScreen.prototype.markInvalid = function(field) {

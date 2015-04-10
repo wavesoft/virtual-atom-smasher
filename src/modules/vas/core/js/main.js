@@ -310,8 +310,14 @@ define("vas/core",
 							}
 						});
 					});
-					scrLogin.on('register', function(user, password) {
+					scrLogin.on('register', function(email, password) {
 						UI.showOverlay("screen.register", function(scrRegister) {
+
+							// Update information
+							scrRegister.onProfileDefined({
+								'email': email,
+								'password': password
+							});
 
 							// On cancel just hide
 							scrRegister.on('cancel', function() {
