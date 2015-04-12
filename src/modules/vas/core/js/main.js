@@ -213,7 +213,7 @@ define("vas/core",
 			// Listen to global user events
 			User.on('notification', function(message, type) {
 				if (type == "critical") {
-					UI.growl(message, 0, "alert")
+					UI.growl(message, 0, "critical")
 				} else {
 					UI.growl(message, 5000, type || "success")
 				}
@@ -247,7 +247,11 @@ define("vas/core",
 
 					// Handle notifications
 					APISocket.on('notification', function(evDetails) {
-						if (evDetails['type'] == "flash") {
+						if (evDetails['type'] == "critical") {
+							// Do not expire on critical
+							UI.growl(evDetails['message'], 0, "critical");
+
+						} else if (evDetails['type'] == "flash") {
 							// Flash goes to flash
 							UI.scheduleFlash(
 								evDetails['title'],
