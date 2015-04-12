@@ -911,20 +911,21 @@ define("vas/core",
 				}
 
 				// Display questionnaire overlay
-				var qOvr = UI.showOverlay("overlay.questionaire");
-				qOvr.onQuestionaireDefined({
-					'title' 	: '<span class="glyphicon glyphicon-ok-circle"></span> Take out a pen and paper!',
-					'subtitle'	: 'Here is a quick questionaire. If you successfuly pass this you can get up to <strong>10</strong> science points!',
-					'questions'	: questions,
-					'validate'	: true,
-					'skip' 		: false,
-				})
-				qOvr.on("answers", function(answers) {
-					User.sendBookAnswers(answers);
-				});
-				qOvr.on("close", function() {
-					if (cb_completed) cb_completed();
-				});
+				UI.showOverlay("overlay.questionaire", (function(qOvr) {
+					qOvr.onQuestionaireDefined({
+						'title' 	: '<span class="glyphicon glyphicon-ok-circle"></span> Take out a pen and paper!',
+						'subtitle'	: 'Here is a quick questionaire. If you successfuly pass this you can get up to <strong>10</strong> science points!',
+						'questions'	: questions,
+						'validate'	: true,
+						'skip' 		: false,
+					})
+					qOvr.on("answers", function(answers) {
+						User.sendBookAnswers(answers);
+					});
+					qOvr.on("close", function() {
+						if (cb_completed) cb_completed();
+					});
+				}).bind(this));
 
 			});
 
@@ -949,20 +950,21 @@ define("vas/core",
 				var qID = data['id'];
 
 				// Display questionnaire overlay
-				var qOvr = UI.showOverlay("overlay.questionaire");
-				qOvr.onQuestionaireDefined({
-					'title' 	: '<span class="glyphicon glyphicon-education"></span> Evaluation Questionnaire',
-					'subtitle'	: "Thank you for your interest in the Virtual Atom Smasher game! In order to evaluate if the platform succeeds on it's goal, we would like you to fill the following questionnaire in order to check what's your current understanding on various terms that you will see in the game. It will only take 2 minutes!",
-					'questions'	: data['questions'],
-					'validate'	: false,
-					'skip' 		: false,
-				})
-				qOvr.on("answers", function(answers) {
-					User.sendLearningEvalAnswers(answers, qID);
-				});
-				qOvr.on("close", function() {
-					if (cb_completed) cb_completed();
-				});
+				UI.showOverlay("overlay.questionaire", (function(qOvr) {
+					qOvr.onQuestionaireDefined({
+						'title' 	: '<span class="glyphicon glyphicon-education"></span> Evaluation Questionnaire',
+						'subtitle'	: "Thank you for your interest in the Virtual Atom Smasher game! In order to evaluate if the platform succeeds on it's goal, we would like you to fill the following questionnaire in order to check what's your current understanding on various terms that you will see in the game. It will only take 2 minutes!",
+						'questions'	: data['questions'],
+						'validate'	: false,
+						'skip' 		: false,
+					})
+					qOvr.on("answers", function(answers) {
+						User.sendLearningEvalAnswers(answers, qID);
+					});
+					qOvr.on("close", function() {
+						if (cb_completed) cb_completed();
+					});
+				}).bind(this));
 
 			});
 
@@ -995,10 +997,12 @@ define("vas/core",
 		VAS.displayBook = function( bookID ) {
 
 			// Display book
-			var comBook = UI.showOverlay("overlay.book");
+			UI.showOverlay("overlay.book", (function(comBook) {
 
-			// Update metadata
-			comBook.onMetaUpdate({ 'book': bookID });
+				// Update metadata
+				comBook.onMetaUpdate({ 'book': bookID });
+
+			}).bind(this));
 
 		}
 
@@ -1039,7 +1043,8 @@ define("vas/core",
 			
 			// Show feedback overlay and define details
 			UI.showOverlay("overlay.feedback", function(com) {
-			}).onFeedbackDetailsDefined(details);
+				com.onFeedbackDetailsDefined(details);
+			});
 
 		}
 

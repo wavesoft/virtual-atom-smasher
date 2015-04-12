@@ -112,7 +112,8 @@ define(
 
 				// Show histograms overlay
 				UI.showOverlay("overlay.histograms", (function(com) {
-				}).bind(this)).onHistogramsDefined( histos );
+					com.onHistogramsDefined( histos );
+				}).bind(this));
 
 			}).bind(this));
 

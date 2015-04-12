@@ -576,6 +576,9 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				// Select active overlay
 				UI.activeOverlayComponent = s;
 
+				// Fire ready callback to initialize component
+				if (cb_ready) cb_ready(s);
+
 				// Blur background & show overlay
 				if (blur_back) UI.host.addClass("fx-blur");
 				UI.hostOverlay.show();
@@ -585,7 +588,6 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 					s.onWillShow(function() {
 						pageTransition( UI.blankOverlayScreen, comDOM, transition, function() {
 							s.onShown();
-							if (cb_ready) cb_ready(s);
 						});
 					});
 				},100);
@@ -603,9 +605,6 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 			// If we have a previous overlay screen, hide it
 			UI.hideOverlay(doShowOverlay);
-
-			// Return component instance
-			return s;
 
 		}
 

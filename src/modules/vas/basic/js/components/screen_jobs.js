@@ -107,10 +107,12 @@ define(
 			this.btnView.click((function() {
 				if (this.lastHistograms) {
 					// Show histograms overlay
-					this.overlayComponent = UI.showOverlay("overlay.histograms", (function(com) {
+					UI.showOverlay("overlay.histograms", (function(com) {
+						// Define overlay component
+						this.overlayComponent = com;
+						// Update histograms
+						this.overlayComponent.onHistogramsDefined( this.lastHistograms );
 					}).bind(this));
-					// Update histograms
-					this.overlayComponent.onHistogramsDefined( this.lastHistograms );
 				}
 			}).bind(this));
 
@@ -189,7 +191,8 @@ define(
 
 						// Show job details overlay
 						UI.showOverlay("overlay.jobstatus", (function(com) {
-						}).bind(this)).onJobDetailsUpdated( details );
+							com.onJobDetailsUpdated( details );
+						}).bind(this));
 
 					}).bind(this));
 				}
