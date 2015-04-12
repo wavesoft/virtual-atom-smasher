@@ -28,7 +28,7 @@ define({
 	 * API to LiveQ
 	 */
 	'core' : {
-		'socket_url' : 'ws://'+window.location.host+':8080/vas/apisocket'
+		'socket_url' : 'ws://'+window.location.host+':8080/vas/api/io'
 	},
 
 	/**
