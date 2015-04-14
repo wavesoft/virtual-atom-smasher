@@ -493,6 +493,30 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Select paper job as default
+		 */
+		User.prototype.makePaperJobDefault = function( paper_id, job_id, callback ) {
+			// Query papers
+			this.accountIO.makePaperJobDefault( paper_id, job_id, callback );
+		}
+
+		/**
+		 * Return paper results
+		 */
+		User.prototype.getPaperResults = function( paper_id, callback ) {
+			// Query papers
+			this.accountIO.getPaperResults( paper_id, callback );
+		}
+
+		/**
+		 * Return job results
+		 */
+		User.prototype.getJobResults = function( job_id, callback ) {
+			// Query papers
+			this.accountIO.getJobResults( job_id, callback );
+		}
+
+		/**
 		 * Return the user and team papers
 		 */
 		User.prototype.getProfilePapers = function( callback ) {

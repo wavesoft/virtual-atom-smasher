@@ -3,45 +3,90 @@
 </div>
 <div class="full-body">
 	<div class="results">
-		<div class="score">
-			Average fit score: <strong>{{paper.fit}}</strong>
-		</div>
-		<div class="score">
-			Best fit score: <strong>{{paper.bestFit}}</strong>
-		</div>
-		<div class="table-list table-scroll table-lg">
-			<table>
-				<thead>
-					<tr>
-						<th class="col-10">Observable</th>
-						<th class="col-2">Fit</th>
-					</tr>
-				</thead>
-				<tbody>
-					{{#paper.observables}}
-					<tr>
-						<td class="col-10 latex-field">
-							{{title}}
-						</td>
-						<td class="col-2">
-							{{fit}}
-						</td>
-					</tr>
-					{{/paper.observables}}
-					{{^paper.observables}}
-					<tr>
-						<td colspan="2" class="col-12 text-center">
-							(No histograms to display)
-						</td>
-					</tr>
-					{{/paper.observables}}
-				</tbody>
-			</table>
-		</div>
+		<table><tr>
+			<td>
+				<div class="score">
+				Average fit score: <strong>{{paper.fit}}</strong>
+				</div>
+			</td>
+			<td>
+				<div class="score">
+					Best fit score: <strong>{{paper.bestFit}}</strong>
+				</div>
+			</td>
+		</tr></table>
+	</div>
+	<div class="result-group">
+		{{#paper.jobs}}
+			<div class="result-head {{#focused}}expanded{{/focused}} {{#selected}}selected{{/selected}}" click="do:focusOnJob({{id}})">
+				Job #{{id}} {{#selected}}<em>(selected)</em>{{/selected}}
+				<span class="result-fit">
+					{{status_text}}
+				<span>
+			</div>
+			{{#focused}}
+			<div class="result-body">
+				{{#completed}}
+				<div class="table-list table-sm">
+					<table>
+						<thead>
+							<tr>
+								<th class="col-10">Observable</th>
+								<th class="col-2">Fit</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#details.observables}}
+							<tr>
+								<td class="col-10 latex-field">
+									{{title}}
+								</td>
+								<td class="col-2">
+									{{fit}}
+								</td>
+							</tr>
+							{{/details.observables}}
+							{{^details.observables}}
+							<tr>
+								<td colspan="2" class="col-12 text-center">
+									(No histograms to display)
+								</td>
+							</tr>
+							{{/details.observables}}
+						</tbody>
+					</table>
+				</div>
+				{{/completed}}
+				<div class="tunables-values">
+					<p class="small">Here are the tunable values that you used. Click on any value to apply it to your current configuration:</p>
+					<ul>
+						{{#details.tunables}}
+						<li>
+							<a href="do:changeValue('{{ name }}',{{ value }})" name="{{ cssname }}" class="match-{{match}}">
+								<div class="value">{{value}}</div>
+								<div class="name">{{name}}</div>
+							</a>
+						</li>
+						{{/details.tunables}}
+					</ul>
+				</div>
+			</div>
+			{{/focused}}
+		{{/paper.jobs}}
 	</div>
 </div>
 <div class="footer footer-input">
 	<button type="button" class="b-teal" click="do:viewHistograms()">
 		<span class="glyphicon glyphicon-eye-open"></span> View Histograms
 	</button>
+	{{#canSelect}}
+	<button type="button" class="b-purple" click="do:selectFocused()">
+		<span class="glyphicon glyphicon-ok"></span> Select
+	</button>
+	{{/canSelect}}
+	{{^canSelect}}
+	<button type="button" class="b-gray" disabled="disabled">
+		<span class="glyphicon glyphicon-ok"></span> Select
+	</button>
+	{{/canSelect}}
 </div>

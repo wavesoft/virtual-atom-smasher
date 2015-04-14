@@ -6,6 +6,66 @@
 .describe-machine-part {
 
 	/////////////////////////////////////
+	// Common parts
+	/////////////////////////////////////
+
+	.tunables-values {
+		border-top: solid 1px #ddd;
+
+		ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			overflow: auto;
+			width: 100%;
+
+			li {
+				float: left;
+				padding: 5px;
+				width: 160px;
+
+				a {
+					display: block;
+					text-align: center;
+					text-decoration: none;
+					border: solid 1px;
+					border-color: #CCC;
+					color: #000;
+					height: 50px;
+					border-radius: 10px;						
+					.value {
+						font-size: 24px;
+						font-weight: bold;
+					}
+					.name {
+						color: #999;
+					}
+
+					&.match-equal {
+						.value {
+							color: #16A085;
+						}
+					}
+					&.match-close {
+						.value {
+							color: #E67E22;
+						}
+					}
+					&.match-far {
+						.value {
+							color: #C0392B;
+						}
+					}
+					&.match-changed {
+						border-color: #E74C3C;
+					}
+
+				}
+			}
+		}
+	}
+
+	/////////////////////////////////////
 	// Machine Specifics
 	/////////////////////////////////////
 
@@ -55,60 +115,6 @@
 			.ql-container {
 				padding: 2px;
 				height: auto;
-			}
-		}
-
-		.values {
-			border-top: solid 1px #ddd;
-
-			ul {
-				list-style: none;
-				padding: 0;
-				margin: 0;
-
-				li {
-					float: left;
-					padding: 5px;
-					width: 160px;
-
-					a {
-						display: block;
-						text-align: center;
-						text-decoration: none;
-						border: solid 1px;
-						border-color: #CCC;
-						color: #000;
-						height: 50px;
-						border-radius: 10px;						
-						.value {
-							font-size: 24px;
-							font-weight: bold;
-						}
-						.name {
-							color: #999;
-						}
-
-						&.match-equal {
-							.value {
-								color: #16A085;
-							}
-						}
-						&.match-close {
-							.value {
-								color: #E67E22;
-							}
-						}
-						&.match-far {
-							.value {
-								color: #C0392B;
-							}
-						}
-						&.match-changed {
-							border-color: #E74C3C;
-						}
-
-					}
-				}
 			}
 		}
 
@@ -196,6 +202,7 @@
 	}
 
 	.machinepart-results {
+
 		.results {
 			border-top: solid 1px #ddd;
 		}
@@ -203,9 +210,52 @@
 			margin: 10px 5px;
 		}
 
-		.full-body .table-list table > tbody {
-			height: 250px;
+		.full-body {
+		  height: 360px;
+		  overflow-y: scroll;
 		}
+
+		.result-head {
+		    padding: 5px;
+		    background-color: #CCC;
+		    cursor: pointer;
+
+		    &.expanded {
+			    border-radius: 5px 5px 0 0;
+			    background-color: #DDD;
+			    margin-top: 5px;
+
+			    + .result-body {
+				    border-radius: 0 0 5px 5px;
+			    	margin-bottom: 5px;
+			    }
+		    }
+
+		    &.selected {
+		    	background-color: #999 !important;
+		    	color: #FFF;
+		    	&.expanded + .result-body {
+				    border-color: #999;
+		    	}
+		    }
+
+		    &:hover {
+		    	background-color: #DDD;
+		    }
+		}
+
+		span.result-fit {
+		    float: right;
+		}
+
+		.result-body {
+		    background-color: #EEE;
+		    border-color: #DDD;
+		    border-style: none solid solid;
+		    border-width: 1px;
+		    padding: 10px;
+		}
+
 	}
 
 }

@@ -146,6 +146,30 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get result details
+		 */
+		APIAccount.prototype.getJobResults = function(job_id, callback) {
+			// Query server
+			this.sendAction("job.results", {
+				'id': job_id
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
+		 * Get paper resutls
+		 */
+		APIAccount.prototype.getPaperResults = function(paper_id, callback) {
+			// Query server
+			this.sendAction("papers.results", {
+				'id': paper_id
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
 		 * Get a particular paper
 		 */
 		APIAccount.prototype.readPaper = function(paper_id, callback) {
@@ -181,6 +205,19 @@ define(["vas/core/api/interface", "vas/config"],
 				if (data && callback) callback(data['status'] == 'ok', data['error']);
 			});
 		}
+
+		/**
+		 * Use the specified job as paper default
+		 */
+		APIAccount.prototype.makePaperJobDefault = function(paper_id, job_id, callback) {
+			// Query server
+			this.sendAction("papers.set.defaultjob", {
+				'id': paper_id,
+				'job': job_id,
+			}, function(data) {
+				if (data && callback) callback(data['status'] == 'ok', data['error']);
+			});
+		};
 
 		/**
 		 * Create a new paper
