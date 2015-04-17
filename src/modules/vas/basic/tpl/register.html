@@ -146,6 +146,7 @@
           <option value="Facebook">Facebook</option>
           <option value="CERN Website">CERN Website</option>
           <option value="Citizen Cyberlab Website">Citizen Cyberlab Website</option>
+          <option value="Alhpa Testing Registration">Alhpa Testing Registration</option>
           <option value="Other">Other</option>
         </select>
         <div class="details">
@@ -162,8 +163,9 @@
           <label><input type="checkbox" value="I can look at experimental data that a few people have seen before"> I can look at experimental data that a few people have seen before</label>
           <label><input type="checkbox" value="I can meet other people with similar interests"> I can meet other people with similar interests</label>
           <label><input type="checkbox" value="I think Virtual Atom Smasher is a useful resource for teaching other people"> I think Virtual Atom Smasher is a useful resource for teaching other people</label>
-          <label><input type="checkbox" value="I like to be a member of the virtual CERN community"> I like to be a member of the virtual CERN community</label>
-          <label><input type="checkbox" value="I want to learn more about what happens at CERN"> I want to learn more about what happens at CERN</label>
+          <label><input type="checkbox" value="I enjoy looking at simulations"> I enjoy looking at simulations</label>
+          <label><input type="checkbox" value="I think I will have a lot of fun tuning the parameters of the simulation"> I think I will have a lot of fun tuning the parameters of the simulation</label>
+          <label><input type="checkbox" value="I am amazed by the vast scale of physics research"> I am amazed by the vast scale of physics research</label>
           <label><input type="checkbox" value="I am happy to help"> I am happy to help</label>
           <label><input type="checkbox" value="I am interested in the Virtual Atom Smasher Game"> I am interested in the Virtual Atom Smasher Game</label>
           <label><input type="checkbox" value="I am interested in particle physics"> I am interested in particle physics</label>
@@ -175,9 +177,16 @@
       <div class="row">
         <label for="f-similar-projects">Previous participation:</label>
         <select id="f-similar-projects" name="similar">
-          <option value="1">Yes</option>
           <option value="0">No</option>
+          <option value="1">Yes</option>
         </select>
+        <div class="details">Have you taken part in any similar projects before?</div>
+      </div>
+
+      <!-- Simmilar projects (more) -->
+      <div class="row">
+        <label for="f-similar-which">If yes, which one:</label>
+        <input id="f-similar-which" name="similar_more" />
         <div class="details">Have you taken part in any similar projects before?</div>
       </div>
 

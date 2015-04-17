@@ -208,6 +208,7 @@ define(
 					'foundout': this.forms[0].foundout,
 					'hopes': this.forms[0].hopes.join(","),
 					'similar': this.forms[0].similar,
+					'similar_more': this.forms[0].similar_more,
 				};
 			}
 
