@@ -257,10 +257,25 @@ define(
 		 */
 		PaperMachinePart.prototype.onWillShow = function( cb ) {
 
-			// Reload papers (and re-render view)
-			// When done, fire callback
-			this.reloadPapers({
-			}, cb);
+			if (this.paper == null) {
+
+				// Reload papers (and re-render view)
+				// When done, fire callback
+					this.reloadPapers({
+				}, cb);
+
+			} else {
+
+				// Get paper details
+				User.readPaper(this.paper.id, (function(paper) {
+					// Update view
+					this.paperEditable = paper['editable'];
+					this.displayPaper( paper );
+					// Fire callback
+					if (cb) cb();
+				}).bind(this));
+
+			}
 
 		}
 

@@ -37,6 +37,7 @@ define(
 			this.markers = {};
 			this.focusMachinePartID = null;
 			this.popoverPos = {};
+			this.popoverVisible = false;
 
 			// Team header
 			$('<h1><span class="highlight">Tuning</span> The Quantum Machine</h1><div class="subtitle">Fiddle with the quantum machine and find the best values</div>').appendTo(hostDOM);
@@ -360,6 +361,9 @@ define(
 				// The component is now hidden
 				this.machinePartComponent.onHidden();
 
+				// The popover is now invisible
+				this.popoverVisible = false;
+
 			}).bind(this));
 
 		}
@@ -579,6 +583,8 @@ define(
 				// Prepare show sequence
 				this.tuningMask.show();
 
+				// The popover is now visible
+				this.popoverVisible = true;
 
 			}).bind(this));
 
@@ -755,6 +761,14 @@ define(
 				});
 
 			}).bind(this));
+	
+			// If we have a popover visible, trigger update events
+			if (this.popoverVisible) {
+				this.machinePartComponent.onWillShow((function() {
+					// Callback Shown
+					this.machinePartComponent.onShown();
+				}).bind(this));
+			}
 			
 			// Continue
 			cb();

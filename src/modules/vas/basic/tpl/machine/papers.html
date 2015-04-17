@@ -41,7 +41,7 @@
 		<div class="footer footer-input">
 			{{#showPapers}}
 			<button type="button" class="b-teal" click="do:closePaper()">
-				<span class="glyphicon glyphicon-menu-left"></span> Back
+				<span class="glyphicon glyphicon-menu-left"></span> Save &amp; Back
 			</button>
 			{{/showPapers}}
 			<button type="button" class="b-teal" click="do:applyAll()">
@@ -51,7 +51,7 @@
 			{{#paper.editable}}
 				{{^paper.active}}
 				<button type="button" click="do:focusPaper({{paper.id}})" class="b-purple">
-					<span class="glyphicon glyphicon-ok"></span> Work on this paper
+					<span class="glyphicon glyphicon-ok"></span> Select
 				</button>
 				<button type="button" click="do:deletePaper()" class="b-purple pull-right">
 					<span class="glyphicon glyphicon-trash"></span>

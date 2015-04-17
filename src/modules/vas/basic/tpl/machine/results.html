@@ -57,18 +57,35 @@
 					</table>
 				</div>
 				{{/completed}}
-				<div class="tunables-values">
-					<p class="small">Here are the tunable values that you used. Click on any value to apply it to your current configuration:</p>
-					<ul>
-						{{#details.tunables}}
-						<li>
-							<a href="do:changeValue('{{ name }}',{{ value }})" name="{{ cssname }}" class="match-{{match}}">
-								<div class="value">{{value}}</div>
-								<div class="name">{{name}}</div>
-							</a>
-						</li>
-						{{/details.tunables}}
-					</ul>
+				<p class="small">Here are the tunable values that you used. Click on any value to apply it to your current configuration:</p>
+				<div class="table-list table-sm">
+					<table>
+						<thead>
+							<tr>
+								<th class="col-10">Tunable</th>
+								<th class="col-2">Value</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#details.tunables}}
+							<tr click="do:changeValue('{{ name }}',{{ value }})">
+								<td class="col-10 latex-field">
+									{{name}}
+								</td>
+								<td class="col-2">
+									{{value}}
+								</td>
+							</tr>
+							{{/details.tunables}}
+							{{^details.tunables}}
+							<tr>
+								<td colspan="2" class="col-12 text-center">
+									(No tunables to display)
+								</td>
+							</tr>
+							{{/details.tunables}}
+						</tbody>
+					</table>
 				</div>
 			</div>
 			{{/focused}}
