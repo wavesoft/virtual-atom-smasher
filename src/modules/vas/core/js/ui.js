@@ -25,7 +25,8 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		 */
 		var badClicks = 0,
 			badClicksStart = 0,
-			badClicksTimer = 0;
+			badClicksTimer = 0,
+			badClickLocations = [];
 
 		$('body').click(function(e) {
 			var target = $(e.target);
@@ -35,11 +36,19 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				return;
 
 			// Other known UI classes
+			if (
+				(target.parent(".tunable").length != 0) ||
+				(target.parent(".r-machine-overlay").length != 0)
+			) return;
 
 			// Everything else is invalid click
 
 			// Count bad clicks
 			badClicks += 1;
+
+			// Collect locations
+			console.log(">>>", e.pageX, e.pageY);
+			badClickLocations.push([ e.pageX, e.pageY ]);
 
 			// Clear previous timer
 			if (badClicksTimer)
@@ -49,17 +58,30 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			badClicksTimer = setTimeout(function() {
 				var delta = Date.now() - badClicksStart;
 
+				// Average x,y locations
+				var x = 0, y = 0;
+				for (var i=0; i<badClickLocations.length; i++) {
+					x += badClickLocations[i][0];
+					y += badClickLocations[i][1];
+				}
+				x /= badClickLocations.length;
+				y /= badClickLocations.length;
+
 				// Fire analytics 
 				Analytics.fireEvent('ui.bad_clicks', {
-					'id': 'interface',
-					'number': badClicks,
-					'time': delta,
+					'id' 		: 'interface',
+					'number' 	: badClicks,
+					'time' 		: delta,
+					"locations" : badClickLocations,
+					"x" 		: x,
+					"y" 		: y,
 				});
 
 				// Reset counters
 				badClicks = 0;
 				badClicksStart = 0;
 				badClicksTimer = 0;
+				badClickLocations = [];
 
 			}, 1000);
 
