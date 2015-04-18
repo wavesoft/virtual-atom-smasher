@@ -3,6 +3,24 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 	function($, config, R, DB, Components, User, Analytics, Sequencer) {
 
 		///////////////////////////////////////////////////////////////
+		//                    ANALYTICS FUNCTIONS                    //
+		///////////////////////////////////////////////////////////////
+
+		/**
+		 * Fire a blur event
+		 */
+		$('window').blur((function(e) {
+			Analytics.fireEvent("blur");
+		}).bind(this));
+
+		/**
+		 * Fire a focus event
+		 */
+		$('window').focus((function(e) {
+			Analytics.fireEvent("focus");
+		}).bind(this));
+
+		///////////////////////////////////////////////////////////////
 		//                     HELPER FUNCTIONS                      //
 		///////////////////////////////////////////////////////////////
 
@@ -1357,6 +1375,9 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			// Store name of sequence
 			tutorialSequence = sequence;
 
+			// Keep the name of the sequence
+			var seqName = sequence;
+
 			// Asynchronouos callback to start the sequence
 			var __startTutorial = function() {
 
@@ -1405,7 +1426,11 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 					// Fade-in & initialize in the same time
 					UI.visualAgentDOM.show(function() {
 						UI.overlayDOM.fadeIn(500, function() { if (--vc==0) __startTutorial(); } );
+
+						// Include the sequence ID in the object
+						sequence['id'] = seqName;
 						UI.visualAgent.onSequenceDefined( sequence, function() { if (--vc==0) __startTutorial(); } );
+
 					});
 
 				});
@@ -1440,6 +1465,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			if (typeof(sequence) == 'string') {
 				__downloadTutorial( sequence );
 			} else {
+				seqName = "anonymous";
 				__stopPrevStartThis( sequence );
 			}
 

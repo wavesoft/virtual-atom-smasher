@@ -2,14 +2,14 @@
 define(
 
 	// Requirements
-	[ "require", "jquery", "popcorn", "vas/core/ui", "vas/core/registry", "vas/core/base/agent" ],
+	[ "require", "jquery", "popcorn", "vas/core/ui", "vas/core/registry", "vas/core/base/agent", "core/analytics/analytics" ],
 
 	/**
 	 * Basic version of the home screen
 	 *
 	 * @exports basic/components/tvhead_agent
 	 */
-	function(require, $, Popcorn, UI, R, VisualAgent) {
+	function(require, $, Popcorn, UI, R, VisualAgent, Analytics) {
 
 
 		/**
@@ -77,6 +77,9 @@ define(
 			this.lastSeed = Math.random();
 			this.boundCallback = null;
 			this.stopped = false;
+
+			// Analytics helpers
+			this.seqID = null;
 
 			// Prepare host dom
 			this.hostDOM.addClass("tvhead");
@@ -226,6 +229,7 @@ define(
 
 			// We are not stopped
 			this.stopped = false;
+			this.seqID = sequence['id'];
 
 			// Validate sequence structure
 			if (!sequence) {
@@ -312,6 +316,12 @@ define(
 			if (this.eExplainPopcorn)
 				this.eExplainPopcorn.play();
 
+			// Fire chatroom send event (no details)
+			Analytics.restartTimer("interface-tutorial");
+			Analytics.fireEvent("interface_tutorial.start", {
+				"id": this.seqID,
+			});
+
 		};
 
 		/**
@@ -330,6 +340,15 @@ define(
 
 			// Reset video
 			this.reset();
+
+			// Stop tutorial
+			var playTime = stopTimer("interface-tutorial"),
+				mediaTime = playTime;
+			Analytics.fireEvent("interface_tutorial.percent", {
+				"id": this.seqID,
+				"time": playTime,
+				"percent": mediaTime / playTime,
+			});
 
 		};
 

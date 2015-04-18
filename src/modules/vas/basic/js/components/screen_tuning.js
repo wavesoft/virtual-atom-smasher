@@ -39,6 +39,8 @@ define(
 			this.popoverPos = {};
 			this.popoverVisible = false;
 
+			this.analyticsEstimateTime = 0;
+
 			// Team header
 			$('<h1><span class="highlight">Tuning</span> The Quantum Machine</h1><div class="subtitle">Fiddle with the quantum machine and find the best values</div>').appendTo(hostDOM);
 
@@ -651,11 +653,7 @@ define(
 		TuningScreen.prototype.estimateResults = function() {
 
 			// Commit estimate transaction
-			Analytics.fireEvent("tuning.values.will_estimate", {
-				"id": this.getTuneID(),
-				"time": Analytics.restartTimer("tuning"),
-				"values": this.values
-			});
+			this.analyticsEstimateTime = Analytics.restartTimer("tuning")
 
 			// Forward event
 			User.triggerEvent("tuning.values.estimate", {
@@ -757,7 +755,9 @@ define(
 				// Fire analytics
 				Analytics.fireEvent("tuning.values.estimate", {
 					"id": this.getTuneID(),
-					"fit": chi2 
+					"time": this.analyticsEstimateTime,
+					"fit": chi2,
+					"values": this.values
 				});
 
 			}).bind(this));

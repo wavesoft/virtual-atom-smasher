@@ -70,6 +70,12 @@ define(
 				var txt = this.eInput.val();
 				this.eInput.val("");
 				this.chat.send(txt);
+
+				// Fire chatroom send event (no details)
+				Analytics.fireEvent("course.chat_send", {
+					"id": this.chatroom,
+				});
+
 			}).bind(this));
 			this.eInput.keypress((function(e) {
 				if (e.keyCode == 13) {
