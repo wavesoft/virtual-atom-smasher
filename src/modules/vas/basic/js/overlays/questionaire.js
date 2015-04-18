@@ -46,11 +46,8 @@ define(
 				// Fire analytics decision
 				if (this.btnSkip.text() == "Skip") {
 					Analytics.fireEvent("questionnaire.skip", {
-						"id": this.qid
-					});
-				} else {
-					Analytics.fireEvent("questionnaire.close", {
-						"id": this.qid
+						"id": this.qid,
+						"time": Analytics.stopTimer("questionnaire")
 					});
 				}
 
@@ -209,6 +206,7 @@ define(
 			// Submit evaluation rate
 			Analytics.fireEvent("questionnaire.evaluate", {
 				"id": this.qid,
+				"time": Analytics.stopTimer("questionnaire"),
 				"good": good,
 				"bad": bad,
 				"total": total,
@@ -259,6 +257,7 @@ define(
 		 * Fire analytics details when shown
 		 */
 		OverlayQuestionaire.prototype.onShown = function() {
+			Analytics.resetTimer("questionnaire");
 			Analytics.fireEvent("questionnaire.show", {
 				"id": this.qid
 			});

@@ -6,6 +6,20 @@ Each event is forwarded on the window DOM, prefixed with the `analytics.` string
 
 Each analytics event has it's own particularities, as seen below:
 
+## blur
+The user has moved away from the game interface.
+```javascript
+{
+}
+```
+
+## focus
+The user has focused again in the game interface.
+```javascript
+{
+}
+```
+
 ## book.show
 A book overlay screen was displayed to the user.
 ```javascript
@@ -46,6 +60,15 @@ Before the tab is dismissed, the following metrics were collected.
 }
 ```
 
+## course.chat_send
+This event is triggered when the user types something on the course interface. The actual text is not sent in order to track just activity and not private information. 
+
+```javascript
+{
+    "id": "",       // The course ID
+}
+```
+
 ## course.percent
 A course was interrupted or completed, conveying `percent` % of it's content.
 
@@ -83,13 +106,14 @@ An interface tutorial (Tootr TVHead) has started.
 }
 ```
 
-## interface_tutorial.completed
+## interface_tutorial.percent
 An interface tutorial (Tootr TVHead) has completed.
 
 ```javascript
 {
     "id": "",       // The course ID
-    "time": 0       // The time (in seconds) spent in the tutorial
+    "time": 0,      // The time (in seconds) spent in the tutorial
+    "percent":      // The percentage of the video seen
 }
 ```
 
@@ -142,24 +166,15 @@ The user has changed the value of a particular tunable parameter.
 }
 ```
 
-## tuning.values.will_estimate
-The user requested for an estimation. When the response arrives, the event `tuning.values.estimate` will be fired.
+## tuning.values.estimate
+The user requested for an estimation. And a response arrived from the server.
 
 ```javascript
 {
     "id": "",       // A unique identifier of the current run
     "time": 0,      // The time spent in the interface before clicking estimate
-    "values": {}    // The values the user sent for estimation (key/value)
-}
-```
-
-## tuning.values.estimate
-A response arrived from the server to a will_estimate request.
-
-```javascript
-{
-    "id": "",       // A unique identifier of the current run
-    "fit": 0,       // The chi-squared fit between reference and simulation
+    "values": {},   // The values the user sent for estimation (key/value)
+    "fit": 0.0,     // The chi-square fit of the result
 }
 ```
 
@@ -220,3 +235,82 @@ Before the screen is changed, this event is fired to send analytics details rega
     "time": 0,      // The time spent on the specified screen
 }
 ```
+
+## intro.correct_answer
+The user has submitted a correct answer in the introduction mini-game.
+
+```javascript
+{
+    "id": "",       // The name of the introduction mini-game
+    "time": 0,      // The time spent playing before submitting
+}
+```
+
+## intro.wrong_answer
+The user has submitted a wrong answer in the introduction mini-game.
+
+```javascript
+{
+    "id": "",       // The name of the introduction mini-game
+    "time": 0,      // The time spent playing before submitting
+    "reason": "",     // The reason the answer was not accepted (ex. 'bad' or 'average')
+}
+```
+
+## intro.skip
+The user has chosen to skip the mini-game.
+
+```javascript
+{
+    "id": "",       // The name of the introduction mini-game
+    "time": 0,      // The time spent playing before skipping
+}
+```
+
+## questionnaire.show
+A questionnaire has been shown to the user.
+
+```javascript
+{
+    "id": "",       // The name of the questionnaire
+}
+```
+
+## questionnaire.skip
+The user has chosen to skip a questionnaire.
+
+```javascript
+{
+    "id": "",       // The name of the questionnaire
+    "time": 0,      // How much time the user has spent
+}
+```
+
+## questionnaire.evaluate
+A questionnaire window has been submitted.
+
+```javascript
+{
+    "id": "",       // The name of the questionnaire
+    "time": 0,      // How much time the user has spent
+    "good": 0,      // The number of good answers
+    "bad": 0,       // The number of bad answers
+    "total": 0,     // The total questions in the questionnaire
+    "ratio": 0.0    // The ratio of good to total answers
+}
+```
+
+## ui.bad_clicks
+A user performed a set of bad clicks in the interface. As 'bad' are considered the clicks not correspoding to a user interface component.
+
+```javascript
+{
+    'id': 'interface',          // Always 'interface'
+    'number': 0,                // The number of bad clicks
+    'time': 0,                  // The time frame of bad clicks 
+    "locations" : [[x,y], ..],  // The array of the bad click locations
+    "x": 0,                     // The average X location of bad clicks
+    "y": 0,                     // The average Y location of bad clicks
+}
+```
+

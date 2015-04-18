@@ -343,7 +343,7 @@ define(
 					Analytics.fireEvent("intro.wrong_answer", {
 						"id": (this.checkHistos ? "val-histo" : "val-single"),
 						"time": Analytics.restartTimer("introgame-tries"),
-						"type": "average"
+						"reason": "average"
 					});
 
 					this.select(".result").attr("class", "result average").text("Almost there!");
@@ -354,7 +354,7 @@ define(
 					Analytics.fireEvent("intro.wrong_answer", {
 						"id": (this.checkHistos ? "val-histo" : "val-single"),
 						"time": Analytics.restartTimer("introgame-tries"),
-						"type": "bad"
+						"reason": "bad"
 					});
 
 					this.select(".result").attr("class", "result bad").text("Try again!");
