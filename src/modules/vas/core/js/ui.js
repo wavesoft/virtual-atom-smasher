@@ -20,6 +20,57 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			Analytics.fireEvent("focus");
 		}).bind(this));
 
+		/**
+		 * Try to identify bad clicks
+		 */
+		var badClicks = 0,
+			badClicksStart = 0,
+			badClicksTimer = 0;
+
+		$('body').click(function(e) {
+			var target = $(e.target);
+
+			// UI Elements are good
+			if (target.is("button,a,input"))
+				return;
+
+			// Other known UI classes
+
+			// Everything else is invalid click
+
+			// Count bad clicks
+			badClicks += 1;
+
+			// Clear previous timer
+			if (badClicksTimer)
+				clearTimeout(badClicksTimer);
+
+			// Set a bad click timeout
+			badClicksTimer = setTimeout(function() {
+				var delta = Date.now() - badClicksStart;
+
+				// Fire analytics 
+				Analytics.fireEvent('ui.bad_clicks', {
+					'id': 'interface',
+					'number': badClicks,
+					'time': delta,
+				});
+
+				// Reset counters
+				badClicks = 0;
+				badClicksStart = 0;
+				badClicksTimer = 0;
+
+			}, 1000);
+
+			// Mark first time we had a bad click
+			if (!badClicksStart) {
+				badClicksStart = Date.now();
+			}
+
+
+		});
+
 		///////////////////////////////////////////////////////////////
 		//                     HELPER FUNCTIONS                      //
 		///////////////////////////////////////////////////////////////

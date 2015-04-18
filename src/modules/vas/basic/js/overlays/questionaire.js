@@ -2,14 +2,14 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/component", "vas/core/db", "vas/core/user" ], 
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/component", "vas/core/db", "vas/core/user", "core/analytics/analytics" ], 
 
 	/**
 	 * This is the default component for displaying questionnaires
 	 *
  	 * @exports vas-basic/overlay/flash
 	 */
-	function(config, R, UI, Component, DB, User) {
+	function(config, R, UI, Component, DB, User, Analytics) {
 
 		/**
 		 * The default tunable body class
@@ -25,6 +25,9 @@ define(
 			this.questions = [];
 			this.validateAnswers = false;
 
+			// Analytics information
+			this.qid = 0;
+
 			// Core DOM structuring
 			this.eHeader = $('<div class="questions-header"></div>').appendTo(hostDOM);
 			this.eQuestions = $('<div class="questions-host"></div>').appendTo(hostDOM);
@@ -39,7 +42,21 @@ define(
 
 			// Bind events
 			this.btnSkip.click((function() {
+
+				// Fire analytics decision
+				if (this.btnSkip.text() == "Skip") {
+					Analytics.fireEvent("questionnaire.skip", {
+						"id": this.qid
+					});
+				} else {
+					Analytics.fireEvent("questionnaire.close", {
+						"id": this.qid
+					});
+				}
+
+				// Close
 				this.trigger('close');
+
 			}).bind(this));
 			this.btnSubmit.click((function() {
 
@@ -189,6 +206,15 @@ define(
 				}
 			}
 
+			// Submit evaluation rate
+			Analytics.fireEvent("questionnaire.evaluate", {
+				"id": this.qid,
+				"good": good,
+				"bad": bad,
+				"total": total,
+				"ratio": good/ total
+			});
+
 			// Send results to use
 			this.trigger("answers", answers);
 
@@ -202,6 +228,7 @@ define(
 		 */
 		OverlayQuestionaire.prototype.onQuestionaireDefined = function( config ) {
 			this.resetQuestions();
+			this.qid = config['id'];
 
 			// Get questions
 			var questions = config['questions'] || [],
@@ -227,6 +254,15 @@ define(
 			this.validateAnswers = (config['validate'] !== undefined) ? config['validate'] : false;
 
 		}
+
+		/**
+		 * Fire analytics details when shown
+		 */
+		OverlayQuestionaire.prototype.onShown = function() {
+			Analytics.fireEvent("questionnaire.show", {
+				"id": this.qid
+			});
+		};
 
 		// Store overlay component on registry
 		R.registerComponent( 'overlay.questionaire', OverlayQuestionaire, 1 );

@@ -226,6 +226,16 @@ define(["core/analytics/transaction"],
 		}
 
 		/**
+		 * Return the time on the specified timer
+		 */
+		Analytics.prototype.getTimer = function(name) {
+			// Check for invalid timers
+			if (!this.timers[name]) return 0;
+			// Return duration
+			return  (Date.now() - this.timers[name]) + this.timerAccummulators[name];
+		}
+
+		/**
 		 * Stop a timer with the given name and return
 		 * the time spent.
 		 */

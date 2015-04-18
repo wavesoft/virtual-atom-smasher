@@ -93,6 +93,11 @@ define(
 				// Trigger next action in the sequence
 				this.trigger('sequence.next', 'continue'); // [SEQUENCING]
 
+				Analytics.fireEvent("intro.skip", {
+					"id": (this.checkHistos ? "val-histo" : "val-single"),
+					"time": Analytics.stopTimer("introgame-tries"),
+				});
+
 			}).bind(this));
 
 
@@ -321,14 +326,37 @@ define(
 					// Update to "Good"
 					this.select(".result").attr("class", "result good").text("Correct!");
 
+					// Correct answer
+					Analytics.fireEvent("intro.correct_answer", {
+						"id": (this.checkHistos ? "val-histo" : "val-single"),
+						"time": Analytics.stopTimer("introgame-tries")
+					});
+
 					// Good results also trigger "Next" sequence
 					setTimeout((function() {
 						this.trigger('sequence.next', 'continue');
 					}).bind(this), 500);
 
 				} else if (status == 1) {
+
+					// Average answer
+					Analytics.fireEvent("intro.wrong_answer", {
+						"id": (this.checkHistos ? "val-histo" : "val-single"),
+						"time": Analytics.restartTimer("introgame-tries"),
+						"type": "average"
+					});
+
 					this.select(".result").attr("class", "result average").text("Almost there!");
+
 				} else {
+
+					// Bad answer
+					Analytics.fireEvent("intro.wrong_answer", {
+						"id": (this.checkHistos ? "val-histo" : "val-single"),
+						"time": Analytics.restartTimer("introgame-tries"),
+						"type": "bad"
+					});
+
 					this.select(".result").attr("class", "result bad").text("Try again!");
 				}
 			}).bind(this);
@@ -394,6 +422,9 @@ define(
 			}).bind(this));
 			*/
 
+			// Restart analytics timer
+			Analytics.restartTimer("introgame-tries");
+
 			// Display
 			this.visible = true;
 			this.renderView();
@@ -401,6 +432,7 @@ define(
 			this.animationStep(true);
 			this.setMode( this.checkHistos );
 			cb();
+
 		}
 
 		/**

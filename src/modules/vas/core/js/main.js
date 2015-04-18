@@ -913,6 +913,7 @@ define("vas/core",
 				// Display questionnaire overlay
 				UI.showOverlay("overlay.questionaire", (function(qOvr) {
 					qOvr.onQuestionaireDefined({
+						'id' 		: 'book-exam',
 						'title' 	: '<span class="glyphicon glyphicon-ok-circle"></span> Take out a pen and paper!',
 						'subtitle'	: 'Here is a quick questionaire. If you successfuly pass this you can get up to <strong>10</strong> science points!',
 						'questions'	: questions,

@@ -126,14 +126,8 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 					this.vars = profile['vars'];
 					this.initVars();
 
-					// If user has an analytics profile, update user ID on analytics
-					if (profile['analytics']) {
-						// Provide tracking UUID to the analytics
-						Analytics.setGlobal("userid", profile['analytics']['uuid']);
-					} else {
-						// Otherwise disable analytics for this session
-						Analytics.disable();
-					}
+					// Provide tracking UUID to the analytics
+					Analytics.setGlobal("userid", profile['trackid']);
 
 					// Fire callback
 					if (callback) callback(true);
