@@ -47,7 +47,6 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			badClicks += 1;
 
 			// Collect locations
-			console.log(">>>", e.pageX, e.pageY);
 			badClickLocations.push([ e.pageX, e.pageY ]);
 
 			// Clear previous timer

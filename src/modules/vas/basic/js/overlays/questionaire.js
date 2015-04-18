@@ -257,7 +257,7 @@ define(
 		 * Fire analytics details when shown
 		 */
 		OverlayQuestionaire.prototype.onShown = function() {
-			Analytics.resetTimer("questionnaire");
+			Analytics.restartTimer("questionnaire");
 			Analytics.fireEvent("questionnaire.show", {
 				"id": this.qid
 			});

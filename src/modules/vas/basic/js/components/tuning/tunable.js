@@ -395,7 +395,6 @@ define(
 			//
 
 			if (this.dragdealer != null) return;
-			console.log(this.elmDragDealer.width());
 			this.dragdealer = new Dragdealer( this.elmDragDealer[0], {
 				horizontal : true,
 				vertical   : false,
