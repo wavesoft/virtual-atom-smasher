@@ -18,11 +18,24 @@ requirejs.config({
 		}
 	],
 
+    /**
+     * Global configuration
+     */
+	config: {
+		'waitSeconds'	: 20
+	},
+
+    /**
+     * Paths to modules
+     */
 	paths: {
 		'tootr/img' 	: 'tootr/img',
 		'vas/config' 	: 'vas/config-debug'
 	},
 
+    /**
+     * Mapping to other modules
+     */
 	map: {
 		'*': {
 			'less'		: 'extern/require-less/js/less',

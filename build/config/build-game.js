@@ -57,6 +57,13 @@
     ],
 
     /**
+     * Global configuration
+     */
+	config: {
+		'waitSeconds'	: 20
+	},
+
+    /**
      * Package configuration
      */
 	packages: [
