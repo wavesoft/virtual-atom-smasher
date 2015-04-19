@@ -338,17 +338,17 @@ define(
 			if (this.eExplainPopcorn)
 				this.eExplainPopcorn.pause();
 
-			// Reset video
-			this.reset();
-
-			// Stop tutorial
-			var playTime = stopTimer("interface-tutorial"),
-				mediaTime = playTime;
+			// Forward analytics
+			var playTime = Analytics.stopTimer("interface-tutorial"),
+				mediaTime = this.eExplainPopcorn.duration() * 1000;
 			Analytics.fireEvent("interface_tutorial.percent", {
 				"id": this.seqID,
 				"time": playTime,
-				"percent": mediaTime / playTime,
+				"percent": playTime / mediaTime,
 			});
+
+			// Reset video
+			this.reset();
 
 		};
 

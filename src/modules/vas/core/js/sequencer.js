@@ -25,7 +25,7 @@ define(["core/util/event_base"],
 
 			// If that's the only element and we are not blocked, continue
 			if ((this.stack.length == 1) && (!this.blocked))
-				this.continue();
+				setTimeout( this.continue.bind(this), 100 );
 
 		}
 
