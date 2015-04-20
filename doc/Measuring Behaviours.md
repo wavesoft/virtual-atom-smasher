@@ -1,79 +1,30 @@
 # Measuring Behaviours in VAS
 
-There are various locations where Virtual Atom Smasher interface tracks the user’s behavior, summarized in the following list:
+There are various locations where Virtual Atom Smasher interface tracks the user’s behavior, separated in two major groups: Passive and Active metrics. 
 
-  1. **Google Analytics** – Tracking low-level user behaviors, such as bad clicks, interface or game actions. This is particularly useful for checking the usability of the interface. The full list of tracked actions can be found on [[Measuring Behaviours.md]].
-  2. **Registration Survey** – This survey is part of the registration interface.
-  3. **Pre-evolution questionnaire** – A moderate-sized questionnaire shown 
+The *Passive* metrics refer to whatever information can be obtained by the user's behaviours without directly asking them. This can be summarised to:
 
-There is a unique tracking ID allocated to each user.
+  1. **Google Analytics** – Tracking low-level user behaviors, such as bad clicks, interface or game actions. This is particularly useful for checking the usability of the interface. The full list of tracked user actions can be found on the document [[Analytics Events.md]].
+  2. **Forum Activity** - The Virtual Atom Smasher game has a forum, which is used for feedback with scientists and inter-communication between teams. It is very simple to extract activity information on the forum, such as: *number of posts, category of posts (ex. technical questions, casual discussions etc.)*
+  3. **Feedback to the developers [Creativity]** - I was thinking that it's really useful to measure user's creativity by letting them contribute to the development of the interface. There is a `Feedback` button in every page of the game, through which users can send feedback to the developers. This is actually a sub-category of the previous, since the feedback thread is created in the game forum.
 
-## Registration Survey
+The *Active* metrics are whatever information can be extracted from the users by directly asking them (ex. surveys). The information collected like this are the following:
 
-The registration survey is shown to the user in the registration screen:
+  1. **Registration Survey [Background & Motivation]** – This survey is part of the registration screen. You can see questions on the [[Registration survey.md]] document. This is used for creating the "analytics profile" of the user.
+  2. **Pre-evolution survey [Learning Outcomes]** – A moderate-sized survey shown right after the registration sequence is used in order to understand the current state of the user's understanding. The questions can be found on the document [[pre-post-questions.md]].
+  3. **Post-evaluation survey [Learning Outcomes]** - The previous survey is shown once again to the user after some fixed amount of play time (ex. a week) and it's used to evaluate if the user has understood some of the game concepts.
+  4. **Feedback survey [Motivation & Engagement]** - This survey includes additional information regarding the usability of the gameplay and the interface. The questions can be found on the [[Feedback survey.md]] document.
+  5. **In-game learning 'exams' [On-topic Learning]** - Since the scientific information in the game are relayed to the user in form of cross-linked wiki-pages, it's easy to trace what information the user has read. *In addition* the user has the option to manually trigger an 'exam' for additional credit. In this exam, (s)he will be presented with questions evaluating the understanding of the terms (s)he has seen so far. Upon successfully answering all the questions regarding a term (s)he "masters" it. Therefore it's quite straightforward to measure *what* terms are understood and *when* did that happen.
 
-### I am
- - Male
- - Female
+# When are the surveys presented to the user
 
-### What is your age?
- - 17 or under
- - 18 to 24
- - 25 to 34
- - 35 to 44
- - 45 to 54
- - 55 to 64
- - 65 to 74
- - 75 or older
+Registration:
+  - Registration Survey
+  - Pre-evaluation Survey
 
-### What is your occupation?
- - Voluntary work
- - Student
- - Full-time employed
- - Retired
- - Part-time employed
- - Unemployed
- - Other
+After a week of play time:
+  - Post-evaluation Survey
+  - Feedback Survey
 
-### Knowledge of particle physics?
- - I have studied particle physics
- - I have no previous knowledge of particle physics
- - My current occupation is related to particle physics
- - I have read articles/books about particle physics
- - I have studied particle physics at college
- - Other
-
-### How did you find out about this game?
- - Invited by a friend / colleague
- - Google search
- - Twitter
- - Facebook
- - CERN Website
- - Citizen Cyberlab Website
- - Alhpa Testing Registration
- - Other
-
-### What do you hope to get out of participating in the game?
- -  I am excited to contribute to original scientific research
- -  I think I will find the game helpful in learning about particle physics
- -  I can look at experimental data that a few people have seen before
- -  I can meet other people with similar interests
- -  I think Virtual Atom Smasher is a useful resource for teaching other people
- -  I enjoy looking at simulations
- -  I think I will have a lot of fun tuning the parameters of the simulation
- -  I am amazed by the vast scale of physics research
- -  I am happy to help
- -  I am interested in the Virtual Atom Smasher Game
- -  I am interested in particle physics
- -  I am interested in science
-
-### Have you taken part in any similar projects before
- - Yes
- - No
-
-### If yes, which one?
-Open answer
-
-## Big evaluation
-
-
+At any time while playing:
+  - In-game learning 'exam'
