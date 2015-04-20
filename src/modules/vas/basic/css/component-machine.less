@@ -3,6 +3,8 @@
 // Reusable components
 ///////////////////////////////////////////////
 
+@hover-background-y: -42px;
+
 // Machine overlays
 // ---------------------
 .r-machine-overlay {
@@ -30,23 +32,22 @@
 
 		background-image: url(modules/vas/basic/img/iconsets.png);
 		background-repeat: no-repeat;
-		background-position-y: 0;
 
 		&:hover {
 			.transform(translate(-27px,-27px));
 			border-width: 6px;
 			background-color: #FFF;
-			background-position-y: -42px;
 		}
 
 		&.locked {
 			.transform(translate(-21px,-21px));
 			border-width: 0;
-			background-position-x: -336px;
 			background-color: #bdc3c7;
 			border-color: #bdc3c7;
+			background-position: -336px 0;
 			&:hover {
 				background-color: #FFF;
+				background-position: -336px @hover-background-y;
 			}
 		}
 	}
@@ -62,49 +63,70 @@
 		left: 140px;
 		top: 150px;
 		.pointer-events(auto);
-		background-position-x: -42px;
+		background-position: -42px 0;
+		&:hover {
+			background-position: -42px @hover-background-y;
+		}
 	}
 
 	.c-issr {
 		left: 219px;
 		top: 101px;
 		.pointer-events(auto);
-		background-position-x: -126px;
+		background-position: -126px 0;
+		&:hover {
+			background-position: -126px @hover-background-y;
+		}
 	}
 
 	.c-hard {
 		left: 298px;
 		top: 141px;
 		.pointer-events(auto);
-		background-position-x: -168px;
+		background-position: -168px 0;
+		&:hover {
+			background-position: -168px @hover-background-y;
+		}
 	}
 
 	.c-remnant {
 		left: 395px;
 		top: 12px;
 		.pointer-events(auto);
-		background-position-x: -84px;
+		background-position: -84px 0;
+		&:hover {
+			background-position: -84px @hover-background-y;
+		}
 	}
 
 	.c-fssr {
 		left: 457px;
 		top: 106px;
 		.pointer-events(auto);
-		background-position-x: -126px;
+		background-position: -126px 0;
+		&:hover {
+			background-position: -126px @hover-background-y;
+		}
 	}
 
 	.c-hadr {
 		left: 724px;
 		top: 97px;
 		.pointer-events(auto);
-		background-position-x: -210px;
+		background-position: -210px 0;
+		&:hover {
+			background-position: -210px @hover-background-y;
+		}
 	}
 
 	.c-decay {
 		left: 1013px;
 		top: 97px;
 		.pointer-events(auto);
-		background-position-x: -252px;
+		background-position: -252px 0;
+		&:hover {
+			background-position: -252px @hover-background-y;
+		}
 	}
 
 }
