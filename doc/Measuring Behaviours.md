@@ -19,12 +19,12 @@ The *Active* metrics are whatever information can be extracted from the users by
 # When are the surveys presented to the user
 
 Registration:
-  - Registration Survey
-  - Pre-evaluation Survey
+  - [Registration survey](Registration survey.md)
+  - [Pre-evaluation Survey](pre-post-questions.md)
 
 After a week of play time:
-  - Post-evaluation Survey
-  - Feedback Survey
+  - [Post-evaluation Survey](pre-post-questions.md)
+  - [Feedback survey](Feedback survey.md)
 
 At any time while playing:
   - In-game learning 'exam'
