@@ -73,6 +73,11 @@ define({
 	'voiceapi': {
 		'baseURL'	: "//test4theory.cern.ch/voiceapi",
 		'api_key'	: "9b7b04b2ebc87af8723d09b4123f1c8fe62dad75"
-	}
+	},
+
+	/**
+	 * Version
+	 */
+	'version': 'debug',
 
 });

@@ -1044,6 +1044,10 @@ define("vas/core",
 			
 			// Show feedback overlay and define details
 			UI.showOverlay("overlay.feedback", function(com) {
+
+				// Inject additional information
+				details['version'] = config.version;
+
 				com.onFeedbackDetailsDefined(details);
 			});
 
