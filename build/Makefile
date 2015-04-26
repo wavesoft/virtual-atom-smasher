@@ -80,11 +80,23 @@ deploy-game: $(DIST)/game-dist.tar.gz
 # ===========================
 editor: r.js $(SRC)/app-editor.css
 # ===========================
+
+# Resources: app-editor.css
+$(DIST)/game/app-editor.css: $(SRC)/app-editor.less $(RES_LESS)
+
+	# Use lessc to compile the game css
+	(cd $(SRC); lessc app-editor.less --clean-css="--s1 --advanced --compatibility=ie8" > app-editor.css)
+
+	# Move file to dist
+	mv $(SRC)/app-editor.css $(DIST)/game/app-editor.css
+
+
+editor: r.js $(SRC)/app-editor.css
 	node r.js -o config/build-editor.js
 
-##########################################################
-
+# ===========================
 all: game editor
+# ===========================
 
 dist: $(DIST)/game-dist.tar.gz
 
@@ -94,13 +106,10 @@ clean:
 
 deploy: deploy-game
 
-##########################################################
+# ===========================
+# Required dependencies
+# ===========================
 
 # Download Node.js optimizer if missing
 r.js:
 	curl -o r.js http://requirejs.org/docs/release/2.1.16/r.js
-
-# Resources: app-editor.css
-$(SRC)/app-editor.css: $(SRC)/app-editor.less
-	(cd ../src; lessc app-editor.less --clean-css="--s1 --advanced --compatibility=ie8" > app-editor.css)
-
