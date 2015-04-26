@@ -369,21 +369,67 @@ function get_or_create_team_forum( $details, $parent_pid, $owner_gid ) {
 	$fid = create_forum( PREFIX_FORUM . $details['t_name'], $parent_pid, DESC_TEAM_FORUM );
 	if (!$fid) return false;
 
-	// Create specific permissions
-	set_explicit_permissions(
-			$fid,
-			array( $owner_gid ),
-			explode(",",DISABLE_TEAM_GIDS)
-		);
-
 	// Return forum ID
 	return $fid;
 
 }
 
 /**
- * Get or create thread
+ * Set explicit permissions to all VAS forums
  */
+function update_all_forum_permissions( ) {
+	global $db;
+
+	// Mapping between forum names and GID
+	$forum_gid_mapping = array();
+
+	// All team GIDs
+	$all_gids = array();
+
+	// Enumerate all VAS groups
+	$query = $db->simple_select("usergroups", "*", "title LIKE '" . PREFIX_GROUP . "%'", array( ));
+	while ($group = $db->fetch_array($query)) {
+		if ($group['gid'] == GID_TEMPLATE)
+			continue;
+
+		// Forum -> GID mapping
+		$forum_gid_mapping[ substr($group['title'], strlen(PREFIX_GROUP)) ] = $group['gid'];
+
+		// All GIDs
+		$all_gids[] = $group['gid'];
+
+	}
+
+	// Apply permissions to all VAS forums
+	$query = $db->simple_select("forums", "*", "pid=" . FORUM_PARENT_TEAM , array( ));
+	while ($forum = $db->fetch_array($query)) {
+
+		// Find out which GID is allocated to this forum
+		if (!isset($forum_gid_mapping[$forum['name']]))
+			continue;
+
+		// Find appropriate group GID
+		$owner_gid = $forum_gid_mapping[$forum['name']];
+
+		// Deny access to all other GIDs
+		$deny_gid = $all_gids;
+		$i = array_search( $owner_gid, $deny_gid );
+		if (!$i) continue;
+		array_splice($deny_gid, $i, 1);
+
+		// Merge with DISABLE_TEAM_GIDS
+		$deny_gid = array_merge( $deny_gid, explode(",",DISABLE_TEAM_GIDS) );
+
+		// Update explicit permissions on the forum
+		set_explicit_permissions(
+				$forum['fid'],
+				array( $owner_gid ),
+				$deny_gid
+			);
+
+	}
+
+}
 
 ////////////////////////////////////////////////////////////
 // Log user in and synchronize his/her group
@@ -486,6 +532,9 @@ if (isset($_GET['term'])) {
 		// Get forum ID for our team
 		$pid = get_or_create_team_forum( $details, FORUM_PARENT_TEAM, $mybb_group['gid'] );
 
+		// Update all forum permissions
+		update_all_forum_permissions();
+
 	} else if ($_GET['scope'] == 'experts') {
 
 		// Create thread in the experts forum
@@ -575,7 +624,6 @@ if (isset($_GET['term'])) {
 	<?php
 	end_body();
 
-
 } else if (isset($_GET['goto'])) {
 	$target = $_GET['goto'];
 
@@ -583,6 +631,11 @@ if (isset($_GET['term'])) {
 
 		// Go to team forum
 		$fid = get_or_create_team_forum( $details, FORUM_PARENT_TEAM, $mybb_group['gid'] );
+
+		// Update all forum permissions
+		update_all_forum_permissions();
+
+		// Redirect to forum display
 		header("Location: forumdisplay.php?fid=" . $fid );
 
 	} else if ($target == 'compose') {

@@ -17,7 +17,7 @@ define("DESC_TEAM_FORUM",						// The default description to a team forum create
 define("BODY_NEW_THREAD",						// The body to a new thread post
 	"Hello everyone! I am looking for some information about this particular parameter. Do you know anything?");
 
-define("DISABLE_TEAM_GIDS",		"1,2,5"); 	// List of groups that should be restricted from accessing a team forum
+define("DISABLE_TEAM_GIDS",		"1,2,5"); 		// List of groups that should be restricted from accessing a team forum
 
 define("GID_TEMPLATE",			2); 	 		// The group to copy fields from when creating usergroup
 define("UID_VAS",				6);				// The Virtual Atom Smasher user as which to post the discussions
