@@ -355,25 +355,6 @@ function get_or_sync_group( $details ) {
 
 }
 
-
-/**
- * Get or create team forum
- */
-function get_or_create_team_forum( $details, $parent_pid, $owner_gid ) {
-
-	// Get forum ID
-	$fid = get_forum_id( PREFIX_FORUM . $details['t_name'], $parent_pid );
-	if ($fid !== false) return $fid;
-
-	// Not found? Create new
-	$fid = create_forum( PREFIX_FORUM . $details['t_name'], $parent_pid, DESC_TEAM_FORUM );
-	if (!$fid) return false;
-
-	// Return forum ID
-	return $fid;
-
-}
-
 /**
  * Set explicit permissions to all VAS forums
  */
@@ -428,6 +409,27 @@ function update_all_forum_permissions( ) {
 			);
 
 	}
+
+}
+
+/**
+ * Get or create team forum
+ */
+function get_or_create_team_forum( $details, $parent_pid, $owner_gid ) {
+
+	// Get forum ID
+	$fid = get_forum_id( PREFIX_FORUM . $details['t_name'], $parent_pid );
+	if ($fid !== false) return $fid;
+
+	// Not found? Create new
+	$fid = create_forum( PREFIX_FORUM . $details['t_name'], $parent_pid, DESC_TEAM_FORUM );
+	if (!$fid) return false;
+
+	// Synchronize all forum permissions
+	update_all_forum_permissions();
+
+	// Return forum ID
+	return $fid;
 
 }
 
@@ -532,9 +534,6 @@ if (isset($_GET['term'])) {
 		// Get forum ID for our team
 		$pid = get_or_create_team_forum( $details, FORUM_PARENT_TEAM, $mybb_group['gid'] );
 
-		// Update all forum permissions
-		update_all_forum_permissions();
-
 	} else if ($_GET['scope'] == 'experts') {
 
 		// Create thread in the experts forum
@@ -631,9 +630,6 @@ if (isset($_GET['term'])) {
 
 		// Go to team forum
 		$fid = get_or_create_team_forum( $details, FORUM_PARENT_TEAM, $mybb_group['gid'] );
-
-		// Update all forum permissions
-		update_all_forum_permissions();
 
 		// Redirect to forum display
 		header("Location: forumdisplay.php?fid=" . $fid );
