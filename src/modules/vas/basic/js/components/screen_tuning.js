@@ -708,6 +708,9 @@ define(
 
 			// Open/Resume labSocket
 			this.lab = APISocket.openLabsocket();
+			this.lab.on('error', (function(message, critical) {
+				UI.logError( message, critical );
+			}).bind(this));
 			this.lab.on('histogramsUpdated', (function(histos) {
 
 				// Save last histograms

@@ -379,7 +379,10 @@ define(
 			var DB = APISocket.openDb();
 			this.labapi = APISocket.openLabsocket();
 
-			// Register histograms
+			// Register callbacks
+			this.labapi.on('error', (function(message, critical) {
+				UI.logError( message, critical );
+			}).bind(this));
 			this.labapi.on('histogramUpdated', (function(data, ref) {
 				this.statusScreen.onObservableUpdated(data, ref);
 			}).bind(this));
@@ -474,7 +477,6 @@ define(
 					this.statusMachinesValue.text(this.numConnectedMachines);
 
 				}
-				console.log(">>> ",logLine,telemetryData);
 			}).bind(this));
 
 			// Reset interface when current job is deselected

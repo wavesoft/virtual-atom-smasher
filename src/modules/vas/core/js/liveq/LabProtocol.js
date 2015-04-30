@@ -183,7 +183,14 @@ define(
 
 						// Update histogram bins from reader, skipping the
 						// reading of histogram ID (it has already happened)
-						histo.updateFromReader( reader, true, histoID, fromInterpolation );
+						if (!histo.updateFromReader( reader, true, histoID, fromInterpolation )) {
+
+							// An error occured, which has taken out of sync
+							// the binary protocol. Until we come up with a better
+							// solution, we are now officially unable to continue.
+							this.trigger( 'error', 'Connection with the server interrupted! Unable to parse histogram frame', true );
+
+						}
 
 						// Update number of events
 						if (histo.nevts > 0)

@@ -128,11 +128,11 @@ define(
 			// Check how we should apply the information so far
 			if (cp) {
 				if (id != this.id) {
-					console.error("Mismatched histogram ID while copy-update of histogram ", this.id);
+					console.error("Mismatched histogram ID (",id,"-",this.id,") while copy-update of histogram ", this.id);
 					return false;
 				}
 				if (bins != this.bins) {
-					console.error("Mismatched bins while copy-update of histogram", this.id);
+					console.error("Mismatched bins (",bins,"-",this.bins,") while copy-update of histogram", this.id);
 					return false;
 				}
 			} else {
@@ -155,6 +155,9 @@ define(
 			for (var i=0; i<this._updateCallbacks.length; i++) {
 				this._updateCallbacks[i]( this );
 			}
+
+			// We are good
+			return true;
 
 		}
 

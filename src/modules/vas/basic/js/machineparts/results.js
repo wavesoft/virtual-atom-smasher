@@ -250,6 +250,9 @@ define(
 		ResultsMachinePart.prototype.showResults = function(job_id) {
 			// Open/Resume labSocket
 			var lab = APISocket.openLabsocket();
+			lab.on('error', (function(message, critical) {
+				UI.logError( message, critical );
+			}).bind(this));
 			lab.on('histogramsUpdated', (function(histos) {
 
 				// Show histograms overlay
