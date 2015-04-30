@@ -1,0 +1,29 @@
+
+
+{"tunables":["TimeShower:alphaSvalue"],"observables":["/OPAL_2004_S6132243/d06-x01-y01","/OPAL_2004_S6132243/d01-x01-y01","/OPAL_2004_S6132243/d14-x01-y01"]}
+
+{"tunables":["StringPT:sigma","StringZ:aLund","StringZ:bLund"],"observables":["/OPAL_1998_S3780481/d01-x01-y01","/ALEPH_1996_S3486095/d17-x01-y01","/ALEPH_1996_S3486095/d18-x01-y01"]}
+REMOVED BUGGY: "/SLD_2004_S5693039/d08-x02-y01"
+
+{"tunables":["StringZ:aExtraDiquark"],"observables":["/ALEPH_1996_S3486095/d27-x01-y01","/SLD_2004_S5693039/d07-x01-y01","/ALEPH_1996_S3486095/d33-x01-y01"]}
+
+{"tunables":["StringFlav:ProbStoUD"],"observables":["/SLD_2004_S5693039/d06-x01-y01"]}
+REMOVED BUGGY: "/SLD_2004_S5693039/d06-x02-y01"
+
+{"tunables":["StringFlav:mesonUDvector"],"observables":["/ALEPH_1996_S3486095/d37-x01-y01"]}
+
+{"tunables":["StringFlav:mesonSvector"],"observables":["/ALEPH_1996_S3486095/d39-x01-y01","/ALEPH_1996_S3486095/d43-x01-y01","/ALEPH_1996_S3486095/d40-x01-y01","/ALEPH_1996_S3486095/d26-x01-y01"]}
+
+{"tunables":["StringFlav:etaSup"],"observables":["/ALEPH_1996_S3486095/d30-x01-y01"]}
+
+{"tunables":["StringFlav:mesonCvector"],"observables":["/ALEPH_1999_S4193598/d01-x01-y01"]}
+
+{"tunables":["StringFlav:mesonBvector"],"observables":[""]}
+
+{"tunables":["StringFlav:probQQtoQ"],"observables":["/SLD_2004_S5693039/d07-x02-y01"]}
+
+{"tunables":["StringFlav:probSQtoQQ"],"observables":["/ALEPH_1996_S3486095/d34-x01-y01"]}
+
+{"tunables":["StringFlav:probQQ1toQQ0"],"observables":["/ALEPH_1996_S3486095/d35-x01-y01","/ALEPH_1996_S3486095/d36-x01-y01"]}
+
+{"tunables":["StringZ:rFactB"],"observables":["/SLD_2002_S4869273/d01-x01-y01"]}
