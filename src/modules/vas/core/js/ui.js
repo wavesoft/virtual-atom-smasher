@@ -1066,25 +1066,36 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 					'top': y
 				});
 
-				// Add click handler
-				popup.click(function() {
+				// Dismiss function
+				var dismissed = false,
+					fnDismiss = function() {
+						
+						// Dismiss once
+						if (dismissed) return;
+						dismissed = true;
 
-					// Fadeout and remove aid
-					popup.fadeOut(function() {
-						popup.remove();
-					});
+						// Fadeout and remove aid
+						popup.fadeOut(function() {
+							popup.remove();
+						});
 
-					// Remove from firstTimeAids
-					var i = UI.firstTimeAids.indexOf(popup);
-					UI.firstTimeAids.splice(i,1);
+						// Remove from firstTimeAids
+						var i = UI.firstTimeAids.indexOf(popup);
+						UI.firstTimeAids.splice(i,1);
 
-					// Mark as seen
-					User.markFirstTimeAsSeen( aid_id );
+						// Mark as seen
+						User.markFirstTimeAsSeen( aid_id );
 
-					// Update collided aids
-					UI.testCollidingFirstTimeAids();
+						// Update collided aids
+						UI.testCollidingFirstTimeAids();
 
-				});
+					};
+
+				// Dismiss when clicking the popup
+				popup.click(function() { fnDismiss(); });
+
+				// Dismiss when clicking the target
+				elm.click(function() { fnDismiss(); });
 
 				// Fade-in with a random delay
 				popup.hide();
