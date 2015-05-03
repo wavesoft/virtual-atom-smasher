@@ -41,9 +41,10 @@ define(
 			this.histogramTabs = [];
 
 			// Prepare plot component on body
+			this.registerTab("dataviz.observable", "uicon-info");
 			this.registerTab("dataviz.histogram", "uicon-plot-sideside");
 			this.registerTab("dataviz.histogram_ratio", "uicon-plot-ratio");
-			this.registerTab("dataviz.histogram_full", "uicon-plot-ratio");
+			//this.registerTab("dataviz.histogram_full", "uicon-plot-ratio");
 
 			// Select the last active tab
 			this.selectTab(lastActiveTab);
@@ -178,6 +179,11 @@ define(
 
 				}).bind(this));
 				this.moreLinks.append( l );
+			}
+
+			// Update metadata on all histogram tab components
+			for (var i=0; i<this.histogramTabs.length; i++) {
+				this.histogramTabs[i].com.onMetaUpdate( meta );
 			}
 
 		}

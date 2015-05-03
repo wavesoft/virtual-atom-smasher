@@ -77,6 +77,7 @@ define(
 	'vas/basic/dataviz/histogram_plain',
 	'vas/basic/dataviz/histogram_ratio',
 	'vas/basic/dataviz/histogram_combined',
+	'vas/basic/dataviz/observable',
 
 	// Information blocks
 	'vas/basic/infoblock/book',
