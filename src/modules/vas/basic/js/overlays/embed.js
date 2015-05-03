@@ -53,7 +53,6 @@ define(
 			this.initialLoad = true;
 			this.embedIframe.attr( "src", config['url'] );
 
-
 		}
 
 
