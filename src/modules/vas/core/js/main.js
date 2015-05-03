@@ -938,36 +938,21 @@ define("vas/core",
 		 */
 		VAS.displayLearningEval = function( cb_completed ) {
 
-			// Get tuning configuration
-			User.getLearningEvalQuestions(function(data) {
+			// Display evaluation
+			UI.showOverlay("overlay.embed", (function(qOvr) {
 
-				// Check for missing questions
-				if (!data) {
-					window.console.error("There are no learning evaluation questions!");
-					return;
-				}
+				// Configure Embed frame
+				qOvr.onEmbedConfigured({
+					'url' 	: 'http://tecfalabs.unige.ch/survey/index.php/948573/lang-en/newtest/Y?userID=' + User.profile['trackid'],
+					'block'	: true,
+				})
 
-				// Get questionnaire ID
-				var qID = data['id'];
+				// Handle close event
+				qOvr.on("close", function() {
+					if (cb_completed) cb_completed();
+				});
 
-				// Display questionnaire overlay
-				UI.showOverlay("overlay.questionaire", (function(qOvr) {
-					qOvr.onQuestionaireDefined({
-						'title' 	: '<span class="glyphicon glyphicon-education"></span> Evaluation Questionnaire',
-						'subtitle'	: "Thank you for your interest in the Virtual Atom Smasher game! In order to evaluate if the platform succeeds on it's goal, we would like you to fill the following questionnaire in order to check what's your current understanding on various terms that you will see in the game. It will only take 2 minutes!",
-						'questions'	: data['questions'],
-						'validate'	: false,
-						'skip' 		: false,
-					})
-					qOvr.on("answers", function(answers) {
-						User.sendLearningEvalAnswers(answers, qID);
-					});
-					qOvr.on("close", function() {
-						if (cb_completed) cb_completed();
-					});
-				}).bind(this));
-
-			});
+			}).bind(this));
 
 		}
 

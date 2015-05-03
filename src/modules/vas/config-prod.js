@@ -78,6 +78,6 @@ define({
 	/**
 	 * Version
 	 */
-	'version': 'master-e735fd2',
+	'version': 'master-5c099dc',
 
 });
