@@ -389,7 +389,7 @@ define(["vas/core/api/interface", "vas/config"],
 			// Update activity counter
 			this.sendAction("user.activity", {
 				'counter': activityMs
-			}
+			});
 		}
 
 		/**
