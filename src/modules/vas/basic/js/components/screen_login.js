@@ -57,6 +57,7 @@ define(
 			this.elmLeftBody.append($("<h1>Welcome visitor!</h1>"));
 			this.elmLeftBody.append($("<p>Virtual Atom Smasher is a revolutionary educational game that brings you along with the theoretical physicists inside CERN!</p>"));
 			this.elmLeftBody.append($("<p>Playing this game you are not only learning about particle physics, but you are actively helping scientists with their research!</p>"));
+			/*
 			var btnTour = $('<a href="do:tour"><img src="'+img_dir+'/take-tour.png" /></a>')
 			btnTour.click(function(e) {
 				e.preventDefault();
@@ -64,6 +65,7 @@ define(
 				UI.showTutorial("pub.welcome");
 			});
 			this.elmLeftBody.append( btnTour );
+			*/
 
 			// Prepare right body
 			this.elmRightBody.append($("<h1>Welcome fellow scientist!</h1>"));
