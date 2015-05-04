@@ -58,6 +58,11 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			 */
 			this.dbIO = null;
 
+			/**
+			 * Flag that denotes that the user is logged in
+			 */
+			this.loggedIn = false;
+
 			// On user log-in update credits
 			APISocket.on('ready', (function() {
 
@@ -119,6 +124,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 				this.accountIO.callbackOnAction("profile", (function(profile) {
 
 					// Let global listeners that the user is logged in
+					this.loggedIn = true;
 					Global.events.trigger("login", profile);
 
 					// Handle profile
@@ -159,6 +165,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 				this.accountIO.callbackOnAction("profile", (function(profile) {
 
 					// Let global listeners that the user is logged in
+					this.loggedIn = true;
 					Global.events.trigger("login", profile);
 
 					// Handle profile

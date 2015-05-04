@@ -305,6 +305,9 @@ define("vas/core",
 								// Alert on unload
 								VAS.alertUnload = true;
 
+								// Start activity autocommit
+								VAS.startActivityAutocommit();
+
 								// Post-login initialize
 								VAS.postLoginInitialize(function() {
 									// Display home page
@@ -343,6 +346,9 @@ define("vas/core",
 
 										// Alert on unload
 										VAS.alertUnload = true;
+
+										// Start activity autocommit
+										VAS.startActivityAutocommit();
 
 										// Post-login initialize
 										VAS.postLoginInitialize(function() {
@@ -1059,15 +1065,11 @@ define("vas/core",
 		}
 
 		/**
-		 * Initialize VAS with the given game configuration and run
+		 * Start commiting user activity
 		 */
-		VAS.run = function() {
+		VAS.startActivityAutocommit = function() {
 
-			// Switch to login screen
-			UI.selectScreen( "screen.login" );
-
-			// Start activity counter
-			VAS.activityCounter = 0;
+			// Define activity timestamp
 			VAS.activityTimestamp = Date.now();
 
 			// Commit activity every 30 seconds
@@ -1080,10 +1082,25 @@ define("vas/core",
 				// Reset timestamp
 				VAS.activityTimestamp = 0;
 			});
+
 			$(window).focus(function() {
 				// Set timestamp
 				VAS.activityTimestamp = Date.now();
 			});
+
+		}
+
+		/**
+		 * Initialize VAS with the given game configuration and run
+		 */
+		VAS.run = function() {
+
+			// Switch to login screen
+			UI.selectScreen( "screen.login" );
+
+			// Start activity counter
+			VAS.activityCounter = 0;
+			VAS.activityTimestamp = 0;
 
 		}
 
