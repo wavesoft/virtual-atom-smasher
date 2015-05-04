@@ -170,7 +170,7 @@ define("vas/core",
 
 				// Check for preferred dimentions
 				var dim = UI.mininav.getPreferredSize();
-				if (dim != undefined) {
+				if (dim !== undefined) {
 					mininavDOM,css({
 						'width': dim[0],
 						'height': dim[1]
@@ -1039,13 +1039,51 @@ define("vas/core",
 		}
 
 		/**
+		 * Submit current activity counter to the server
+		 */
+		VAS.commitActivity = function() {
+
+			// Calculate activity delta and store on activity counter
+			if (VAS.activityTimestamp != 0)
+				VAS.activityCounter += (Date.now() - VAS.activityTimestamp);
+
+			// Commit to server
+			if (VAS.activityCounter > 0) {
+				User.commitActivityTimer( VAS.activityCounter );
+				VAS.activityCounter = 0;
+			}
+
+			// Update activity timestamp
+			VAS.activityTimestamp = Date.now();
+
+		}
+
+		/**
 		 * Initialize VAS with the given game configuration and run
 		 */
 		VAS.run = function() {
 
-			// Run main game
+			// Switch to login screen
 			UI.selectScreen( "screen.login" );
-			//UI.selectScreen( "screen.home" );
+
+			// Start activity counter
+			VAS.activityCounter = 0;
+			VAS.activityTimestamp = Date.now();
+
+			// Commit activity every 30 seconds
+			VAS.activityCommitTimer = setInterval( VAS.commitActivity, 30000 )
+
+			// Stop / Start activity on window blur/focus
+			$(window).blur(function() {
+				// Commit activity
+				VAS.commitActivity();
+				// Reset timestamp
+				VAS.activityTimestamp = 0;
+			});
+			$(window).focus(function() {
+				// Set timestamp
+				VAS.activityTimestamp = Date.now();
+			});
 
 		}
 

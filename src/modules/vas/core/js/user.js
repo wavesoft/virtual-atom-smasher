@@ -989,6 +989,16 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Update activity timer
+		 */
+		User.prototype.commitActivityTimer = function( activityMs ) {
+
+			// Commit activity timer
+			this.accountIO.commitActivityTimer( activityMs );
+
+		}
+
+		/**
 		 * Handle configuration changes
 		 */
 		User.prototype.onConfigChanged = function( configName, callback ) {

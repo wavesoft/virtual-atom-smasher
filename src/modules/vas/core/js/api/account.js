@@ -383,6 +383,16 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Commit activity timer
+		 */
+		APIAccount.prototype.commitActivityTimer = function( activityMs ) {
+			// Update activity counter
+			this.sendAction("user.activity", {
+				'counter': activityMs
+			}
+		}
+
+		/**
 		 * Handle chatroom event
 		 */
 		APIAccount.prototype.handleAction = function(action, data) {
