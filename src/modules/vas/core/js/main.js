@@ -126,6 +126,15 @@ define("vas/core",
 		 */
 		VAS.initialize = function( readyCallback ) {
 
+			// If we have HTTP enforcing, apply it now
+			if (config.enforce_http && (window.location.protocol != "http:")) {
+
+				// Redirect and return
+				window.location = 'http:' + String(window.location).split(":")[1];
+				return;
+				
+			}
+
 			// Absolutely minimum UI initializations
 			UI.initialize();
 

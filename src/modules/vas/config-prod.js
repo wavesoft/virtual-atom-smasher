@@ -76,8 +76,13 @@ define({
 	},
 
 	/**
+	 * Enforce 'http' (webapi and survey bugfix)
+	 */
+	'enforce_http': true,
+
+	/**
 	 * Version
 	 */
-	'version': 'master-f74dfec',
+	'version': 'master-18c5918',
 
 });

@@ -76,6 +76,11 @@ define({
 	},
 
 	/**
+	 * Enforce 'http' (webapi and survey bugfix)
+	 */
+	'enforce_http': true,
+
+	/**
 	 * Version
 	 */
 	'version': 'debug',
