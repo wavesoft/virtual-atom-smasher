@@ -129,9 +129,12 @@ define("vas/core",
 			// If we have HTTP enforcing, apply it now
 			if (config.enforce_http && (window.location.protocol != "http:")) {
 
-				// Redirect and return
-				window.location = 'http:' + String(window.location).split(":")[1];
-				return;
+				// Skip if we have '#noenforce' hash
+				if (window.location.hash != '#noenforce') {
+					// Redirect and return
+					window.location = 'http:' + String(window.location).split(":")[1];
+					return;
+				}
 				
 			}
 
