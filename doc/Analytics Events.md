@@ -113,6 +113,7 @@ An interface tutorial (Tootr TVHead) has completed.
 {
     "id": "",       // The course ID
     "time": 0,      // The time (in seconds) spent in the tutorial
+    "focused": 0,   // The time (in seconds) spent focused on the video
     "percent":      // The percentage of the video seen
 }
 ```
