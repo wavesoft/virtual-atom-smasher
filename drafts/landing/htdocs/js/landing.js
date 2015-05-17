@@ -45,6 +45,26 @@ $(function() {
 	}
 
 	/**
+	 * Smooth scrolling on the links
+	 */
+	$('a').click(function( e ){  
+
+		// Ignore non #ID links
+	    var href = $(this).attr("href");
+	    if (href[0] != "#")
+	    	return;
+
+	    // Find target
+	    e.preventDefault();
+	    var targetId = $(href),
+	    	top = $(targetId).offset().top;
+
+	    // Animate
+	    $('html, body').stop().animate({scrollTop: top }, 500);
+
+	});
+
+	/**
 	 * Bind to DOM events
 	 */
 	$(window).resize(function() {

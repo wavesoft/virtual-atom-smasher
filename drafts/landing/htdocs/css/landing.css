@@ -5,6 +5,14 @@ body {
   font-size: 14px;
   overflow-x: hidden;
 }
+em {
+  letter-spacing: 1px;
+}
+.btn.btn-green {
+  color: #ffffff;
+  background-color: #1ABC9C;
+  border-color: #16A085;
+}
 .service-box {
   background-color: #FFF;
   padding: 10px;
@@ -24,6 +32,17 @@ body {
 }
 .filler {
   padding: 20px 0 50px;
+}
+.filler .filler-title {
+  text-align: center;
+  margin: 5px 0 40px;
+  font-size: 1.4em;
+  color: #333;
+  text-transform: uppercase;
+}
+.filler .filler-title > span {
+  border-bottom: solid 1px #333;
+  padding-bottom: 10px;
 }
 .section {
   min-height: 500px;
@@ -81,6 +100,7 @@ body {
 }
 .section .section-body > div > p {
   text-shadow: 2px 2px 1px #000;
+  font-size: 1.1em;
 }
 .section .more-arrow {
   position: absolute;
@@ -110,7 +130,8 @@ body {
 }
 .section.section-vas + .filler h1,
 .section.section-vas + .filler h2,
-.section.section-vas + .filler h3 {
+.section.section-vas + .filler h3,
+.section.section-vas + .filler h4 {
   color: #cd5f00;
 }
 .section.section-vas + .filler .section-body > div {
@@ -132,14 +153,15 @@ body {
 }
 .section.section-more + .filler h1,
 .section.section-more + .filler h2,
-.section.section-more + .filler h3 {
+.section.section-more + .filler h3,
+.section.section-more + .filler h4 {
   color: #148f77;
 }
 .section.section-more + .filler .section-body > div {
   margin-top: 20px;
 }
 .section.section-behind > .backfix {
-  background-image: url("../img/bubble.png");
+  background-image: url("../img/bubble.jpg");
 }
 .section.section-behind .section-header > div,
 .section.section-behind .section-header > div + div {
@@ -151,7 +173,8 @@ body {
 }
 .section.section-behind + .filler h1,
 .section.section-behind + .filler h2,
-.section.section-behind + .filler h3 {
+.section.section-behind + .filler h3,
+.section.section-behind + .filler h4 {
   color: #c87f0a;
 }
 .section.section-behind + .filler .section-body > div {
