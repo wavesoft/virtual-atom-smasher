@@ -80,6 +80,7 @@ define(
 
 			// Analytics helpers
 			this.seqID = null;
+			this.timeStarted = 0;
 
 			// Prepare host dom
 			this.hostDOM.addClass("tvhead");
@@ -316,7 +317,13 @@ define(
 			if (this.eExplainPopcorn)
 				this.eExplainPopcorn.play();
 
+			// Restart timer when video is actually started
+			this.eExplainPopcorn.on('playing', (function() {
+				this.timeStarted = Date.now();
+			}).bind(this));
+
 			// Fire chatroom send event (no details)
+			this.timeStarted = Date.now();
 			Analytics.restartTimer("interface-tutorial");
 			Analytics.fireEvent("interface_tutorial.start", {
 				"id": this.seqID,
@@ -339,11 +346,17 @@ define(
 				this.eExplainPopcorn.pause();
 
 			// Forward analytics
-			var playTime = Analytics.stopTimer("interface-tutorial"),
+			var playTime = Date.now() - this.timeStarted,
 				mediaTime = this.eExplainPopcorn.duration() * 1000;
+
+			// If ended map to mediaTime
+			if (this.eExplainPopcorn.ended()) playTime = mediaTime;
+
+			// Fire analytics event
 			Analytics.fireEvent("interface_tutorial.percent", {
 				"id": this.seqID,
-				"time": playTime,
+				"time": playTime / 1000,
+				"focused":  Analytics.stopTimer("interface-tutorial") / 1000,
 				"percent": playTime / mediaTime,
 			});
 

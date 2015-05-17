@@ -29,10 +29,12 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			badClickLocations = [];
 
 		$('body').click(function(e) {
-			var target = $(e.target);
+			var target = $(e.target),
+				valid_selectors = "button,a,input,.navbtn-large,.tab";
 
-			// UI Elements are good
-			if (target.is("button,a,input"))
+			// UI Elements (or parent elements) are good
+			if (target.is(valid_selectors) ||
+			   (target.parent(valid_selectors).length != 0))
 				return;
 
 			// Other known UI classes
@@ -322,13 +324,6 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 		/**
 		 * The currently registered popup widgets
-		 *
-		 * @type {Object}
-		 */
-		UI.popupWidgets = {};
-
-		/**
-		 * First-time aids
 		 *
 		 * @type {Object}
 		 */
@@ -643,7 +638,6 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 					blur_back = args[i];
 				}
 			}
-
 
 			// Delay-execute showOverlay if required
 			var doShowOverlay = function() {

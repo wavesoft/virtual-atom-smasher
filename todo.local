@@ -1,0 +1,39 @@
+I am debugging the events
+do you prefer I write here the comments..... or I write a technical report?
+in the mean while........ I am writing things here....
+interface_tutorial:percent:ui.tuning:0.2175
+I saw the whole video... it should be 100% or 1.0
+so... 
+
+1.- percent of tutorial is not properly measured.
+
+3.- at the simulation screen if I click feedback is not tracked as feedback and it is firing the bad-click event. (two things to fix here ) additionally.... just a comment in the forum (ie. simulation->feedback) you show "Please correct the following errors before continuing:" .  I would remove that, and show it in case the user is submiting the comment without subject.
+
+5.- at the fssr screen the tabs, description, unlock, current results, papers are not tracked
+
+6.- view job status button is not tracked
+
+.... it could be my fault... maybe you are generating the event and I am not receiving it... anyway. I will be debugging the whole day so I will go through this list many times :)
+
+I don't understand why I have a list of jobs.. if it is not possible to run more than a good at the same time
+additionally.... I am with the hadronization... I cannot get any estimation
+I click the bottom but nothing happen
+
+7. when I am at the fssr screen or hidro screen and I click to go back to the machine it counts as bad_click
+additionally.... at the simulation screen when I want to see the plot combining simulation data and reference data.... for the parameters around the world.... the X axis values cannot be read properly
+the unlock tab at the hadrizo... screen it is not clear. my understanding.... as I unlock I get new parameters to optimise, but I don't see the way of going back. I mean... If a want to go back to 3 parameters, can I do it? maybe it makes no sense to go back?
+
+9.- at user status screen when I click "Master your knowledge" the fired tag is pop_up:show:undefined:undefined
+it can be my fault, but I think that variables does not contain the right values.
+additionally at user status screen, let icon with the pencil does not work.
+
+9. at the status screen. the view all published papers is not tracked. It fires bac_click
+.
+.
+.
+How do you want me to proceed?
+10.- status screen , the 4 options are not tracked (i.e. the four circular icons at the bottom of the screen)
+they fire bad_clicks
+11.- when I click on an user profile. it is not tracked
+12.- when I click change team. It is not tracked
+When do you think it can be fixed? I would like to have a meeting with Oula and see the analytic structure in detail.

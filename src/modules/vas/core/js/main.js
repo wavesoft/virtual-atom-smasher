@@ -961,7 +961,7 @@ define("vas/core",
 
 				// Configure Embed frame
 				qOvr.onEmbedConfigured({
-					'url' 	: 'http://tecfalabs.unige.ch/survey/index.php/948573/lang-en/newtest/Y?userID=' + User.profile['trackid'],
+					'url' 	: '//tecfalabs.unige.ch/survey/index.php/948573/lang-en/newtest/Y?userID=' + User.profile['trackid'],
 					'block'	: true,
 				})
 
