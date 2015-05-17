@@ -1,0 +1,169 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700);
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  overflow-x: hidden;
+}
+.service-box {
+  background-color: #FFF;
+  padding: 10px;
+  margin: 10px 0 2px;
+  border-bottom: solid 1px #E7E7E7;
+}
+.service-box .box-image {
+  text-align: center;
+}
+.service-box .box-image img {
+  border: none;
+}
+.service-box .box-body h1 {
+  text-align: center;
+  font-size: 1.7em;
+  font-weight: bold;
+}
+.filler {
+  padding: 20px 0 50px;
+}
+.section {
+  min-height: 500px;
+  position: relative;
+  overflow: hidden;
+}
+.section > .backfix {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  left: 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+.section .section-spacer {
+  margin-bottom: 100px;
+}
+.section .section-floater {
+  position: absolute;
+}
+.section .section-header > div,
+.section .section-header > div + div {
+  background-color: #FFF;
+  height: 97px;
+  border-radius: 0;
+}
+.section .section-header > div {
+  font-family: 'Open Sans Condensed', sans-serif;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  color: #333;
+  padding-left: 20px;
+  border-radius: 20px 0 0 0;
+}
+.section .section-header > div div.title {
+  font-size: 2.9em;
+  font-weight: 700;
+}
+.section .section-header > div div.subtitle {
+  font-size: 1.5em;
+  font-weight: 300;
+  margin-bottom: 5px;
+}
+.section .section-body {
+  margin-bottom: 20px;
+}
+.section .section-body > div {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  border-radius: 8px;
+}
+.section .section-body > div > p {
+  text-shadow: 2px 2px 1px #000;
+}
+.section .more-arrow {
+  position: absolute;
+  display: block;
+  left: 50%;
+  bottom: 30px;
+  width: 50px;
+  height: 50px;
+  border-style: none solid solid none;
+  border-color: #fff;
+  border-width: 1px;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+}
+.section.section-vas > .backfix {
+  background-image: url("../img/back-vas.jpg");
+}
+.section.section-vas .section-header > div,
+.section.section-vas .section-header > div + div {
+  border-bottom: solid 1px #E7E7E7;
+}
+.section.section-vas + .filler {
+  background-color: #F3F3F3;
+  border-bottom: solid 4px #ff7701;
+}
+.section.section-vas + .filler h1,
+.section.section-vas + .filler h2,
+.section.section-vas + .filler h3 {
+  color: #cd5f00;
+}
+.section.section-vas + .filler .section-body > div {
+  margin-top: 20px;
+}
+.section.section-vas .section-body > div {
+  margin-top: 40px;
+}
+.section.section-more > .backfix {
+  background-image: url("../img/behind.jpg");
+}
+.section.section-more .section-header > div,
+.section.section-more .section-header > div + div {
+  border-bottom: solid 1px #E7E7E7;
+}
+.section.section-more + .filler {
+  background-color: #F3F3F3;
+  border-bottom: solid 4px #1abc9c;
+}
+.section.section-more + .filler h1,
+.section.section-more + .filler h2,
+.section.section-more + .filler h3 {
+  color: #148f77;
+}
+.section.section-more + .filler .section-body > div {
+  margin-top: 20px;
+}
+.section.section-behind > .backfix {
+  background-image: url("../img/bubble.png");
+}
+.section.section-behind .section-header > div,
+.section.section-behind .section-header > div + div {
+  border-bottom: solid 1px #E7E7E7;
+}
+.section.section-behind + .filler {
+  background-color: #F3F3F3;
+  border-bottom: solid 4px #f39c12;
+}
+.section.section-behind + .filler h1,
+.section.section-behind + .filler h2,
+.section.section-behind + .filler h3 {
+  color: #c87f0a;
+}
+.section.section-behind + .filler .section-body > div {
+  margin-top: 20px;
+}
+.section .section-floater.floater-vas {
+  width: 520px;
+  height: 520px;
+  background-image: url(../img/logo-big.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  left: -40px;
+  top: -39px;
+  opacity: 0.6;
+}
