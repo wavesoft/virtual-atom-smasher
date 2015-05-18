@@ -166,7 +166,7 @@ em {
   margin-top: 20px;
 }
 .section.section-behind > .backfix {
-  background-image: url("../img/bubble.jpg");
+  background-image: url("../img/red.jpg");
 }
 .section.section-behind .section-header > div,
 .section.section-behind .section-header > div + div {
@@ -174,13 +174,13 @@ em {
 }
 .section.section-behind + .filler {
   background-color: #F3F3F3;
-  border-bottom: solid 4px #158cba;
+  border-bottom: solid 4px #e74c3c;
 }
 .section.section-behind + .filler h1,
 .section.section-behind + .filler h2,
 .section.section-behind + .filler h3,
 .section.section-behind + .filler h4 {
-  color: #106a8c;
+  color: #d62c1a;
 }
 .section.section-behind + .filler .section-body > div {
   margin-top: 20px;

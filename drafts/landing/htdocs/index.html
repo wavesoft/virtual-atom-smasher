@@ -173,11 +173,32 @@
 
 				<div class="media">
 				  <div class="media-left">
+				      <img class="media-object" src="img/icon-distributed.png" alt="Distributed">
+				  </div>
+				  <div class="media-body">
+				    <h4 class="media-heading">LiveQ for managing the jobs</h4>
+					<p>For each simulation we will have to compute hundrends of thousands of collisions and wait for all of them to complete. Something like this could take from a couple of minutes to a couple of hours. This is not acceptable in an interactive game. In order to be able to provide real-time information to the game interface, as the simulation progresses, we have developed the <a href="https://github.com/wavesoft/LiveQ" target="_blank">LiveQ Framework</a>. In addition, this framework makes sure to start the simulation as quickly as possible to as many machine as possible, effectively reducing the overall time that you will have to wait.</p>
+				  </div>
+				</div>
+
+				<div class="media">
+				  <div class="media-left">
 				      <img class="media-object" src="img/icon-cernvm.png" alt="CernVM">
 				  </div>
 				  <div class="media-body">
 				    <h4 class="media-heading">&mu;CernVM as our Virtual Appliance</h4>
-					<p>We.</p>
+					<p>Our experimental software are running in a specialised linux distribution, and depend on quite some applications. However not all the volunteers run linux, nor they are willing to go through the installation process. Therefore, we have pre-packaged a <a href="https://en.wikipedia.org/wiki/Virtual_machine" target="_blank">Virtual Machine</a> with all the software that we need, and we are sending this instead to the users.</p>
+					<p>We are using micro-<a href="http://cernvm.cern.ch/portal" target="_blank">CernVM</a> as our virtual appliance, because it offers a small footprint and provides all the required mechanisms to deliver the latest software to all the users.</p>
+				  </div>
+				</div>
+
+				<div class="media">
+				  <div class="media-left">
+				      <img class="media-object" src="img/icon-webapi.png" alt="WebAPI">
+				  </div>
+				  <div class="media-body">
+				    <h4 class="media-heading">CernVM WebAPI for making it easy</h4>
+					<p>You are going to need a hypervisor (such as Virtual Box) if you would like to start your own Virtual Appliance in order to provide more computing resources in your project. However such task is not easy for everyone. For this reason we have developed <em>CernVM WebAPI</em>, a mechanism that can start a virtual machine in your computer direclty from the browser, taking care of the installation of a hypervisor if needed. Just sit back and enjoy!</p>
 				  </div>
 				</div>
 
@@ -192,7 +213,7 @@
 			<div class="section-spacer hidden-xs"></div>
 			<div class="row section-header">
 			  <div class="col-sm-offset-4 col-sm-6">
-				<div class="title">People Behind</div>
+				<div class="title">Developing the game</div>
 				<div class="subtitle">See who made this game possible</div>
 			  </div>
 			  <div class="col-sm-2 hidden-xs">&nbsp;</div>
@@ -203,7 +224,7 @@
 			  		Quite some people have contributed in the development of this game. From the theoretical physicists till the smallest developers, they have addressed all their efforts in order to make a useful educational tool for everyone! 
 			  	</p>
 				<div>
-					<a class="btn btn-primary btn-lg" href="#behind">Meet the team</a>
+					<a class="btn btn-danger btn-lg" href="#behind">Meet the team</a>
 				</div>
 			  </div>
 			</div>
@@ -213,74 +234,86 @@
 			<div class="row section-body">
 			  <div class="col-sm-offset-1 col-sm-10">
 
-				<div class="row">
-				   <div class="col-lg-10 col-lg-offset-1">
-				      <div class="row">
-				         <div class="col-lg-6">
-				            <div class="media">
-				               <a href="#team" class="pull-left"><img src="img/team-ioannis.jpg" alt="Ioannis" class="media-object img-rounded"></a>
-				               <div class="media-body">
-				                  <h4 class="media-heading">Ioannis Charalampidis</h4>
-				                  <p>Ioannis is based at CERN and developed the game interface and all the computing framework behind. He is </p>
-				               </div>
-				            </div>
-				         </div>
-				         <div class="col-lg-6">
-				            <div class="media">
-				               <a href="#team" class="pull-left"><img src="img/team-lioumpa.jpg" alt="Lioumpa" class="media-object img-rounded"></a>
-				               <div class="media-body">
-				                  <h4 class="media-heading">Theodoridou Lioumpa</h4>
-				                  <p>Lioumpa is our artwork designer and content development. She has designed the graphics and animations for the game and she has made simple and understandable most of the scientific explainations.</p>
-				               </div>
-				            </div>
-				         </div>
+			  	<div class="filler-title">
+			  		<span>Meet our team</span>
+			  	</div>
 
-				      </div>
-				      <div class="row">
-				         <div class="col-lg-6">
-				            <div class="media">
-							   <div class="media-left">
-					           	 <img src="img/team-francois.jpg" alt="Ioannis" class="media-object img-rounded"></a>
-				               </div>
-				               <div class="media-body">
-				                  <h4 class="media-heading">Francois Grey</h4>
-				                  <p>Francois is in the University of Geneva. He is our occasional taskmaster, to keep the team on schedule</p>
-				               </div>
-				            </div>
-				         </div>
-				         <div class="col-lg-6">
-				            <div class="media">
-				               <a href="#team" class="pull-left"><img src="img/team-peter.jpg" alt="Ioannis" class="media-object img-rounded"></a>
-				               <div class="media-body">
-				                  <h4 class="media-heading">Peter Skands</h4>
-				                  <p>Peter Skands at Monash University is the particle physicist who conceived of the challenge, and ensures the physics output is useful.</p>
-				               </div>
-				            </div>
-				         </div>
-				      </div>
-				      <div class="row">
-				         <div class="col-lg-6">
-				            <div class="media">
-				               <a href="#team" class="pull-left"><img src="img/team-ben.jpg" alt="Ioannis" class="media-object img-rounded"></a>
-				               <div class="media-body">
-				                  <h4 class="media-heading">Ben Segal</h4>
-				                  <p>The dev team was guided by Ben Segal of CERN, who has masterminded the development of much of the technology needed for the challenge over several years.             </p>
-				               </div>
-				            </div>
-				         </div>
-				         <div class="col-lg-6">
-				            <div class="media">
-				               <a href="#team" class="pull-left"><img src="img/team-jose.jpg" alt="Ioannis" class="media-object img-rounded"></a>
-				               <div class="media-body">
-				                  <h4 class="media-heading">Jose Luis Fernandez-Marquez</h4>
-				                  <p>Jose is in the University of Geneva has helped install the analytics that helped us monitor the challenge.          </p>
-				               </div>
-				            </div>
-				         </div>
-				      </div>
-				   </div>
-				</div>
-
+					<div class="row">
+						<div class="col-lg-10 col-lg-offset-1">
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="media">
+										<div class="media-left">
+											<a href="#team" class="pull-left"><img src="img/team-ioannis.jpg" alt="Ioannis" class="media-object img-rounded"></a>
+										</div>
+										<div class="media-body">
+											<h4 class="media-heading">Ioannis Charalampidis</h4>
+											<p>Ioannis is based at CERN and developed the game interface and all the computing framework behind. He is </p>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="media">
+										<div class="media-left">
+											<a href="#team" class="pull-left"><img src="img/team-lioumpa.jpg" alt="Lioumpa" class="media-object img-rounded"></a>
+										</div>
+										<div class="media-body">
+											<h4 class="media-heading">Theodoridou Lioumpa</h4>
+											<p>Lioumpa is our artwork designer and content development. She has did the graphics and animations for the game and she has made simple and understandable most of the scientific explainations.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="media">
+										<div class="media-left">
+											<img src="img/team-francois.jpg" alt="Francois" class="media-object img-rounded"></a>
+										</div>
+										<div class="media-body">
+											<h4 class="media-heading">Francois Grey</h4>
+											<p>Francois is in the University of Geneva. He is our occasional taskmaster, to keep the team on schedule</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="media">
+										<div class="media-left">
+											<a href="#team" class="pull-left"><img src="img/team-peter.jpg" alt="Peter" class="media-object img-rounded"></a>
+										</div>
+										<div class="media-body">
+											<h4 class="media-heading">Peter Skands</h4>
+											<p>Peter Skands at Monash University is the particle physicist who conceived of the game, and ensures the physics output is useful.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="media">
+										<div class="media-left">
+											<a href="#team" class="pull-left"><img src="img/team-ben.jpg" alt="Ben" class="media-object img-rounded"></a>
+										</div>
+										<div class="media-body">
+											<h4 class="media-heading">Ben Segal</h4>
+											<p>The dev team was guided by Ben Segal of CERN, who has masterminded the development of much of the technology needed for the game over several years.</p>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="media">
+										<div class="media-left">
+											<a href="#team" class="pull-left"><img src="img/team-jose.jpg" alt="Jose" class="media-object img-rounded"></a>
+										</div>
+										<div class="media-body">
+											<h4 class="media-heading">Jose Luis Fernandez-Marquez</h4>
+											<p>Jose is in the University of Geneva has helped install the analytics that helped us monitor the game.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
 			  </div>
 			</div>

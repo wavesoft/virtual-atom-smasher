@@ -59,6 +59,9 @@ $(function() {
 	    var targetId = $(href),
 	    	top = $(targetId).offset().top;
 
+	    // Push state
+        history.pushState({}, "Virtual Atom Smasher - " + $(this).text(), href);
+
 	    // Animate
 	    $('html, body').stop().animate({scrollTop: top }, 500);
 
