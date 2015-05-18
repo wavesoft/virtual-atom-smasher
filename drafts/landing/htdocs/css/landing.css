@@ -122,6 +122,9 @@ em {
   -ms-transform: rotate(45deg);
   -o-transform: rotate(45deg);
 }
+.section .more-arrow:focus {
+  outline: none;
+}
 .section.section-vas > .backfix {
   background-image: url("../img/back-vas.jpg");
 }
