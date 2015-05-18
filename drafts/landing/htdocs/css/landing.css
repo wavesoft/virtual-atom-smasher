@@ -185,6 +185,9 @@ em {
 .section.section-behind + .filler .section-body > div {
   margin-top: 20px;
 }
+.section.section-behind + .filler .media {
+  margin: 2px 5px;
+}
 .section .section-floater.floater-vas {
   width: 520px;
   height: 520px;
