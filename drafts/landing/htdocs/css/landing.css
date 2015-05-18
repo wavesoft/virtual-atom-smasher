@@ -44,6 +44,11 @@ em {
   border-bottom: solid 1px #333;
   padding-bottom: 10px;
 }
+.footer {
+  background-color: #eee;
+  padding: 50px 0 40px;
+  text-align: center;
+}
 .section {
   min-height: 500px;
   position: relative;
@@ -169,13 +174,13 @@ em {
 }
 .section.section-behind + .filler {
   background-color: #F3F3F3;
-  border-bottom: solid 4px #f39c12;
+  border-bottom: solid 4px #158cba;
 }
 .section.section-behind + .filler h1,
 .section.section-behind + .filler h2,
 .section.section-behind + .filler h3,
 .section.section-behind + .filler h4 {
-  color: #c87f0a;
+  color: #106a8c;
 }
 .section.section-behind + .filler .section-body > div {
   margin-top: 20px;
