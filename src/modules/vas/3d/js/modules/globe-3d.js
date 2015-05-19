@@ -33,8 +33,12 @@ define(
 			this.scene = new THREE.Scene();
 
 			// Initialize renderer
-			this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-			this.hostDOM.append(this.renderer.domElement);
+			try	{
+				this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+				this.hostDOM.append(this.renderer.domElement);
+			} catch (e) {
+				this.renderer = null;
+			}
 
 			// ============================
 			//  Prepare lighting
@@ -176,6 +180,7 @@ define(
 			if (!this.paused)
 				this.globeHost.rotateY(0.01);
 
+			if (!this.render) return;
 			this.renderer.render( 
 				this.scene, 
 				this.camera 
@@ -205,6 +210,7 @@ define(
 			this.half.y = h/2;
 
 			// Resize renderer
+			if (!this.render) return;
 			this.renderer.setSize( w, h );
 
 		};
