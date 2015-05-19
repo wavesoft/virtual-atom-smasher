@@ -180,7 +180,7 @@ define(
 			if (!this.paused)
 				this.globeHost.rotateY(0.01);
 
-			if (!this.render) return;
+			if (!this.renderer) return;
 			this.renderer.render( 
 				this.scene, 
 				this.camera 
@@ -210,8 +210,8 @@ define(
 			this.half.y = h/2;
 
 			// Resize renderer
-			if (!this.render) return;
-			this.renderer.setSize( w, h );
+			if (this.renderer)
+				this.renderer.setSize( w, h );
 
 		};
 
