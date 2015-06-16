@@ -47,14 +47,6 @@ define("vas/media", [ "require", "popcorn" ],
 			videoWrapper = Popcorn.HTMLVimeoVideoElement( host[0] );
 			videoWrapper.src = url;
 
-			// Register callbacks
-			videoWrapper.addEventListener('loadeddata', function() {
-				if (timedOut) return;
-				clearTimeout(timeoutTimer);
-				$(videoWrapper).triggerHandler('loaded');
-			});
-
-
 		} else if (url.match( /^vas:/i )) {
 
 			//
@@ -76,8 +68,8 @@ define("vas/media", [ "require", "popcorn" ],
 
 		// Register callbacks
 		videoWrapper.addEventListener('loadeddata', function() {
-			if (timedOut) return;
 			clearTimeout(timeoutTimer);
+			if (timedOut) return;
 			$(videoWrapper).triggerHandler('loaded');
 		});
 
@@ -86,7 +78,7 @@ define("vas/media", [ "require", "popcorn" ],
 			timedOut = true;
 			$(videoWrapper).triggerHandler('timeout');
 		}, 10000);
-
+		
 
 		// Return video wrapper
 		return videoWrapper;
