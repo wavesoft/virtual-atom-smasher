@@ -14,7 +14,7 @@ define(
 		/**
 		 * The default tunable body class
 		 */
-		var OverlayQuestionaire = function(hostDOM) {
+		var OverlayEmbed = function(hostDOM) {
 
 			// Initialize widget
 			Component.call(this, hostDOM);
@@ -42,12 +42,12 @@ define(
 		};
 
 		// Subclass from ObservableWidget
-		OverlayQuestionaire.prototype = Object.create( Component.prototype );
+		OverlayEmbed.prototype = Object.create( Component.prototype );
 
 		/**
 		 * Reposition flashDOM on resize
 		 */
-		OverlayQuestionaire.prototype.onEmbedConfigured = function( config ) {
+		OverlayEmbed.prototype.onEmbedConfigured = function( config ) {
 
 			// Navigate to the specified URL
 			this.initialLoad = true;
@@ -57,7 +57,7 @@ define(
 
 
 		// Store overlay component on registry
-		R.registerComponent( 'overlay.embed', OverlayQuestionaire, 1 );
+		R.registerComponent( 'overlay.embed', OverlayEmbed, 1 );
 
 	}
 

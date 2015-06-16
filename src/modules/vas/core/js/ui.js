@@ -505,6 +505,8 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			UI.hostOverlay.click(function(e) {
 				e.preventDefault();
 				e.stopPropagation();
+				if (UI.activeOverlayComponent)
+					UI.activeOverlayComponent.trigger('dispose');
 				UI.hideOverlay();
 			});
 

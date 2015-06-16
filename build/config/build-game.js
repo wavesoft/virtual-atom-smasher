@@ -50,6 +50,7 @@
             	// WARNING: All these modules *MUST* be named explicitly
 				"vas/core",
 				"vas/basic",
+				"vas/media",
 				"vas/3d/main",
 				"google-tag-manager"
 
@@ -91,6 +92,10 @@
 		{
 			'name': 'vas/basic',
 			'location': 'vas/basic/js'
+		},
+		{
+			'name': 'vas/media',
+			'location': 'vas/media/js'
 		},
 		{
 			'name': 'vas/3d',
@@ -152,7 +157,7 @@
 		{
 			'name'		: 'popcorn',
 			'location'	: 'extern/popcorn/js',
-			'main'		: 'popcorn-19cb6b0'
+			'main'		: 'popcorn-8ae202a'
 		},
 		{
 			'name'		: 'jquery-knob',
@@ -211,6 +216,8 @@
 		'vas/basic/img' : 'vas/basic/img',
 		'vas/basic/tpl' : 'vas/basic/tpl',
 		'vas/basic/css' : 'vas/basic/css',
+		'vas/media/img' : 'vas/media/img',
+		'vas/media/mov' : 'vas/media/mov',
 
 		// Use the production config
 		'vas/config' 	: 'vas/config-prod',

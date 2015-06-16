@@ -1,9 +1,9 @@
 
 define(
 
-	[ "require", "three", "three-extras", "vas/core/registry", "vas/core/base/component" ], 
+	[ "require", "three", "three-extras", "vas/core/registry", "vas/core/ui", "vas/core/base/component" ], 
 
-	function(require, THREE, THREEx, R, Component ) {
+	function(require, THREE, THREEx, R, UI, Component ) {
 
 		/**
 		 * Find base directory for images
@@ -37,6 +37,7 @@ define(
 				this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 				this.hostDOM.append(this.renderer.domElement);
 			} catch (e) {
+				UI.logError("Your browser does not support WebGL. Note that graphics might be missing!");
 				this.renderer = null;
 			}
 

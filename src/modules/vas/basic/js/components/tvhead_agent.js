@@ -2,14 +2,14 @@
 define(
 
 	// Requirements
-	[ "require", "jquery", "popcorn", "vas/core/ui", "vas/core/registry", "vas/core/base/agent", "core/analytics/analytics" ],
+	[ "require", "jquery", "popcorn", "vas/media", "vas/core/ui", "vas/core/registry", "vas/core/base/agent", "core/analytics/analytics" ],
 
 	/**
 	 * Basic version of the home screen
 	 *
 	 * @exports basic/components/tvhead_agent
 	 */
-	function(require, $, Popcorn, UI, R, VisualAgent, Analytics) {
+	function(require, $, Popcorn, Media, UI, R, VisualAgent, Analytics) {
 
 
 		/**
@@ -252,12 +252,38 @@ define(
 			this.tvHead.append(videoHost);
 
 			// Prepare video wrapper
-			var videoWrapper = Popcorn.HTMLYouTubeVideoElement( "#misc-presentation-video" );
-			videoWrapper.src = sequence.video;
-			videoWrapper.addEventListener('loadeddata', function() {
+			var videoWrapper = Media.createVideoWrapper( sequence.video, videoHost );
+			if (!videoWrapper) {
+
+				// We are invalid
+				this.eExplainPopcorn = null;
+				cb();
+
+				// Seuqnce completion right away
+				setTimeout((function() {
+					UI.logError("An error occured while trying to load the video object!");
+					this.trigger('completed');
+				}).bind(this), 100);
+
+				// Do not continue
+				return;
+			}
+
+			// Bind events
+			$(videoWrapper).on('loaded', (function() {
 				// Fire callback when we are loaded
 				cb();
-			});
+			}).bind(this));
+			$(videoWrapper).on('timeout', (function() {
+				// We are invalid
+				this.eExplainPopcorn = null;
+				cb();
+				// Trigger error
+				UI.logError("It seems the video is not loading. There might be a network error!");
+				setTimeout((function() {
+					this.trigger('completed');
+				}).bind(this), 100);
+			}).bind(this));
 
 			// Initialize popcorn
 			this.eExplainPopcorn = Popcorn(videoWrapper);
@@ -314,13 +340,18 @@ define(
 			if (this.stopped) return;
 
 			// Start the video
-			if (this.eExplainPopcorn)
+			if (this.eExplainPopcorn) {
+
+				// Play
 				this.eExplainPopcorn.play();
 
-			// Restart timer when video is actually started
-			this.eExplainPopcorn.on('playing', (function() {
-				this.timeStarted = Date.now();
-			}).bind(this));
+				// Restart timer when video is actually started
+				this.eExplainPopcorn.on('playing', (function() {
+					this.timeStarted = Date.now();
+				}).bind(this));
+
+			}
+
 
 			// Fire chatroom send event (no details)
 			this.timeStarted = Date.now();
@@ -342,23 +373,24 @@ define(
 			this.stopped = true;
 
 			// Stop the video
-			if (this.eExplainPopcorn)
+			if (this.eExplainPopcorn) {
 				this.eExplainPopcorn.pause();
 
-			// Forward analytics
-			var playTime = Date.now() - this.timeStarted,
-				mediaTime = this.eExplainPopcorn.duration() * 1000;
+				// Forward analytics
+				var playTime = Date.now() - this.timeStarted,
+					mediaTime = this.eExplainPopcorn.duration() * 1000;
 
-			// If ended map to mediaTime
-			if (this.eExplainPopcorn.ended()) playTime = mediaTime;
+				// If ended map to mediaTime
+				playTime = mediaTime;
 
-			// Fire analytics event
-			Analytics.fireEvent("interface_tutorial.percent", {
-				"id": this.seqID,
-				"time": playTime / 1000,
-				"focused":  Analytics.stopTimer("interface-tutorial") / 1000,
-				"percent": playTime / mediaTime,
-			});
+				// Fire analytics event
+				Analytics.fireEvent("interface_tutorial.percent", {
+					"id": this.seqID,
+					"time": playTime / 1000,
+					"focused":  Analytics.stopTimer("interface-tutorial") / 1000,
+					"percent": playTime / mediaTime,
+				});
+			}
 
 			// Reset video
 			this.reset();

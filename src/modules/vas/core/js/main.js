@@ -762,8 +762,8 @@ define("vas/core",
 					function(cb) {
 						// Show pre-evaluation questionnaire
 						if (!User.isFirstTimeSeen("learningeval.pre")) {
-							VAS.displayLearningEval(function() {
-								User.markFirstTimeAsSeen("learningeval.pre");
+							VAS.displayLearningEval(function(completed) {
+								if (completed) User.markFirstTimeAsSeen("learningeval.pre");
 								cb();
 							});
 						} else {
@@ -963,11 +963,14 @@ define("vas/core",
 				qOvr.onEmbedConfigured({
 					'url' 	: '//tecfalabs.unige.ch/survey/index.php/948573/lang-en/newtest/Y?userID=' + User.profile['trackid'],
 					'block'	: true,
-				})
+				});
 
 				// Handle close event
 				qOvr.on("close", function() {
-					if (cb_completed) cb_completed();
+					if (cb_completed) cb_completed(true);
+				});
+				qOvr.on("dispose", function() {
+					if (cb_completed) cb_completed(false);
 				});
 
 			}).bind(this));

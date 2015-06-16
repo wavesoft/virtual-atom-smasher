@@ -3,14 +3,14 @@
 define(
 
 	// Requirements
-	["jquery", "popcorn", "vas/core/db", "vas/core/ui", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/user"],
+	["jquery", "popcorn", "vas/media", "vas/core/db", "vas/core/ui", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/user"],
 
 	/**
 	 * Basic version of the home screen
 	 *
 	 * @exports basic/components/explain_screen
 	 */
-	function($, Popcorn, DB, UI, config, R,C, User) {
+	function($, Popcorn, Media, DB, UI, config, R,C, User) {
 
 		/**
 		 * @class
@@ -110,22 +110,44 @@ define(
 			// Reset playback button status
 			this.pauseResumeBtn.html('<span class="glyphicon glyphicon-pause"></span>');
 
-			// Create a popcorn video wrapper
-			var videoWrapper = Popcorn.HTMLYouTubeVideoElement( "#cinematic-video-host" );
-			videoWrapper.src = this.videoURL;
-			videoWrapper.addEventListener('loadeddata', function() {
-				cb();
-			});
-
-			// Create a popcorn instance
-			this.popcorn = Popcorn( videoWrapper );
-			this.popcorn.on('ended', (function() {
+			// Reusable function for completion callback
+			var complete_callback = (function() {
 				this.trigger('completed');
 				this.trigger('sequence.next', 'completed'); // [SEQUENCING]
 				this.isPlaying = false;
 				if (this.completedCallback)
 					this.completedCallback();
-			}).bind(this));
+			});
+
+			// Create a popcorn video wrapper
+			var videoWrapper = Media.createVideoWrapper( this.videoURL, this.videoContainer );
+			if (!videoWrapper) {
+				// We are invalid
+				this.popcorn = null;
+				cb();
+				// Seuqnce completion right away
+				UI.logError("An error occured while trying to load the video object!");
+				setTimeout(complete_callback(), 100);
+				// Do not continue
+				return;
+			}
+
+			// Bind events
+			$(videoWrapper).on('loaded', function() {
+				cb();
+			});
+			$(videoWrapper).on('timeout', function() {
+				// We are invalid
+				this.popcorn = null;
+				cb();
+				// Seuqnce completion right away
+				UI.logError("It seems the video is not loading. There might be a network error!");
+				setTimeout(complete_callback(), 100);
+			});
+
+			// Create a popcorn instance
+			this.popcorn = Popcorn( videoWrapper );
+			this.popcorn.on('ended', complete_callback);
 		}
 
 
