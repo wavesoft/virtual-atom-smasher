@@ -10,3 +10,6 @@ pre#status-log {
   height: 200px;
   font-size: 10px;
 }
+button#btn-startstop {
+  width: 200px;
+}

@@ -9,9 +9,11 @@
 		<link rel="stylesheet" href="css/computing.css" />
 		<script type="text/javascript" src="js/jquery-2.1.1.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="//cernvm.cern.ch/releases/webapi/js/cvmwebapi-latest.js"></script>
-<!--		<script type="text/javascript" src="js/cvmwebapi-latest-offline.js"></script> -->
+		<script type="text/javascript" src="js/dumbq.js"></script>
+		<script type="text/javascript" src="js/cvmwebapi-2.0.12.js"></script> 
 		<script type="text/javascript" src="js/cvmwebapi-avm.js"></script>
+		<script type="text/javascript" src="js/creditpiggy.js"></script>
+		<script type="text/javascript" src="js/ccl-tracker.js"></script>
 		<script type="text/javascript" src="js/computing.js"></script>
 		<!--
 		<script>
@@ -30,7 +32,10 @@
 			<div class="row">
 				<div class="col-sm-offset-2 col-sm-8">
 					<h1>Virtual Atom Smasher <small>Worker</small></h1>
-					<p>From this website you can start and control computing resources that can be used in the Virtual Atom Smasher.</p>
+					<p>
+						<button id="btn-login" class="pull-right btn btn-sm btn-default">Log-in to collect credits</button>
+						From this website you can start and control computing resources that can be used in the Virtual Atom Smasher.
+					</p>
 				</div>
 			</div>
 			<div class="row">
@@ -54,6 +59,10 @@
 											<td><span id="status-machine" class="label label-default">Unknown</span></td>
 										</tr>
 										<tr>
+											<td>API</td>
+											<td><span id="status-api" class="label label-default">Unknown</span></td>
+										</tr>
+										<tr>
 											<td>Agent</td>
 											<td><span id="status-agent" class="label label-default">Unknown</span></td>
 										</tr>
@@ -64,7 +73,15 @@
 									</table>
 								</div>
 								<div class="col-xs-8">
-									<pre id="status-log">Initializing</pre>
+									<pre id="status-log"></pre>
+								</div>
+							</div>
+
+							<div class="text-center">
+								<div class="btn-group btn-group-lg" role="group" aria-label="Controls">
+								  <button type="button" id="btn-startstop" class="btn btn-primary">Start</button>
+								  <button type="button" id="btn-view" class="btn btn-default">View</button>
+								  <button type="button" id="btn-trash" class="btn btn-default">Trash</button>
 								</div>
 							</div>
 
@@ -73,6 +90,13 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- CreditPiggy Initialization -->
+		<script>
+		CreditPiggy.configure({'project':'8d41257d79bd4015b781ebcbd59d88ee'});
+		window.analyticsListener = function(ev, values){ console.log("---", ev, values) };
+		</script>
+		<!-- End CreditPiggy Initialization -->
 
 	</body>
 </html>

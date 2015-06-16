@@ -1,0 +1,1 @@
+/Users/icharala/Develop/cernvm-webapi/src/html/cvmwebapi-2.0.12.js

@@ -1,22 +1,6 @@
 
 (function(global) {
 
-	var CMD_START = 1,
-		CMD_STOP = 2,
-		CMD_APPLY = 3,
-		CMD_DESTROY = 4,
-		CMD_SET_CAP = 5,
-
-		STATE_STOPPED = 0,
-		STATE_RUNNING = 1,
-		STATE_PENDING = 2,
-
-		FLAG_NOT_READY = 0,
-		FLAG_READY = 1,
-		FLAG_READY_NOT_ACTIVE = 2,
-		FLAG_PENDING = 3,
-		FLAG_ERROR = 4;
-
 	// Create CVM namespace if missing
 	if (global['CVM'] == undefined) {
 		console.error("cvmwebapi-avm.js requires cernvm-webapi.js to be loaded first!");
@@ -45,6 +29,25 @@
 			   parseInt(timeParts[1]) * 60 +
 			   parseInt(timeParts[2]);
 	}
+
+	/**
+	 * Expose flags
+	 */
+	var CMD_START = 1,
+		CMD_STOP = 2,
+		CMD_APPLY = 3,
+		CMD_DESTROY = 4,
+		CMD_SET_CAP = 5,
+
+		STATE_STOPPED = 0,
+		STATE_RUNNING = 1,
+		STATE_PENDING = 2,
+
+		FLAG_NOT_READY = CVM.FLAG_NOT_READY = 0,
+		FLAG_READY = CVM.FLAG_READY = 1,
+		FLAG_READY_NOT_ACTIVE = CVM.FLAG_READY_NOT_ACTIVE = 2,
+		FLAG_PENDING = CVM.FLAG_PENDING = 3,
+		FLAG_ERROR = CVM.FLAG_ERROR = 4;
 
 	/**
 	 * Reusable probe functions
@@ -216,7 +219,6 @@
 			if (analytics) analytics.fireEvent("webapi.started");
 
 			// Store session instance
-			window.s = session;
 			this.wa_session = session;
 			this.wa_last_state = -1;
 

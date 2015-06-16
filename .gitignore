@@ -5,3 +5,4 @@ node_modules
 *.psd
 
 *.bak
+src/modules/vas/media/mov/*
