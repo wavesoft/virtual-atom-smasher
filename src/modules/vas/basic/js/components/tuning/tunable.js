@@ -1,7 +1,7 @@
 define(
 
 	// Dependencies
-	["jquery", "dragdealer", "vas/core/registry", "vas/core/ui", "vas/core/user", "vas/core/base/tuning_components", "core/util/spinner", "core/analytics/analytics" ], 
+	["jquery", "dragdealer", "vas/core/registry", "vas/core/ui", "vas/core/user", "vas/core/base/tuning_components", "core/util/spinner", "ccl-tracker" ], 
 
 	/**
 	 * This is the default tunable widget component for the base interface.

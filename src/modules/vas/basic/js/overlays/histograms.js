@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	["jquery", "mathjax", "sha1", "vas/core/registry","vas/core/base/component", "vas/core/apisocket", "vas/core/liveq/Calculate", "core/analytics/analytics"], 
+	["jquery", "mathjax", "sha1", "vas/core/registry","vas/core/base/component", "vas/core/apisocket", "vas/core/liveq/Calculate", "ccl-tracker"], 
 
 	/**
 	 * This is the default component for displaying flash overlay messages

@@ -8,7 +8,7 @@ define(
 		"vas/core/ui",
 		"vas/core/base/view", 
 		"vas/core/user",
-		"core/analytics/analytics",
+		"ccl-tracker",
 		"text!vas/basic/tpl/introgame.html",
 	],
 

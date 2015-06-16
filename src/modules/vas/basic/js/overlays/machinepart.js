@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/component", "vas/core/user", "core/analytics/analytics"], 
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/component", "vas/core/user", "ccl-tracker"], 
 
 	/**
 	 * This is the default component for displaying flash overlay messages

@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/view", "vas/core/user", "core/analytics/analytics",
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/view", "vas/core/user", "ccl-tracker",
 	 "text!vas/basic/tpl/overlay/switchteam.html"
 	],
 

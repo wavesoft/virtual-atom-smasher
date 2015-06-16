@@ -2,7 +2,7 @@
 define(
 
 	// Requirements
-	[ "require", "jquery", "popcorn", "vas/media", "vas/core/ui", "vas/core/registry", "vas/core/base/agent", "core/analytics/analytics" ],
+	[ "require", "jquery", "popcorn", "vas/media", "vas/core/ui", "vas/core/registry", "vas/core/base/agent", "ccl-tracker" ],
 
 	/**
 	 * Basic version of the home screen

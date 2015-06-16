@@ -1,7 +1,7 @@
 /**
  * [core/main] - Core initialization module
  */
-define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket", "vas/core/global", "core/analytics/analytics"], 
+define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket", "vas/core/global", "ccl-tracker"], 
 
 	function(Config, EventBase, DB, APISocket, Global, Analytics) {
 

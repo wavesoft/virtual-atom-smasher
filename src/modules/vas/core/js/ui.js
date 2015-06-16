@@ -1,5 +1,5 @@
 
-define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/base/components", "vas/core/user", "core/analytics/analytics", "vas/core/sequencer"], 
+define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/base/components", "vas/core/user", "ccl-tracker", "vas/core/sequencer"], 
 	function($, config, R, DB, Components, User, Analytics, Sequencer) {
 
 		///////////////////////////////////////////////////////////////

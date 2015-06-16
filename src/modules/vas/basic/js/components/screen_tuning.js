@@ -7,7 +7,7 @@ define(
 		"vas/core/db", "vas/core/ui", "sha1", "vas/config", 
 		"vas/core/registry", "vas/core/base/components", 
 		"vas/core/user", "vas/core/apisocket", 
-		"vas/core/liveq/Calculate", "core/analytics/analytics"
+		"vas/core/liveq/Calculate", "ccl-tracker"
 	],
 
 	/**

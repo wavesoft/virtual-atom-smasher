@@ -2,7 +2,7 @@
 define(
 
 	// Requirements
-	["jquery", "vas/core/db", "vas/core/ui", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/apisocket", "core/analytics/analytics"],
+	["jquery", "vas/core/db", "vas/core/ui", "vas/config", "vas/core/registry", "vas/core/base/components", "vas/core/apisocket", "ccl-tracker"],
 
 	/**
 	 * Basic version of the courseroom screen

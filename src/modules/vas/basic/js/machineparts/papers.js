@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	["jquery", "quill", "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/base/view", "core/analytics/analytics",
+	["jquery", "quill", "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/base/view", "ccl-tracker",
 	 "text!vas/basic/tpl/machine/papers.html"], 
 
 	/**

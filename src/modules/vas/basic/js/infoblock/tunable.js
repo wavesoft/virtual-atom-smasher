@@ -1,7 +1,7 @@
 define(
 
 	// Dependencies
-	["jquery", "vas/core/registry", "vas/core/user", "vas/core/base/data_widget", "core/analytics/analytics" ], 
+	["jquery", "vas/core/registry", "vas/core/user", "vas/core/base/data_widget", "ccl-tracker" ], 
 
 	/**
 	 * This is the default component for displaying information regarding a tunable
