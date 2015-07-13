@@ -315,3 +315,15 @@ A user performed a set of bad clicks in the interface. As 'bad' are considered t
 }
 ```
 
+# Reviews in the Analytics
+
+## As from `July 13, 2015`
+
+ * Till now after the registration screen, the `userid` global field was always `undefined` until the user refreshes the page. That was caused by a the data collected during that time cannot be linked to any account. A solution would be to treat them as anonymous.
+ * Till now all the `course.chat_send` events were having `id=undefined`. You should assume that the appropriate id was `course-intro`.
+ * Till now two `course.percent` events were fired when a course was finished. If you see both of them arriving at the same (or close) timestamps, with one having `percent=1.0` and the other `percent=0.0`, assume that `percent=1` (100%).
+ * Till now the `interface_tutorial.start` were coming in pairs. Now this is fixed.
+ * Till now the an `observables.hidden` event was fired right before a `observables.shown` event with `time=0`. This bug is now fixed.
+ * Till now the `questionnaire.*` events was stored in analytics as `pop_up:*` events. From now own, we are using the `questionnaire:*` name.
+
+

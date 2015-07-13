@@ -1478,12 +1478,6 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 					Sequencer.unblock();
 				});
 
-				// Fire analytics
-				Analytics.restartTimer("ui.tutorial");
-				Analytics.fireEvent('interface_tutorial.start', {
-					'id': sequence
-				});
-
 			}
 
 			// Asynchronous callback for preparing the elements
@@ -1568,12 +1562,6 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			// Asynchronous function to wait until a screen transition
 			// has completed
 			var __continueHideTutorial = function() {
-
-				// Fire analytics event
-				Analytics.fireEvent('interface_tutorial.completed', {
-					'id': tutorialSequence,
-					'time': Analytics.stopTimer("ui.tutorial")
-				});
 
 				// Hide visual agent
 				UI.visualAgent.hide(function() {

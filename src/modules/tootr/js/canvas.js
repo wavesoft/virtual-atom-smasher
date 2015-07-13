@@ -28,6 +28,7 @@ define(
 
 			// Initialize timeline runtime
 			var isPlaying = false;
+			this.completed = false;
 			this.timeline = new Timeline( this.canvasFabric );
 			this.timeline.addEventListener('change', (function() {
 				this.canvasFabric.renderAll();
@@ -35,11 +36,13 @@ define(
 					if (isPlaying) {
 						this.trigger('animationCompleted');
 						this.timeline.setPaused(true);
+						this.completed = true;
 						isPlaying = false;
 					}
 				} else {
 					if (!isPlaying) {
 						this.trigger('animationStarted');
+						this.completed = false;
 						isPlaying = true;
 					}
 				}
@@ -116,7 +119,11 @@ define(
 		 */
 		Canvas.prototype.getPosition = function(normalized) {
 			if (normalized) {
-				return this.timeline.position / this.timeline.duration;
+				if (this.completed) {
+					return 1.0;
+				} else {
+					return this.timeline.position / this.timeline.duration;
+				}
 			} else {
 				return this.timeline.position;
 			}
