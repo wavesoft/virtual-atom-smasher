@@ -328,6 +328,16 @@ The validation results arrived from the server. This event accompanies the previ
 }
 ```
 
+## level.completed
+The user has completed a particular level and moved on the next one.
+
+```javascript
+{
+    "id": "",       // A unique identifier of the current level
+    "score": 0.0    // The score he/she got in this level
+}
+```
+
 # Revisions in the Analytics
 
 ## As from `July 13, 2015`
