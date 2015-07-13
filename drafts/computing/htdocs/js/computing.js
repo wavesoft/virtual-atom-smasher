@@ -3,7 +3,7 @@ $(function() {
 
 	// Create an autonomous VM that takes care of all the
 	// interfacing with WebAPI
-	var avm = window.avm = new CVM.AutonomousVM( 'http://test4theory.cern.ch/vmcp?config=challenge-dumbq' ),
+	var avm = window.avm = new CVM.AutonomousVM( 'http://test4theory.cern.ch/vmcp?config=challenge-dumbq-local' ),
 		dqfe = window.dqfe = new DumbQ.Frontend(),
 		cp = window.CreditPiggy;
 
@@ -11,10 +11,8 @@ $(function() {
 	$(dqfe).on('online', function(e, machine) {
 		avm.statusFlags.agent = true;
 		avm.notifyFlagChange();
-
 		// Claim machine in CreditPiggy
 		cp.claimWorker( machine['vmid'] );
-
 	});
 	$(dqfe).on('offline', function(e) {
 		avm.statusFlags.agent = false;
@@ -93,6 +91,21 @@ $(function() {
 			dqfe.disable();
 			log('API went offline', 'text-info');
 		}
+	});
+
+	// Bid interface
+	$("#btn-startstop").click(function() {
+		avm.start();
+	});
+	$("#btn-view").click(function() {
+		avm.openRDP();
+	});
+	$("#btn-trash").click(function() {
+		avm.destroy();
+	});
+
+	$("#btn-login").click(function() {
+		cp.showLogin();
 	});
 
 

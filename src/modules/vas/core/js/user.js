@@ -82,6 +82,9 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 					this.triggerStateChange( profile['state'], this.state );
 					this.state = profile['state'];
 
+					// Provide tracking UUID to the analytics
+					Analytics.setGlobal("userid", profile['trackid']);
+
 					// Send pile of events
 					this.sendEventPile();
 
@@ -131,9 +134,6 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 					this.profile = profile;
 					this.vars = profile['vars'];
 					this.initVars();
-
-					// Provide tracking UUID to the analytics
-					Analytics.setGlobal("userid", profile['trackid']);
 
 					// Fire callback
 					if (callback) callback(true);

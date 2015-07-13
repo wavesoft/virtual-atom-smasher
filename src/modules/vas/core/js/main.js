@@ -172,52 +172,6 @@ define("vas/core",
 				if (readyCallback) readyCallback();
 			});
 
-			// Create the mini-nav menu
-			var mininavDOM = $('<div class="'+config.css['nav-mini']+'"></div>');
-			UI.host.append(mininavDOM);
-			
-			// Try to create mini-nav
-			UI.mininav = R.instanceComponent("nav.mini", mininavDOM);
-			if (UI.mininav !== undefined) {
-
-				// Check for preferred dimentions
-				var dim = UI.mininav.getPreferredSize();
-				if (dim !== undefined) {
-					mininavDOM,css({
-						'width': dim[0],
-						'height': dim[1]
-					});
-					UI.mininav.onResize( dim[0], dim[1] );
-				} else {
-					UI.mininav.onResize( mininavDOM.width(), mininavDOM.height() );
-				}
-
-				// Bind events
-				UI.mininav.on("changeScreen", function(to) {
-					if (to == "screen.home") {
-						VAS.displayHome(true);
-					} else {
-						UI.selectScreen(to, UI.Transitions.ZOOM_OUT);
-					}
-				});
-				// Bind events
-				UI.mininav.on("displayKnowledge", function() {
-					VAS.displayKnowledge();
-				});
-				UI.mininav.on("displayStatus", function() {
-					VAS.displayStatus();
-				});
-				UI.mininav.on("displayTuningScreen", function() {
-					VAS.displayTuningScreen();
-				});
-				UI.mininav.on("displayJobs", function() {
-					VAS.displayJobs();
-				});
-				UI.mininav.on('displayMenu', function() {
-					VAS.displayMenu();
-				});
-
-			}
 
 			// Add CernVM WebAPI script to the main page
 			$('head').append('<script type="text/javascript" src="http://cernvm.cern.ch/releases/webapi/js/cvmwebapi-latest.js"></script>');

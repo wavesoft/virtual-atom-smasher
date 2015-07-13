@@ -1,5 +1,5 @@
 
-define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/base/components", "vas/core/user", "ccl-tracker", "vas/core/sequencer"], 
+define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/base/components", "vas/core/user", "ccl-tracker", "vas/core/sequencer" ], 
 	function($, config, R, DB, Components, User, Analytics, Sequencer) {
 
 		///////////////////////////////////////////////////////////////
@@ -261,7 +261,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		}
 
 		/**
-		 * Local properties for visual aids
+		 * Local properties for UI class
 		 */
 		var visualAidCurrent = false,
 			visualAidTimer = 0,
@@ -272,7 +272,11 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			tutorialCompleteListener = false,
 			tutorialActive = false,
 			tutorialSequence = "",
-			popupWidget = false;
+			popupWidget = false,
+			notificationArea = null,
+			notificationHost = null,
+			notificationID = 0,
+			notificationIndex = { };
 
 		///////////////////////////////////////////////////////////////
 		//                       IMPLEMENTATION                      //
@@ -301,11 +305,11 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		UI.activeScreen = "";
 
 		/**
-		 * The mini-nav component
+		 * The notifications floater component
 		 *
-		 * @type {MiniNavComponent}
+		 * @type {NotificationFloat}
 		 */
-		UI.mininav = "";
+		UI.notificationsFloater = null;
 
 		/**
 		 * The ID of the previous screen
@@ -556,6 +560,38 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				if (tutorialCompleteListener)
 					tutorialCompleteListener();
 			});
+
+
+			// Create the mini-nav menu
+			var notificationFloat = $('<div class="notifications-float"></div>');
+			UI.host.append(notificationFloat);
+			
+			// Try to create mini-nav
+			UI.notificationsFloater = R.instanceComponent("float.notifications", notificationFloat);
+			if (UI.notificationsFloater !== undefined) {
+
+				// Check for preferred dimentions
+				var dim = UI.notificationsFloater.getPreferredSize();
+				if (dim !== undefined) {
+					notificationFloat,css({
+						'width': dim[0],
+						'height': dim[1]
+					});
+					UI.notificationsFloater.onResize( dim[0], dim[1] );
+				} else {
+					UI.notificationsFloater.onResize( notificationFloat.width(), notificationFloat.height() );
+				}
+
+				/*
+				// Initialize notifications area
+				notificationArea = new NotificationManager({
+					'xProperty': 'right',	'x': 0,	'distributeX': -1,
+					'yProperty': 'top',		'y': 0,	'distributeY': 0,
+					'host'	   : notificationHost
+				});
+				*/
+
+			}
 
 			// Bind on window events
 			$(window).resize(function() {
@@ -1727,8 +1763,8 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				abortShowLoading();
 
 				// Inform page transition
-				if (UI.mininav)
-					UI.mininav.onPageWillChange( prevScreen, name );
+				if (UI.notificationsFloater)
+					UI.notificationsFloater.onPageWillChange( prevScreen, name );
 
 				// And cross-fade simultanously
 				pageTransition(ePrev.hostDOM, eNext.hostDOM, transition, function() {
@@ -1738,8 +1774,8 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 					if (eNext !== undefined) eNext.onShown();
 
 					// Change page
-					if (UI.mininav)
-						UI.mininav.onPageChanged( prevScreen, name );
+					if (UI.notificationsFloater)
+						UI.notificationsFloater.onPageChanged( prevScreen, name );
 
 					// Fire resize events on overlay masks & visualAgent
 					// (This is a hack to update visual agent's position after 
@@ -1953,6 +1989,69 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 			// Start with the first sequence
 			handeSequence();
+
+		}
+
+		/**
+		 * Show a notification in the notification area
+		 *
+		 * @param {string|object} v_icon - The notification message or it's configuration
+		 * @param {string} v_title - The title of the notification (when icon is string)
+		 * @param {int} v_timeout - How much time ti stay before disposing
+		 * @param {function} v_callback - The callback function to be fired when the user clicks the notification
+		 */
+		UI.showNotification = function( v_icon, v_title, v_callback ) {
+
+			// Skip on lockdown
+			if (UI.lockdown)
+				return;
+
+			// Check for missing arguments
+			var args = [v_transition, v_cb_ready, v_blur_back],
+				transition = UI.Transitions.ZOOM_IN,
+				cb_ready = null,
+				blur_back = true;
+
+			// Auto-arrange arguments
+			for (var i=0; i<args.length; i++) {
+				if (typeof(args[i]) == 'function') {
+					cb_ready = args[i];
+				} else if (typeof(args[i]) == 'object') {
+					transition = args[i];
+				} else if (typeof(args[i]) == 'boolean') {
+					blur_back = args[i];
+				}
+			}
+
+			// Prepare config object
+			var notification = {};
+			if (typeof(icon) == "string") {
+
+				// Define notification icon
+				notification['icon'] = icon;
+				// Title is missing
+				if (typeof(title) == 'function') {
+					notification['click'] = title;
+ 				} else {
+					notification['title'] = title;
+					notification['click'] = callback;
+				}
+
+			} else {
+				// Otherwise icon is object
+				notification = icon;
+
+				// Check additional parameters
+				if (typeof(title) == 'function') {
+					notification['click'] = title;
+				} else if (typeof(callback) == 'function') {
+					notification['title'] = title;
+					notification['click'] = callback;
+				}
+			}
+
+			// Show notification
+			notificationArea.showNotification( notification );
 
 		}
 

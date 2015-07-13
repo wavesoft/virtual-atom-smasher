@@ -32,7 +32,6 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 	 */
 	function(config, Component, View) {
 
-
 		////////////////////////////////////////////////////////////
 
 		/**
@@ -946,6 +945,93 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		};
 
 		////////////////////////////////////////////////////////////
+		/**
+		 * Initializes a new Notification Screen Component.
+		 *
+		 * Such components are permanately visible on the screen and they display
+		 * disposable, pop-up notifications.
+		 *
+		 * @class
+		 * @classdesc Abstract class for defining backdrop images.
+		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
+		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 *
+		 */
+		var NotificationFloat = function( hostDOM ) {
+
+			// Initialize base class
+			Component.call(this, hostDOM);
+
+		}
+
+		// Subclass from Component
+		NotificationFloat.prototype = Object.create( Component.prototype );
+
+		/**
+		 * This function is called when a notificatino sohuld be displayed to the user.
+		 *
+		 * The notification object has the following basic structure that might be
+		 * extended according to the implementation.
+		 *
+		 * This function is also fired when a notification sohuld be updated.
+		 *
+		 * @example <caption>Notification Format</caption>
+		 * {
+		 *     'title': '..',	// Notification Title
+		 *     'icon': '..',	// Notification Icon
+		 * }
+		 * @abstract
+		 * @param {string} nid - The notification ID. 
+		 * @param {object} config - The configuration information 
+		 */
+		NotificationFloat.prototype.onNotificationAdded = function( nid, notf ) {
+
+		};
+
+		/**
+		 * This function is called when a notificatino sohuld be removed from the list.
+		 *
+		 * @abstract
+		 * @param {string} nid - The notification ID to remove. 
+		 */
+		NotificationFloat.prototype.onNotificationRemoved = function( nid ) {
+
+		};
+
+		/**
+		 * This function is called when a a notification element should be flashed
+		 * in order to attract user's attention.
+		 *
+		 * @abstract
+		 * @param {string} nid - The notification ID to remove. 
+		 */
+		NotificationFloat.prototype.onNotificationFocus = function( nid ) {
+
+		};
+
+		/**
+		 * This function is called when the user starts to navigate navigates to the specified page.
+		 *
+		 * @abstract
+		 * @param {string} newPage - The name of the new page
+		 * @param {string} oldPage - The name of the old page
+		 */
+		NotificationFloat.prototype.onPageWillChange = function(newPage, oldPage) {
+
+		};
+
+		/**
+		 * This function is called when the user navigates to the specified page.
+		 *
+		 * @abstract
+		 * @param {string} newPage - The name of the new page
+		 * @param {string} oldPage - The name of the old page
+		 */
+		NotificationFloat.prototype.onPageChanged = function(newPage, oldPage) {
+
+		};
+
+		////////////////////////////////////////////////////////////
 		//             Event definitions for JSDoc                //
 		////////////////////////////////////////////////////////////
 
@@ -1033,6 +1119,14 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @event module:core/base/components~CinematicScreen#completed		
 		 */
 
+		/**
+		 * This event should be fired by the NotificationFloat when the user clicks
+		 * on a notification.
+		 *
+		 * @param {string} nid - The notification ID
+		 * @event module:core/base/components~NotificationFloat#notificationClick		
+		 */
+
 		////////////////////////////////////////////////////////////
 
 		// Expose components
@@ -1054,6 +1148,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 			'TeamScreen'		: TeamScreen,
 			'Backdrop'			: Backdrop,
 			'LoginScreen'		: LoginScreen,
+			'NotificationFloat'	: NotificationFloat,
 			'Popup'				: Popup
 		};
 

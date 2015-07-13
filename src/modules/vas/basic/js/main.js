@@ -32,6 +32,9 @@ define(
 	// Subscreens
 	'vas/basic/components/screen_observable_short',
 
+	// Floats
+	'vas/basic/floats/notifications',
+
 	// Other components
 	'vas/basic/components/nav_mini',
 	'vas/basic/components/tvhead_agent',

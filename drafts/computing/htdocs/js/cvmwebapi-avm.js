@@ -39,9 +39,9 @@
 		CMD_DESTROY = 4,
 		CMD_SET_CAP = 5,
 
-		STATE_STOPPED = 0,
-		STATE_RUNNING = 1,
-		STATE_PENDING = 2,
+		STATE_STOPPED = CVM.STATE_STOPPED = 0,
+		STATE_RUNNING = CVM.STATE_RUNNING = 1,
+		STATE_PENDING = CVM.STATE_PENDING = 2,
 
 		FLAG_NOT_READY = CVM.FLAG_NOT_READY = 0,
 		FLAG_READY = CVM.FLAG_READY = 1,
@@ -760,6 +760,15 @@
 			this.wa_session.close();
 			this.wa_session = null;
 			this.webapiSessionInitialized = false;
+		}
+	}
+
+	/**
+	 * Open RDP window
+	 */
+	AutonomousVM.prototype.openRDP = function() {
+		if (this.wa_session) {
+			this.wa_session.openRDPWindow();
 		}
 	}
 

@@ -206,8 +206,12 @@
 		{
 			'name'		: 'mathjax',
 			'location'	: 'extern/mathjax/js'
+		},
+		{
+			'name'		: 'ccl-tracker',
+			'location'	: 'extern/ccl-tracker/js',
+			'main'		: 'ccltracker-1.0.min'
 		}
-
 	],
 
 	paths: {
