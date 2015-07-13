@@ -9,13 +9,13 @@ When the distribution of the following ratio gets smaller, the user has understo
 
 ```
             Number of back click events
-Ratio = -----=====-------------------------
+Ratio = -----------------------------------
          Total number of events in session
 ```
 
 Where:
 
- * Bac click events = `ui.bad_clicks`
+ * Bad click events = `ui.bad_clicks`
 
 ## 1.2. Confidence
 
