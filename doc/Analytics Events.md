@@ -315,7 +315,20 @@ A user performed a set of bad clicks in the interface. As 'bad' are considered t
 }
 ```
 
-# Reviews in the Analytics
+# Pending Analytic Events
+This section contains events that are pending implementation.
+
+## tuning.values.validate
+The validation results arrived from the server. This event accompanies the previous `tuning.values.will_validate`.
+
+```javascript
+{
+    "id": "",       // A unique identifier of the current run
+    "fit": 0.0      // The chi-square fit of the result
+}
+```
+
+# Revisions in the Analytics
 
 ## As from `July 13, 2015`
 
@@ -325,5 +338,4 @@ A user performed a set of bad clicks in the interface. As 'bad' are considered t
  * Till now the `interface_tutorial.start` were coming in pairs. Now this is fixed.
  * Till now the an `observables.hidden` event was fired right before a `observables.shown` event with `time=0`. This bug is now fixed.
  * Till now the `questionnaire.*` events was stored in analytics as `pop_up:*` events. From now own, we are using the `questionnaire:*` name.
-
 
