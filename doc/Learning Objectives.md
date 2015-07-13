@@ -45,7 +45,60 @@ Therefore, one indicator would be to expect the following sequence to be seen mo
  4. Optionally the steps 2-3 are repeated
  5. The user clicks on validate: `tuning.values.will_validate`
 
+
 # 2. On-topic Learning
 
-## 2.1 
+## 2.1. User Strategy
+
+As the user understands better the tuning process, his actions become more specific. Instead of random changes of random parameters he should be changing only fewer parameters with a more accurate ranges.
+
+Therefore, we introduce the following two indicators:
+```
+a = Count( `tuning.values.change` events until a `tuning.values.will_validate` event )
+```
+and:
+```
+b = Average( `scale` property of `tuning.values.change` events until a `tuning.values.will_validate` )
+```
+
+Therefore if the following value gets smaller, it means that the user knows what (s)he is doing:
+```
+strategy = a + b
+```
+
+## 2.2. Results
+
+One of the most obvious indicators is to check if the actual simulation responses are getting better over time or worse. 
+
+Therefore you can monitor the distribution of `fit` property of `tuning.values.validate` up until a `level.completed` event.
+
+It should initially fluctuate, meaning that the user is testing the ranges of the parameters, but it eventually should become progressively more stable, with a specific trend towards zero.
+
+## 2.3. Learned how to use 'Estimate'
+
+One of the assisting features in the game is the 'Estimate' button. However the user should learn how to use it before he continues.
+
+In principle, clicking on 'Estimate' gives you an estimate of the results. That result **MUST** be better before the user moves forward to validation. 
+
+Therefore if the following number tends to be **bigger** before the `tuning.values.will_validate` event, then the user **DOES NOT KNOW** how to use Estimate.
+
+```
+estimate_score = `fit` field of `tuning.values.estimate` event
+```
+
+## 2.4. Progression in the game
+
+Another simpler indicator is just to look at how many levels the user has completed so far. You can count the `level.completed` events for this purpose.
+
+
+# 3. On-topic Extra Learning
+ 
+## 3.1. Responses to Questionnaires
+
+The in-game questionnaires provide additional information to the user regarding scientific and computing terms. Therefore it's very easy to check if the user has obtained extra knowledge by monitoring the value of the following property:
+
+```
+learning = `ratio` field of `questionnaire.evaluate` event
+```
+
 
