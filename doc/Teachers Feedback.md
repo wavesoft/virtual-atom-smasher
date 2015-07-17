@@ -26,11 +26,11 @@
 - "I started tuning starting from the left side of the parameter and moving towards the right side. I am not waiting for the simulation to complete, if I see things getting better, I just abort"
 - "I always have to look on the histograms in order to check if their values are good or bad."
 - Histograms have some quite complex terms. 
-- Students will skip the introduction
+- Students will skip the introduction for sure.
 - "Green means good, Black means bad": We are missing explanation on the tuning screen.
 - Everyone was 100% bored after 30'
 - I don't know what's the initial values, I don't know what these parameters are, 'Estimate' does not provide any useful information... I am completely lost.
-- People are missing eplanations of the tunable parameters.
+- People are missing the location of the explanations of the tunable parameters.
 - Reaction: What are these parameters, and how they fit to the model. 
 - I wouldn't know if the data are so important unless you have told us.
 - It looks good, but I have absolutely no idea what's happening here.
