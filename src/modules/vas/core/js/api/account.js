@@ -65,6 +65,17 @@ define(["vas/core/api/interface", "vas/config"],
 			
 		}
 
+                /**
+		 * Perform logout 
+		 */
+		APIAccount.prototype.logout = function(callback) {
+
+			// Log-out user and fire callback when logged out
+			this.sendAction("logout", {
+			}, callback);
+
+		}
+
 		/**
 		 * Send user variables 
 		 */
