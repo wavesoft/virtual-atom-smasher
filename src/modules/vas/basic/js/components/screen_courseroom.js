@@ -73,7 +73,7 @@ define(
 
 				// Fire chatroom send event (no details)
 				Analytics.fireEvent("course.chat_send", {
-					"id": this.chatroom,
+					"id": this.course_id
 				});
 
 			}).bind(this));
@@ -126,12 +126,6 @@ define(
 					if (!this.started) return;
 					this.trigger('completed');
 					this.trigger('sequence.next', 'completed'); // [SEQUENCING]
-
-					// Fire analytics % of completion
-					Analytics.fireEvent("course.percent", {
-						'id': this.course_id,
-						'percent': 1.0
-					});
 
 				}).bind(this));
 
@@ -506,7 +500,7 @@ define(
 			if (this.started) {
 				Analytics.fireEvent("course.percent", {
 					'id': this.course_id,
-					'percent': this.explainComponent.getPosition()
+					'percent': this.explainComponent.getNormalizedPosition()
 				});
 			}
 

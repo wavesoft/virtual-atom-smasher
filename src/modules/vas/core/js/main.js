@@ -270,6 +270,9 @@ define("vas/core",
 								evDetails['message'],
 								evDetails['icon']
 								);
+						} else if (evDetails['type'] == "analytics") {
+							// Forward analytics event
+							Analytics.fireEvent( evDetails['id'], evDetails['data'] || {} );
 						} else {
 							// Any other type goes to growl
 							var msg = evDetails['message'];

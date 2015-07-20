@@ -46,7 +46,7 @@ $(DIST)/game/app-game.js: r.js config/build-game.js $(SRC)/app-game.js $(JS_CORE
 	node r.js -o config/build-game.js
 
 # Distribution archive
-$(DIST)/game-dist.tar.gz: $(DIST)/game/app-game.js
+$(DIST)/game-dist.tar.gz: $(DIST)/game/app-game.js $(DIST)/game/app-game.css
 
 	# Cleanup junk files
 	find $(DIST)/game -type f -name '.DS_Store' -exec rm {} \;

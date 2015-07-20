@@ -19,6 +19,7 @@ define(
 			// Initialize widget
 			Component.call(this, hostDOM);
 			hostDOM.addClass("histograms-overlay");
+			this.isVisible = false;
 
 			// Prepare categories
 			this.elmCategories = [
@@ -177,6 +178,9 @@ define(
 				});
 			}
 
+			// Assume shown
+			this.isVisible = true;
+
 			// Fire shown
 			cb();
 
@@ -186,6 +190,7 @@ define(
 		 * Histograms hidden
 		 */
 		OverlayHistograms.prototype.onHidden = function() {
+			if (!this.isVisible) return;
 
 			// Fire analytics
 			Analytics.fireEvent("observables.hidden", {

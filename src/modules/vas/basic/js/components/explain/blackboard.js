@@ -35,7 +35,7 @@ define(
 		/**
 		 * Return the animation position normalized to 0.0-1.0
 		 */
-		ExplainBlackboard.prototype.getPosition = function() {
+		ExplainBlackboard.prototype.getNormalizedPosition = function() {
 			return this.canvas.getPosition(true);
 		}
 

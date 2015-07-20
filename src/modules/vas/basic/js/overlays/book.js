@@ -262,13 +262,19 @@ define(
 					body.scroll((function(e) {
 
 						// Update page coverage
-						var scrollHeight = e.currentTarget.scrollHeight - $(e.currentTarget).height() - parseFloat($(e).css("padding-top")) - parseFloat($(e).css("padding-bottom"));
+						var scrollHeight = e.currentTarget.scrollHeight - $(e.currentTarget).height() - parseFloat($(e.currentTarget).css("padding-top")) - parseFloat($(e).css("padding-bottom"));
 							currCoverage = e.currentTarget.scrollTop / scrollHeight;
 						if (currCoverage > this.coverage[0]) {
 							this.coverage[0] = currCoverage;
 						}
 
 					}).bind(this));
+
+					// If we don't have any scroll length, coverage is 100%
+					var scrollHeight = body[0].scrollHeight - body.height() - parseFloat(body.css("padding-top"));
+					if (scrollHeight <= 0) {
+						this.coverage[0] = 1.0;
+					}
 
 					// Place games tab
 					if (data['games'] && (data['games'].length > 0)) {
@@ -332,6 +338,7 @@ define(
 
 						// Click on the first item
 						games_list.find(".list-item:first-child").click();
+
 					}
 
 					// Place resources tab
