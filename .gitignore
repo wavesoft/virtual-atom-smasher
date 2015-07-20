@@ -7,3 +7,9 @@ node_modules
 *.bak
 src/modules/vas/media/mov/*
 doc/JSDoc/html*
+
+src/nbproject/project.properties
+
+src/nbproject/project.xml
+
+src/modules/vas/basic/js/components/screen_test.js
