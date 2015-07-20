@@ -684,6 +684,12 @@ define("vas/core",
 					scrTuning.on('feedback', function(data) {
 						VAS.sendFeedback(data);
 					});
+                    scrTuning.on('logout', function(data) {
+                        // Go to login screen
+						UI.selectScreen("screen.login");
+                        // Logout
+                        APISocket.openAccount().logout();
+					});
 
 					// Reload tuning configuration
 					scrTuning.on('reload', function() {
