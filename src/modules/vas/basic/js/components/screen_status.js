@@ -111,7 +111,7 @@ define(
 
 			}).bind(this));
 
-			// Go back
+			// Register click handlers
 			this.handleDoURL('hideStatus', (function() {
 				this.trigger('hideStatus');
 			}).bind(this));
@@ -119,6 +119,9 @@ define(
 				this.trigger("feedback", {
 					"screen": "status"
 				});
+			}).bind(this));
+            this.handleDoURL('logout', (function() {
+                this.trigger("logout");
 			}).bind(this));
 
 		}

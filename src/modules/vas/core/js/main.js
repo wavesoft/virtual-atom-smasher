@@ -435,6 +435,12 @@ define("vas/core",
 					scrStatus.on('feedback', function(data) {
 						VAS.sendFeedback(data);
 					});
+                    scrStatus.on('logout', function(data) {
+                        // Go to login screen
+						UI.selectScreen("screen.login");
+                        // Logout
+                        APISocket.openAccount().logout();
+					});
 
 					// Complete login
 					prog_status.ok("Results screen ready");
@@ -527,6 +533,12 @@ define("vas/core",
 					});
 					scrJobs.on('feedback', function(data) {
 						VAS.sendFeedback(data);
+					});
+					scrJobs.on('logout', function(data) {
+                        // Go to login screen
+						UI.selectScreen("screen.login");
+                        // Logout
+                        APISocket.openAccount().logout();
 					});
 
 					// Complete login
