@@ -435,11 +435,11 @@ define("vas/core",
 					scrStatus.on('feedback', function(data) {
 						VAS.sendFeedback(data);
 					});
-                    scrStatus.on('logout', function(data) {
-                        // Go to login screen
+					scrStatus.on('logout', function(data) {
+						// Go to login screen
 						UI.selectScreen("screen.login");
-                        // Logout
-                        APISocket.openAccount().logout();
+						// Logout
+						APISocket.openAccount().logout();
 					});
 
 					// Complete login
@@ -535,10 +535,10 @@ define("vas/core",
 						VAS.sendFeedback(data);
 					});
 					scrJobs.on('logout', function(data) {
-                        // Go to login screen
+						// Go to login screen
 						UI.selectScreen("screen.login");
-                        // Logout
-                        APISocket.openAccount().logout();
+						// Logout
+						APISocket.openAccount().logout();
 					});
 
 					// Complete login
@@ -557,7 +557,7 @@ define("vas/core",
 					// Complete login
 					prog_courseroom.ok("Courseroom screen ready");
 					cb();
-				};				
+				};
 
 			var prog_menu = progressAggregator.begin(1),
 				init_menu = function(cb) {

@@ -120,8 +120,8 @@ define(
 					"screen": "status"
 				});
 			}).bind(this));
-            this.handleDoURL('logout', (function() {
-                this.trigger("logout");
+			this.handleDoURL('logout', (function() {
+				this.trigger("logout");
 			}).bind(this));
 
 		}
