@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript" src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="9slice.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css"/>
+		<link rel="stylesheet" type="text/css" href="style.css"/>
+	</head>
+	<body>
+		<div id="controls">
+			<table>
+				<tr>
+					<td>
+						<div id="picture-drop">
+							Drop Picture Here
+						</div>
+					</td>
+					<td>
+						<table>
+							<tr>
+								<td colspan="4">9-Slice Ruler Positions:</td>
+							</tr>
+							<tr>
+								<th><label for="inpSliceLeft">Left:</label></th>
+								<td><input id="inpSliceLeft" value="20" /></td>
+								<th><label for="inpSliceRight">Right:</label></th>
+								<td><input id="inpSliceRight" value="20" /></td>
+							</tr>
+							<tr>
+								<th><label for="inpSliceTop">Top:</label></th>
+								<td><input id="inpSliceTop" value="20" /></td>
+								<th><label for="inpSliceBottom">Bottom:</label></th>
+								<td><input id="inpSliceBottom" value="20" /></td>
+							</tr>
+							<tr>
+								<td colspan="4">Border Size:</td>
+							</tr>
+							<tr>
+								<th><label for="inpBorderLeft">Left:</label></th>
+								<td><input id="inpBorderLeft" value="20" /></td>
+								<th><label for="inpBorderRight">Right:</label></th>
+								<td><input id="inpBorderRight" value="20" /></td>
+							</tr>
+							<tr>
+								<th><label for="inpBorderTop">Top:</label></th>
+								<td><input id="inpBorderTop" value="20" /></td>
+								<th><label for="inpBorderBottom">Bottom:</label></th>
+								<td><input id="inpBorderBottom" value="20" /></td>
+							</tr>
+							<tr>
+								<th colspan="2">Border image stretch:</th>
+								<td colspan="2">
+									<select id="inpBorder">
+										<option selected="selected">stretch</option>
+										<option>repeat</option>
+										<option>round</option>
+										<option>space</option>
+										<option>initial</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+						<div class="applyBtn">
+							<button type="button" id="btnApply">Apply</button>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="preview">
+			<div id="resizable"></div>
+		</div>
+	</body>
+</html>
