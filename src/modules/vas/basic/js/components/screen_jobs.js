@@ -40,16 +40,20 @@ define(
 			$('<h1><span class="highlight">Simulations</span> Dashboard</h1>').appendTo(hostDOM);
 			$('<p>Here you can see your active simulation jobs.</p>').appendTo(hostDOM);
 
-			// Forward icon
+			// Menu icons
 			var btnHost = $('<div class="menu-icon"></div>').appendTo(hostDOM),
 				btnFeedback = $('<div class="navbtn-large navbtn-upper navbtn-feedback"><span class="glyphicon glyphicon-bullhorn"></span><div class="title title-top">Feedback</div></div>').appendTo(btnHost),
+                btnLogout = $('<div class="navbtn-large navbtn-upper navbtn-log-out"><span class="glyphicon glyphicon-log-out"></span><div class="title">Logout</div></div>').appendTo(btnHost),
 				btnBackward = $('<div class="navbtn-large navbtn-upper"><span class="glyphicon glyphicon-menu-down icon-direction icon-direction-down"></span><span class="glyphicon glyphicon-wrench"></span><div class="title title-top">Tuning</div></div>').appendTo(btnHost);
 
-			// Register backward 
+			// Register click handlers
 			btnFeedback.click((function() {
 				this.trigger("feedback", {
 					"screen": "jobs"
 				});
+			}).bind(this));
+			btnLogout.click((function() {
+                this.trigger("logout");
 			}).bind(this));
 			btnBackward.click((function() {
 				this.trigger("hideJobs");
