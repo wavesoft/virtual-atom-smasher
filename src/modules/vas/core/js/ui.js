@@ -594,14 +594,24 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			});
 			$(window).resize();
 
-			// Always listen for ESC key, and if we have an active tutorial, quit it
+			// Always listen for ESC key, and hide the active UI Element
 			$(window).keydown(function(e) {
-				if ((e.keyCode == 27) && (tutorialActive)) {
-					e.preventDefault();
-					e.stopPropagation();
+				if (e.keyCode == 27) {
 
-					// Stop tutorial
-					UI.hideTutorial();
+					// Hide tutorial
+					if (tutorialActive) {
+						e.preventDefault();
+						e.stopPropagation();
+						UI.hideTutorial();
+					}
+
+					// Hide overlay
+					if (UI.activeOverlayComponent) {
+						e.preventDefault();
+						e.stopPropagation();
+						UI.hideOverlay();
+					}
+
 				}
 			});
 
