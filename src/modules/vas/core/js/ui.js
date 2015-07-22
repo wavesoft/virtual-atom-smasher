@@ -697,10 +697,16 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			}
 
 			// Block sequencer to prohibit interactions
-			Sequencer.block();
+			//Sequencer.block();
 
-			// If we have a previous overlay screen, hide it
-			UI.hideOverlay(doShowOverlay);
+			// If we have a previous overlay, hide it first
+			if (UI.activeOverlayComponent) {
+				// Hide previous overlay and then show
+				hideOverlay(showOverlay);
+			} else {
+				// Show overlay
+				showOverlay();
+			}
 
 		}
 
@@ -720,9 +726,9 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		UI.scheduleFlash = function(title, text, icon, transition, cb_close) {
 
 			// Put on sqeuencer
-			Sequencer.schedule((function() {
+			//Sequencer.schedule((function() {
 				this.showFlash(title, text, icon, transition, cb_close);
-			}).bind(this));
+			//}).bind(this));
 
 		}
 
@@ -785,9 +791,9 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		UI.scheduleFlashPrompt = function(title, text, options, icon, transition, cb_close) {
 
 			// Put on sqeuencer
-			Sequencer.schedule((function() {
+			//Sequencer.schedule((function() {
 				this.showFlashPrompt(title, text, options, icon, transition, cb_close);
-			}).bind(this));
+			//}).bind(this));
 
 		}
 
@@ -863,7 +869,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			if (!UI.activeOverlayComponent) {
 				if (cb_ready) cb_ready();
 				// Unblock sequencer
-				Sequencer.unblock();
+				//Sequencer.unblock();
 				return;
 			}
 
@@ -887,7 +893,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 					if (cb_ready) cb_ready();
 
 					// Unblock sequencer
-					Sequencer.unblock();
+					//Sequencer.unblock();
 
 				});
 			});
@@ -1428,9 +1434,9 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		UI.scheduleTutorial = function( sequence, cb_completed ) {
 
 			// Put on sqeuencer
-			Sequencer.schedule((function() {
+			//Sequencer.schedule((function() {
 				this.showTutorial(sequence, cb_completed);
-			}).bind(this));
+			//}).bind(this));
 
 		}
 
@@ -1485,7 +1491,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 					// Fire callback when completed
 					if (cb_completed) cb_completed();
 					// Unblock sequencer
-					Sequencer.unblock();
+					//Sequencer.unblock();
 				});
 
 			}
@@ -1542,7 +1548,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			}
 			
 			// Block sequencer
-			Sequencer.block();
+			//Sequencer.block();
 
 			// If we were given a string, load the tutorial from the database
 			if (typeof(sequence) == 'string') {
@@ -1852,9 +1858,9 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		UI.scheduleSequence = function( sequences, callback ) {
 
 			// Put on sqeuencer
-			Sequencer.schedule((function() {
+			//Sequencer.schedule((function() {
 				this.displaySequence(sequences, callback);
-			}).bind(this));
+			//}).bind(this));
 
 		}
 
@@ -1909,7 +1915,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 								// We are completed
 								if (callback) callback();
 								// Unblock sequencer
-								Sequencer.unblock();								
+								//Sequencer.unblock();								
 							} else {
 								// Apply routing
 								var index = routing_table[key];
@@ -1931,7 +1937,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 						scr.on('sequence.exit', function(key) {
 							if (callback) callback();
 							// Unblock sequencer
-							Sequencer.unblock();								
+							//Sequencer.unblock();								
 						});
 
 					});
@@ -1947,7 +1953,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			};
 
 			// Block sequencer to prohibit interactions
-			Sequencer.block();
+			//Sequencer.block();
 
 			// Start with the first sequence
 			handeSequence();
