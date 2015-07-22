@@ -272,6 +272,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			tutorialCompleteListener = false,
 			tutorialActive = false,
 			tutorialSequence = "",
+			overlayStack = [],
 			popupWidget = false;
 
 		///////////////////////////////////////////////////////////////
@@ -503,12 +504,23 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			UI.hostOverlay.addClass("fullscreen host-overlay");
 			UI.hostOverlay.hide();
 			UI.hostOverlay.click(function(e) {
+
+				// Stop propagation
 				e.preventDefault();
 				e.stopPropagation();
+
+				// Dispose active component
 				if (UI.activeOverlayComponent)
 					UI.activeOverlayComponent.trigger('dispose');
+
+				// Reset overlay stack and hide
+				overlayStack = [];
 				UI.hideOverlay();
+
 			});
+
+			// Prepare host overlay navbar (on top)
+			UI.hostOverlayNavbar = $('<div class="host-overlay-navbar"></div>').appendTo(UI.hostOverlay);
 
 			// Prepare overlay window
 			UI.hostOverlayWindow = $('<div class="pt-main pt-perspective"></div>').appendTo(UI.hostOverlay);
@@ -634,6 +646,9 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			if (UI.lockdown)
 				return;
 
+			// Store request on stack
+			overlayStack.push([ name, v_transition, v_cb_ready, v_blur_back ]);
+
 			// Check for missing arguments
 			var args = [v_transition, v_cb_ready, v_blur_back],
 				transition = UI.Transitions.ZOOM_IN,
@@ -658,8 +673,34 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				var comDOM = $('<div class="'+config.css['screen']+'"></div>');
 				UI.hostOverlayWindow.append(comDOM);
 
+				// Add 'back' button
+				UI.hostOverlayNavbar.empty();
+				if (overlayStack.length > 1) {
+
+					// Create back button
+					var backBtn = $('<a class="nav-button"><span class="glyphicon glyphicon-menu-left"></span> Back</>').appendTo(UI.hostOverlayNavbar);
+					backBtn.click(function(e) {
+
+						// Stop propagation
+						e.preventDefault();
+						e.stopPropagation();
+
+						// Pop current page
+						overlayStack.pop();
+
+						// Get page to focus
+						// (Will be pushed again on showOverlay)
+						var focusAt = overlayStack.pop();
+						UI.showOverlay(
+								focusAt[0], focusAt[1], focusAt[2], focusAt[3], focusAt[4]
+							);
+
+					});
+
+				}
+
 				// Create screen instance
-				var s = R.instanceComponent(name, comDOM), valid = true;
+				var s = R.instanceComponent(name, comDOM);
 				if (!s) {
 					console.error("[Overlay] Unable to load overlay '"+name+"'");
 					comDOM.remove();
@@ -690,6 +731,8 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 				// Listen for close events of this component
 				s.onOnce('close', function() {
+					// Flush stack
+					overlayStack = [];
 					// Hide overlay
 					UI.hideOverlay();
 				});
@@ -699,14 +742,8 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 			// Block sequencer to prohibit interactions
 			//Sequencer.block();
 
-			// If we have a previous overlay, hide it first
-			if (UI.activeOverlayComponent) {
-				// Hide previous overlay and then show
-				hideOverlay(showOverlay);
-			} else {
-				// Show overlay
-				showOverlay();
-			}
+			// Hide previous and show this
+			UI.hideOverlay(doShowOverlay);
 
 		}
 

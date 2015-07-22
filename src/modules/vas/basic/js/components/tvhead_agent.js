@@ -90,7 +90,7 @@ define(
 			this.hostDOM.append( this.tvBody );
 
 			// Add skip button
-			this.skipBtn = $('<a class="navbtn-skip">Skip <span class="glyphicon glyphicon-menu-right"></span></a>').appendTo(this.hostDOM.parent());
+			this.skipBtn = $('<a class="nav-button nav-button-skip">Skip <span class="glyphicon glyphicon-menu-right"></span></a>').appendTo(this.hostDOM.parent());
 			this.skipBtn.click((function() {
 				this.trigger('completed');
 			}).bind(this));

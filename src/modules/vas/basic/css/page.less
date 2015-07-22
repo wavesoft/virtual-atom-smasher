@@ -125,9 +125,8 @@ h1 {
 // Uniform skip button
 // ===============================
 
-.navbtn-skip {
+.nav-button {
 	.border-radius( 20px );
-	position: absolute;
 	display: block;
 	z-index: 20000;
 	background-color: #FFF;
@@ -140,31 +139,25 @@ h1 {
 	font-family: 'Source Sans Pro', sans-serif;
 	font-size: 14px;
 
-	right: 10px;
-	bottom: 10px;
 	padding: 5px 12px 9px;
 	font-size: 18px;
 }
 
-.navbtn-skip:hover {
+.nav-button:hover {
 	text-decoration: none;
 }
 
-.navbtn-playback {
-	.border-radius( 20px );
+.nav-button-playback {
 	position: absolute;
-	display: block;
-	z-index: 20001;
-	background-color: #FFF;
-	border: solid 1px #95A5A6;
-	color: #95A5A6;
-	height: 20px;
-	cursor: pointer;
-
 	right: 95px;
 	bottom: 10px;
 	padding: 6px 8px 8px;
-	font-size: 18px;
+}
+
+.nav-button-skip {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
 }
 
 // ===============================
@@ -1391,6 +1384,12 @@ body.enable-ipide {
 				}
 			}
 
+		}
+
+		.host-overlay-navbar {
+			position: absolute;
+			left: 10px;
+			top: 10px;
 		}
 	}
 

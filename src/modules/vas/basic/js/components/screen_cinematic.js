@@ -29,7 +29,7 @@ define(
 			// Prepare the container for the video
 			this.videoContainer = $('<div class="video-container" id="cinematic-video-host"></div>').appendTo(this.hostDOM);
 			this.videoBlocker = $('<div class="video-blocker"></div>').appendTo(this.hostDOM);
-			this.skipVideo = $('<a href="javascript:;" class="navbtn-skip">Skip <span class="glyphicon glyphicon-menu-right"></span></a>').appendTo(this.hostDOM);
+			this.skipVideo = $('<a href="javascript:;" class="nav-button nav-button-skip">Skip <span class="glyphicon glyphicon-menu-right"></span></a>').appendTo(this.hostDOM);
 
 			// Set a null completed callback
 			this.completedCallback = null;
@@ -49,7 +49,7 @@ define(
 			}).bind(this));
 
 			// Add pause and rewind
-			this.pauseResumeBtn = $('<a href="javascript:;" class="navbtn-playback"><span class="glyphicon glyphicon-pause"></span></a>').appendTo(this.hostDOM);
+			this.pauseResumeBtn = $('<a href="javascript:;" class="nav-button nav-button-playback"><span class="glyphicon glyphicon-pause"></span></a>').appendTo(this.hostDOM);
 			this.pauseResumeBtn.click((function() {
 				if (this.isPlaying) {
 					if (this.popcorn) this.popcorn.pause();
