@@ -41,6 +41,8 @@ define(
 						     .attr("class", "dv-plot");
 			this.svgPlot = this.svg.append("g")
 							 .attr("transform", "translate("+this.margin.left+","+this.margin.top+")");
+			this.svgData = this.svgPlot.append("g")
+							.attr("class", "data");
 			this.svgLegend = this.svgPlot.append("g")
 							.attr("class", "legend");
 
@@ -120,6 +122,7 @@ define(
 		 */
 		DataVizHistogram.prototype.regen = function() {
 
+			// Values are an array of: [y, y+, y-, x, x+, x-]
 			// If we have no data, plot no data points
 			if ((this.data != null) && !this.data.empty) {
 
@@ -162,9 +165,12 @@ define(
 				var plots = [
 					{
 						'id'	 : 'plot-sim',
-						'legend' : 'Simulation / Reference Ratio',
-						'color'  : '#f1c40f',
-						'data'   : this.data.values
+						'legend' : 'Simulation-to-Reference Ratio',
+						'color'  : '#0066FF',
+						'data'   : this.data.values,
+
+						// Get the 1-sigma error band
+						'sigma'  : this.ratioBand.values
 					}
 				];
 
@@ -185,20 +191,63 @@ define(
 				for (var j=0; j<plots.length; j++) {
 					var plot = plots[j];
 
+					// Access plot's group
+					var group = this.svgData.select("g.plot#"+plot.id);
+					if (group.empty()) {
+						group = this.svgData.append("g")
+							.attr("class", "plot")
+							.attr("id", plot.id);
+						group.append("g")
+							.attr("class", "plot-back");
+						group.append("g")
+							.attr("class", "plot-fore");
+					}
+
+					// Access plot's group
+					var groupBack = group.select("g.plot-back"),
+						groupFore = group.select("g.plot-fore");
+
+					// ==============
+					//  1-sigma band
+					// ==============
+
+					var record = groupBack.selectAll("path.plot-band")
+									.data(plot.sigma);
+
+					// Enter
+					record.enter()
+						.append("rect")
+							.attr("class", "plot-band");
+							//.style("fill", plot.color);
+
+					// Update
+					record
+						.attr("x", function(d,i){
+							return self.xScale( d[3] - d[5] );
+						})
+						.attr("y", function(d,i){
+							return self.yScale( d[0] + d[1] );
+						})
+						.attr("width", function(d,i) {
+							return self.xScale( d[3] + d[4] ) - 
+								   self.xScale( d[3] - d[5] );
+						})
+						.attr("height", function(d,i) {
+							return self.yScale( d[0] - d[2] ) -
+								   self.yScale( d[0] + d[1] );
+						});
+						//.style("fill", plot.color);
+
+					// Delete
+					record.exit()
+						.remove();
+
 					// =============
 					//     Plots 
 					// =============
 
-					// Access plot's group
-					var group = this.svgPlot.select("g.plot#"+plot.id);
-					if (group.empty()) {
-						group = this.svgPlot.append("g")
-							.attr("class", "plot")
-							.attr("id", plot.id);
-					}
-
 					// Access D3 record for this element
-					var record = group.selectAll("path.plot-line")
+					var record = groupFore.selectAll("path.plot-line")
 									.data([plot.data]);
 
 					// Enter
@@ -234,23 +283,16 @@ define(
 							return "translate(" + self.xScale(d[3]) + "," + self.yScaleNonZero(d[0]) + ")"
 						})
 						.attr("d", function(d,i) {
-							var bs = self.errorBars.bulletSize/2;
+							var h = self.yScale( d[0] - d[2] ) - self.yScale( d[0] + d[1] );
 
 							// Path for the bullet
-							var D_RECT= "M"+(-bs)+","+(-bs)+
-										"L"+bs+","+(-bs)+
-										"L"+bs+","+bs+
-										"L"+(-bs)+","+bs+
+							var D_ERR= "M0,-"+(h/2)+
+										"L0,"+(h/2)+
 										"Z";
-							return  D_RECT;
+							return  D_ERR;
 
 						})
-						.attr("stroke", plot.color);
-
-					// =============
-					//  Error bars
-					// =============
-					
+						.attr("stroke", plot.color);					
 
 				}
 
@@ -318,8 +360,21 @@ define(
 				this.svgLegend
 					.attr("transform", "translate("+ofsX+","+ofsY+")");
 
+				// Collect legends
+				var legends = [];
+				for (var i=0; i<plots.length; i++) {
+					legends.push({
+						'text': plots[i].legend,
+						'color': plots[i].color
+					})
+				}
+				legends.push({
+					'text': 'Goal',
+					'color': '#EE3'
+				});
+
 				// Open data record
-				var record = this.svgLegend.selectAll("g.legend-entry").data(plots);
+				var record = this.svgLegend.selectAll("g.legend-entry").data(legends);
 
 				// Enter
 				var newGroups = record.enter()
@@ -355,18 +410,10 @@ define(
 						return "translate(0,"+(yDirection*i*self.legend.height)+")"
 					});
 				record.selectAll("text")
-					.text(function(d,i) { return d.legend + (d.data.interpolated?" [Estimate]":"") });
+					.text(function(d,i) { return d.text; });
 				record.selectAll("path")
 					.attr("fill", function(d,i) { 
-						var color = d.color;
-						if (typeof(d.color) == 'object') {
-							if (d.data.interpolated) {
-								color = d.color[1];
-							} else {
-								color = d.color[0];
-							}
-						}
-						return color; 
+						return d.color; 
 					});
 
 				// Delete
@@ -390,8 +437,10 @@ define(
 			// Prepare data variables
 			if (!data) {
 				this.data = null;
+				this.ratioBand = null;
 			} else {
 				this.data = LiveQCalc.calculateRatioHistogram( data['data'], data['ref'].data );
+				this.ratioBand = LiveQCalc.calculateRatioHistogram( data['ref'].data, data['ref'].data );
 			}
 
 			// Regen plot

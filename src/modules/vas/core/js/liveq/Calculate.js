@@ -239,7 +239,7 @@ define(
 				x = b[3]; y = b[0] / r[0];
 				yErrPlus = Math.abs( b[1] / r[0] );
 				yErrMinus = Math.abs( b[2] / r[0] );
-				xErrPlus = 0; xErrMinus = 0;
+				xErrPlus = b[4]; xErrMinus = b[5];
 
 				// Store values
 				values.push([

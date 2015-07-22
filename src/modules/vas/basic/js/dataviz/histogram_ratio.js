@@ -215,6 +215,39 @@ define(
 						.remove();
 
 					// =============
+					//  Error bands
+					// =============
+
+					var record = group.selectAll("path.plot-band")
+									.data(plot.data);
+
+					// Enter
+					record.enter()
+						.append("svg:rect")
+							.attr("class", "plot-band")
+							.style("fill", plot.color);
+
+					// Update
+					record
+						.attr("x", function(d,i){
+							return self.xScale(d[3]);
+						})
+						.attr("y", function(d,i){
+							return self.yScaleNonZero(d[0]);
+						})
+						.attr("width", function(d,i) {
+							return self.yScaleNonZero(d[5]) + self.yScaleNonZero(d[4]);
+						})
+						.attr("height", function(d,i) {
+							return self.yScaleNonZero(d[2]) + self.yScaleNonZero(d[1]);
+						})
+						.style("fill", plot.color);
+
+					// Delete
+					record.exit()
+						.remove();
+					
+					// =============
 					//  Data Points
 					// =============
 
@@ -246,10 +279,9 @@ define(
 						})
 						.attr("stroke", plot.color);
 
-					// =============
-					//  Error bars
-					// =============
-					
+					// Delete
+					record.exit()
+						.remove();
 
 				}
 
