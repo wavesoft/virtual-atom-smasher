@@ -328,7 +328,7 @@ define(
 			this.meta = meta;
 
 			// Update label
-			this.elmTitle.text(meta['short']);
+			this.elmTitle.html(meta['short']);
 
 			// Prepare spinner
 			if (this.spinner) return;
