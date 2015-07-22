@@ -163,7 +163,10 @@ define(
 						'id'	 : 'plot-sim',
 						'legend' : 'Ratio',
 						'color'  : '#ffff00',
-						'data'   : this.data.values
+						'data'   : this.data.values,
+
+						// Get the 1-sigma error band
+						'sigma'  : this.ratioBand.values
 					}
 				];
 
@@ -184,20 +187,64 @@ define(
 				for (var j=0; j<plots.length; j++) {
 					var plot = plots[j];
 
-					// =============
-					//     Plots 
-					// =============
-
 					// Access plot's group
 					var group = this.svgPlot.select("g.plot#"+plot.id);
 					if (group.empty()) {
 						group = this.svgPlot.append("g")
 							.attr("class", "plot")
 							.attr("id", plot.id);
+						group.append("g")
+							.attr("class", "plot-back");
+						group.append("g")
+							.attr("class", "plot-fore");
 					}
 
+					// Access plot's group
+					var groupBack = group.select("g.plot-back"),
+						groupFore = group.select("g.plot-fore");
+
+					// ==============
+					//  1-sigma band
+					// ==============
+
+					var record = groupBack.selectAll("path.plot-band")
+									.data(plot.sigma);
+
+					// Enter
+					record.enter()
+						.append("rect")
+							.attr("class", "plot-band");
+							//.style("fill", plot.color);
+
+					// Update
+					record
+						.attr("x", function(d,i){
+							return self.xScale( d[3] - d[5] );
+						})
+						.attr("y", function(d,i){
+							return self.yScale( d[0] + d[1] );
+						})
+						.attr("width", function(d,i) {
+							return self.xScale( d[3] + d[4] ) - 
+								   self.xScale( d[3] - d[5] );
+						})
+						.attr("height", function(d,i) {
+							return self.yScale( d[0] - d[2] ) -
+								   self.yScale( d[0] + d[1] );
+						});
+						//.style("fill", plot.color);
+
+					// Delete
+					record.exit()
+						.remove();
+
+
+					// =============
+					//     Plots 
+					// =============
+
 					// Access D3 record for this element
-					var record = group.selectAll("path.plot-line")
+					var record = groupFore.selectAll("path.plot-line")
 									.data([plot.data]);
 
 					// Enter
@@ -209,39 +256,6 @@ define(
 					// Update
 					record.attr("d", pathLine)
 							.attr("stroke", plot.color);
-
-					// Delete
-					record.exit()
-						.remove();
-
-					// =============
-					//  Error bands
-					// =============
-
-					var record = group.selectAll("path.plot-band")
-									.data(plot.data);
-
-					// Enter
-					record.enter()
-						.append("svg:rect")
-							.attr("class", "plot-band")
-							.style("fill", plot.color);
-
-					// Update
-					record
-						.attr("x", function(d,i){
-							return self.xScale(d[3]);
-						})
-						.attr("y", function(d,i){
-							return self.yScaleNonZero(d[0]);
-						})
-						.attr("width", function(d,i) {
-							return self.yScaleNonZero(d[5]) + self.yScaleNonZero(d[4]);
-						})
-						.attr("height", function(d,i) {
-							return self.yScaleNonZero(d[2]) + self.yScaleNonZero(d[1]);
-						})
-						.style("fill", plot.color);
 
 					// Delete
 					record.exit()
@@ -266,16 +280,13 @@ define(
 							return "translate(" + self.xScale(d[3]) + "," + self.yScaleNonZero(d[0]) + ")"
 						})
 						.attr("d", function(d,i) {
-							var bs = self.errorBars.bulletSize/2;
+							var h = self.yScale( d[0] - d[2] ) - self.yScale( d[0] + d[1] );
 
 							// Path for the bullet
-							var D_RECT= "M"+(-bs)+","+(-bs)+
-										"L"+bs+","+(-bs)+
-										"L"+bs+","+bs+
-										"L"+(-bs)+","+bs+
+							var D_ERR= "M0,-"+(h/2)+
+										"L0,"+(h/2)+
 										"Z";
-							return  D_RECT;
-
+							return  D_ERR;
 						})
 						.attr("stroke", plot.color);
 
@@ -421,8 +432,10 @@ define(
 			// Prepare data variables
 			if (!data) {
 				this.data = null;
+				this.ratioBand = null;
 			} else {
 				this.data = LiveQCalc.calculateRatioHistogram( data['data'], data['ref'].data );
+				this.ratioBand = LiveQCalc.calculateRatioHistogram( data['ref'].data, data['ref'].data );
 			}
 
 			// Regen plot
