@@ -359,6 +359,29 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get observable details
+		 */
+		APIAccount.prototype.getObservableDetails = function(listOfObservables, callback) {
+			// Query server
+			this.sendAction("observables.details", {
+				'observables': listOfObservables
+			}, function(data) {
+				if (data && callback) {
+
+					// Create an indexed list
+					var dat = data['data'], ans = { };
+					for (var i=0; i<dat.length; i++) {
+						ans[dat[i].name] = dat[i];
+					}
+
+					// Fire callback with indexed list of observables
+					callback(ans);
+
+				}
+			});
+		}
+
+		/**
 		 * Unlock a particular machine part stage
 		 */
 		APIAccount.prototype.unlockMachineStage = function(stage, callback) {

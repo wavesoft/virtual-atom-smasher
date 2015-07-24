@@ -13,10 +13,268 @@
 .histograms-overlay {
 	.border-radius(20px);
 	background: #fff;
-	border: solid 5px #DDD;
-	overflow-x: hidden;
-	overflow-y: auto !important;
+	overflow: hidden;
 
+	div.histogram-tabbody {
+		position: absolute;
+		left: 0; top: 0;
+		width: 100%;
+		height: 100%;
+
+		div.top {
+
+		}
+
+		div.left {
+			position: absolute;
+			left: 0; right: 250px;
+			top: 36px; bottom: 0;
+			
+			padding: 5px;
+			overflow-y: scroll;
+			overflow-x: hidden;
+
+			div.histogram {
+				.border-radius( 20px );
+				position: relative;
+				display: block;
+				float: left;
+				width: 260px;
+				height: 350px;
+				cursor: pointer;
+				border-width: 1px 1px 5px;
+				border-style: solid;
+				margin: 1px 0 6px 1px;
+				padding: 0 8px 0 0;
+				overflow: hidden;
+
+				// Hover and selected
+				&:hover {
+					background-color: #EEE;
+				}
+				&.selected {
+					border-color: #0066FF !important;
+					background-color: #F6FAFF;
+				}
+
+				// Fixed-size histogram plot host
+				.histo-plot-host {
+					display: block;
+					width: 260px;
+					height: 350px;
+				}
+
+				// Iconic view of the histogram
+				.transition( ~"width 0.2s, height 0.2s"  );
+				.histo-plot-host {
+					.transition( all 0.2s );
+				}
+				.histo-label-name {
+					.transition( opacity 0.2s );
+					opacity: 0;
+
+				    display: block;
+				    text-align: center;
+				    font-size: 14px;
+					
+				    position: absolute;
+				    top: 8px;
+				    left: 0; right: 0;
+			        padding: 0 10px;
+
+				}
+				.histo-label-fit {
+					.transition( opacity 0.2s );
+					opacity: 0;
+
+				    display: block;
+				    text-align: center;
+				    font-size: 12px;
+
+				    position: absolute;
+				    bottom: 5px;
+				    left: 0; right: 0;
+
+				}
+				&.histo-icon {
+				    width: 120px !important;
+				    height: 108px !important;
+				    .histo-plot-host {
+				    	opacity: 0;
+				    }
+					.histo-label-name {
+						opacity: 1;
+					}
+					.histo-label-fit {
+						opacity: 1;
+					}
+				}
+				&:not(.histo-icon) {
+					clear: left;
+				}
+
+				// coloring based on fit
+				&.histo-fit-perfect {
+					border-color: 
+						rgba(red(@observ-c-perfect), green(@observ-c-perfect), blue(@observ-c-perfect), 0.24) 
+						rgba(red(@observ-c-perfect), green(@observ-c-perfect), blue(@observ-c-perfect), 0.24) 
+						@observ-c-perfect;
+					.histo-label-fit {
+						color: @observ-c-perfect;
+					}
+				}
+				&.histo-fit-good {
+					border-color: 
+						rgba(red(@observ-c-good), green(@observ-c-good), blue(@observ-c-good), 0.24) 
+						rgba(red(@observ-c-good), green(@observ-c-good), blue(@observ-c-good), 0.24) 
+						@observ-c-good;
+					.histo-label-fit {
+						color: @observ-c-good;
+					}
+				}
+				&.histo-fit-average {
+					border-color: 
+						rgba(red(@observ-c-average), green(@observ-c-average), blue(@observ-c-average), 0.24) 
+						rgba(red(@observ-c-average), green(@observ-c-average), blue(@observ-c-average), 0.24) 
+						@observ-c-average;
+					.histo-label-fit {
+						color: @observ-c-average;
+					}
+				}
+				&.histo-fit-bad {
+					border-color: 
+						rgba(red(@observ-c-bad), green(@observ-c-bad), blue(@observ-c-bad), 0.24) 
+						rgba(red(@observ-c-bad), green(@observ-c-bad), blue(@observ-c-bad), 0.24) 
+						@observ-c-bad;
+					.histo-label-fit {
+						color: @observ-c-bad;
+					}
+				}
+
+			}
+
+		}
+
+		div.right {
+			background-color: #ddd;
+			position: absolute;
+			right: 0; width: 250px;
+			top: 36px; bottom: 0;			
+
+			div.right-header {
+				position: absolute;
+				left: 0; right: 0; top: 0; bottom: 120px;
+
+				margin: 10px;
+				overflow: auto;
+
+			}
+
+			div.right-footer {
+				position: absolute;
+				left: 0; right: 0; bottom: 0; height: 120px;
+
+				div.histo-correlations {
+					position: absolute;
+					bottom: 70px; left: 0; right: 0;
+
+					padding: 6px;
+					background-color: #EEE;
+					cursor: pointer;
+					overflow: hidden;
+
+					.transition( max-height 0.25s );
+					max-height: 37px;
+					&:hover {
+						max-height: 500px;
+					}
+
+					.correlation-label {
+						font-size: 10px;
+						color: #999;
+						margin-bottom: 1px;
+					}
+					.correlation {
+						cursor: pointer;
+						margin: 2px;
+					    font-size: 16px;
+					    text-align: center;
+					}
+
+				}
+
+				div.histo-fit-group {
+					color: darken(@observ-c-nofit, 20%);
+					margin-top: 50px;
+
+					div.histo-fit {
+						text-align: center;
+						font-size: 1.5em;
+						font-weight: bold;
+						text-align: center;
+						padding: 4px;
+						background-color: @observ-c-nofit;
+					}
+					div.histo-fit-details {
+						text-align: center;
+						font-size: 0.8em;
+						font-weight: bold;
+						text-align: center;
+						padding: 4px;
+						background-color: @observ-c-nofit;
+					}
+
+					&.perfect {
+						color: darken(@observ-c-perfect, 10%);
+						div.histo-fit {
+							background: screen(@observ-c-nofit, @observ-c-perfect);
+						}
+						div.histo-fit-details {
+							background: darken(screen(@observ-c-nofit, @observ-c-perfect), 20%);
+						}
+					}
+
+					&.good {
+						color: darken(@observ-c-good, 10%);
+						div.histo-fit {
+							background: screen(@observ-c-nofit, @observ-c-good);
+						}
+						div.histo-fit-details {
+							background: darken(screen(@observ-c-nofit, @observ-c-good), 20%);
+						}
+					}
+
+					&.average {
+						color: darken(@observ-c-average, 10%);
+						div.histo-fit {
+							background: screen(@observ-c-nofit, @observ-c-average);
+						}
+						div.histo-fit-details {
+							background: darken(screen(@observ-c-nofit, @observ-c-average), 20%);
+						}
+
+					}
+
+					&.bad {
+						color: darken(@observ-c-bad, 10%);
+						div.histo-fit {
+							background: screen(@observ-c-nofit, @observ-c-bad);
+						}
+						div.histo-fit-details {
+							background: darken(screen(@observ-c-nofit, @observ-c-bad), 20%);
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	/*
 	div.group {
 		padding: 20px;
 		clear: both;
@@ -76,68 +334,6 @@
 						}
 
 						div.fit-score {
-							position: absolute;
-							bottom: 0; left: 0; right: 0;
-							color: darken(@observ-c-nofit, 20%);
-
-							div.status {
-								text-align: center;
-								font-size: 1.5em;
-								font-weight: bold;
-								text-align: center;
-								padding: 4px;
-								background-color: @observ-c-nofit;
-							}
-							div.detail {
-								text-align: center;
-								font-size: 0.8em;
-								font-weight: bold;
-								text-align: center;
-								padding: 4px;
-								background-color: @observ-c-nofit;
-							}
-
-							&.perfect {
-								color: darken(@observ-c-perfect, 10%);
-								div.status {
-									background: screen(@observ-c-nofit, @observ-c-perfect);
-								}
-								div.detail {
-									background: darken(screen(@observ-c-nofit, @observ-c-perfect), 20%);
-								}
-							}
-
-							&.good {
-								color: darken(@observ-c-good, 10%);
-								div.status {
-									background: screen(@observ-c-nofit, @observ-c-good);
-								}
-								div.detail {
-									background: darken(screen(@observ-c-nofit, @observ-c-good), 20%);
-								}
-							}
-
-							&.average {
-								color: darken(@observ-c-average, 10%);
-								div.status {
-									background: screen(@observ-c-nofit, @observ-c-average);
-								}
-								div.detail {
-									background: darken(screen(@observ-c-nofit, @observ-c-average), 20%);
-								}
-
-							}
-
-							&.bad {
-								color: darken(@observ-c-bad, 10%);
-								div.status {
-									background: screen(@observ-c-nofit, @observ-c-bad);
-								}
-								div.detail {
-									background: darken(screen(@observ-c-nofit, @observ-c-bad), 20%);
-								}
-
-							}
 
 						}
 
@@ -148,5 +344,6 @@
 		}
 		
 	}
+	*/
 
 }

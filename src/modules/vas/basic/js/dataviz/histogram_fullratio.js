@@ -165,7 +165,7 @@ define(
 				var plots = [
 					{
 						'id'	 : 'plot-sim',
-						'legend' : 'Simulation-to-Reference Ratio',
+						'legend' : 'Current aggreement',
 						'color'  : '#0066FF',
 						'data'   : this.data.values,
 
@@ -303,17 +303,17 @@ define(
 				// Create the X and Y axis
 				if (!this.xAxisGraphic)
 					this.xAxisGraphic = this.svgPlot.append("g")
-					    .attr("class", "x axis")
-					    .attr("transform", "translate(0,"+this.yScale(1)+")")
-					    .call(this.xAxis);
+					    .attr("class", "x axis");
 				if (!this.yAxisGraphic)
 					this.yAxisGraphic = this.svgPlot.append("g")
-					    .attr("class", "y axis")
-					    .call(this.yAxis);
+					    .attr("class", "y axis");
 
-				// Render them
-				this.xAxisGraphic.call(this.xAxis);
-				this.yAxisGraphic.call(this.yAxis);
+				// Render/Update them
+				this.xAxisGraphic
+				    .attr("transform", "translate(0,"+this.yScale(1)+")")
+					.call(this.xAxis);
+				this.yAxisGraphic
+					.call(this.yAxis);
 
 				// ------------------------------------------
 				//  Graphic Design - Legend

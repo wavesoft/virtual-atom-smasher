@@ -2,14 +2,19 @@ define(
 
 	// Dependencies
 
-	["jquery", "mathjax", "sha1", "vas/core/registry","vas/core/base/component", "vas/core/apisocket", "vas/core/liveq/Calculate", "ccl-tracker"], 
+	[ "jquery", "mathjax", "sha1", "ccl-tracker", 
+	  "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/base/component", "vas/core/apisocket", "vas/core/liveq/Calculate",
+	  "text!vas/basic/tpl/overlay/histograms.html"
+	], 
 
 	/**
 	 * This is the default component for displaying flash overlay messages
 	 *
  	 * @exports vas-basic/overlay/flash
 	 */
-	function(config, MathJax, SHA1, R, Component, APISocket, Calculate, Analytics) {
+	function(config, MathJax, SHA1, Analytics, 
+		     R, UI, DB, Component, APISocket, Calculate,
+		     tpl) {
 
 		/**
 		 * The default tunable body class
@@ -21,21 +26,37 @@ define(
 			hostDOM.addClass("histograms-overlay");
 			this.isVisible = false;
 
-			// Prepare categories
-			this.elmCategories = [
-				$('<div class="group group-attention"></div>').appendTo(hostDOM).append( $('<h1><span class="glyphicon glyphicon-warning-sign"></span> Bad Matches</h1><p class="subtitle">Histograms that have bad match (error bigger than 3 sigma).</p>') ),
-				$('<div class="group group-warn"></div>').appendTo(hostDOM).append( $('<h1><span class="glyphicon glyphicon-exclamation-sign"></span> Fair Matches</h1><p class="subtitle">Histograms that are fairly good, but still have some minor issues to fix  (error bigger than 3 sigma).</p>') ),
-				$('<div class="group group-good"></div>').appendTo(hostDOM).append( $('<h1><span class="glyphicon glyphicon-ok"></span> Good Matches</h1><p class="subtitle">Histograms that are successfuly tuned to the best possible case.</p>') )
-			];
+			// Load view template and plutins
+			this.loadTemplate(tpl);
+			this.renderView();
 
-			// Prepare the category contents
-			this.elmCategoryHistograms = [];
-			for (var i=0; i<this.elmCategories.length; i++) {
-				this.elmCategoryHistograms.push( $('<div class="histograms"></div>').appendTo(this.elmCategories[i]) );
-			}
+			//
+			// We are never going to re-draw the UI,
+			// therefore we can use .select() without 
+			// callback in order to get the DOM elements
+			// we are interested in
+			//
+			this.elmHistoContainer = this.select(".histo-container");
+			this.elmDescHeader = this.select(".histo-name");
+			this.elmDescDesc = this.select(".histo-desc");
+			this.elmDescCorrelations = this.select(".histo-correlations");
+			this.elmDescFrame = this.select(".histo-fit-group");
+			this.elmDescFit = this.select(".histo-fit");
+			this.elmDescFitDetails = this.select(".histo-fit-details");
+			this.elmRightPanel = this.select(".right");
+			this.elmRightFooter = this.select(".right-footer");
 
 			// Array of histogram objects
 			this.histograms = [];
+			this.histogramIndex = {};
+			this.selectedHistogram = "";
+
+			// Currently active filter
+			//  0 : No filter
+			//  1 : Bad matches
+			//  2 : Good matches
+			//
+			this.filter = 0;
 
 			// A unique checksum ID for the current set of histograms
 			this.checksumID = "";
@@ -46,117 +67,348 @@ define(
 		OverlayHistograms.prototype = Object.create( Component.prototype );
 
 		/**
+		 * Show/hide histograms in the list according to
+		 * the current configuration
+		 */
+		OverlayHistograms.prototype.updateHistogramDisplay = function() {
+
+			// Order all DOM elements
+			var order = [ ];
+			for (var i=0; i<this.histograms.length; i++) {
+				order.push([ this.histograms[i].dom, this.histograms[i].fit[0] ]);
+			}
+			order.sort(function(a,b){ return b[1] - a[1]; });
+
+			// Order and re-attach relevant items in descending fit order
+			for (var i=order.length-1; i>=0; i--) {
+				var dom = order[i][0],
+					fit = order[i][1],
+					match = 
+						(this.filter == 0) ||
+					   ((this.filter == 1) && (fit > 4)) ||
+					   ((this.filter == 2) && (fit <= 4))
+					;
+
+				// If the element is attached, but not a match, detach from dom
+				if (jQuery.contains(document, dom[0]) && !match) {
+					dom.detach();
+				}
+
+				// If item is a match, reorder
+				else if (match) {
+					dom.prependTo( this.elmHistoContainer );
+				}
+
+			}
+
+		}
+
+		/**
+		 * Undefine description panel
+		 */
+		OverlayHistograms.prototype.resetDescription = function() {
+
+			// Hide right footer
+			this.elmRightFooter.hide();
+
+			// Reset text
+			this.elmDescHeader.text("Select a histogram");
+			this.elmDescDesc.html("<p>Please select a histogram to see more details</p>");
+
+		}
+
+		/**
+		 * Update the description panel
+		 */
+		OverlayHistograms.prototype.updateDescription = function( record ) {
+			var chi2fit = record.fit,
+				status_msg, status_cls;
+
+			// Check on which scale is the fit
+			if (chi2fit[0] < 1) { // 1 sigma
+				status_msg = "Perfect Match";
+				status_cls = "perfect";
+			} else if (chi2fit[0] < 4) { // 2 sigma
+				status_msg = "Good Match";
+				status_cls = "good";
+			} else if (chi2fit[0] < 9) { // 3 sigma
+				status_msg = "Fair Match";
+				status_cls = "average";
+			} else {
+				status_msg = "Bad Match";						
+				status_cls = "bad";
+			}
+
+			// Update fit details
+			this.elmDescFrame.attr("class", "histo-fit-group "+ status_cls);
+			this.elmDescFit.text(status_msg);
+			this.elmDescFitDetails.html(
+					'<div><strong>Events:</strong> ' + record.nevts + '</div>' + 
+					'<div><strong>Error:</strong> ' + chi2fit[0].toFixed(2) + ' ± ' + chi2fit[1].toFixed(2) + '</div>'
+				);
+
+			// Update description
+			this.elmDescCorrelations.empty();
+			if (!record.obs) {
+				// Missing observable details
+				this.elmDescHeader.text(id);
+				this.elmDescDesc.text("(Description is missing)");
+			} else {
+
+				// Update observable details
+				this.elmDescHeader.html( record.obs.title );
+				this.elmDescDesc.html( record.obs.desc );
+
+				// Add correlations
+				if (record.obs.correlations) {
+					this.elmDescCorrelations.append($('<div class="correlation-label">This historam is sensitive to:</div>'));
+					for (var i=0; i<record.obs.correlations.length; i++) {
+						var c = record.obs.correlations[i],
+							elmHandleTimer = null,
+							elm = $('<div class="correlation"></div>')
+								.text( c.tunable )
+								.appendTo( this.elmDescCorrelations );
+
+					}
+				}
+
+				// (Re)typeset math
+				MathJax.typeset( this.elmRightPanel );
+
+			}
+
+			// Show right footer
+			this.elmRightFooter.show();
+
+		}
+
+		/**
+		 * Select a particular histogram 
+		 */
+		OverlayHistograms.prototype.selectHistogram = function( id ) {
+
+			// Deselect currently selected histogram
+			if (this.selectedHistogram) {
+				// Get histogram
+				var record = this.histogramIndex[this.selectedHistogram];
+				if (record) {
+					record.dom.removeClass("selected");
+				}
+				// Deactivate
+				this.selectedHistogram = "";
+			}
+
+			// If we have no ID, just deselect
+			if (!id) return;
+
+			// Activate the specified ID
+			var record = this.histogramIndex[id];
+			if (!record) {
+				console.warn("Unable to select missing histogram #"+id);
+				return;
+			}
+
+			// Activate
+			this.selectedHistogram = id;
+			record.dom.addClass("selected");
+
+			// Update description
+			this.updateDescription( record );
+
+		}
+
+		/**
+		 * Add a new histogram 
+		 */
+		OverlayHistograms.prototype.histoCreate = function( id, histogram, obsDetails ) {
+
+			// Create histogram data visualization
+			var domHisto = $('<div class="histogram histo-icon"></div>').appendTo(this.elmHistoContainer),
+				domLabelName = $('<div class="histo-label-name"></div>').appendTo( domHisto ),
+				domLabelFit =  $('<div class="histo-label-fit"></div>').appendTo( domHisto ),
+				domPlotHost = $('<div class="histo-plot-host"></div>').appendTo( domHisto ),
+				hist = R.instanceComponent("dataviz.histogram_combined", domPlotHost);
+
+			// Select histogram upon clicking on it
+			domHisto.click((function(histoID) {
+				return function(e) {
+					if (this.selectedHistogram == histoID) {
+						domHisto.toggleClass("histo-icon");
+					} else {
+						this.selectHistogram(histoID);
+					}
+				};
+			})(id).bind(this));
+
+			// Prepare record
+			var record = {
+				'id'   : id,			// Histogram ID
+				'dom'  : domHisto,		// DOM Element
+				'com'  : hist,			// Histogram Component
+				'obs'  : obsDetails,	// Observable details
+				'fit'  : null,			// Current chi-squared fit
+				'nevts': null,			// Number of events
+				'domfl': domLabelFit,	// Fit label DOM element
+			};
+
+			// Store on index and array
+			this.histograms.push(record);
+			this.histogramIndex[id] = record;
+
+			// Update details
+			if (obsDetails) {
+				domLabelName.html(record.obs.title);
+				MathJax.typeset( domLabelName );
+			}
+
+		}
+
+		/**
+		 * Update histogram data
+		 */
+		OverlayHistograms.prototype.histoUpdate = function( id, histogram ) {
+			var record = this.histogramIndex[id];
+
+			// Update histogram
+			record.com.onUpdate( histogram );
+
+			// Update record details
+			record.fit = Calculate.chi2WithError( histogram.data, histogram.ref.data );
+			record.nevts = histogram.data.nevts;
+
+			// Check on which scale is the fit
+			var status_cls;
+			if (record.fit[0] < 1) { // 1 sigma
+				status_cls = "perfect";
+			} else if (record.fit[0] < 4) { // 2 sigma
+				status_cls = "good";
+			} else if (record.fit[0] < 9) { // 3 sigma
+				status_cls = "average";
+			} else {
+				status_cls = "bad";
+			}
+
+			// Update class
+			record.dom.removeClass( "histogram histo-fit-perfect histogram histo-fit-good histogram histo-fit-average histogram histo-fit-bad" );
+			record.dom.addClass( "histogram histo-fit-"+status_cls );
+
+			// If that's focused, update description
+			if (this.selectedHistogram == id)
+				this.updateDescription( record );
+
+			// Update fit label
+			record.domfl.text( record.fit[0].toFixed(2) + ' ± ' + record.fit[1].toFixed(2) );
+
+		}
+
+		/**
+		 * Delete a histogram 
+		 */
+		OverlayHistograms.prototype.histoDelete = function( id ) {
+
+			// Deselect histogram if this is selected
+			if (this.selectedHistogram == id) {
+				this.selectHistogram( false );
+				this.resetDescription();
+			}
+
+			// Lookup record
+			var record = this.histogramIndex[id];
+			if (!record) return;
+
+			// Delete DOM
+			record.dom.remove();
+
+			// Delete record
+			var index = this.histograms.indexOf(record);
+			if (index >= 0) this.histograms.splice(index,1);
+			delete this.histogramIndex[id];
+
+		}
+
+		/**
 		 * Reposition flashDOM on resize
 		 */
 		OverlayHistograms.prototype.onHistogramsDefined = function( histograms ) {
 
-			// Get histogram names
-			var histoNames = [];
-			for (var i=0; i<histograms.length; i++)
-				histoNames.push(histograms[i].id);
+			// Keep a reference with the histograms processed
+			var processed = { },
+				newHistograms = [],
+				newHistoIDs = [];
 
-			// Query observable information 
-			var DB = APISocket.openDb();
-			DB.getMultipleRecords("observable", histoNames, (function(unused, observables) {
+			// Start by adding missing histograms
+			for (var i=0; i<histograms.length; i++) {
+				var id = histograms[i].id;
+				// Mark as processed
+				processed[id] = true;
+				// Add missing histogram
+				if (this.histogramIndex[id] == undefined) {
+					// Keep the ID and the reference of the histogram
+					// for post-processing
+					newHistograms.push( histograms[i] );
+					newHistoIDs.push( id );
+				} 
+				// Update existing histograms
+				else {
+					this.histoUpdate( id, histograms[i] );
+				}
+			}
 
-				var histoGroups = [[], [], []];
-				var hashData = "",
-					analyticsHistograms = [];
+			// Delete other missing histograms
+			for (var i=0; i<this.histograms.length; i++) {
+				var id = this.histograms[i].id;
+				// Delete IDs that were not processed
+				if (processed[id] == undefined)
+					this.histoDelete(id);
+			}
 
-				// Scan histograms and sort them into groups
-				for (var i=0; i<histograms.length; i++) {
-					var chi2fit = Calculate.chi2WithError( histograms[i].data, histograms[i].ref.data );
-					if (chi2fit[0] < 4) { // 1 sigma
-						histoGroups[2].push( histograms[i] );
-					} else if (chi2fit[0] < 9) { // 2 sigma
-						histoGroups[1].push( histograms[i] );
-					} else { // 3 sigma or more
-						histoGroups[0].push( histograms[i] );
+			// If we have new histograms, query database to 
+			// fetch details and build histograms
+			if (newHistograms.length > 0) {
+
+				// Query observable information 
+				var Account = APISocket.openAccount();
+				Account.getObservableDetails( newHistoIDs, (function(observables) {
+
+					// Create/update every histogram
+					for (var i=0; i<newHistograms.length; i++) {
+						var id = newHistograms[i].id;
+						// Add histogram
+						this.histoCreate( id, newHistograms[i], observables[id] );
+						// Update histogram
+						this.histoUpdate( id, newHistograms[i] );
 					}
 
-					// Collect ID for checksum calculation
-					if (hashData != "") hashData += ";";
-					hashData += histograms[i].id;
-					analyticsHistograms.push( histograms[i].id );
+					// Update histogram order
+					this.updateHistogramDisplay();
 
-				}
+				}).bind(this));
 
-				// Create the visual components
-				this.histograms = [];
-				for (var i=0; i<histoGroups.length; i++) {
-					var histos = histoGroups[i],
-						targetDOM = this.elmCategoryHistograms[i].empty();
+			} else {
 
+				// Update histogram order
+				this.updateHistogramDisplay();
 
-					// Create, initialize and place on DOM
-					this.elmCategories[i].hide();
-					for (var j=0; j<histos.length; j++) {
+			}
 
-						// Create histogram data visualization
-						var domHisto = $('<div class="histogram"></div>').appendTo(targetDOM),
-							domDetails = $('<div class="details"></div>').appendTo(domHisto),
-							chi2fit = Calculate.chi2WithError( histos[j].data, histos[j].ref.data ),
-							hist = R.instanceComponent("dataviz.histogram_combined", domHisto);
+			// Calculate a hash for analytics details
+			var hashData = "", analyticsHistograms = [];
+			for (var i=0; i<histograms.length; i++) {
+				// Collect ID for checksum calculation
+				if (hashData != "") hashData += ";";
+				hashData += histograms[i].id;
+				analyticsHistograms.push( histograms[i].id );
+			}
 
-						// Store on histograms
-						hist.onUpdate( histos[j] );
-						this.histograms.push( hist );
+			// Store analytics hash id
+			this.checksumID = SHA1.hash( hashData );
 
-						// Populate histogram details
-						var obsDetails = observables[histos[j].id];
-						if (obsDetails) {
-							$('<div class="description"><h2>' + obsDetails['title'] + '</h2><p>' + (obsDetails['desc'] || "(Missing description)") + '</p></div>')
-								.appendTo(domDetails);
-						} else {
-							$('<div class="description"><h2>' + histos[j].id + '</h2><p>(Missing details)</p></div>')
-								.appendTo(domDetails);
-						}
-
-						// Check on which scale is the fit
-						var status_msg, status_cls;
-						if (chi2fit[0] < 1) { // 1 sigma
-							status_msg = "Perfect Match";
-							status_cls = "perfect";
-						} else if (chi2fit[0] < 4) { // 2 sigma
-							status_msg = "Good Match";
-							status_cls = "good";
-						} else if (chi2fit[0] < 9) { // 3 sigma
-							status_msg = "Fair Match";
-							status_cls = "average";
-						} else {
-							status_msg = "Bad Match";						
-							status_cls = "bad";
-						}
-
-
-						// Update fit score
-						var score = $('<div class="fit-score ' + status_cls + '">')
-							.append($('<div class="status">'+status_msg+'</div>'))
-							.append($('<div class="detail"><div><strong>Events:</strong> ' + histos[j].data.nevts + '</div><div><strong>Error:</strong> ' + chi2fit[0].toFixed(2) + ' ± ' + chi2fit[1].toFixed(2) + '</div></div>'))
-							.appendTo(domDetails);
-
-
-						// (Re)typeset math
-						MathJax.typeset( domHisto );
-
-						// Show category
-						this.elmCategories[i].show();
-
-					}
-				}
-
-				// Store ID
-				this.checksumID = SHA1.hash( hashData );
-
-				// Fire analytics
-				Analytics.restartTimer("observables")
-				Analytics.fireEvent("observables.shown", {
-					'id': this.checksumID,
-					'histos': analyticsHistograms
-				});
-
-			}).bind(this));
-
+			// Fire analytics
+			Analytics.restartTimer("observables")
+			Analytics.fireEvent("observables.shown", {
+				'id': this.checksumID,
+				'histos': analyticsHistograms
+			});
 
 		}
 
@@ -168,10 +420,9 @@ define(
 
 			// Resize histograms to update their UI
 			for (var i=0; i<this.histograms.length; i++) {
-				var com = this.histograms[i],
+				var com = this.histograms[i].com,
 					w = com.hostDOM.width(),
 					h = com.hostDOM.height();
-
 				com.onResize(w,h);
 				com.onWillShow(function() {
 					com.onShown();
@@ -180,6 +431,9 @@ define(
 
 			// Assume shown
 			this.isVisible = true;
+
+			// Reset
+			this.resetDescription();
 
 			// Fire shown
 			cb();

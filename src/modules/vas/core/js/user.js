@@ -701,6 +701,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Shorthand to get observable details
+		 */
+		User.prototype.getObservableDetails = function( observableList, callback ) {
+			// Get part papers
+			this.accountIO.getObservableDetails( observableList, callback );
+		}
+
+		/**
 		 * Shorthand to unlock the specified part
 		 */
 		User.prototype.unlockMachineStage = function( partName, callback ) {

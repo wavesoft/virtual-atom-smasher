@@ -161,7 +161,7 @@ define(
 				var plots = [
 					{
 						'id'	 : 'plot-sim',
-						'legend' : 'Ratio',
+						'legend' : 'Current aggreement',
 						'color'  : '#ffff00',
 						'data'   : this.data.values,
 

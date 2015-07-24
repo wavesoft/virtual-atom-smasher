@@ -837,20 +837,30 @@ define(
 		 */
 		DataVizFullHistogram.prototype.onUpdate = function(data) {
 
-			// Remove all histograms
-			this.plots = [];
-
 			// If we have data, update histograms
 			if (data != null) {
-				this.addHistogram(data['data'], data['ref'].title);
-				this.addHistogram(data['ref'].data, "Reference Data");
 
-				// Initialize images
-				this.initImages(
-					data['ref'].imgTitle,
-					data['ref'].imgXLabel,
-					data['ref'].imgYLabel
-					);
+				// Add or update plots
+				if (this.plots == 0) {
+
+					// First time, create histograms
+					this.addHistogram(data['data'], "Simulation Data");
+					this.addHistogram(data['ref'].data, "Reference Data");
+
+					// Initialize images
+					this.initImages(
+						data['ref'].imgTitle,
+						data['ref'].imgXLabel,
+						data['ref'].imgYLabel
+						);
+
+				} else {
+
+					// Every other time, just update data
+					this.plots[0].histo = data['data'];
+					this.plots[1].histo = data['ref'].data;
+
+				}
 			}
 
 			// Update
