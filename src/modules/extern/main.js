@@ -110,7 +110,12 @@ require.config({
 			'name'		: 'ccl-tracker',
 			'location'	: 'extern/ccl-tracker/js',
 			'main'		: 'ccltracker-1.0.min'
-		}
+		},
+		{
+			'name'		: 'isotope',
+			'location'	: 'extern/isotope/js',
+			'main'		: 'isotope-2.2.1.min'
+		},
 	],
 
 
