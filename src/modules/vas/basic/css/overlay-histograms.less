@@ -25,6 +25,10 @@
 
 		}
 
+		.histo-container > div {
+			width: 100%;
+		}
+
 		div.left {
 			position: absolute;
 			left: 0; right: 250px;
@@ -37,9 +41,9 @@
 			div.histogram {
 				.border-radius( 20px );
 				position: relative;
-				display: block;
+				//display: block;
 				float: left;
-				width: 260px;
+				width: 250px;
 				height: 350px;
 				cursor: pointer;
 				border-width: 1px 1px 5px;
@@ -47,6 +51,7 @@
 				margin: 1px 0 6px 1px;
 				padding: 0 8px 0 0;
 				overflow: hidden;
+				background-color: #FFF;
 
 				// Hover and selected
 				&:hover {
@@ -65,7 +70,6 @@
 				}
 
 				// Iconic view of the histogram
-				.transition( ~"width 0.2s, height 0.2s"  );
 				.histo-plot-host {
 					.transition( all 0.2s );
 				}
@@ -108,9 +112,6 @@
 					.histo-label-fit {
 						opacity: 1;
 					}
-				}
-				&:not(.histo-icon) {
-					clear: left;
 				}
 
 				// coloring based on fit

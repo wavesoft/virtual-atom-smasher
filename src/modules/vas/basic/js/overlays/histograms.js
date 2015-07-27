@@ -2,7 +2,7 @@ define(
 
 	// Dependencies
 
-	[ "jquery", "mathjax", "sha1", "ccl-tracker", 
+	[ "jquery", "mathjax", "sha1", "ccl-tracker", "isotope",
 	  "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/base/component", "vas/core/apisocket", "vas/core/liveq/Calculate",
 	  "text!vas/basic/tpl/overlay/histograms.html"
 	], 
@@ -12,7 +12,7 @@ define(
 	 *
  	 * @exports vas-basic/overlay/flash
 	 */
-	function(config, MathJax, SHA1, Analytics, 
+	function($, MathJax, SHA1, Analytics, Isotope,
 		     R, UI, DB, Component, APISocket, Calculate,
 		     tpl) {
 
@@ -50,6 +50,31 @@ define(
 			this.histograms = [];
 			this.histogramIndex = {};
 			this.selectedHistogram = "";
+
+			window.histo = this;
+
+			// Initialize isotope layout mechanism
+			this.isotopeContainer = $('<div></div>').appendTo( this.elmHistoContainer );
+			this.isotopeLayout = new Isotope(this.isotopeContainer[0], {
+				itemSelector: '.histogram',
+				layoutMode: 'masonry',
+				masonry: {
+				  columnWidth: 132
+				},
+				getSortData: {
+				    // Return weight
+				    weight: (function( itemElem ) {
+				    	var hid = $(itemElem).data("hid"),
+				    		record = this.histogramIndex[hid],
+				    		fit = record.fit ? record.fit[0] : 0;
+				    	// Icons have bigger weight
+				    	if ($(itemElem).hasClass("histo-icon")) {
+				    		fit += 10000;
+				    	}
+				    	return fit;
+				    }).bind(this)
+				}
+			});
 
 			// Currently active filter
 			//  0 : No filter
@@ -114,6 +139,22 @@ define(
 			// Reset text
 			this.elmDescHeader.text("Select a histogram");
 			this.elmDescDesc.html("<p>Please select a histogram to see more details</p>");
+
+		}
+
+		/**
+		 * Update layout 
+		 */
+		OverlayHistograms.prototype.updateLayout = function() {
+
+			// Update sort data
+			//this.isotopeLayout.updateSortData( this.isotopeContainer.find(".histogram") );
+			this.isotopeLayout.reloadItems();
+
+			// Re-arrange by weight
+			this.isotopeLayout.arrange({
+				sortBy: 'weight'
+			});
 
 		}
 
@@ -223,17 +264,23 @@ define(
 		OverlayHistograms.prototype.histoCreate = function( id, histogram, obsDetails ) {
 
 			// Create histogram data visualization
-			var domHisto = $('<div class="histogram histo-icon"></div>').appendTo(this.elmHistoContainer),
+			var domHisto = $('<div class="histogram histo-icon"></div>').appendTo( this.isotopeContainer ),
 				domLabelName = $('<div class="histo-label-name"></div>').appendTo( domHisto ),
 				domLabelFit =  $('<div class="histo-label-fit"></div>').appendTo( domHisto ),
 				domPlotHost = $('<div class="histo-plot-host"></div>').appendTo( domHisto ),
 				hist = R.instanceComponent("dataviz.histogram_combined", domPlotHost);
 
 			// Select histogram upon clicking on it
+			domHisto.data("hid", id);
 			domHisto.click((function(histoID) {
 				return function(e) {
 					if (this.selectedHistogram == histoID) {
+						// Toggle histo-icon class
 						domHisto.toggleClass("histo-icon");
+						// Re-arrange items on isotope upon completion
+						setTimeout((function() {
+							this.updateLayout();
+						}).bind(this), 10);
 					} else {
 						this.selectHistogram(histoID);
 					}
@@ -254,6 +301,9 @@ define(
 			// Store on index and array
 			this.histograms.push(record);
 			this.histogramIndex[id] = record;
+
+			// Add on isotope
+			this.isotopeLayout.appended( domHisto );
 
 			// Update details
 			if (obsDetails) {
@@ -287,6 +337,10 @@ define(
 			} else {
 				status_cls = "bad";
 			}
+
+			// Update DOM metadata for Isotope layouting
+			record.dom.data("fit", record.fit[0]);
+			record.dom.data("fit-class", status_cls);
 
 			// Update class
 			record.dom.removeClass( "histogram histo-fit-perfect histogram histo-fit-good histogram histo-fit-average histogram histo-fit-bad" );
@@ -379,15 +433,17 @@ define(
 						this.histoUpdate( id, newHistograms[i] );
 					}
 
-					// Update histogram order
-					this.updateHistogramDisplay();
+					// Re-run Isotope layout
+					console.log("Layout");
+					this.isotopeLayout.layout();
+					this.updateLayout();
 
 				}).bind(this));
 
 			} else {
 
-				// Update histogram order
-				this.updateHistogramDisplay();
+				// Re-arrange isotope items
+				this.updateLayout();
 
 			}
 
@@ -439,6 +495,17 @@ define(
 			cb();
 
 		}
+
+		/**
+		 * Reposition flashDOM on resize
+		 */
+		OverlayHistograms.prototype.onShown = function() {
+
+			// Update layout upon shown
+			this.updateLayout();
+
+		}
+
 
 		/**
 		 * Histograms hidden
