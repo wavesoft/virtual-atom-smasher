@@ -45,13 +45,12 @@ define(
 			this.elmDescFitDetails = this.select(".histo-fit-details");
 			this.elmRightPanel = this.select(".right");
 			this.elmRightFooter = this.select(".right-footer");
+			this.elmTopNavbar = this.select(".top .nav");
 
 			// Array of histogram objects
 			this.histograms = [];
 			this.histogramIndex = {};
 			this.selectedHistogram = "";
-
-			window.histo = this;
 
 			// Initialize isotope layout mechanism
 			this.isotopeContainer = $('<div></div>').appendTo( this.elmHistoContainer );
@@ -76,12 +75,15 @@ define(
 				}
 			});
 
+			// Bind DOM events
+			var self = this;
+			this.elmTopNavbar.find("li").click(function() {
+				// Update filter selection
+				self.updateFilterSelection( this );
+			})
+
 			// Currently active filter
-			//  0 : No filter
-			//  1 : Bad matches
-			//  2 : Good matches
-			//
-			this.filter = 0;
+			this.filter = "all";
 
 			// A unique checksum ID for the current set of histograms
 			this.checksumID = "";
@@ -92,39 +94,43 @@ define(
 		OverlayHistograms.prototype = Object.create( Component.prototype );
 
 		/**
-		 * Show/hide histograms in the list according to
-		 * the current configuration
+		 * Return true if the histogram with the specified ID is visible
 		 */
-		OverlayHistograms.prototype.updateHistogramDisplay = function() {
+		OverlayHistograms.prototype.isHistogramVisible = function( hid ) {
 
-			// Order all DOM elements
-			var order = [ ];
-			for (var i=0; i<this.histograms.length; i++) {
-				order.push([ this.histograms[i].dom, this.histograms[i].fit[0] ]);
+			// Require 'hid'
+			if (!hid) return false;
+
+			// Get record
+			var	record = this.histogramIndex[hid];
+			if (!record) return false;
+
+			// Test fit
+			var fit = record.fit ? record.fit[0] : 1000000.0;
+			if (this.filter == "all") {
+				return true;
+			} else if (this.filter == "bad") {
+				return (fit > 4.0);
+			} else if (this.filter == "good") {
+				return (fit <= 4.0);
+			} else {
+				return false;
 			}
-			order.sort(function(a,b){ return b[1] - a[1]; });
+		}
 
-			// Order and re-attach relevant items in descending fit order
-			for (var i=order.length-1; i>=0; i--) {
-				var dom = order[i][0],
-					fit = order[i][1],
-					match = 
-						(this.filter == 0) ||
-					   ((this.filter == 1) && (fit > 4)) ||
-					   ((this.filter == 2) && (fit <= 4))
-					;
+		/**
+		 * Update the filter selection
+		 */
+		OverlayHistograms.prototype.updateFilterSelection = function( elm ) {
+			var element = $(elm);
 
-				// If the element is attached, but not a match, detach from dom
-				if (jQuery.contains(document, dom[0]) && !match) {
-					dom.detach();
-				}
+			// Select element
+			this.elmTopNavbar.find("li").removeClass("selected");
+			element.addClass("selected");
 
-				// If item is a match, reorder
-				else if (match) {
-					dom.prependTo( this.elmHistoContainer );
-				}
-
-			}
+			// Update filter
+			this.filter = element.data("filter")
+			this.updateLayout();
 
 		}
 
@@ -145,16 +151,37 @@ define(
 		/**
 		 * Update layout 
 		 */
-		OverlayHistograms.prototype.updateLayout = function() {
+		OverlayHistograms.prototype.updateLayout = function( reloadItems ) {
 
-			// Update sort data
-			//this.isotopeLayout.updateSortData( this.isotopeContainer.find(".histogram") );
-			this.isotopeLayout.reloadItems();
+			// Reload items if requested
+			if (reloadItems) {
+				this.isotopeLayout.reloadItems();
+			}
 
 			// Re-arrange by weight
+			var self = this;
 			this.isotopeLayout.arrange({
-				sortBy: 'weight'
+				sortBy: 'weight',
+				filter: function( element ) {
+					return self.isHistogramVisible( $(this).data("hid") );
+				}
 			});
+
+			// Check if this action will hide the active item
+			if (this.selectedHistogram && !this.isHistogramVisible(this.selectedHistogram)) {
+
+				// Get histogram
+				var record = this.histogramIndex[this.selectedHistogram];
+				if (record) {
+					record.dom.removeClass("selected");
+				}
+				// Deactivate
+				this.selectedHistogram = "";
+
+				// Reset description
+				this.resetDescription();
+
+			}
 
 		}
 
@@ -268,22 +295,45 @@ define(
 				domLabelName = $('<div class="histo-label-name"></div>').appendTo( domHisto ),
 				domLabelFit =  $('<div class="histo-label-fit"></div>').appendTo( domHisto ),
 				domPlotHost = $('<div class="histo-plot-host"></div>').appendTo( domHisto ),
+				domBtnToggle = $('<div class="histo-btn-expand"></div>').appendTo( domHisto ),
 				hist = R.instanceComponent("dataviz.histogram_combined", domPlotHost);
 
 			// Select histogram upon clicking on it
 			domHisto.data("hid", id);
 			domHisto.click((function(histoID) {
 				return function(e) {
-					if (this.selectedHistogram == histoID) {
-						// Toggle histo-icon class
-						domHisto.toggleClass("histo-icon");
-						// Re-arrange items on isotope upon completion
-						setTimeout((function() {
-							this.updateLayout();
-						}).bind(this), 10);
+					e.preventDefault();
+					e.stopPropagation();
+
+					if (histoID == this.selectedHistogram) {
+						// Perform toggling if already focused
+						domBtnToggle.click();
 					} else {
+						// Otherwise focus
 						this.selectHistogram(histoID);
 					}
+				}				
+			})(id).bind(this));
+
+			// Bind toggle button events
+			domBtnToggle.click((function(histoID) {
+				return function(e) {
+					e.preventDefault();
+					e.stopPropagation();
+
+					if (domHisto.hasClass("histo-icon")) {
+						domHisto.removeClass("histo-icon");
+						domBtnToggle.addClass("expanded")
+					} else {
+						domHisto.addClass("histo-icon");
+						domBtnToggle.removeClass("expanded")
+					}
+
+					// Re-arrange items on isotope upon completion
+					setTimeout((function() {
+						this.updateLayout(true);
+					}).bind(this), 10);
+
 				};
 			})(id).bind(this));
 
@@ -434,16 +484,16 @@ define(
 					}
 
 					// Re-run Isotope layout
-					console.log("Layout");
 					this.isotopeLayout.layout();
-					this.updateLayout();
+					this.updateLayout(true);
 
 				}).bind(this));
 
 			} else {
 
+				// Update sort data
 				// Re-arrange isotope items
-				this.updateLayout();
+				this.updateLayout(true);
 
 			}
 

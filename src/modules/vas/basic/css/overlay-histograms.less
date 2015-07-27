@@ -22,11 +22,26 @@
 		height: 100%;
 
 		div.top {
+			position: absolute;
+			left: 0; top: 0; right: 250px;
+			padding: 5px 0;
+		    background-color: #EEE;
 
-		}
-
-		.histo-container > div {
-			width: 100%;
+			ul.nav {
+				list-style: none;
+			    margin: 0;
+			    padding: 3px 10px;
+   				li {
+   					cursor: pointer;
+   					.border-radius(5px);
+				    padding: 2px 5px;
+				    display: inline-block;
+				    &.selected {
+					    color: #FFF;
+					    background-color: #0066FF;
+				    }
+				}
+			}
 		}
 
 		div.left {
@@ -37,6 +52,10 @@
 			padding: 5px;
 			overflow-y: scroll;
 			overflow-x: hidden;
+
+			&.histo-container > div {
+				width: 100%;
+			}
 
 			div.histogram {
 				.border-radius( 20px );
@@ -52,6 +71,43 @@
 				padding: 0 8px 0 0;
 				overflow: hidden;
 				background-color: #FFF;
+
+				// Expand button
+				.histo-btn-expand {
+					.glyphicon();
+					display: none;
+					position: absolute;
+					right: 5px; top: 5px;
+					width: 24px; height: 24px;
+					.border-radius( 12px );
+					color: #FFF;
+
+					&:before {
+						content: "\e096"; 
+					}
+					&.expanded {
+						&:before {
+							content: "\e097" !important;
+						}
+					}
+
+					background-color: #0066FF;
+					text-align: center;
+					line-height: 23px;
+					font-size: 12px;
+					cursor: pointer;
+					opacity: 0.30;
+
+					&:hover {
+						opacity: 1.0;
+					}
+
+				}
+				&:hover {
+					.histo-btn-expand {
+						display: block;
+					}
+				}
 
 				// Hover and selected
 				&:hover {
@@ -160,7 +216,7 @@
 			background-color: #ddd;
 			position: absolute;
 			right: 0; width: 250px;
-			top: 36px; bottom: 0;			
+			top: 0; bottom: 0;			
 
 			div.right-header {
 				position: absolute;
