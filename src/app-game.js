@@ -85,13 +85,81 @@ requirejs(['require', 'extern', 'core', 'vas', 'tootr'
 					// Load GTM when libraries are in place
 					var gtm = new GTM('GTM-PBX27K');
 
-					// Initialize VAS 
-					console.log("Initializing...");
-					main.initialize(function() {
-						// Wait until VAS is ready and run it
-						console.log("Running...");
-						main.run();
-					});
+					// Helper function to run game
+					var runGame = function() {
+						// Initialize VAS 
+						console.log("Initializing...");
+						main.initialize(function() {
+							// Wait until VAS is ready and run it
+							console.log("Running...");
+							main.run();
+						});
+					};
+
+					// Helper function to initialize core components
+					// and display BSOD with the given message
+					var abortGame = function(message) {
+						// Initialize vas/core/main module
+						main.initialize(function() {
+							// Log critical error (rendered using BSOD)
+							require("vas/core/ui").logError(message , true);
+						});
+					}
+
+					// Chain of additional loading actions
+					var loadChain = [];
+
+					// Parse hash-arguments
+					var args = { },
+						hashParts = String(window.location).split("#"),
+						hash = (hashParts.length > 1) ? hashParts[1] : "",
+						hashParts = hash.split("&");
+					for (var i=0; i<hashParts.length; i++) {
+						var parts = hashParts[i].split("="),
+							arg = parts[0], value = decodeURIComponent(parts[1]);
+
+						// Load extension pack
+						if (arg == "load") {
+							var pkgURL = "";
+							if (value.indexOf("@") > -1) {
+								// Github version
+								parts = value.split("@");
+								pkgURL = "https://rawgit.com/"+parts[1]+"/"+parts[0]+"/master/src/main.js";
+							} else {
+								// Raw URL
+								pkgURL = value;
+							}
+
+							// Register the loading of that package as a chain function
+							loadChain.push((function(pkgURL) {
+								return function(cb) {
+									// Load package by it's URL
+									require([ pkgURL ], function( PackageInstance) { 
+										// Package is loaded, fire callback
+										cb();
+									}, function(err) {
+										// If an error occured, fire BSOD
+										abortGame("Could not load extension " + pkgURL)
+									});
+								}
+							})(pkgURL));
+
+						}
+
+					}
+
+					// Run load chain
+					loadChain.push( runGame );
+					var loadChainStep = function(cb, index) {
+						var i = index || 0;
+						// If we run out of chain, stop
+						if (i >= loadChain.length) return;
+						// Run function in chain and call next function when completed
+						loadChain[i](function() { loadChainStep(cb, i+1); })
+					};
+
+					// Start load chain
+					loadChainStep();
 
 				});
 
