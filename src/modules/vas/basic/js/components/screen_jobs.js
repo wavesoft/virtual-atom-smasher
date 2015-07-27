@@ -43,7 +43,7 @@ define(
 			// Menu icons
 			var btnHost = $('<div class="menu-icon"></div>').appendTo(hostDOM),
 				btnFeedback = $('<div class="navbtn-large navbtn-upper navbtn-feedback"><span class="glyphicon glyphicon-bullhorn"></span><div class="title title-top">Feedback</div></div>').appendTo(btnHost),
-				btnLogout = $('<div class="navbtn-large navbtn-upper navbtn-log-out"><span class="glyphicon glyphicon-log-out"></span><div class="title">Logout</div></div>').appendTo(btnHost),
+				btnLogout = $('<div class="navbtn-large navbtn-upper navbtn-log-out"><span class="glyphicon glyphicon-log-out"></span><div class="title">Logout</div></div>'), //.appendTo(btnHost),
 				btnBackward = $('<div class="navbtn-large navbtn-upper"><span class="glyphicon glyphicon-menu-down icon-direction icon-direction-down"></span><span class="glyphicon glyphicon-wrench"></span><div class="title title-top">Tuning</div></div>').appendTo(btnHost);
 
 			// Register click handlers
