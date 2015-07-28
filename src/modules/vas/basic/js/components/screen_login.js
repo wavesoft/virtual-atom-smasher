@@ -35,6 +35,7 @@ define(
 			// Create a slpash backdrop
 			this.select(".backdrop", (function (e) {
 				this.backdrop = R.instanceComponent("backdrop.login", e);
+				this.forwardVisualEvents( this.backdrop, { 'left':0, 'top': 0, 'width': '100%', 'height': '100%' } );				
 			}).bind(this));
 
 			// Register button

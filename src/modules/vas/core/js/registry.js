@@ -223,7 +223,6 @@ define(["vas/config", "vas/core/base/component"],
 				var ofs = $(hostDOM).offset();
 				inst.onResize( $(hostDOM).width(), $(hostDOM).height() );
 				inst.onMove( ofs.left, ofs.top );
-				inst.hide();
 
 			//} catch (e) {
 			//	console.error("Registry: Could not instantiate component '"+name+"'. Exception: ",e);
