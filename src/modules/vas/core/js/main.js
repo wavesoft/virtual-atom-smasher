@@ -10,37 +10,6 @@ define("vas/core",
 		var VAS = { };
 
 		/**
-		 * Helper dummy progress updater
-		 */
-		var _DummyRunner_ = function() {
-			this.onUpdate = null;
-			this.onCompleted = null;
-			this.progress = 0;
-			this.started = false;
-			this.data = null;
-
-			// Progress step
-			this.step = function() {
-				this.progress += 0.01;
-				if (this.progress>=1) {
-					this.progress = 1;
-					if (this.onCompleted) this.onCompleted();
-				} else {
-					setTimeout(this.step.bind(this), 100);
-				}
-				if (this.onUpdate) this.onUpdate( this.data, this.progress );
-			}
-
-			// Progress start
-			this.start = function() {
-				if (this.started) return;
-				this.started = true;
-				this.step();
-			}
-
-		};
-
-		/**
 		 * Override error logging from UI
 		 */
 		UI.logError = function( message, critical ) {
@@ -332,6 +301,75 @@ define("vas/core",
 							}
 						});
 					});
+					scrLogin.on('password_reset', function(email) {
+
+						// If e-mail is missing, growl
+						if (!email) {
+							UI.growl("Please fill-in your e-mail address first!", "alert", 5000);
+							return;
+						} 
+
+						// Request password reset pin
+						var accountAPI = APISocket.openAccount();
+						accountAPI.requestPasswordReset(email, function(data) {
+							if (data['status'] != "ok") {
+								// Growl errors
+								UI.growl(data['message'], "alert", 5000);
+							} else {
+
+								// When the reset e-mail is sent, open the reset password interface
+								UI.showOverlay("screen.resetpassword", function(scrReset) {
+
+									UI.growl( "We have just sent a password reset pin to your e-mail address", "info", 0 );
+
+									// Call the onProfileDefined functinon to inform the
+									// password reset screen about the user's profile.
+									scrReset.onProfileDefined({
+										'email': email,
+									});
+
+									// Wait for 'submit' event to complete password reset
+									scrReset.on('submit', function( pin, password ) {
+
+										// Complete password reset
+										accountAPI.completePasswordReset( email, pin, password, function(data) {
+											if (data['status'] != "ok") {
+
+												// Display errors in the overlay
+												scrReset.onPasswordResetError( data['message'] );
+
+											} else {
+
+												// Hide overlay upon completion
+												UI.hideOverlay();
+												// ----------------------------
+
+												// Alert on unload
+												VAS.alertUnload = true;
+
+												// Start activity autocommit
+												VAS.startActivityAutocommit();
+
+												// Post-login initialize
+												VAS.postLoginInitialize(function() {
+													// Display home page
+													VAS.displayTuningScreen();
+												});
+
+												// ----------------------------
+
+											}
+										});
+
+									});
+
+								});
+
+							}
+						});
+
+
+					});
 					scrLogin.on('register', function(email, password) {
 						UI.showOverlay("screen.register", function(scrRegister) {
 
@@ -440,6 +478,8 @@ define("vas/core",
 						UI.selectScreen("screen.login");
 						// Logout
 						APISocket.openAccount().logout();
+						// Stop auto-commit timers
+						VAS.stopActivityAutocommit();
 					});
 
 					// Complete login
@@ -1104,26 +1144,22 @@ define("vas/core",
 		 * Start commiting user activity
 		 */
 		VAS.startActivityAutocommit = function() {
-
 			// Define activity timestamp
 			VAS.activityTimestamp = Date.now();
-
 			// Commit activity every 30 seconds
 			VAS.activityCommitTimer = setInterval( VAS.commitActivity, 30000 )
+			// Enable auto-commit activity flag
+			VAS.activityCommitEnabled = true;
+		}
 
-			// Stop / Start activity on window blur/focus
-			$(window).blur(function() {
-				// Commit activity
-				VAS.commitActivity();
-				// Reset timestamp
-				VAS.activityTimestamp = 0;
-			});
-
-			$(window).focus(function() {
-				// Set timestamp
-				VAS.activityTimestamp = Date.now();
-			});
-
+		/**
+		 * Stop commiting user activity
+		 */
+		VAS.stopActivityAutocommit = function() {
+			// Disable auto-commit activity flag
+			VAS.activityCommitEnabled = false;
+			// Clear timer
+			clearInterval( VAS.activityCommitTimer );
 		}
 
 		/**
@@ -1139,6 +1175,21 @@ define("vas/core",
 			VAS.activityTimestamp = 0;
 
 		}
+
+		// Stop / Start activity on window blur/focus
+		$(window).blur(function() {
+			if (!VAS.activityCommitEnabled) return;
+			// Commit activity
+			VAS.commitActivity();
+			// Reset timestamp
+			VAS.activityTimestamp = 0;
+		});
+
+		$(window).focus(function() {
+			if (!VAS.activityCommitEnabled) return;
+			// Set timestamp
+			VAS.activityTimestamp = Date.now();
+		});
 
 		return VAS;
 	}

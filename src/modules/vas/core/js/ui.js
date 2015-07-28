@@ -619,6 +619,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 					// Hide overlay
 					if (UI.activeOverlayComponent) {
+						overlayStack = [];
 						e.preventDefault();
 						e.stopPropagation();
 						UI.hideOverlay();

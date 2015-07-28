@@ -65,13 +65,39 @@ define(["vas/core/api/interface", "vas/config"],
 			
 		}
 
-                /**
+		/**
 		 * Perform logout 
 		 */
 		APIAccount.prototype.logout = function(callback) {
 
 			// Log-out user and fire callback when logged out
 			this.sendAction("logout", {
+			}, callback);
+
+		}
+
+		/**
+		 * Perform password reset 
+		 */
+		APIAccount.prototype.requestPasswordReset = function(email, callback) {
+
+			// Fire password reset without pin, in order to allocate new
+			this.sendAction("passwordReset", {
+				'email': email
+			}, callback);
+
+		}
+
+		/**
+		 * Perform password reset 
+		 */
+		APIAccount.prototype.completePasswordReset = function(email, pin, password, callback) {
+
+			// Fire password reset with pin and pasword
+			this.sendAction("passwordReset", {
+				'email': email,
+				'pin': pin,
+				'password': password
 			}, callback);
 
 		}

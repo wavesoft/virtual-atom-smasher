@@ -60,6 +60,19 @@ define(
 				}).bind(this));
 			}).bind(this));
 
+			// Forbot password button
+			this.select(".btn-forgot-password", (function (dom) {
+				dom.click((function (e) {
+					// Prevent default
+					e.preventDefault();
+					e.stopPropagation();
+					// Save e-mail
+					localStorage.setItem("vas-login", this.select("#login-email").val());
+					// Trigger password reset
+					this.trigger("password_reset", this.select("#login-email").val());
+				}).bind(this));
+			}).bind(this));
+
 			// Render template
 			this.renderView();
 

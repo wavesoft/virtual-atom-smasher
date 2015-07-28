@@ -28,6 +28,7 @@ define(
 	'vas/basic/components/screen_tutorial_stats',
 	'vas/basic/components/screen_status',
 	'vas/basic/components/screen_introgame',
+	'vas/basic/components/screen_passwordreset',
 
 	// Subscreens
 	'vas/basic/components/screen_observable_short',

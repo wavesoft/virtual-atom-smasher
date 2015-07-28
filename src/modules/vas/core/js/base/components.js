@@ -723,6 +723,47 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 
 		////////////////////////////////////////////////////////////
 		/**
+		 * Initializes a new Password Reset Screen.
+		 *
+		 * This component is shown when the user requests a password reset.
+		 *
+		 * @class
+		 * @classdesc Abstract class for defining backdrop images.
+		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
+		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 *
+		 */
+		var PasswordResetScreen = function( hostDOM ) {
+
+			// Initialize base class
+			Component.call(this, hostDOM);
+
+		}
+
+		// Subclass from Component
+		PasswordResetScreen.prototype = Object.create( Component.prototype );
+
+		/**
+		 * This function is fired when the user profile is available in order to 
+		 * update the respective UI elements.
+		 *
+		 * @abstract
+		 * @param {object} profile - An object containing one field, 'email' 
+		 */
+		PasswordResetScreen.prototype.onProfileDefined = function( profile ) {
+		}
+
+		/**
+		 * A password reset error occured
+		 *
+		 * @abstract
+		 * @param {string} message - The message of the error.
+		 */
+		PasswordResetScreen.prototype.onPasswordResetError = function( error ){
+		}
+
+		////////////////////////////////////////////////////////////
+		/**
 		 * Initializes a new Cinematic Screen
 		 *
 		 * This component is used when a full-screen cinematic should be displayed.
@@ -1037,24 +1078,25 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 
 		// Expose components
 		var components = {
-			'TuningScreen'		: TuningScreen,
-			'RunningScreen'		: RunningScreen,
-			'ExplainScreen' 	: ExplainScreen,
-			'HomeScreen'		: HomeScreen,
-			'RegisterScreen'	: RegisterScreen,
-			'ProgressScreen'	: ProgressScreen,
-			'ResultsScreen'		: ResultsScreen,
-			'CinematicScreen'	: CinematicScreen,
-			'TutorialScreen'	: TutorialScreen,
-			'BSODScreen'		: BSODScreen,
-			'IPIDEScreen'		: IPIDEScreen,
-			'CourseroomScene'	: CourseroomScene,
-			'ObservableScreen'	: ObservableScreen,
-			'Nav'				: Nav,
-			'TeamScreen'		: TeamScreen,
-			'Backdrop'			: Backdrop,
-			'LoginScreen'		: LoginScreen,
-			'Popup'				: Popup
+			'TuningScreen'		 : TuningScreen,
+			'RunningScreen'		 : RunningScreen,
+			'ExplainScreen' 	 : ExplainScreen,
+			'HomeScreen'		 : HomeScreen,
+			'RegisterScreen'	 : RegisterScreen,
+			'ProgressScreen'	 : ProgressScreen,
+			'ResultsScreen'		 : ResultsScreen,
+			'CinematicScreen'	 : CinematicScreen,
+			'TutorialScreen'	 : TutorialScreen,
+			'BSODScreen'		 : BSODScreen,
+			'IPIDEScreen'		 : IPIDEScreen,
+			'CourseroomScene'	 : CourseroomScene,
+			'ObservableScreen'	 : ObservableScreen,
+			'Nav'				 : Nav,
+			'TeamScreen'		 : TeamScreen,
+			'Backdrop'			 : Backdrop,
+			'LoginScreen'		 : LoginScreen,
+			'PasswordResetScreen': PasswordResetScreen,
+			'Popup'				 : Popup
 		};
 
 		return components;
