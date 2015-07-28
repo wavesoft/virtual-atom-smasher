@@ -320,7 +320,7 @@ define("vas/core",
 								// When the reset e-mail is sent, open the reset password interface
 								UI.showOverlay("screen.resetpassword", function(scrReset) {
 
-									UI.growl( "We have just sent a password reset pin to your e-mail address", "info", 0 );
+									UI.growl( "We have sent a password reset pin to your e-mail address", "info", 10000 );
 
 									// Call the onProfileDefined functinon to inform the
 									// password reset screen about the user's profile.
@@ -396,6 +396,9 @@ define("vas/core",
 										/////////////
 										// The user is registered and logged in
 										/////////////
+
+										// Hide register overlay
+										UI.hideOverlay();
 
 										// Alert on unload
 										VAS.alertUnload = true;
@@ -478,8 +481,6 @@ define("vas/core",
 						UI.selectScreen("screen.login");
 						// Logout
 						APISocket.openAccount().logout();
-						// Stop auto-commit timers
-						VAS.stopActivityAutocommit();
 					});
 
 					// Complete login
@@ -744,6 +745,8 @@ define("vas/core",
 						UI.selectScreen("screen.login");
                         // Logout
                         APISocket.openAccount().logout();
+						// Stop auto-commit timers
+						VAS.stopActivityAutocommit();
 					});
 
 					// Reload tuning configuration

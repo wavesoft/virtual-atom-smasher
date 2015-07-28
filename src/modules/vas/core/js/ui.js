@@ -510,12 +510,15 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 				e.stopPropagation();
 
 				// Dispose active component
-				if (UI.activeOverlayComponent)
-					UI.activeOverlayComponent.trigger('dispose');
+				var lastActiveComponent = UI.activeOverlayComponent;
 
 				// Reset overlay stack and hide
 				overlayStack = [];
 				UI.hideOverlay();
+
+				// Trigger dispose to the previously active component
+				if (lastActiveComponent)
+					lastActiveComponent.trigger('dispose');
 
 			});
 
@@ -641,7 +644,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 		 * @param {boolean} blur_back - Blur background
 		 *
 		 */
-		UI.showOverlay = function(name, v_transition, v_cb_ready, v_blur_back) {
+		UI.showOverlay = function(name, v_transition, v_cb_ready, v_blur_back ) {
 
 			// Skip on lockdown
 			if (UI.lockdown)
