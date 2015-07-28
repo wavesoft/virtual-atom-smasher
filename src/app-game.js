@@ -134,7 +134,16 @@ requirejs(['require', 'extern', 'core', 'vas', 'tootr'
 							loadChain.push((function(pkgURL) {
 								return function(cb) {
 									// Load package by it's URL
-									require([ pkgURL ], function( PackageInstance) { 
+									require([ pkgURL ], function( PackageInstance) {
+
+										// Include stylesheet from the customisations
+										var parts = pkgURL.split("/"),
+											cssURL = parts.slice(0, parts.length-1).join("/") + "/css/style.css";
+
+										// Empbed the CSS element
+										alert(cssURL);
+										$('<link rel="stylesheet" type="text/css"></link>').attr('href', cssURL).appendTo($('head'));
+
 										// Package is loaded, fire callback
 										cb();
 									}, function(err) {
