@@ -1,0 +1,52 @@
+{
+    "backdrop.login": "That's the background graphics (static or dynamic) of the log-in screen.",
+    "backdrop.progress": "That's the background graphics (static or dynamic) of the progress screen.",
+    "backdrop.tuning": "That's the background graphics (static or dynamic) of the tuning screen.",
+
+    "dataviz.histogram_combined": "This histogram combines the `dataviz.histogram_full` and `dataviz.histogram_fullratio` into a vertical split-view histogram that shows both value and ratio.",
+    "dataviz.histogram_full": "This is an detailed visualisation of the histogram bins with error bars and error bands.",
+    "dataviz.histogram_fullratio": "This is an detailed visualisation of the ratio of the histogram bins between theory and reference.",
+    "dataviz.histogram_plain": "This is a simplified visualisation of the histogram bins with basic error bars.",
+    "dataviz.histogram_ratio": "This is a simplified visualisation of the ratio of the histogram bins between theory and reference.",
+
+    "explain.blackboard": "This is the blackboard canvas that is used by the courseroom screen to render the tootr animation.",
+
+    "infoblock.observable": "This is the body of the pop-up infoblock that explains an observable.",
+    "infoblock.tunable": "This is the body of the pop-up infoblock that explains a tunable.",
+
+    "overlay.book": "This is an overlay screen that shows a multi-tabbed interface with explainations regarding a parameter",
+    "overlay.histograms": "This is an overlay screen that shows to the user a collection of histograms that may be dynamically updated.",
+    "overlay.jobstatus": "This is an overlay screen that shows the status of a running job.",
+
+    "overlay.machinepart": "This is an overlay screen used in the tuning screen to explain details of a particular machine part.",
+    "overlay.machinepart.describe": "This is a tab in the `overlay.machinepart` screen that describes a part of the machine.",
+    "overlay.machinepart.paper": "This is a tab in the `overlay.machinepart` screen that provides quick access to the user's papers.",
+    "overlay.machinepart.results": "This is a tab in the `overlay.machinepart` screen that provides quick access to the user's past results.",
+    "overlay.machinepart.unlock": "This is a tab in the `overlay.machinepart` screen that provides the unlocking interface to more parameters.",
+
+    "profilepart.book": "This is a floating tab in the `screen.status` screen that shows the knowledge the user has explored so far.",
+    "profilepart.papers": "This is a floating tab in the `screen.status` screen that shows to the user the papers (s)he has access to.",
+    "profilepart.team": "This is a floating tab in the `screen.status` screen that shows the status of the user's team.",
+    "profilepart.user": "This is a floating tab in the `screen.status` screen that shows the user's profile.",
+
+    "screen.status": "This is a game screen where the user can see the status of varous game components, such as his/her papers, team, knowledge etc..",
+    "screen.courseroom": "This is a virtual classroom screen, where guests are shown a procedural TootR presentation while alowing them to interact with eachother.",
+    "screen.jobs": "This is the job dashboard screen, where user can see the status of his/her jobs and the relevant machines and control them.",
+    "screen.login": "This is the landing screen shown to the user when (s)he arrives in the game. From this screen (s)he should be able to log-in, create an account or reset his/her password.",
+    "screen.progress": "This is the splash screen shown during the game initialisation. It has a progress bar in the bottom that shows the current loading state.",
+    "screen.register": "This is the registration screen shown to the user when (s)he selects to register in the game.",
+    "screen.tuning": "This is the main game screen from which user changes the monte-carlo simulation parameters (refered to as 'tuning').",
+
+    "screen.observable.short": "This is a target-like screen where the status of the observables. Whle the observable results are getting better, each observable point is moving closer to the center.",
+
+    "tutorial.agent": "This is an interactive agent that is used to explain various interface components to the user.",
+
+    "widget.globe3d": "This is a 3D spinning globe with pins, refering to the location of the computing nodes currently used by the project.",
+
+    "widget.observable.tuning": "This is the observable point in the `screen.observable.short` screen that moves towards the center when the chi-squared fit test gets smaller.",
+    "widget.onscreen": "This is an 'on-screen pop-up' frame that is used to explain various interface parts in-place.",
+
+    "widget.tunable.tuning": "This is a slider widget used by the user to input a value of a tunable parameter.",
+    "widget.tunable.tuningpanel": "This is an auto-sized frame that contains one or more tuning widgets. This is used in the tuning screen."
+
+}
