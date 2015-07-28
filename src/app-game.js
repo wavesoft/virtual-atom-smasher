@@ -141,7 +141,6 @@ requirejs(['require', 'extern', 'core', 'vas', 'tootr'
 											cssURL = parts.slice(0, parts.length-1).join("/") + "/css/style.css";
 
 										// Empbed the CSS element
-										alert(cssURL);
 										$('<link rel="stylesheet" type="text/css"></link>').attr('href', cssURL).appendTo($('head'));
 
 										// Package is loaded, fire callback
