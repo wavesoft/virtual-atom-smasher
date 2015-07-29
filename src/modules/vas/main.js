@@ -30,8 +30,8 @@ require.config({
 		'vas/basic/tpl' : 'vas/basic/tpl',
 		'vas/basic/css' : 'vas/basic/css',
 
-		'vas/media/img' : 'vas/core/img',
-		'vas/media/mov' : 'vas/core/mov',
+		'vas/media/img' : 'vas/media/img',
+		'vas/media/mov' : 'vas/media/mov',
 
 	}
 

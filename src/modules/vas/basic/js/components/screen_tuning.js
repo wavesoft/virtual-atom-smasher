@@ -4,7 +4,7 @@ define(
 	// Requirements
 	[
 		"jquery", "jquery-transition-event", "d3", 
-		"vas/core/db", "vas/core/ui", "sha1", "vas/config", 
+		"vas/core/db", "vas/core/ui", "sha1", "vas/config", "vas/media",
 		"vas/core/registry", "vas/core/base/components", 
 		"vas/core/user", "vas/core/apisocket", 
 		"vas/core/liveq/Calculate", "ccl-tracker"
@@ -15,7 +15,7 @@ define(
 	 *
 	 * @exports basic/components/explain_screen
 	 */
-	function($, $te, d3, DB, UI, SHA1, config, R,C, User, APISocket, Calculate, Analytics ) {
+	function($, $te, d3, DB, UI, SHA1, config, Media, R,C, User, APISocket, Calculate, Analytics ) {
 
 		/**
 		 * @class
@@ -68,6 +68,7 @@ define(
 			}).bind(this));
 
 			// Show feedback video when user moves mouse over
+			/*
 			btnFeedback.mouseenter((function() {
 				setTimeout((function() {
 					if (!User.isFirstTimeSeen("ui.button.feedback")) {
@@ -77,6 +78,7 @@ define(
 					}
 				}).bind(this), 500);
 			}).bind(this));
+			*/
 
 			// Create status frame
 			var elmStatus = this.elmStatus = $('<div class="status-frame"></div>').appendTo(hostDOM),
@@ -292,7 +294,7 @@ define(
 			this.btnHelp = $('<button class="btn-help btn-shaded btn-teal btn-with-icon"><span class="glyphicon glyphicon-bookmark"></span><br />Help</button>').appendTo(this.hostDOM);
 			this.btnHelp.click((function() {
 				//this.descFrame.toggleClass("visible");
-				UI.scheduleTutorial("ui.tuning");
+				UI.showHelpOverlay( Media.image("help/01-help-intro.png") )
 			}).bind(this));
 
 			// ---------------------------------
@@ -416,12 +418,15 @@ define(
 				this.tunableGroup.show();
 				this.tunableGroup.addClass("animating");
 
+				/*
 				// Check if user has not seen the tuning part tutorial
 				if (!User.isFirstTimeSeen("tuning.firsttunable")) {
+
 					UI.scheduleTutorial("ui.tuning.firsttunable", function() {
 						User.markFirstTimeAsSeen("tuning.firsttunable");
 					});
 				}
+				*/
 
 			}
 
@@ -555,6 +560,7 @@ define(
 				}).bind(this);
 
 				// Check if user has not seen the machine part tutorial
+				/*
 				if (!User.isFirstTimeSeen("tuning.machinepart")) {
 					UI.scheduleTutorial("ui.tuning.machinepart", function() {
 						User.markFirstTimeAsSeen("tuning.machinepart");
@@ -563,6 +569,8 @@ define(
 				} else {
 					_showMachineAnimation();
 				}
+				*/
+				_showMachineAnimation();
 
 				// Add back-blur fx on the machine DOM
 				this.machine.onWillHide((function() {
@@ -789,8 +797,8 @@ define(
 
 			// Check if user has not seen the intro tutorial
 			if (!User.isFirstTimeSeen("tuning.intro")) {
-				// Display the intro sequence
-				UI.scheduleTutorial("ui.tuning", function() {
+				// Display the intro help screen
+				UI.showHelpOverlay( Media.image("help/01-help-intro.png"), function() {
 					// Mark introduction sequence as shown
 					User.markFirstTimeAsSeen("tuning.intro");
 				});

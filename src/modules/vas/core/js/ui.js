@@ -1,6 +1,6 @@
 
-define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/base/components", "vas/core/user", "ccl-tracker", "vas/core/sequencer"], 
-	function($, config, R, DB, Components, User, Analytics, Sequencer) {
+define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media", "vas/core/base/components", "vas/core/user", "ccl-tracker", "vas/core/sequencer"], 
+	function($, config, R, DB, Media, Components, User, Analytics, Sequencer) {
 
 		///////////////////////////////////////////////////////////////
 		//                    ANALYTICS FUNCTIONS                    //
@@ -1460,6 +1460,42 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/core/ba
 
 			// Reset visualAidCurrent
 			visualAidCurrent = false;
+
+		}
+
+		/**
+		 * Show a full-screen one or multi-image help screen
+		 *
+		 * @param {array|string} image - The path to the image(s).
+		 * @param {array} transition - The transition definition (defaults to UI.Transitions.ZOOM_IN)
+		 * @param {function} cb_close - The callback to fire when the help screen is disposed
+		 *
+		 */
+		UI.showHelpOverlay = function( image, transition, cb_close ) {
+
+			// Check for missing arguments
+			if (typeof(transition) == 'function') {
+				cb_close = transition; transition = null;
+			}
+			if (!transition) {
+				transition = UI.Transitions.ZOOM_IN;
+			}
+
+			// Return component instance
+			return UI.showOverlay("overlay.help", transition, function(com) {
+
+				// Define message
+				com.onHelpDefined( [ image ] );
+
+				// Register close event
+				com.onOnce("close", function() {
+					// Fire callback when completed
+					if (cb_close) cb_close();
+					// Unblock sequencer
+					Sequencer.unblock();
+				});
+
+			});
 
 		}
 

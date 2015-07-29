@@ -97,6 +97,7 @@ define(
 	'vas/basic/overlays/switchteam',
 	'vas/basic/overlays/feedback',
 	'vas/basic/overlays/embed',
+	'vas/basic/overlays/help',
 
 	// Machine parts
 	'vas/basic/machineparts/describe',

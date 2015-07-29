@@ -277,9 +277,9 @@ define(
 				domainAction = action.substr(domain.length+1);
 
 			// Handle some priority messages
-			if (action == "ui.notification") {
-				// A server-triggered notification
-				this.trigger('notification', parameters);
+			if (action == "ui.event") {
+				// A server-triggered event
+				this.trigger('event', parameters);
 			} else if (action == "ui.command") {
 				// A server-triggered command
 				this.trigger('command', parameters);

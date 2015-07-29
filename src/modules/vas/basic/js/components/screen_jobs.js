@@ -2,14 +2,14 @@
 define(
 
 	// Requirements
-	["jquery", "d3", "vas/core/ui", "vas/core/apisocket", "vas/config", "vas/core/registry", "vas/core/base/components"],
+	["jquery", "d3", "vas/core/ui", "vas/core/user", "vas/media", "vas/core/apisocket", "vas/config", "vas/core/registry", "vas/core/base/components"],
 
 	/**
 	 * Basic version of the jobs screen
 	 *
 	 * @exports basic/components/explain_screen
 	 */
-	function($, d3, UI, APISocket, config, R,C) {
+	function($, d3, UI, User, Media, APISocket, config, R,C) {
 
 		/**
 		 * @class
@@ -90,6 +90,7 @@ define(
 			this.statusProgressValue = $('<div class="panel-value">0 %</div>').appendTo(this.statusProgress);
 
 			// Panel abort and view buttons
+			this.btnHelp = $('<button class="p-help btn-help btn-shaded btn-teal btn-with-icon"><span class="glyphicon glyphicon-bookmark"></span><br />Help</button>').appendTo(this.sideScreenDOM);
 			this.btnAbort = $('<button class="p-abort btn-shaded btn-red btn-striped btn-with-icon"><span class="glyphicon glyphicon-remove-circle"></span><br />Abort</button>').appendTo(this.sideScreenDOM);
 			this.btnView = $('<button class="p-view btn-shaded btn-darkblue btn-with-icon"><span class="glyphicon glyphicon-dashboard"></span><br />View</button>').appendTo(this.sideScreenDOM);
 
@@ -118,6 +119,10 @@ define(
 						this.overlayComponent.onHistogramsDefined( this.lastHistograms );
 					}).bind(this));
 				}
+			}).bind(this));
+			this.btnHelp.click((function() {
+				//this.descFrame.toggleClass("visible");
+				UI.showHelpOverlay( Media.image("help/03-simulation.png") )
 			}).bind(this));
 
 			// ---------------------------------
@@ -524,6 +529,15 @@ define(
 						// Reset
 						this.submitTunables = null;
 						this.submitObservables = null;
+
+						// Check if user has not seen the intro tutorial, show it now
+						if (!User.isFirstTimeSeen("running.intro")) {
+							// Display the intro help screen
+							UI.showHelpOverlay( Media.image("help/03-simulation.png"), function() {
+								// Mark introduction sequence as shown
+								User.markFirstTimeAsSeen("running.intro");
+							});
+						}
 
 					}).bind(this);
 

@@ -4,9 +4,9 @@
  */
 define("vas/core",
 
-	["jquery", "ccl-tracker", "vas/config",  "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/apisocket", "vas/core/base/components", "core/util/progress_aggregator", "vas/core/liveq/core", "vas/core/liveq/Calculate" ], 
+	["jquery", "ccl-tracker", "vas/config",  "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/media", "vas/core/apisocket", "vas/core/base/components", "core/util/progress_aggregator", "vas/core/liveq/core", "vas/core/liveq/Calculate" ], 
 
-	function($, Analytics, config, R, UI, DB, User, APISocket, Components, ProgressAggregator, LiveQCore, LiveQCalc) {
+	function($, Analytics, config, R, UI, DB, User, Media, APISocket, Components, ProgressAggregator, LiveQCore, LiveQCalc) {
 		var VAS = { };
 
 		/**
@@ -226,40 +226,67 @@ define("vas/core",
 						prog_api.fail("Could not initialize core I/O socket!" + message, true);
 					});
 
-					// Handle notifications
-					APISocket.on('notification', function(evDetails) {
-						if (evDetails['type'] == "critical") {
-							// Do not expire on critical
-							UI.growl(evDetails['message'], 0, "critical");
+					// Handle server events
+					APISocket.on('event', function(evDetails) {
+						var evName = evDetails['name'],
+							evData = evDetails['data'] || {};
 
-						} else if (evDetails['type'] == "flash") {
-							// Flash goes to flash
-							UI.scheduleFlash(
-								evDetails['title'],
-								evDetails['message'],
-								evDetails['icon']
-								);
-						} else if (evDetails['type'] == "analytics") {
+						// -----------------------------
+						//  UI Alert Message
+						// -----------------------------
+						if ( evName == 'alert' ) {
+
+							if (evData['type'] == "critical") {
+
+								// Do not expire on critical
+								UI.growl(evData['message'], 0, "critical");
+
+							} else if (evData['type'] == "flash") {
+
+								// Flash goes to flash
+								UI.scheduleFlash(
+									evData['title'],
+									evData['message'],
+									evData['icon']
+									);
+
+							} else {
+
+								// Any other type goes to growl
+								var msg = evData['message'];
+								if (evData['title'])
+									msg = "<strong>"+evData['title']+":</strong> " + msg;
+								UI.growl(msg, evData['type'])
+
+							}
+						}
+
+						// -----------------------------
+						//  Analytics Event
+						// -----------------------------
+						else if (evName == "analytics") {
+
 							// Forward analytics event
-							Analytics.fireEvent( evDetails['id'], evDetails['data'] || {} );
-						} else {
-							// Any other type goes to growl
-							var msg = evDetails['message'];
-							if (evDetails['title'])
-								msg = "<strong>"+evDetails['title']+":</strong> " + msg;
-							UI.growl(msg, evDetails['type'])
-						}
-					});
+							Analytics.fireEvent( evData['id'], evData['data'] || {} );
 
-					// Handle commands
-					APISocket.on('command', function(cmdDetails) {
-
-						// Display a tutorial
-						if (cmdDetails['type'] == "tutorial") {
-							// Schedule tutorial
-							UI.scheduleTutorial( cmdDetails['name'] );
 						}
-						
+
+						// -----------------------------
+						//  Credits have changed
+						// -----------------------------
+						else if (evName == "credits") {
+
+							// If the user gets credits show first-time
+							if (!User.isFirstTimeSeen("credits.intro")) {
+								// Display the science points screen
+								UI.showHelpOverlay( Media.image("help/02-science-points.png"), function() {
+									// Mark introduction sequence as shown
+									User.markFirstTimeAsSeen("credits.intro");
+								});
+							}
+
+						}
+
 					});
 
 					// Connect to core socket

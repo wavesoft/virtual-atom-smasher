@@ -85,6 +85,20 @@ define("vas/media", [ "require", "popcorn" ],
 
 	}
 
+	/**
+	 * Return a media image
+	 */
+	Media.image = function(path) {
+		return require.toUrl( "vas/media/img/" + path );
+	}
+
+	/**
+	 * Return a media video
+	 */
+	Media.video = function(path) {
+		return require.toUrl( "vas/media/video/" + path );
+	}
+
 	// Return module configuration
 	return Media;
 
