@@ -4,7 +4,7 @@
         "dictionaries": ["jsdoc","closure"]
     },
     "source": {
-        "exclude": [ "src/modules/extern" ],
+        "include": [ "src/modules/core", "src/modules/vas/core", "src/modules/vas" ],
         "includePattern": ".+\\.js(doc)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
@@ -16,6 +16,14 @@
     "plugins": [],
     "templates": {
         "cleverLinks": false,
-        "monospaceLinks": false
+        "monospaceLinks": false,
+        "systemName": "Virtual Atom Smasher",
+        "copyright": "(C) Ioannis Charalampidis, Citizen Cyberlab, 2014-2015",
+        "navType": "inline",
+        "linenums": true,
+        "theme": "oblivion",
+        "default": {
+          "outputSourceFiles": true
+        }
     }
 }
