@@ -29,8 +29,8 @@ define({
 	 */
 	'core' : {
 		//'socket_url' :  ((window.location.protocol=="https:") ? 'wss:' : 'ws:') + '//test4theory.cern.ch/vas/api/io'
-		'socket_url' : 'ws://'+window.location.host+':8080/vas/api/io'
-		//'socket_url' : 'ws://test4theory.cern.ch/vas/api/io'
+		//'socket_url' : 'ws://'+window.location.host+':8080/vas/api/io'
+		'socket_url' : 'ws://test4theory.cern.ch/vas/api/io'
 	},
 
 	/**
