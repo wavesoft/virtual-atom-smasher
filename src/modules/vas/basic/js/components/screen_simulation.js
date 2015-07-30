@@ -147,6 +147,7 @@ define(
 				e.preventDefault();
 
 				// A tuning value changed
+				Analytics.restartTimer("simulation.playgame");
 				Analytics.fireEvent("simulation.playgame", {
 				});
 
@@ -158,12 +159,16 @@ define(
 						'url': '//particle-clicker.web.cern.ch/particle-clicker/'
 					});
 
-					// Handle close event
+					// Fire analytics callback when closed
 					gameOvr.on("close", function() {
-						if (cb_completed) cb_completed(true);
+						Analytics.fireEvent("simulation.playgame.time", {
+							"time": Analytics.stopTimer("simulation.playgame")
+						});
 					});
 					gameOvr.on("dispose", function() {
-						if (cb_completed) cb_completed(false);
+						Analytics.fireEvent("simulation.playgame.time", {
+							"time": Analytics.stopTimer("simulation.playgame")
+						});
 					});
 
 				}).bind(this));
