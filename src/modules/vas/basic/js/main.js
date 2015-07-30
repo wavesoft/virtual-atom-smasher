@@ -29,6 +29,7 @@ define(
 	'vas/basic/components/screen_status',
 	'vas/basic/components/screen_introgame',
 	'vas/basic/components/screen_passwordreset',
+	'vas/basic/components/screen_simulation',
 
 	// Subscreens
 	'vas/basic/components/screen_observable_short',
@@ -58,6 +59,9 @@ define(
 	// Running-related
 	"vas/basic/components/running/observable",
 	"vas/basic/components/running/status",
+
+	// Simulation screen-related
+	'vas/basic/components/simulation/observable_point',
 
 	// Misc components
 	"vas/basic/components/onscreen",	

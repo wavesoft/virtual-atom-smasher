@@ -589,7 +589,7 @@ define("vas/core",
 
 			var prog_jobs = progressAggregator.begin(1),
 				init_jobs = function(cb) {
-					var scrJobs = VAS.scrJobs = UI.initAndPlaceScreen("screen.jobs");
+					var scrJobs = VAS.scrJobs = UI.initAndPlaceScreen("screen.simulation");
 					if (!scrJobs) {
 						UI.logError("Core: Unable to initialize jobs screen!");
 						return;
@@ -950,7 +950,7 @@ define("vas/core",
 		VAS.displayJobs = function( animateBackwards ) {
 
 			// Select jobs screen
-			UI.selectScreen("screen.jobs", animateBackwards ? UI.Transitions.DIFF_BOTTOM : UI.Transitions.DIFF_TOP);
+			UI.selectScreen("screen.simulation", animateBackwards ? UI.Transitions.DIFF_BOTTOM : UI.Transitions.DIFF_TOP);
 
 		}
 

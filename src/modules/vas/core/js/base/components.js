@@ -987,6 +987,28 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		};
 
 		////////////////////////////////////////////////////////////
+		/**
+		 * Initializes a new SimulationScreen Component.
+		 *
+		 * This screen presents to the user the status of the current simulation.
+		 *
+		 * @class
+		 * @classdesc Abstract class for defining backdrop images.
+		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
+		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 *
+		 */
+		var SimulationScreen = function( hostDOM ) {
+
+			// Initialize base class
+			Component.call(this, hostDOM);
+
+		}
+
+		// Subclass from Component
+		SimulationScreen.prototype = Object.create( Component.prototype );
+
+		////////////////////////////////////////////////////////////
 		//             Event definitions for JSDoc                //
 		////////////////////////////////////////////////////////////
 
@@ -1096,6 +1118,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 			'Backdrop'			 : Backdrop,
 			'LoginScreen'		 : LoginScreen,
 			'PasswordResetScreen': PasswordResetScreen,
+			'SimulationScreen'	 : SimulationScreen,
 			'Popup'				 : Popup
 		};
 
