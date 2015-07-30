@@ -20,6 +20,7 @@
 			width: 14px; height: 14px; top: 30px;
 			.transform( translateX(-7px) translateY(-7px) );
 			.border-radius(10px);
+			.transition( ~"left 0.25s, background-color 0.25s, border-color 0.25s" );
 
 			border-style: solid;
 			border-width: 2px;
@@ -59,6 +60,7 @@
 		}
 
 		> .errorbar {
+			.transition( all 0.25s );
 			position: absolute;
 			top: 30px;
 			border-width: 2px;

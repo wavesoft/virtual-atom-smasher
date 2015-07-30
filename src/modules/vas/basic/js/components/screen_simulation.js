@@ -48,14 +48,21 @@ define(
 			//
 			// Bind a handler to the 'Help' button
 			//
-			this.select(".p-help").click((function() {
+			this.select(".p-help").click((function(e) {
+				// Cancel event
+				e.stopPropagation();
+				e.preventDefault();
+				// Show help
 				UI.showHelpOverlay( Media.image("help/03-simulation.png") )
 			}).bind(this));
 
 			//
 			// Bind a handler to the 'Abort' button
 			//
-			this.select(".p-abort").click((function() {
+			this.select(".p-abort").click((function(e) {
+				// Cancel event
+				e.stopPropagation();
+				e.preventDefault();
 				// Abort LabAPI job
 				if (this.labapi) {
 					this.labapi.abortJob( this.activeJob );
@@ -68,7 +75,11 @@ define(
 			//
 			// Bind a handler to the 'View' button
 			//
-			this.select(".p-view").click((function() {
+			this.select(".p-view").click((function(e) {
+				// Cancel event
+				e.stopPropagation();
+				e.preventDefault();
+				// Show histograms
 				if (this.lastHistograms) {
 					// Show histograms overlay
 					UI.showOverlay("overlay.histograms", (function(com) {
@@ -83,7 +94,11 @@ define(
 			//
 			// Bind a handler to the 'Feedback' button
 			//
-			this.select(".p-feedback").click((function() {
+			this.select(".p-feedback").click((function(e) {
+				// Cancel event
+				e.stopPropagation();
+				e.preventDefault();
+				// Send feedback
 				this.trigger("feedback", {
 					"screen": "jobs"
 				});
@@ -92,8 +107,29 @@ define(
 			//
 			// Bind a handler to the 'Down' button
 			//
-			this.select(".p-hidejobs").click((function() {
+			this.select(".p-hidejobs").click((function(e) {
+				// Cancel event
+				e.stopPropagation();
+				e.preventDefault();
+				// Hide panel
 				this.trigger("hideJobs");
+			}).bind(this));
+
+			//
+			// Bind job details
+			//
+			this.select(".p-details").click((function(e) {
+				// Cancel event
+				e.stopPropagation();
+				e.preventDefault();
+				// Show job details
+				this.labapi.getJobDetails(this.activeJob, (function(details) {
+					// Show job details overlay
+					UI.showOverlay("overlay.jobstatus", (function(com) {
+						com.onJobDetailsUpdated( details );
+					}).bind(this));
+				}).bind(this));
+
 			}).bind(this));
 
 		}
@@ -252,7 +288,10 @@ define(
 
 			// Start globe spinning if status is running
 			this.globe.setPaused( !(job['status'] == 1)  );
-			if ((job['status'] < 2) || (job['status'] == 5)) this.select(".p-abort").removeClass("disabled");
+			if ((job['status'] < 2) || (job['status'] == 5)) {
+				this.select(".p-abort").removeClass("disabled");
+				this.select(".p-details").removeClass("disabled");
+			}
 
 			// Parse agents
 			this.globe.removeAllPins();
