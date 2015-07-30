@@ -3,6 +3,7 @@ define(
 
 	// Requirements
 	[ 
+		"ccl-tracker",
 		"vas/core/registry", "vas/core/base/components", "vas/core/ui", "vas/core/user", "vas/media", "vas/core/apisocket",
 		"text!vas/basic/tpl/simulation.html"
 	],
@@ -12,7 +13,7 @@ define(
 	 *
 	 * @exports basic/components/screen_simulation
 	 */
-	function( R, C, UI, User, Media, APISocket, tplMain ) {
+	function( Analytics, R, C, UI, User, Media, APISocket, tplMain ) {
 
 		/**
 		 * @class
@@ -122,6 +123,11 @@ define(
 				// Cancel event
 				e.stopPropagation();
 				e.preventDefault();
+
+				// A tuning value changed
+				Analytics.fireEvent("simulation.jobdetails", {
+				});
+
 				// Show job details
 				this.labapi.getJobDetails(this.activeJob, (function(details) {
 					// Show job details overlay
@@ -139,12 +145,25 @@ define(
 				// Cancel event
 				e.stopPropagation();
 				e.preventDefault();
+
+				// A tuning value changed
+				Analytics.fireEvent("simulation.playgame", {
+				});
+
 				// Display a mini-game
-				UI.showOverlay("overlay.embed", (function(qOvr) {
+				UI.showOverlay("overlay.embed", (function(gameOvr) {
 
 					// Configure Embed frame
-					qOvr.onEmbedConfigured({
+					gameOvr.onEmbedConfigured({
 						'url': '//particle-clicker.web.cern.ch/particle-clicker/'
+					});
+
+					// Handle close event
+					gameOvr.on("close", function() {
+						if (cb_completed) cb_completed(true);
+					});
+					gameOvr.on("dispose", function() {
+						if (cb_completed) cb_completed(false);
 					});
 
 				}).bind(this));
