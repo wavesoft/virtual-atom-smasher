@@ -482,10 +482,10 @@ define(
 						setTimeout((function() {
 
 							// Fire first-time interface aids
-							if (!this.btnEstimate.hasClass("disabled"))
-								UI.showFirstTimeAid("tuning.control.estimate");
-							if (!this.btnValidate.hasClass("disabled"))
-								UI.showFirstTimeAid("tuning.control.validate");
+							// if (!this.btnEstimate.hasClass("disabled"))
+							// 	UI.showFirstTimeAid("tuning.control.estimate");
+							// if (!this.btnValidate.hasClass("disabled"))
+							// 	UI.showFirstTimeAid("tuning.control.validate");
 
 						}).bind(this), 100);
 
@@ -837,28 +837,28 @@ define(
 			//	this.btnEstimate.addClass("disabled");
 			//} else {
 			User.onConfigChanged("sim-interpolate", (function(isEnabled) {
-				if (isEnabled) {
-					this.btnEstimate.removeClass("disabled");
-					if (this.controlBoardHost.hasClass("visible")) {
-						UI.showFirstTimeAid("tuning.control.estimate");
-					}
-				} else {
-					this.btnEstimate.addClass("disabled");
-				}
+				// if (isEnabled) {
+				// 	this.btnEstimate.removeClass("disabled");
+				// 	if (this.controlBoardHost.hasClass("visible")) {
+				// 		UI.showFirstTimeAid("tuning.control.estimate");
+				// 	}
+				// } else {
+				// 	this.btnEstimate.addClass("disabled");
+				// }
  			}).bind(this));
 			//}
 			//if (!this.machineConfigurationsEnabled['sim-run']) {
 			//	this.btnValidate.addClass("disabled");
 			//} else {
 			User.onConfigChanged("sim-validate", (function(isEnabled) {
-				if (isEnabled) {
-					this.btnValidate.removeClass("disabled");
-					if (this.controlBoardHost.hasClass("visible")) {
-						UI.showFirstTimeAid("tuning.control.validate");
-					}
-				} else {
-					this.btnValidate.addClass("disabled");
-				}
+				// if (isEnabled) {
+				// 	this.btnValidate.removeClass("disabled");
+				// 	if (this.controlBoardHost.hasClass("visible")) {
+				// 		UI.showFirstTimeAid("tuning.control.validate");
+				// 	}
+				// } else {
+				// 	this.btnValidate.addClass("disabled");
+				// }
 			}).bind(this));
 			//}
 

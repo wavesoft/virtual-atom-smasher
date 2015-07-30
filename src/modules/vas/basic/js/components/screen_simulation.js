@@ -132,6 +132,24 @@ define(
 
 			}).bind(this));
 
+			//
+			//
+			//
+			this.select(".p-game").click((function(e) {
+				// Cancel event
+				e.stopPropagation();
+				e.preventDefault();
+				// Display a mini-game
+				UI.showOverlay("overlay.embed", (function(qOvr) {
+
+					// Configure Embed frame
+					qOvr.onEmbedConfigured({
+						'url': '//particle-clicker.web.cern.ch/particle-clicker/'
+					});
+
+				}).bind(this));
+			}).bind(this));
+
 		}
 
 		SimulationScreen.prototype = Object.create( C.SimulationScreen.prototype );
