@@ -600,10 +600,6 @@ define(
 						// Submit job
 						this.labapi.submitJob( this.submitTunables, this.submitObservables );
 
-						// Reset
-						this.submitTunables = null;
-						this.submitObservables = null;
-
 						// Check if user has not seen the intro tutorial, show it now
 						if (!User.isFirstTimeSeen("running.intro")) {
 							// Display the intro help screen
@@ -618,11 +614,18 @@ define(
 						// Do not allow to submit another job
 						UI.scheduleFlash(
 							"Multiple submission", 
-							"You can only submit one job. Please wait until it's finished!",
+							"You can only submit one job. Please wait until it's finished or abort the previous one!",
 							"flash-icons/alert.png"
 						);
 
+						// Request listing to connect to previous job
+						this.labapi.enumJobs();
+
 					}
+
+					// Reset
+					this.submitTunables = null;
+					this.submitObservables = null;
 
 				}).bind(this));
 

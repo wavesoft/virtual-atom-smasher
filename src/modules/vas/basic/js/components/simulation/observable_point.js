@@ -4,7 +4,7 @@ define(
 	// Requirements
 	[ 
 		"mathjax",
-		"vas/core/registry", "vas/core/base/data_widget", "vas/core/liveq/Calculate",
+		"vas/core/registry", "vas/core/ui",  "vas/core/base/data_widget", "vas/core/liveq/Calculate",
 		"text!vas/basic/tpl/observable_point.html"
 	],
 
@@ -13,7 +13,7 @@ define(
 	 *
 	 * @exports basic/components/simulation/observable_point
 	 */
-	function( MathJax, R, DataWidget, Calculate, tpl ) {
+	function( MathJax, R, UI, DataWidget, Calculate, tpl ) {
 
 		/**
 		 * @class
@@ -27,14 +27,88 @@ define(
 			this.loadTemplate( tpl );
 			this.renderView();
 
+			// Initialize
+			this.meta = null;
+			this.value = null;
+			this.mouseOver = false;
+			this._handleTimer = 0;
+
+			// Handle pointer events
+			this.select(".circle").mouseenter((function() {
+				this.mouseOver = true;
+				this.handleFocus();
+			}).bind(this));
+
+			this.select(".circle").mouseleave((function() {
+				this.mouseOver = false;
+				this.handleBlur();
+			}).bind(this));
+
 		}
 
 		ObservableWidget.prototype = Object.create( DataWidget.prototype );
 
 		/**
+		 * Take appropriate actions to focus this element
+		 */
+		ObservableWidget.prototype.handleFocus = function() {
+			clearTimeout(this._handleTimer);
+			this._handleTimer = setTimeout((function() {
+					
+				var pos = this.hostDOM.offset(),
+					x = pos.left + this.hostDOM.width()/2,
+					y = pos.top + this.hostDOM.height()/2;
+
+				UI.showPopup( 
+					"widget.onscreen", 
+					x, y,
+					(function(hostDOM) {
+
+						// Prepare the body
+						var comBody = R.instanceComponent("infoblock.observable", hostDOM);
+						if (comBody) {
+
+							// Update infoblock 
+							comBody.onMetaUpdate( this.meta );
+							comBody.onUpdate( this.value );
+
+							// Adopt events from infoblock as ours
+							this.adoptEvents( comBody );
+
+						} else {
+							console.warn("Could not instantiate observable infoblock!");
+						}
+
+					}).bind(this),
+					{ 
+						'offset': 50,
+						'title' : this.meta['title']
+					}
+				);				
+
+			}).bind(this), 250);
+
+		}
+
+		/**
+		 * Take appropriate actions to blur this element
+		 */
+		ObservableWidget.prototype.handleBlur = function() {
+			clearTimeout(this._handleTimer);
+			this._handleTimer = setTimeout((function() {
+
+				UI.hidePopup();
+
+			}).bind(this), 100);
+		}
+
+		/**
 		 * Update metadata
 		 */
 		ObservableWidget.prototype.onMetaUpdate = function( meta ) {
+
+			// Keep metadata
+			this.meta = meta;
 
 			// Update title (with LaTeX support)
 			var title = this.select(".title");
@@ -50,6 +124,7 @@ define(
 			// Calculate the chi-squared fit (with errors) between
 			// the histogram and the reference.
 			var chi2fit = Calculate.chi2WithError( histogram.data, histogram.ref.data );
+			this.value = histogram;
 
 			// Helper to map Chi value 0.0 till 9.0+ like this:
 			// 

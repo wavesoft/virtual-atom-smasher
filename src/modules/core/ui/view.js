@@ -6,6 +6,12 @@ define(["require", "mustache", "jquery",
 		// Load plugins
 		"core/ui/view/plugin-checkbox-vis",
 		"core/ui/view/plugin-do"], 
+
+	/**
+	 * The Reusable Templated View Base Class
+	 *
+ 	 * @exports core/ui/view
+	 */
 	function(require, Mustache, $, plVis, plDo) {
 
 		/**
@@ -120,6 +126,9 @@ define(["require", "mustache", "jquery",
 
 		/**
 		 * A templated view
+		 *
+		 * @class
+		 * @classdesc The base class for creating templated views
 		 */
 		var View = function(template, hostDOM) {
 

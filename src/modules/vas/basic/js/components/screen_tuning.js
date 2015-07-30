@@ -758,7 +758,7 @@ define(
 					claim = "fair";
 					claim_reason = "your fair attempt";
 				}
-				msg += "(" + chi2.toFixed(2) + ")";
+				//msg += "(" + chi2.toFixed(2) + ")";
 
 				// Print result
 				this.panelStatus.text(msg);
