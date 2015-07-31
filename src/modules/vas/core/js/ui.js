@@ -766,10 +766,21 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 		 */
 		UI.scheduleFlash = function(title, text, icon, transition, cb_close) {
 
+			// Check for missing arguments
+			if (typeof(transition) == 'function') {
+				cb_close = transition; transition = null;
+			}
+			if (!transition) {
+				transition = UI.Transitions.ZOOM_IN;
+			}
+
 			// Put on sqeuencer
-			//Sequencer.schedule((function() {
-				this.showFlash(title, text, icon, transition, cb_close);
-			//}).bind(this));
+			Sequencer.schedule((function( cb_next ) {
+				this.showFlash(title, text, icon, transition, function() {
+					cb_next();
+					if (cb_close) cb_close();
+				});
+			}).bind(this));
 
 		}
 
@@ -832,9 +843,12 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 		UI.scheduleFlashPrompt = function(title, text, options, icon, transition, cb_close) {
 
 			// Put on sqeuencer
-			//Sequencer.schedule((function() {
-				this.showFlashPrompt(title, text, options, icon, transition, cb_close);
-			//}).bind(this));
+			Sequencer.schedule((function( cb_next ) {
+				this.showFlashPrompt(title, text, options, icon, transition, function() {
+					cb_next();
+					if (cb_close) cb_close();
+				});
+			}).bind(this));
 
 		}
 
@@ -1464,6 +1478,34 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 		}
 
 		/**
+		 * Schedule a help overlay when possible
+		 *
+		 * @param {array|string} image - The path to the image(s).
+		 * @param {array} transition - The transition definition (defaults to UI.Transitions.ZOOM_IN)
+		 * @param {function} cb_close - The callback to fire when the help screen is disposed
+		 *
+		 */
+		UI.scheduleHelpOverlay = function( image, transition, cb_close ) {
+
+			// Check for missing arguments
+			if (typeof(transition) == 'function') {
+				cb_close = transition; transition = null;
+			}
+			if (!transition) {
+				transition = UI.Transitions.ZOOM_IN;
+			}
+
+			// Put on sqeuencer
+			Sequencer.schedule((function(cb_next) {
+				this.showHelpOverlay(image, transition, function() {
+					cb_next();
+					if (cb_close) cb_close();
+				});
+			}).bind(this));
+
+		}
+
+		/**
 		 * Show a full-screen one or multi-image help screen
 		 *
 		 * @param {array|string} image - The path to the image(s).
@@ -1492,7 +1534,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 					// Fire callback when completed
 					if (cb_close) cb_close();
 					// Unblock sequencer
-					Sequencer.unblock();
+					//Sequencer.unblock();
 				});
 
 			});
@@ -1511,9 +1553,12 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 		UI.scheduleTutorial = function( sequence, cb_completed ) {
 
 			// Put on sqeuencer
-			//Sequencer.schedule((function() {
-				this.showTutorial(sequence, cb_completed);
-			//}).bind(this));
+			Sequencer.schedule((function(cb_next) {
+				this.showTutorial(sequence, function() {
+					cb_next();
+					if (cb_completed) cb_completed();
+				});
+			}).bind(this));
 
 		}
 
@@ -1935,9 +1980,12 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 		UI.scheduleSequence = function( sequences, callback ) {
 
 			// Put on sqeuencer
-			//Sequencer.schedule((function() {
-				this.displaySequence(sequences, callback);
-			//}).bind(this));
+			Sequencer.schedule((function( cb_next ) {
+				this.displaySequence(sequences, function() {
+					cb_next();
+					if (callback) callback();
+				});
+			}).bind(this));
 
 		}
 

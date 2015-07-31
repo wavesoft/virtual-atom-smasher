@@ -39,8 +39,18 @@ define(["core/util/event_base"],
 
 			// Schedule next item in squence
 			try { 
-				var fn = this.stack.shift();
-				fn();
+				var fn = this.stack[0];
+
+				// Fire function and pass continue callback
+				fn((function() {
+
+					// Shift item from stack
+					this.stack.shift();
+
+					// Call next function outside the main call stack
+					setTimeout( this.continue.bind(this), 100 );
+
+				}).bind(this)) ;
 			} 
 			catch(e) {
 				// Log exception

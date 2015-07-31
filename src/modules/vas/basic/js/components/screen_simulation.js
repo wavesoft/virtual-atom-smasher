@@ -54,7 +54,7 @@ define(
 				e.stopPropagation();
 				e.preventDefault();
 				// Show help
-				UI.showHelpOverlay( Media.image("help/03-simulation.png") )
+				UI.scheduleHelpOverlay( Media.image("help/03-simulation.png") )
 			}).bind(this));
 
 			//
@@ -645,7 +645,7 @@ define(
 						// Check if user has not seen the intro tutorial, show it now
 						if (!User.isFirstTimeSeen("running.intro")) {
 							// Display the intro help screen
-							UI.showHelpOverlay( Media.image("help/03-simulation.png"), function() {
+							UI.scheduleHelpOverlay( Media.image("help/03-simulation.png"), function() {
 								// Mark introduction sequence as shown
 								User.markFirstTimeAsSeen("running.intro");
 							});

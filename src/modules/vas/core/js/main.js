@@ -279,7 +279,7 @@ define("vas/core",
 							// If the user gets credits show first-time
 							if (!User.isFirstTimeSeen("credits.intro")) {
 								// Display the science points screen
-								UI.showHelpOverlay( Media.image("help/02-science-points.png"), function() {
+								UI.scheduleHelpOverlay( Media.image("help/02-science-points.png"), function() {
 									// Mark introduction sequence as shown
 									User.markFirstTimeAsSeen("credits.intro");
 								});

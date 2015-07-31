@@ -294,7 +294,7 @@ define(
 			this.btnHelp = $('<button class="btn-help btn-shaded btn-teal btn-with-icon"><span class="glyphicon glyphicon-bookmark"></span><br />Help</button>').appendTo(this.hostDOM);
 			this.btnHelp.click((function() {
 				//this.descFrame.toggleClass("visible");
-				UI.showHelpOverlay( Media.image("help/01-help-intro.png") )
+				UI.scheduleHelpOverlay( Media.image("help/01-help-intro.png") )
 			}).bind(this));
 
 			// ---------------------------------
@@ -798,7 +798,7 @@ define(
 			// Check if user has not seen the intro tutorial
 			if (!User.isFirstTimeSeen("tuning.intro")) {
 				// Display the intro help screen
-				UI.showHelpOverlay( Media.image("help/01-help-intro.png"), function() {
+				UI.scheduleHelpOverlay( Media.image("help/01-help-intro.png"), function() {
 					// Mark introduction sequence as shown
 					User.markFirstTimeAsSeen("tuning.intro");
 				});
