@@ -54,6 +54,33 @@
 		bottom: 5px;
 	}
 
+   	.help-menu {
+		position: absolute;
+		background-color: #FFF;
+		left: 8px;
+		bottom: 70px;
+		padding: 2px;
+		border: solid 1px #999;
+		border-radius: 10px 10px 10px 0;
+	    a {
+	    	display: block;
+	    	padding: 8px;
+	    	border-radius: 5px;
+
+	    	&:hover {
+	    		background-color: #2980B9;
+	    		color: #fff;
+	    		text-decoration: none;
+	    	}
+	    }
+
+		.transition(opacity 0.25);
+	    opacity: 0;
+	    &.visible {
+	    	opacity: 1;
+	    }
+   	}
+
 	// Corned machine configuraiton buttons
 	.btn-machine-beam {
 		.pointer-events(auto);

@@ -290,11 +290,39 @@ define(
 
 			}).bind(this));
 
+			// Create help menu for the help menu button
+			this.comHelpMenu = $('<div class="help-menu"></div>').appendTo(this.hostDOM);
+			$('<a href="javascript:;"><span class="glyphicon glyphicon-facetime-video"></span>&nbsp; 0. Introduction to the Tuning Process</a>').appendTo(this.comHelpMenu).click((function(e) {
+				this.trigger("help", "00-intro-video");
+				this.comHelpMenu.removeClass("visible");
+			}).bind(this));
+			$('<a href="javascript:;"><span class="glyphicon glyphicon-question-sign"></span>&nbsp; 1. Welcome to Virtual Atom Smasher</a>').appendTo(this.comHelpMenu).click((function(e) {
+				this.trigger("help", "01-help-intro");
+				this.comHelpMenu.removeClass("visible");
+			}).bind(this));
+			$('<a href="javascript:;"><span class="glyphicon glyphicon-question-sign"></span>&nbsp; 2. You got some Science Points</a>').appendTo(this.comHelpMenu).click((function(e) {
+				this.trigger("help", "02-science-points");
+				this.comHelpMenu.removeClass("visible");
+			}).bind(this));
+			$('<a href="javascript:;"><span class="glyphicon glyphicon-question-sign"></span>&nbsp; 3. You are now Running a Simulation</a>').appendTo(this.comHelpMenu).click((function(e) {
+				this.trigger("help", "03-simulation");
+				this.comHelpMenu.removeClass("visible");
+			}).bind(this));
+			$('<a href="javascript:;"><span class="glyphicon glyphicon-question-sign"></span>&nbsp; 4. Through the eyes of the scientist</a>').appendTo(this.comHelpMenu).click((function(e) {
+				this.trigger("help", "04-histogram");
+				this.comHelpMenu.removeClass("visible");
+			}).bind(this));
+			$('<a href="javascript:;"><span class="glyphicon glyphicon-question-sign"></span>&nbsp; 5. Learning and Getting Help</a>').appendTo(this.comHelpMenu).click((function(e) {
+				this.trigger("help", "05-learning");
+				this.comHelpMenu.removeClass("visible");
+			}).bind(this));
+
 			// Create help button
 			this.btnHelp = $('<button class="btn-help btn-shaded btn-teal btn-with-icon"><span class="glyphicon glyphicon-bookmark"></span><br />Help</button>').appendTo(this.hostDOM);
 			this.btnHelp.click((function() {
 				//this.descFrame.toggleClass("visible");
-				UI.scheduleHelpOverlay( Media.image("help/01-help-intro.png") )
+				// this.trigger("help", "01-help-intro");
+				this.comHelpMenu.toggleClass("visible");
 			}).bind(this));
 
 			// ---------------------------------
@@ -798,10 +826,10 @@ define(
 			// Check if user has not seen the intro tutorial
 			if (!User.isFirstTimeSeen("tuning.intro")) {
 				// Display the intro help screen
-				UI.scheduleHelpOverlay( Media.image("help/01-help-intro.png"), function() {
-					// Mark introduction sequence as shown
-					User.markFirstTimeAsSeen("tuning.intro");
-				});
+				this.trigger("help", "01-help-intro.png");
+				this.trigger("help", "05-learning.png");
+				// Mark introduction sequence as shown
+				User.markFirstTimeAsSeen("tuning.intro");
 			}
 
 			// Make sure we have a 'tuning' timer

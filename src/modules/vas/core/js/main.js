@@ -473,6 +473,9 @@ define("vas/core",
 					}
 
 					// Bind events
+					scrResults.on('help', function(term) {
+						VAS.displayHelp(term);
+					});
 					scrResults.on('hideResults', function() {
 						UI.selectPreviousScreen()
 					});
@@ -491,6 +494,9 @@ define("vas/core",
 					}
 
 					// Bind events
+					scrStatus.on('help', function(term) {
+						VAS.displayHelp(term);
+					});
 					scrStatus.on('hideStatus', function() {
 						VAS.displayTuningScreen(UI.Transitions.DIFF_LEFT);
 					});
@@ -550,6 +556,9 @@ define("vas/core",
 					}
 
 					// Bind events
+					scrHome.on('help', function(term) {
+						VAS.displayHelp(term);
+					});
 					scrHome.on('changeScreen', function(name) {
 						UI.selectScreen(name);
 					});
@@ -596,6 +605,9 @@ define("vas/core",
 					}
 
 					// Bind events
+					scrJobs.on('help', function(term) {
+						VAS.displayHelp(term);
+					});
 					scrJobs.on('hideJobs', function() {
 						VAS.displayTuningScreen(UI.Transitions.DIFF_BOTTOM);
 					});
@@ -700,6 +712,9 @@ define("vas/core",
 
 						});
 					});
+					scrKnowledge.on('help', function(term) {
+						VAS.displayHelp(term);
+					});
 					scrKnowledge.on('flash', function(title,body,icon) {
 						UI.scheduleFlash(title, body, icon);
 					});
@@ -728,6 +743,9 @@ define("vas/core",
 					}
 
 					// Bind events
+					scrTuning.on('help', function(term) {
+						VAS.displayHelp(term);
+					});
 					scrTuning.on('showBook', function(bookID) {
 						VAS.displayBook(bookID);
 					});
@@ -1101,6 +1119,45 @@ define("vas/core",
 				comBook.onMetaUpdate({ 'book': bookID });
 
 			}).bind(this));
+
+		}
+
+		/**
+		 * Display the introduction video
+		 */
+		VAS.displayIntro = function() {
+
+			// Display the intro sequence
+			UI.scheduleSequence( DB.cache['definitions']['intro-sequence']['sequence'] , function() {
+
+				// Display home page
+				VAS.displayTuningScreen();
+
+			});
+
+		}
+
+		/**
+		 * Display a help screen for the specified term
+		 */
+		VAS.displayHelp = function(term) {
+
+			// Handle Videos
+			if (term == '00-intro-video') {
+				this.displayIntro();
+
+			// Handle images
+			} else if (term == '01-help-intro') {
+				UI.scheduleHelpOverlay( Media.image("help/01-help-intro.png") );
+			} else if (term == '02-science-points') {
+				UI.scheduleHelpOverlay( Media.image("help/02-science-points.png") );
+			} else if (term == '03-simulation') {
+				UI.scheduleHelpOverlay( Media.image("help/03-simulation.png") );
+			} else if (term == '04-histogram') {
+				UI.scheduleHelpOverlay( Media.image("help/04-histogram.png") );
+			} else if (term == '05-learning') {
+				UI.scheduleHelpOverlay( Media.image("help/05-learning.png") );
+			}
 
 		}
 

@@ -54,7 +54,8 @@ define(
 				e.stopPropagation();
 				e.preventDefault();
 				// Show help
-				UI.scheduleHelpOverlay( Media.image("help/03-simulation.png") )
+				this.trigger("help", "03-simulation");
+				this.trigger("help", "04-histogram.png");
 			}).bind(this));
 
 			//
@@ -643,12 +644,12 @@ define(
 						this.labapi.submitJob( this.submitTunables, this.submitObservables );
 
 						// Check if user has not seen the intro tutorial, show it now
-						if (!User.isFirstTimeSeen("running.intro")) {
+						if (!User.isFirstTimeSeen("simulation.intro")) {
 							// Display the intro help screen
-							UI.scheduleHelpOverlay( Media.image("help/03-simulation.png"), function() {
-								// Mark introduction sequence as shown
-								User.markFirstTimeAsSeen("running.intro");
-							});
+							this.trigger("help", "03-simulation.png");
+							this.trigger("help", "04-histogram.png");
+							// Mark introduction sequence as shown
+							User.markFirstTimeAsSeen("simulation.intro");
 						}
 
 					} else if (status == "conflict") {
