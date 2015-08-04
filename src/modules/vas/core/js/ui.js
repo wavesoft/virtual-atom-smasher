@@ -625,6 +625,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 						overlayStack = [];
 						e.preventDefault();
 						e.stopPropagation();
+						Sequencer.reset();
 						UI.hideOverlay();
 					}
 
@@ -1533,8 +1534,10 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 				com.onOnce("close", function() {
 					// Fire callback when completed
 					if (cb_close) cb_close();
-					// Unblock sequencer
-					//Sequencer.unblock();
+				});
+				com.onOnce("dispose", function() {
+					// Fire callback when disposed
+					if (cb_close) cb_close();
 				});
 
 			});
