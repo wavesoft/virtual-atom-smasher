@@ -55,7 +55,7 @@ define(
 				e.preventDefault();
 				// Show help
 				this.trigger("help", "03-simulation");
-				this.trigger("help", "04-histogram.png");
+				this.trigger("help", "04-histogram");
 			}).bind(this));
 
 			//
