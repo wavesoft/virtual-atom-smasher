@@ -183,11 +183,11 @@ define(
 			if (!this.meta) return;
 			
 			// Check if user has not seen the tuning part tutorial
-			if (!User.isFirstTimeSeen("ui.book")) {
-				UI.showTutorial("ui.book", function() {
-					User.markFirstTimeAsSeen("ui.book");
-				});
-			}
+			// if (!User.isFirstTimeSeen("ui.book")) {
+			// 	UI.showTutorial("ui.book", function() {
+			// 		User.markFirstTimeAsSeen("ui.book");
+			// 	});
+			// }
 		}
 
 		/**

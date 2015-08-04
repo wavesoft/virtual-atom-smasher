@@ -646,8 +646,8 @@ define(
 						// Check if user has not seen the intro tutorial, show it now
 						if (!User.isFirstTimeSeen("simulation.intro")) {
 							// Display the intro help screen
-							this.trigger("help", "03-simulation.png");
-							this.trigger("help", "04-histogram.png");
+							this.trigger("help", "03-simulation");
+							this.trigger("help", "04-histogram");
 							// Mark introduction sequence as shown
 							User.markFirstTimeAsSeen("simulation.intro");
 						}

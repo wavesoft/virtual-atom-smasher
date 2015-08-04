@@ -786,7 +786,10 @@ define(
 					claim = "fair";
 					claim_reason = "your fair attempt";
 				}
-				//msg += "(" + chi2.toFixed(2) + ")";
+
+				// Convert to percent
+				var percent = parseInt(((3 - Math.sqrt( Math.max(Math.min(chi2, 9.0), 0.0) )) / 3) * 100);
+				msg += "(" + percent + "%)";
 
 				// Print result
 				this.panelStatus.text(msg);
@@ -826,8 +829,8 @@ define(
 			// Check if user has not seen the intro tutorial
 			if (!User.isFirstTimeSeen("tuning.intro")) {
 				// Display the intro help screen
-				this.trigger("help", "01-help-intro.png");
-				this.trigger("help", "05-learning.png");
+				this.trigger("help", "01-help-intro");
+				this.trigger("help", "05-learning");
 				// Mark introduction sequence as shown
 				User.markFirstTimeAsSeen("tuning.intro");
 			}
