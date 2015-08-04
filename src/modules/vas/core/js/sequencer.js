@@ -60,6 +60,13 @@ define(["core/util/event_base"],
 		}
 
 		/**
+		 * Reset the sequencer
+		 */
+		Sequencer.prototype.reset = function() {
+			this.stack = [];
+		}
+
+		/**
 		 * Block sequencer to prohibit interactions
 		 */
 		Sequencer.prototype.block = function() {
