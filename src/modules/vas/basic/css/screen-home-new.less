@@ -1,0 +1,244 @@
+///////////////////////////////////////////////
+// Left menu buttons
+///////////////////////////////////////////////
+
+.navbtn-left {
+  position: absolute;
+  width: 77px;
+  height: 42px;
+  cursor: pointer;
+
+  div.glyphicon {
+    position: absolute;
+    width: 77px;
+    height: 42px;
+    text-align: center;
+    font-size: 20px;
+    top: 4px;
+    left: -4px;
+    color: white;
+  }
+
+  div.title {
+    .pointer-events(none);
+    position: absolute;
+    padding: 4px;
+    width: 77px;
+    left: -8px;
+    top: 42px;
+    text-align: center;
+    opacity: 0;
+  }
+
+  &:hover {
+    div.title {
+      opacity: 1;
+    }
+    background-position: 0 42px;
+  }
+
+  &:active {
+    background-position: 0 84px;
+  }
+
+}
+
+///////////////////////////////////////////////
+// Center menu buttons
+///////////////////////////////////////////////
+
+.navbtn-center {
+  position: absolute;
+  width: 119px;
+  height: 112px;
+  top: -67px;
+  cursor: pointer;
+  background: url(modules/vas/basic/img/buttons/btn-middle.png) 0 0;
+
+  div.title {
+    .font-handwriting();
+    position: absolute;
+    width: 119px;
+    height: 42px;
+    bottom: 4px;
+    text-align: center;
+  }
+
+  div.info {
+    position: absolute;
+    width: 94px;
+    margin-right: 16px;
+    margin-left: 16px;
+    top: 0;
+    left: -4px;
+    color: white;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-height: 21px;
+    max-height: 63px;
+  }
+
+  &:hover {
+    // TODO check btn-middle.png
+
+    top: 0;
+    background-position: 0 -112px;
+
+    .transition(top 0.5s);
+
+  }
+
+  &:active {
+    background-position: 0 -224px;
+  }
+
+}
+
+///////////////////////////////////////////////
+// Home Screen
+///////////////////////////////////////////////
+
+.screen.home-new {
+  //width: 100%; height: 100%;
+  .fullscreen;
+  .unselectable;
+  .fx-animated;
+
+  min-width: 800px;
+  min-height: 600px;
+
+  background-image: url(modules/vas/basic/img/backgrounds/machine-back.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  // Top-left menu icons
+  .menu-icons {
+
+    // Top-left menu icons
+    .left-menu-icons {
+      float: left;
+
+      .navbtn-help {
+        background-image: url(modules/vas/basic/img/buttons/btn-help.png);
+      }
+
+      .navbtn-profile {
+        left: 77px;
+        background-image: url(modules/vas/basic/img/buttons/btn-profile.png);
+      }
+
+    }
+
+    // Center menu icons
+    .center-menu-icons {
+      //float: top;
+      //width: 485px;
+      width: 476px;
+      margin: 0 auto;
+
+      .navbtn-knowledge {
+
+      }
+
+      .navbtn-papers {
+        margin-left: 119px;
+      }
+
+      .navbtn-teams {
+        margin-left: 238px;
+      }
+
+      .navbtn-forum {
+        margin-left: 357px;
+      }
+
+    }
+
+    // Status frame
+    .status-frame {
+      //position: absolute;
+      float: right;
+      width: 152px;
+      height: 42px;
+      margin-top: 0;
+      background: url(modules/vas/basic/img/status-frame.png) 0 0;
+    }
+
+  }
+
+  .machine-frame {
+    position: absolute;
+    width: 100%; height: 40%;
+    top: 119px;
+
+    .machine {
+      background-image: url(modules/vas/basic/img/machine.png);
+      position: absolute;
+      width: 1100px; height: 345px;
+      //margin: 0 auto;
+      left: 50%; top: 50%;
+      -webkit-transform: translate(-550px,-172px);
+      transform: translate(-550px,-172px);
+    }
+
+    .machine-overlay {}
+
+  }
+
+  .levels-container {
+    background-image: url(modules/vas/basic/img/backgrounds/machine-black-back.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40%;
+    //height: 215px;
+
+    .levels-frame {
+      position: absolute;
+      width: 100%;
+      //height: 40%;
+      height: 257px;
+      left: 0; bottom: 0;
+
+      .levels {
+        background-image: url(modules/vas/basic/img/backgrounds/levels.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        position: absolute;
+        width: 1024px;
+        height: 257px;
+        left: 50%; top: 100%;
+        -webkit-transform: translate(-512px,-256px);
+        transform: translate(-512px,-256px);
+      }
+
+      .navbtn-levels {
+        position: absolute;
+        height: 257px;
+        width: 32px;
+        background-color: red;
+        cursor: pointer;
+      }
+
+      .navbtn-lvl-left {
+        left: 0;
+      }
+
+      .navbtn-lvl-right {
+        right: 0;
+      }
+
+    }
+
+  }
+
+}
