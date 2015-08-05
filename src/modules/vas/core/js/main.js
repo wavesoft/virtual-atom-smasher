@@ -279,7 +279,7 @@ define("vas/core",
 							// If the user gets credits show first-time
 							if (!User.isFirstTimeSeen("credits.intro")) {
 								// Show the science points intro once
-								this.displayHelp("02-science-points");
+								VAS.displayHelp("02-science-points");
 								User.markFirstTimeAsSeen("credits.intro");
 							}
 

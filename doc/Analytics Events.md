@@ -315,6 +315,23 @@ A user performed a set of bad clicks in the interface. As 'bad' are considered t
 }
 ```
 
+## simulation.playgame
+The user clicked on the `Bored? Play a game` button.
+
+```javascript
+{
+}
+```
+
+## simulation.playgame.time
+The user dismissed the in-game mini-game.
+
+```javascript
+{
+    'time': 0,                  // How long the window was open
+}
+```
+
 # Pending Analytic Events
 This section contains events that are pending implementation.
 
@@ -349,3 +366,4 @@ The user has completed a particular level and moved on the next one.
  * Till now the an `observables.hidden` event was fired right before a `observables.shown` event with `time=0`. This bug is now fixed.
  * Till now the `questionnaire.*` events was stored in analytics as `pop_up:*` events. From now own, we are using the `questionnaire:*` name.
 
+## As from ``

@@ -435,7 +435,6 @@ define(
 			labSocket.on('histogramsUpdated', (function(histos) {
 				this.lastHistograms = histos;
 				this.select(".p-view").removeClass("disabled");
-				//this.eStatusLabel.text("RUNNING");
 
 				// Update all observables
 				for (var i=0; i<histos.length; i++) {
@@ -458,6 +457,10 @@ define(
 				var currNevts = parseInt(meta['nevts']),
 					progValue = currNevts * 100 / this.maxEvents;
 				this.select(".p-progress .panel-value").text( Math.round(progValue) + " %" );
+
+				// Switch to running
+				if (currNevts > 0)
+					this.select(".p-run-status").text("RUNNING");
 
 				// Calculate rate
 				var currTime = Date.now();
@@ -500,6 +503,9 @@ define(
 
 					// Add a pin to the globe
 					this.pinIndex[ telemetryData['agent_added'] ] = this.globe.addPin( lat, lng );
+
+					// Update status
+					this.select(".p-run-status").text("STARTING");
 
 					// Update the number of machines
 					this.numConnectedMachines++;
