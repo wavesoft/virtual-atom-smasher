@@ -202,6 +202,16 @@ define("vas/core",
 			User.on('flash', function(title,body,icon) {
 				UI.scheduleFlash(title, body, icon);
 			});
+			User.on('profile', function(profile) {
+
+				// Check if the user can see the evaluation questionnaire
+				if (!User.isFirstTimeSeen("learningeval.post")) {
+					User.canTakePostEvaluation(function() {
+						VAS.displayPostEvalPrompt();
+					});
+				}
+
+			});
 
 
 			// Break down initialization process in individual chainable functions
@@ -683,7 +693,7 @@ define("vas/core",
 								UI.scheduleFlash(
 									'Knowledge expanded',
 									'You have just expanded your knowlege and unlocked the topic <em>'+knowlegeDetails['title']+'</em>',
-									'/flash-icons/books.png'
+									'flash-icons/books.png'
 								);
 
 								// Handle knowledge actions
@@ -869,7 +879,7 @@ define("vas/core",
 					function(cb) {
 						// Show pre-evaluation questionnaire
 						if (!User.isFirstTimeSeen("learningeval.pre")) {
-							VAS.displayLearningEval(function(completed) {
+							VAS.displayLearningPreEval(function(completed) {
 								if (completed) User.markFirstTimeAsSeen("learningeval.pre");
 								cb();
 							});
@@ -895,6 +905,44 @@ define("vas/core",
 
 			// Start sequence
 			seq_next();
+
+		}
+
+		/**
+		 * Display a post-evaluation questionnaire prompt
+		 */
+		VAS.displayPostEvalPrompt = function() {
+
+			// Show prompt only one
+			if (VAS.__postEvalPromptShown)
+				return;
+
+			// Ask user if he/she wants to take the intro tutorial
+			UI.scheduleFlashPrompt(
+				"Learning Evaluation", 
+				"You seem like a master in this game. Would you like to take a short questionnaire?", 
+				[
+					{ 
+						"label"    : "Yes, show it!",
+						"class"    : "btn-blue",
+					  	"callback" : function(){
+					  		// Display post-evaluation questionnaire
+							VAS.displayLearningPostEval(function(completed) {
+								if (completed) User.markFirstTimeAsSeen("learningeval.post");
+							});
+						}
+					},
+					{
+						"label"    : "Later",
+						"class"    : "btn-darkblue",
+						"callback" : function(){
+							// Mark the post-evaluation prompt as shown
+							VAS.__postEvalPromptShown = true;
+						}
+					}
+				],
+				"flash-icons/atom.png"
+			);
 
 		}
 
@@ -1059,16 +1107,42 @@ define("vas/core",
 		}
 
 		/**
-		 * Display learning evaluation questionnaire
+		 * Display learning pre-evaluation questionnaire
 		 */
-		VAS.displayLearningEval = function( cb_completed ) {
+		VAS.displayLearningPreEval = function( cb_completed ) {
 
 			// Display evaluation
-			UI.showOverlay("overlay.embed", (function(qOvr) {
+			UI.scheduleOverlay("overlay.embed", (function(qOvr) {
 
 				// Configure Embed frame
 				qOvr.onEmbedConfigured({
 					'url' 	: '//tecfalabs.unige.ch/survey/index.php/948573/lang-en/newtest/Y?userID=' + User.profile['trackid'],
+					'block'	: true,
+				});
+
+				// Handle close event
+				qOvr.on("close", function() {
+					if (cb_completed) cb_completed(true);
+				});
+				qOvr.on("dispose", function() {
+					if (cb_completed) cb_completed(false);
+				});
+
+			}).bind(this));
+
+		}
+
+		/**
+		 * Display learning post-evaluation questionnaire
+		 */
+		VAS.displayLearningPostEval = function( cb_completed ) {
+
+			// Display evaluation
+			UI.scheduleOverlay("overlay.embed", (function(qOvr) {
+
+				// Configure Embed frame
+				qOvr.onEmbedConfigured({
+					'url' 	: '//tecfalabs.unige.ch/survey/index.php/927274/lang-en/newtest/Y?userID=' + User.profile['trackid'],
 					'block'	: true,
 				});
 

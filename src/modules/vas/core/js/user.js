@@ -717,6 +717,30 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Check if the user can take post-evaluation qustionnaire
+		 */
+		User.prototype.canTakePostEvaluation = function( callback ) {
+
+			// Check how many levels the user has explored
+			var total=0, unlocked=0;
+			for (var k in this.profile['state']['partcounters']) {
+				var counter = this.profile['state']['partcounters'][k];
+				total += counter.total;
+				unlocked += counter.unlocked;
+			}
+
+			// Check if the user hasn't explored not even half of them
+			if (unlocked < total/2) return;
+
+			// If the user hasn't spent at least an hour of continuous playing, exit
+			if (this.profile['playTime'] < 3600000) return;
+
+			// Otherwise, prompt the user
+			if (callback) callback(true);
+
+		}
+
+		/**
 		 * Build and return the user's task information tree
 		 */
 		User.prototype.getTaskDetails = function( task_id ) {

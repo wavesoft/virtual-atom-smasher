@@ -752,6 +752,46 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 
 		}
 
+
+		/**
+		 * Schedule the display of an overlay screen when possible
+		 *
+		 * @param {string} name - The name of the module to focus.
+		 * @param {array} transition - The transition definition (defaults to UI.Transitions.ZOOM_IN)
+		 * @param {function} cb_ready - The callback to fire when the screen has changed
+		 * @param {boolean} blur_back - Blur background
+		 *
+		 */
+		UI.scheduleOverlay = function(name, v_transition, v_cb_ready, v_blur_back) {
+
+			// Check for missing arguments
+			var args = [v_transition, v_cb_ready, v_blur_back],
+				transition = UI.Transitions.ZOOM_IN,
+				cb_ready = null,
+				blur_back = true;
+
+			// Auto-arrange arguments
+			for (var i=0; i<args.length; i++) {
+				if (typeof(args[i]) == 'function') {
+					cb_ready = args[i];
+				} else if (typeof(args[i]) == 'object') {
+					transition = args[i];
+				} else if (typeof(args[i]) == 'boolean') {
+					blur_back = args[i];
+				}
+			}
+
+			// Put on sqeuencer
+			Sequencer.schedule((function( cb_next ) {
+				this.showOverlay(name, transition, blur_back, function(component) {
+					component.onOnce('close', function() { cb_next(); });
+					component.onOnce('dispose', function() { cb_next(); });
+					if (cb_ready) cb_ready(component);
+				});
+			}).bind(this));
+
+		}
+
 		/**
 		 * Schedule a showFlash execution
 		 *
