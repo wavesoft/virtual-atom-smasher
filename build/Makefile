@@ -24,7 +24,7 @@ GIT_REV = $(shell git log --pretty=format:%h -1)
 GIT_VERSION = $(GIT_TAG)-$(GIT_REV)
 
 # ===========================
-game: $(DIST)/game/app-game.js $(DIST)/game/app-game.css
+game: $(DIST)/game/app-game.js $(DIST)/game/app-game.css $(DIST)/game/app-game.appcache
 # ===========================
 
 # Resources: app-game.css
@@ -37,7 +37,7 @@ $(DIST)/game/app-game.css: $(SRC)/app-game.less $(RES_LESS)
 	mv $(SRC)/app-game.css $(DIST)/game/app-game.css
 
 # Game source
-$(DIST)/game/app-game.js: r.js config/build-game.js $(SRC)/app-game.js $(JS_CORE) $(JS_EXTERN) $(JS_TOOTR) $(JS_VAS) $(RES_IMAGES)
+$(DIST)/game/app-game.js: r.js config/build-game.js $(SRC)/app-game.js $(JS_CORE) $(JS_EXTERN) $(JS_TOOTR) $(JS_VAS)
 
 	# Update version tag in the production config
 	sed -i.bak "s/'version': '.*'/'version': '$(GIT_VERSION)'/g" $(MODULES)/vas/config-prod.js
@@ -45,8 +45,29 @@ $(DIST)/game/app-game.js: r.js config/build-game.js $(SRC)/app-game.js $(JS_CORE
 	# Build game
 	node r.js -o config/build-game.js
 
+# Cache Manifest
+$(DIST)/game/app-game.appcache: $(DIST)/game/app-game.css $(DIST)/game/app-game.js $(RES_IMAGES)
+
+	# Prepare header
+	echo "CACHE MANIFEST" > $(DIST)/game/app-game.appcache
+	date +'# %d/%m/%Y %H:%M:%S' >> $(DIST)/game/app-game.appcache
+
+	# Core components first
+	echo "require.js" >> $(DIST)/game/app-game.appcache
+	echo "app-game.css" >> $(DIST)/game/app-game.appcache
+	echo "app-game.html" >> $(DIST)/game/app-game.appcache
+	echo "app-game.js" >> $(DIST)/game/app-game.appcache
+
+	# All resources afterwards, sorted by file size, ascending
+	( cd dist/game; find modules -type f -exec du "{}" \; | sort -n | awk '{print substr($$0, index($$0, $$2))}' | sed 's/ /%20/g' ) >> $(DIST)/game/app-game.appcache
+
+	# Prepare network resources
+	echo >> $(DIST)/game/app-game.appcache
+	echo "NETWORK:" >> $(DIST)/game/app-game.appcache
+	echo "*" >> $(DIST)/game/app-game.appcache
+
 # Distribution archive
-$(DIST)/game-dist.tar.gz: $(DIST)/game/app-game.js $(DIST)/game/app-game.css
+$(DIST)/game-dist.tar.gz: $(DIST)/game/app-game.js $(DIST)/game/app-game.css $(DIST)/game/app-game.appcache
 
 	# Cleanup junk files
 	find $(DIST)/game -type f -name '.DS_Store' -exec rm {} \;
