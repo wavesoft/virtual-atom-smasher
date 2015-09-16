@@ -1195,6 +1195,26 @@ define("vas/core",
 		}
 
 		/**
+		 * Display user's eligiblity on the currently active awards
+		 */
+		VAS.displayEligibility = function( bookID ) {
+
+			// Fetch eligibility details
+			User.getEligibilityStatus(function(details) {
+
+				// Show eligibility overlay
+				UI.showOverlay("overlay.eligibility", (function(comOverlay) {
+
+					// Update details
+					comOverlay.onEligibilityInformation(details);
+
+				}).bind(this));
+
+			});
+
+		}
+
+		/**
 		 * Display the introduction video
 		 */
 		VAS.displayIntro = function() {

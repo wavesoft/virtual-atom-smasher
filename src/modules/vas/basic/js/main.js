@@ -103,6 +103,7 @@ define(
 	'vas/basic/overlays/feedback',
 	'vas/basic/overlays/embed',
 	'vas/basic/overlays/help',
+	'vas/basic/overlays/eligibility',
 
 	// Machine parts
 	'vas/basic/machineparts/describe',

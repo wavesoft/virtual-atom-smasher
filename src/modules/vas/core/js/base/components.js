@@ -1009,6 +1009,35 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		SimulationScreen.prototype = Object.create( Component.prototype );
 
 		////////////////////////////////////////////////////////////
+		/**
+		 * Eligibility Screen is shown to the user to check the status
+		 * of his/her participation in a challenge.
+		 *
+		 * @class
+		 * @classdesc Abstract class for defining backdrop images.
+		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
+		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 *
+		 */
+		var EligibilityScreen = function( hostDOM ) {
+
+			// Initialize base class
+			Component.call(this, hostDOM);
+
+		}
+
+		// Subclass from Component
+		EligibilityScreen.prototype = Object.create( Component.prototype );
+
+		/**
+		 * Update eligibility information
+		 *
+		 * @param {object} info - Eligibility information details
+		 */
+		EligibilityScreen.prototype.onEligibilityInformation = function(info) {
+		}
+
+		////////////////////////////////////////////////////////////
 		//             Event definitions for JSDoc                //
 		////////////////////////////////////////////////////////////
 
@@ -1119,6 +1148,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 			'LoginScreen'		 : LoginScreen,
 			'PasswordResetScreen': PasswordResetScreen,
 			'SimulationScreen'	 : SimulationScreen,
+			'EligibilityScreen'	 : EligibilityScreen,
 			'Popup'				 : Popup
 		};
 

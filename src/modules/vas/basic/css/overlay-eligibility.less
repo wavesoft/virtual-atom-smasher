@@ -1,0 +1,133 @@
+
+///////////////////////////////////////////////
+// The eligibility status overlay
+///////////////////////////////////////////////
+
+.overlay-eligibility {
+
+	background-image: url(modules/vas/basic/img/backgrounds/thanks.jpg);
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+
+	.award-host {
+		background-color: rgba(255,255,255,0.6);
+	    height: 240px;
+	    padding-top: 20px;
+	    width: 90%;
+	    margin: 10px auto;
+	    position: absolute;
+	    left: 5%; top: 50%;
+		.border-radius( 30px );
+	    .transform( translateY(-120px) );
+
+		h1, p {
+			margin: 0 20px;
+		}
+		p {
+		    color: #34495E;
+		}
+
+		.segments {
+			margin: 50px auto;
+			width: 90%;
+			height: 64px;
+
+			&.segments-width-1 .segment { width: 100%; 	}
+			&.segments-width-2 .segment { width: 50%; 	}
+			&.segments-width-3 .segment { width: 33.3%; }
+			&.segments-width-4 .segment { width: 25%; 	}
+			&.segments-width-5 .segment { width: 20%; 	}
+			&.segments-width-6 .segment { width: 16.6%; }
+			&.segments-width-7 .segment { width: 14.2%; }
+			&.segments-width-8 .segment { width: 12.5%; }
+			&.segments-width-9 .segment { width: 11.1%; }
+			&.segments-width-9 .segment { width: 10%; 	}
+
+			.segment {
+				float: right;
+				height: 64px;
+				display: block;
+				position: relative;
+
+				.segment-label {
+				    position: absolute;
+				    background-color: #FF0;
+				    left: 5px; top: 5px;
+				    height: 52px; right: 5px;
+				    border-width: 1px;
+				    border-style: solid;			 
+				    padding-left: 35px;
+				    color: #FFF;
+			        box-shadow: 0px 2px 6px rgba(0,0,0,0.50);
+			        text-align: center;
+				}
+				
+				.segment-progress {
+					position: absolute;
+					left: 50px; right: 16px;
+					bottom: 10px; height: 4px;
+					background-color: rgba(0,0,0,0.24);
+					.border-radius( 2px );
+
+					.indicator {
+					    position: absolute;
+					    left: 0;
+					    width: 50%;
+					    height: 4px;
+					    background-color: #FFEF6C;
+					    box-shadow: 0px 0px 5px #FFF;
+					}
+					
+				}
+
+				&:not(:first-child) .segment-label:after {
+					display: block;
+					width: 38.18px;
+					height: 38.18px;
+					background-color: #F00;
+					position: absolute;
+					content: " ";
+					right: -38.18px; top: 26px;
+					.transform( translateX(-19.09px) translateY(-19.09px) rotate(45deg) );
+				    border-width: 1px;
+
+				    border-style: solid solid none none;
+			        box-shadow: 4px -4px 5px rgba(0,0,0,0.3);
+				}
+				&:not(:last-child) .segment-label:before {
+				    display: block;
+					width: 38.18px;
+					height: 38.18px;
+					background-color: #FFF;
+					position: absolute;
+					content: " ";
+					left: 0; top: 26px;
+					.transform( translateX(-19.09px) translateY(-19.09px) rotate(45deg) );
+				    border-width: 1px;
+				    border-style: solid solid none none;
+				}
+
+				&.c-green .segment-label {
+					background-color: #2ECC71;
+					border-color: #27AE60;
+					&:after {
+						background-color: #2ECC71;
+						border-color: #27AE60;
+					}
+				}
+				&.c-red .segment-label {
+					background-color: #E74C3C;
+					border-color: #C0392B;
+					&:after {
+						background-color: #E74C3C;
+						border-color: #C0392B;
+					}
+				}
+
+			}
+		}
+
+	}
+
+}

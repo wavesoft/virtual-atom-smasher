@@ -717,6 +717,51 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Get user's eligibility status to the active awards
+		 */
+		User.prototype.getEligibilityStatus = function( callback ) {
+
+			// Prepare details
+			details = {
+				"title": "Summer Student Lunch Coupon",
+				"checks": [ ]
+			};
+
+			// Check how many levels the user has explored
+			var total=0, unlocked=0;
+			for (var k in this.profile['state']['partcounters']) {
+				var counter = this.profile['state']['partcounters'][k];
+				total += counter.total;
+				unlocked += counter.unlocked;
+			}
+
+			// Add level check
+			details['checks'].push({
+				"title": "Completed 15% of levels",
+				"progress": unlocked / total,
+				"check" : (unlocked / total) >= 0.15,
+			});
+
+			// Add play time check
+			details['checks'].push({
+				"title": "Played more than 1h",
+				"progress": Math.min( this.profile['playTime']/3600000, 1.0 ),
+				"check" : (this.profile['playTime'] >= 3600000),
+			});
+
+			// Add post-eval check
+			details['checks'].push({
+				"title": "Taken evaluation questionnire",
+				"progress": this.isFirstTimeSeen("learningeval.post"),
+				"check" : (this.profile['playTime'] >= 3600000),
+			});
+
+			// Fire callback
+			if (callback) callback(details);
+
+		}
+
+		/**
 		 * Check if the user can take post-evaluation qustionnaire
 		 */
 		User.prototype.canTakePostEvaluation = function( callback ) {
@@ -729,8 +774,8 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 				unlocked += counter.unlocked;
 			}
 
-			// Check if the user hasn't explored not even half of them
-			if (unlocked < total/2) return;
+			// Check if the user hasn't explored not even 15% of them
+			// if ((unlocked / total) < 0.15) return;
 
 			// If the user hasn't spent at least an hour of continuous playing, exit
 			if (this.profile['playTime'] < 3600000) return;
