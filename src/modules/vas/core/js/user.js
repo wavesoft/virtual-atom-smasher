@@ -745,15 +745,15 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			// Add play time check
 			details['checks'].push({
 				"title": "Played more than 1h",
-				"progress": Math.min( this.profile['playTime']/3600000, 1.0 ),
-				"check" : (this.profile['playTime'] >= 3600000),
+				"progress": Math.min( this.profile['playtime']/3600000, 1.0 ),
+				"check" : (this.profile['playtime'] >= 3600000),
 			});
 
 			// Add post-eval check
 			details['checks'].push({
 				"title": "Taken evaluation questionnire",
-				"progress": this.isFirstTimeSeen("learningeval.post"),
-				"check" : (this.profile['playTime'] >= 3600000),
+				"progress": this.isFirstTimeSeen("learningeval.post") ? 1.0 : 0.0,
+				"check" : (this.profile['playtime'] >= 3600000),
 			});
 
 			// Fire callback
@@ -778,7 +778,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			// if ((unlocked / total) < 0.15) return;
 
 			// If the user hasn't spent at least an hour of continuous playing, exit
-			if (this.profile['playTime'] < 3600000) return;
+			if (this.profile['playtime'] < 3600000) return;
 
 			// Otherwise, prompt the user
 			if (callback) callback(true);
