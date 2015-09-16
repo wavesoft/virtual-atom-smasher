@@ -777,6 +777,9 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			// Check if the user hasn't explored not even 15% of them
 			// if ((unlocked / total) < 0.15) return;
 
+			// Require the user to have the pre-evaluation questionnaire passed
+			if (!this.isFirstTimeSeen("learningeval.pre")) return;
+
 			// If the user hasn't spent at least an hour of continuous playing, exit
 			if (this.profile['playtime'] < 3600000) return;
 
