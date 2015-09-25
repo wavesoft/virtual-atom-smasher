@@ -188,7 +188,7 @@ define(
 		/**
 		 * Update the description panel
 		 */
-		OverlayHistograms.prototype.updateDescription = function( record ) {
+		OverlayHistograms.prototype.updateDescription = function( record, full ) {
 			var chi2fit = record.fit,
 				status_msg, status_cls;
 
@@ -215,34 +215,35 @@ define(
 					'<div><strong>Error:</strong> ' + chi2fit[0].toFixed(2) + ' ± ' + chi2fit[1].toFixed(2) + '</div>'
 				);
 
-			// Update description
-			this.elmDescCorrelations.empty();
-			if (!record.obs) {
-				// Missing observable details
-				this.elmDescHeader.text(id);
-				this.elmDescDesc.text("(Description is missing)");
-			} else {
+			// Update all details only on full-update
+			if (full) {
+				// Update description
+				this.elmDescCorrelations.empty();
+				if (!record.obs) {
+					// Missing observable details
+					this.elmDescHeader.text(id);
+					this.elmDescDesc.text("(Description is missing)");
+				} else {
+					// Update observable details
+					this.elmDescHeader.html( record.obs.title );
+					this.elmDescDesc.html( record.obs.desc );
 
-				// Update observable details
-				this.elmDescHeader.html( record.obs.title );
-				this.elmDescDesc.html( record.obs.desc );
+					// Add correlations
+					if (record.obs.correlations) {
+						this.elmDescCorrelations.append($('<div class="correlation-label">This historam is sensitive to:</div>'));
+						for (var i=0; i<record.obs.correlations.length; i++) {
+							var c = record.obs.correlations[i],
+								elmHandleTimer = null,
+								elm = $('<div class="correlation"></div>')
+									.text( c.tunable )
+									.appendTo( this.elmDescCorrelations );
 
-				// Add correlations
-				if (record.obs.correlations) {
-					this.elmDescCorrelations.append($('<div class="correlation-label">This historam is sensitive to:</div>'));
-					for (var i=0; i<record.obs.correlations.length; i++) {
-						var c = record.obs.correlations[i],
-							elmHandleTimer = null,
-							elm = $('<div class="correlation"></div>')
-								.text( c.tunable )
-								.appendTo( this.elmDescCorrelations );
-
+						}
 					}
+
+					// (Re)typeset math
+					MathJax.typeset( this.elmRightPanel );
 				}
-
-				// (Re)typeset math
-				MathJax.typeset( this.elmRightPanel );
-
 			}
 
 			// Show right footer
@@ -281,7 +282,7 @@ define(
 			record.dom.addClass("selected");
 
 			// Update description
-			this.updateDescription( record );
+			this.updateDescription( record, true );
 
 		}
 
@@ -398,7 +399,7 @@ define(
 
 			// If that's focused, update description
 			if (this.selectedHistogram == id)
-				this.updateDescription( record );
+				this.updateDescription( record, false );
 
 			// Update fit label
 			record.domfl.text( record.fit[0].toFixed(2) + ' ± ' + record.fit[1].toFixed(2) );

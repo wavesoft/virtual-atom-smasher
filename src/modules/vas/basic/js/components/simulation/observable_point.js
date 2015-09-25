@@ -32,6 +32,7 @@ define(
 			this.value = null;
 			this.mouseOver = false;
 			this._handleTimer = 0;
+			this.popupBody = null;
 
 			// Handle pointer events
 			this.select(".circle").mouseenter((function() {
@@ -71,6 +72,9 @@ define(
 							// Update infoblock 
 							comBody.onMetaUpdate( this.meta );
 							comBody.onUpdate( this.value );
+
+							// Keep for updating
+							this.popupBody = comBody;
 
 							// Adopt events from infoblock as ours
 							this.adoptEvents( comBody );
@@ -125,6 +129,10 @@ define(
 			// the histogram and the reference.
 			var chi2fit = Calculate.chi2WithError( histogram.data, histogram.ref.data );
 			this.value = histogram;
+
+			// Update popup
+			if (this.popupBody)
+				this.popupBody.onUpdate( this.value );
 
 			// Helper to map Chi value 0.0 till 9.0+ like this:
 			// 

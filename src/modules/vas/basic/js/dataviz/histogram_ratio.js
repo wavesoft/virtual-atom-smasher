@@ -207,7 +207,7 @@ define(
 					//  1-sigma band
 					// ==============
 
-					var record = groupBack.selectAll("path.plot-band")
+					var record = groupBack.selectAll("rect.plot-band")
 									.data(plot.sigma);
 
 					// Enter
