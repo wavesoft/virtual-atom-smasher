@@ -408,6 +408,17 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get all levels including their status
+		 */
+		APIAccount.prototype.enumLevels = function(callback) {
+			// Query server
+			this.sendAction("levels.enum", {
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
 		 * Unlock a particular machine part stage
 		 */
 		APIAccount.prototype.unlockMachineStage = function(stage, callback) {

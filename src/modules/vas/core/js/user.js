@@ -497,7 +497,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Select paper job as default
 		 */
 		User.prototype.makePaperJobDefault = function( paper_id, job_id, callback ) {
-			// Query papers
+			// Pass query to account API
 			this.accountIO.makePaperJobDefault( paper_id, job_id, callback );
 		}
 
@@ -505,7 +505,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Return paper results
 		 */
 		User.prototype.getPaperResults = function( paper_id, callback ) {
-			// Query papers
+			// Pass query to account API
 			this.accountIO.getPaperResults( paper_id, callback );
 		}
 
@@ -513,7 +513,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Return job results
 		 */
 		User.prototype.getJobResults = function( job_id, callback ) {
-			// Query papers
+			// Pass query to account API
 			this.accountIO.getJobResults( job_id, callback );
 		}
 
@@ -521,7 +521,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Return the user and team papers
 		 */
 		User.prototype.getProfilePapers = function( callback ) {
-			// Query papers
+			// Pass query to account API
 			this.accountIO.getProfilePapers( callback );
 		}
 
@@ -556,7 +556,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Update a signle paper.
 		 */
 		User.prototype.updatePaper = function( paper_id, fields, callback ) {
-			// Update paper
+			// Pass query to account API
 			this.accountIO.updatePaper(paper_id, fields, callback);
 		}
 
@@ -564,7 +564,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Delete a signle paper.
 		 */
 		User.prototype.deletePaper = function( paper_id, callback ) {
-			// Update paper
+			// Pass query to account API
 			this.accountIO.deletePaper(paper_id, callback);
 		}
 
@@ -572,7 +572,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Cite a signle paper.
 		 */
 		User.prototype.citePaper = function( paper_id, callback ) {
-			// Cite paper
+			// Pass query to account API
 			this.accountIO.citePaper(paper_id, callback);
 		}
 
@@ -580,7 +580,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Shorthand to get the current user's paper
 		 */
 		User.prototype.getUserPaper = function( callback ) {
-			// Get user paper
+			// Pass query to account API
 			this.readPaper( this.profile['activePaper'], callback );
 		}
 
@@ -588,7 +588,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Shorthand to get the current user's private messages
 		 */
 		User.prototype.getUserMessages = function( callback ) {
-			// Get user messages
+			// Pass query to account API
 			this.accountIO.getUserMessages( callback );
 		}
 
@@ -596,7 +596,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Shorthand to get user team details
 		 */
 		User.prototype.getUserTeamDetails = function( callback ) {
-			// Get team details
+			// Pass query to account API
 			this.accountIO.getUserTeamDetails( callback );
 		}
 
@@ -604,7 +604,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Shorthand to update the current user's paper
 		 */
 		User.prototype.updateUserPaper = function( fields, callback ) {
-			// Get user paper
+			// Pass query to account API
 			this.updatePaper( this.profile['activePaper'], fields, callback );
 		}
 
@@ -612,7 +612,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Create new paper on the user account
 		 */
 		User.prototype.createPaper = function( callback ) {
-			// Create a new paper
+			// Pass query to account API
 			this.accountIO.createPaper( callback );
 		};
 
@@ -620,7 +620,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Focus on a particular paper
 		 */
 		User.prototype.focusPaper = function( paper_id, callback ) {
-			// Create a new paper
+			// Pass query to account API
 			this.accountIO.focusPaper( paper_id, callback );
 		};
 
@@ -628,7 +628,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Get book questions
 		 */
 		User.prototype.getBookExam = function( callback ) {
-			// Get user paper
+			// Pass query to account API
 			this.accountIO.getBookExam( callback );
 		}
 
@@ -636,7 +636,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Send book answers
 		 */
 		User.prototype.sendBookAnswers = function( answers, callback ) {
-			// Get user paper
+			// Pass query to account API
 			this.accountIO.sendBookAnswers( answers, callback );
 		}
 
@@ -645,7 +645,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Query and return learning evaluation questions
 		 */
 		User.prototype.getLearningEvalQuestions = function( callback ) {
-			// Forward to account IO
+			// Pass query to account API
 			this.accountIO.getLearningEvalQuestions( callback );
 		}
 		
@@ -653,7 +653,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Send back evaluation questions
 		 */
 		User.prototype.sendLearningEvalAnswers = function( answers, id, callback ) {
-			// Forward to account IO
+			// Pass query to account API
 			this.accountIO.sendLearningEvalAnswers( answers, id, callback );
 		}
 
@@ -680,7 +680,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Get book profile
 		 */
 		User.prototype.getProfileBooks = function(callback) {
-			// Forward book profile request
+			// Pass query to account API
 			this.accountIO.getProfileBooks(callback);
 		}
 
@@ -688,7 +688,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Commit user variables to the database
 		 */
 		User.prototype.commitUserRecord = function() {
-			// Commit user variables
+			// Pass query to account API
 			this.accountIO.sendVariables(this.vars);
 		}
 
@@ -696,7 +696,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Shorthand to get the specified part details
 		 */
 		User.prototype.getPartDetails = function( partName, callback ) {
-			// Get part papers
+			// Pass query to account API
 			this.accountIO.getPartDetails( partName, callback );
 		}
 
@@ -704,7 +704,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Shorthand to get observable details
 		 */
 		User.prototype.getObservableDetails = function( observableList, callback ) {
-			// Get part papers
+			// Pass query to account API
 			this.accountIO.getObservableDetails( observableList, callback );
 		}
 
@@ -712,9 +712,17 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Shorthand to unlock the specified part
 		 */
 		User.prototype.unlockMachineStage = function( partName, callback ) {
-			// Get part papers
+			// Pass query to account API
 			this.accountIO.unlockMachineStage( partName, callback );
 		}
+
+		/**
+		 * Get all levels including their status
+		 */
+		User.prototype.enumLevels = function( callback ) {
+			// Pass query to account API
+			this.accountIO.enumLevels( callback );
+		};
 
 		/**
 		 * Get user's eligibility status to the active awards

@@ -169,12 +169,13 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		 * @param {function} callback - The callback to fire when a response arrives
 		 *
 		 */
-		APILabSocket.prototype.submitJob = function(parameters, histograms, callback) {
+		APILabSocket.prototype.submitJob = function(parameters, histograms, level, callback) {
 
 			// Submit a job request
 			this.sendAction("job.submit", {
 				'parameters': parameters,
-				'observables': histograms || []
+				'observables': histograms || [],
+				'level': level
 			}, callback);
 
 			// Mark simulation as active

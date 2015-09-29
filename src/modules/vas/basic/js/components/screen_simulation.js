@@ -34,6 +34,7 @@ define(
 			this.labapi = null;
 			this.submitTunables = null;
 			this.submitObservables = null;
+			this.submitLevel = null;
 			this.existingResults = false;
 			this.lastHistograms = [];
 			this.lastHistogramsIndex = {};
@@ -638,9 +639,10 @@ define(
 		 * onWillShow event.
 		 *
 		 */
-		SimulationScreen.prototype.onSubmitRequest = function( tunables, observables ) {
+		SimulationScreen.prototype.onSubmitRequest = function( tunables, observables, level ) {
 			this.submitTunables = tunables;
 			this.submitObservables = observables;
+			this.submitLevel = level;
 		}
 
 		/**
@@ -702,7 +704,7 @@ define(
 					if (status == "ok") {
 
 						// Submit job
-						this.labapi.submitJob( this.submitTunables, this.submitObservables );
+						this.labapi.submitJob( this.submitTunables, this.submitObservables, this.submitLevel );
 
 						// Check if user has not seen the intro tutorial, show it now
 						if (!User.isFirstTimeSeen("simulation.intro")) {
@@ -730,6 +732,7 @@ define(
 					// Reset
 					this.submitTunables = null;
 					this.submitObservables = null;
+					this.submitLevel = null;
 
 				}).bind(this));
 
