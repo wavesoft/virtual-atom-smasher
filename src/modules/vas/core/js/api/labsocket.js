@@ -78,6 +78,15 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 				// Simulation is completed
 				this.running = false;
 
+			} else if (action == "job.exists") { /* Job already exists */
+				console.log("Job exists");
+
+				// Fire callbacks
+				this.trigger('runExists');
+
+				// Simulation is completed
+				this.running = false;
+
 			} else if (action == "job.failed") { /* Simulation failed */
 				console.error("Simulation error:", data['message']);
 

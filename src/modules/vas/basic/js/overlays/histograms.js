@@ -65,7 +65,7 @@ define(
 				    weight: (function( itemElem ) {
 				    	var hid = $(itemElem).data("hid"),
 				    		record = this.histogramIndex[hid],
-				    		fit = record.fit ? record.fit[0] : 0;
+				    		fit = (record ? (record.fit ? record.fit[0] : 0) : 0);
 				    	// Icons have bigger weight
 				    	if ($(itemElem).hasClass("histo-icon")) {
 				    		fit += 10000;

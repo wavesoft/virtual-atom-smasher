@@ -48,7 +48,8 @@ define(
 			// Convert job status integer to string
 			var status_str = [
 				'Pending', 'Running', 'Completed',
-				'Failed', 'Cancelled', 'Stalled'
+				'Failed', 'Cancelled', 'Stalled',
+				'Archived'
 			];
 			details['status_str'] = status_str[ details['status'] ];
 

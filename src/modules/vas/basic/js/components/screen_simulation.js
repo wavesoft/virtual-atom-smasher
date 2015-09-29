@@ -34,6 +34,9 @@ define(
 			this.labapi = null;
 			this.submitTunables = null;
 			this.submitObservables = null;
+			this.existingResults = false;
+			this.lastHistograms = [];
+			this.lastHistogramsIndex = {};
 
 			//
 			// Create globe
@@ -140,7 +143,7 @@ define(
 			}).bind(this));
 
 			//
-			//
+			// Bind a handler to the 'play game' button
 			//
 			this.select(".p-game").click((function(e) {
 				// Cancel event
@@ -203,6 +206,11 @@ define(
 			this.numConnectedMachines = 0;
 			this.pinIndex = { };
 			this.activeJob = null;
+			this.existingResults = true;
+
+			// Reset last histograms
+			this.lastHistograms = [];
+			this.lastHistogramsIndex = {};
 
 			// Reset globe
 			this.globe.removeAllPins();
@@ -312,6 +320,9 @@ define(
 			// Store on observables
 			this.observables.push( obs );
 
+			// REturn record
+			return obs;
+
 		}
 
 		/**
@@ -416,7 +427,12 @@ define(
 							hist = histoMap[obs['name']];
 
 						// Fire respective observable
-						this.createObservable( hist.id, obs );
+						var obs = this.createObservable( hist.id, obs );
+
+						// Update component if we have data
+						if (this.lastHistogramsIndex[hist.id] !== undefined) {
+							obs.com.onUpdate( this.lastHistogramsIndex[hist.id] );
+						}
 
 					}
 
@@ -433,7 +449,14 @@ define(
 			// the possibly open overlay component.
 			//
 			labSocket.on('histogramsUpdated', (function(histos) {
+
+				// Update histograms and index
 				this.lastHistograms = histos;
+				for (var i=0; i<histos.length; i++) {
+					this.lastHistogramsIndex[histos[i].id] = histos[i];
+				}
+
+				// Make 'view' button clickable
 				this.select(".p-view").removeClass("disabled");
 
 				// Update all observables
@@ -456,12 +479,18 @@ define(
 			labSocket.on('metadataUpdated', (function(meta) {
 				var currNevts = parseInt(meta['nevts']),
 					progValue = currNevts * 100 / this.maxEvents;
-				this.select(".p-progress .panel-value").text( Math.round(progValue) + " %" );
 
-				// Switch to running
-				if (currNevts > 0)
-					this.select(".p-run-status").text("RUNNING");
+				// Update UI only if we are not displaying existing results
+				if (!this.existingResults) {
+					// Set progress
+					this.select(".p-progress .panel-value")
+						.text( Math.round(progValue) + " %" );
+					// Switch to running
+					if (currNevts > 0)
+						this.select(".p-run-status").text("RUNNING");
+				}
 
+	
 				// Calculate rate
 				var currTime = Date.now();
 				if (this.lastEventsTime) {
@@ -534,8 +563,9 @@ define(
 			//
 			// Reset interface when current job is deselected
 			//
-			labSocket.on('jobDeselected', (function() {
-				this.resetInterface();
+			labSocket.on('jobDeselected', (function(jobid) {
+				if (this.activeJob == jobid)
+					this.resetInterface();
 			}).bind(this));
 
 			//
@@ -560,6 +590,31 @@ define(
 			//
 			labSocket.on('runCompleted', (function() {
 				this.resetInterface();
+			}).bind(this));
+
+			//
+			// When such job is already exists
+			//
+			labSocket.on('runExists', (function() {
+
+				// Make the interface aware of the situation
+				this.select(".p-run-status").text( "ARCHIVED" );
+				this.select(".p-progress .panel-value").text( "---" );
+				this.select(".p-machines .panel-value").text("---");
+				this.select(".p-events .panel-value").text("---");
+				this.select(".p-abort").addClass("disabled");
+				this.select(".p-details").removeClass("disabled");
+
+				// Set the existing flag
+				this.existingResults = true;
+
+				// Do not allow to submit another job
+				UI.scheduleFlash(
+					"Existing Submission", 
+					"Someone has already tried this configuration. We are presenting you the results.",
+					"flash-icons/relax.png"
+				);
+
 			}).bind(this));
 
 			//
