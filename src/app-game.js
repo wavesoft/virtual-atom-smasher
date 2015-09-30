@@ -121,13 +121,19 @@ requirejs(['require', 'extern', 'core', 'vas', 'tootr'
 						// Load extension pack
 						if (arg == "load") {
 							var pkgURL = "";
-							if (value.indexOf("@") > -1) {
-								// Github version
-								parts = value.split("@");
-								pkgURL = "https://rawgit.com/"+parts[1]+"/"+parts[0]+"/master/src/main.js";
-							} else {
-								// Raw URL
+							if (value.match(/https?:\/\//)) {
+								// Raw URL Specified
 								pkgURL = value;
+							} else {
+								// Github package 
+								var parts = value.split("/");
+								if (parts.length > 2) {
+									pkgURL = "https://rawgit.com/"+value+"/src/main.js";
+								} else if (parts.length == 2) {
+									pkgURL = "https://rawgit.com/"+parts[0]+"/"+parts[1]+"/master/src/main.js";
+								} else {
+									pkgURL = "https://rawgit.com/"+parts[0]+"/vas-customisations/master/src/main.js";
+								}
 							}
 
 							// Register the loading of that package as a chain function
