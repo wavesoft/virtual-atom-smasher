@@ -23,6 +23,7 @@
     "overlay.machinepart.paper": "This is a tab in the `overlay.machinepart` screen that provides quick access to the user's papers.",
     "overlay.machinepart.results": "This is a tab in the `overlay.machinepart` screen that provides quick access to the user's past results.",
     "overlay.machinepart.unlock": "This is a tab in the `overlay.machinepart` screen that provides the unlocking interface to more parameters.",
+    "overlay.flash": "This is the round pop-up that appears in the center of the screen when something important needs to be shown to the user",
 
     "profilepart.book": "This is a floating tab in the `screen.status` screen that shows the knowledge the user has explored so far.",
     "profilepart.papers": "This is a floating tab in the `screen.status` screen that shows to the user the papers (s)he has access to.",

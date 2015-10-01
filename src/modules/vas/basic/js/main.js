@@ -30,7 +30,7 @@ define(
 	'vas/basic/components/screen_introgame',
 	'vas/basic/components/screen_passwordreset',
 	'vas/basic/components/screen_simulation',
-	// 'vas/basic/components/screen_home_new',
+	'vas/basic/components/screen_home_new',
 
 	// Subscreens
 	'vas/basic/components/screen_observable_short',

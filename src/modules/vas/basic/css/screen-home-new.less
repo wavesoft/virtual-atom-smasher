@@ -212,21 +212,162 @@
         background-image: url(modules/vas/basic/img/backgrounds/levels.png);
         background-repeat: no-repeat;
         background-position: center;
-        background-size: cover;
         position: absolute;
         width: 1024px;
         height: 257px;
         left: 50%; top: 100%;
         -webkit-transform: translate(-512px,-256px);
         transform: translate(-512px,-256px);
+        
+        .levelbtn {
+          display: block;
+          position: absolute;
+          width: 142px;
+          height: 142px;
+          cursor: pointer;
+          .transform( translate(-71px, -71px) );
+
+          .level-back {
+            position: absolute;
+            left: 0; top: 0;
+            width: 142px; height: 142px;
+            background-image: url(modules/vas/basic/img/buttons/btn-levels.png);
+            background-repeat: no-repeat;
+            background-position: 0 142px;
+            opacity: 0;
+            .transition( opacity 0.25s );
+          }
+
+          &.inactive {
+            .level-back {
+              background-position: 0 -284px;
+              opacity: 1;
+            }
+            &:hover .level-back {
+              background-position: 0 -284px;
+            }
+            &:active .level-back{
+              background-position: 0 -284px;
+            }
+          }
+          &:hover .level-back {
+            opacity: 1;
+            background-position: 0 0;
+          }
+          &:active .level-back {
+            opacity: 1;
+            background-position: 0 -142px;
+          }
+
+          &.level-1 {
+            left: 107px; top: 162px;
+          }
+          &.level-2 {
+            left: 259px; top: 168px;
+          }
+          &.level-3 {
+            left: 409px; top: 115px;
+          }
+          &.level-4 {
+            left: 566px; top: 170px;
+          }
+          &.level-5 {
+            left: 693px; top: 191px;
+          }
+          &.level-6 {
+            left: 814px; top: 134px;
+          }
+          &.level-7 {
+            left: 935px; top: 176px;
+          }
+
+          .level-title {
+              .font-handwriting();
+              font-size: 36px;
+              color: #fff;
+              font-weight: bold;
+              position: absolute;
+              text-align: center;
+              width: 100%;
+              top: 12px;
+          }
+
+          .level-stars {
+            width: 124px;
+            height: 60px;
+            background-image: url(modules/vas/basic/img/elements/stars.png);
+            background-repeat: no-repeat;
+            background-position: 0 0;
+            position: absolute;
+            left: 12px;
+            top: 60px;
+
+            &.stars-1 {
+              background-position: 0 -60px;            
+            }
+            &.stars-2 {
+              background-position: 0 -120px;            
+            }
+            &.stars-3 {
+              background-position: 0 -180px;            
+            }
+            &.stars-hide {
+              display: none;
+            }
+
+          }
+
+        }
+
       }
 
       .navbtn-levels {
+        .transition( color 0.5s );
         position: absolute;
         height: 257px;
-        width: 32px;
-        background-color: red;
+        width: 100px;
         cursor: pointer;
+        font-size: 38px;
+        text-align: center;
+        padding-top: 63px;
+        color: #f1c40f;
+        
+        &::after {
+          .transition( opacity 0.5s );
+          position: absolute;
+          left: 0; top: 0;
+          height: 257px;
+          width: 100px;
+          opacity: 0;
+          content: " ";
+        }
+
+        &:hover {
+          color: #FFF;
+        }
+
+        &.navbtn-lvl-left:hover::after {
+          opacity: 1;
+          /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0+100;White+to+Transparent */
+          background: -moz-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+          background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+          background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+          background: -o-linear-gradient(left, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+          background: -ms-linear-gradient(left, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
+          background: linear-gradient(to right, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C */
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 */
+        }
+        &.navbtn-lvl-right:hover::after {
+          opacity: 1;
+          /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&0+1,1+99 */
+          background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 1%, rgba(255,255,255,1) 99%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+          background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(1%,rgba(255,255,255,0)), color-stop(99%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+          background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0) 1%,rgba(255,255,255,1) 99%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+          background: -o-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0) 1%,rgba(255,255,255,1) 99%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+          background: -ms-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0) 1%,rgba(255,255,255,1) 99%,rgba(255,255,255,1) 100%); /* IE10+ */
+          background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0) 1%,rgba(255,255,255,1) 99%,rgba(255,255,255,1) 100%); /* W3C */
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 */
+        }
       }
 
       .navbtn-lvl-left {
