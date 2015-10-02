@@ -4,7 +4,6 @@
         "dictionaries": ["jsdoc","closure"]
     },
     "source": {
-        "include": [ "src/modules/core", "src/modules/vas/core", "src/modules/vas" ],
         "includePattern": ".+\\.js(doc)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
@@ -13,17 +12,23 @@
         "destination": "./doc/JSDoc/html",
         "recurse": true
     },
-    "plugins": [],
+    "plugins": [ "doc/JSDoc/plugins/registry" ],
     "templates": {
-        "cleverLinks": false,
-        "monospaceLinks": false,
-        "systemName": "Virtual Atom Smasher",
-        "copyright": "(C) Ioannis Charalampidis, Citizen Cyberlab, 2014-2015",
-        "navType": "inline",
-        "linenums": true,
-        "theme": "oblivion",
-        "default": {
-          "outputSourceFiles": true
-        }
+        "applicationName": "Virtual Atom Smasher",
+        "disqus": "",
+        "googleAnalytics": "",
+        "openGraph": {
+            "title": "",
+            "type": "website",
+            "image": "",
+            "site_name": "",
+            "url": ""
+        },
+        "meta": {
+            "title": "",
+            "description": "",
+            "keyword": ""
+        },
+        "linenums": true
     }
 }
