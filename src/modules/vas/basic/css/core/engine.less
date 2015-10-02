@@ -1,0 +1,322 @@
+
+///////////////////////////////////////////////////
+// engine.less - Bare minimum, core engine styling
+// -----------------------------------------------
+// The classes in this file style ONLY engine,
+// elements, meaning elements constructed by the
+// vas/core modules.
+///////////////////////////////////////////////////
+
+// ==================================
+// Core page styling
+// ==================================
+
+// Hack for full-screen resizing
+html, body {
+	overflow: hidden;
+	padding: 0;	margin: 0;
+	height: 100%;
+}
+
+// Page Body
+body {
+	background-image: url("@{vas-basic-img-path}/background/basic.jpg");
+	background-size: cover;
+	background-position: top center;
+	background-repeat: no-repeat;
+}
+
+// Common input style
+input, textarea, keygen, select, button {
+	margin: 2px;
+	font-size: 14px;
+}
+
+// Common link style
+a {
+	color: #2980B9;
+	text-decoration: none;
+
+	&:hover {
+		color: #3498DB;
+		text-decoration: underline;
+	}
+}
+
+// ==================================
+// Engine Components
+// ==================================
+
+//
+// An overlay screen 
+//
+.overlay {
+	position: absolute;
+	left: 0; right: 0;
+	width: 100%; height: 100%;
+	z-index: 10010;
+
+	.mask-part {
+		position: absolute;
+		background-color: rgba(0,0,0,0.6);
+	}
+	.mask-ring {
+		position: absolute;
+		border: solid 6px #FFF;
+		.border-radius( 4px );
+	}
+
+	&.loading {
+		&:after {
+			background: url("@{vas-basic-img-path}/loading.gif") no-repeat center center;
+			width: 64px; height: 64px;
+			left: 48%; top: 48%;
+			position: absolute;
+			display: block;
+			content: " ";
+		}
+		.nav-button {
+			display: none;
+		}
+	}
+
+	h1,h2,h3,h4,h5 {
+		.glyphicon {
+			opacity: 0.5;
+		}
+	}
+	
+}
+
+// ==================================
+// Skip/Playback Button
+// ==================================
+
+// Base Styling
+.nav-button {
+	.border-radius( 20px );
+	display: block;
+	z-index: 20000;
+	background-color: #FFF;
+	border: solid 1px #95A5A6;
+	color: #95A5A6;
+	height: 20px;
+	cursor: pointer;
+
+	text-decoration: none;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 14px;
+
+	padding: 5px 12px 9px;
+	font-size: 18px;
+}
+
+// Mouse over
+.nav-button:hover {
+	text-decoration: none;
+}
+
+// Positioning of playback
+.nav-button-playback {
+	position: absolute;
+	right: 95px;
+	bottom: 10px;
+	padding: 6px 8px 8px;
+}
+.nav-button-skip {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+}
+
+// ==================================
+// In-Place Integrated Editor Env.
+// ==================================
+
+// Show IPDE buttons with the enable-ipide class
+body.enable-ipide {
+	.btn-edit-component {
+		display: block;
+	}
+}
+
+// The edit button for the IPIDE
+.btn-edit-component {
+	.border-radius(32px);
+	.transition( all 0.5s );
+	display: none;
+
+	opacity: 0.5;
+	color: #fff;
+	position: absolute;
+	right: 34px; top: 2px;
+	width: 32px; height: 32px;
+	line-height: 32px;
+	font-size: 20px;
+	text-align: center;
+	z-index: 9999;
+
+	&:hover {
+		opacity: 1;
+		background-color: #FF9900;
+	}
+}
+
+// ===============================
+//  Growl widgets
+// ===============================
+
+.growl {
+	.border-radius(10px);
+	.transition( top 0.5s );
+	.box-shadow( 1px 1px 7px #000 );
+
+	position: absolute;
+	border: solid 2px;
+	z-index: 10000;
+	right: 10px;
+
+	width: 200px;
+	height: 54px;
+	padding: 10px;
+	margin: 5px;
+	font-size: 14px;
+	cursor: pointer;
+
+	// Styling
+	border-color: #bdc3c7;
+	background-color: #ecf0f1;
+	color: #333;
+
+	&.alert {
+		border-color: #c0392b;
+		background-color: #e74c3c;
+		color: #fff;
+	}
+
+	&.success {
+		border-color: #16a085;
+		background-color: #16a085;
+		color: #ffffff;
+	}
+
+	&.info {
+		border-color: #2980b9;
+		background-color: #3498db;
+		color: #ffffff;
+	}
+
+	&.critical {
+		background-image: url("@{vas-basic-img-path}/bits/stripes-white.png");
+		border-color: #c0392b;
+		background-color: #e74c3c;
+		color: #fff;
+	}
+
+}
+
+// ================================
+//  Placeholder for missing screen
+// ================================
+
+.screen.error-screen {
+	min-height: 48px;
+	background-color: #FFE0CC !important;
+	background-position: center center;
+	background-repeat: no-repeat;
+	border: solid 5px #FF6600;
+	background-image: url(@image-warning);
+}
+
+
+// ===============================
+//  Main game frame
+// ===============================
+
+#game-frame {
+
+	// For page transitions
+	-webkit-perspective: 1200px;
+	-moz-perspective: 1200px;
+	perspective: 1200px;
+
+	// General full-screen screens
+	.screen {
+		position: absolute;
+		left: 0; top: 0;
+		width: 100%; height: 100%;
+
+		// For page transitions
+		overflow: hidden;
+		display: none;
+		-webkit-backface-visibility: hidden;
+		   -moz-backface-visibility: hidden;
+		    -ms-backface-visibility: hidden;
+		     -o-backface-visibility: hidden;
+		       backface-visibility: hidden;
+		-webkit-transform: translate3d(0, 0, 0);
+		   -moz-transform: translate3d(0, 0, 0);
+		    -ms-transform: translate3d(0, 0, 0);
+		     -o-transform: translate3d(0, 0, 0);
+		        transform: translate3d(0, 0, 0);
+		-webkit-transform-style: preserve-3d;
+		   -moz-transform-style: preserve-3d;
+		    -ms-transform-style: preserve-3d;
+		     -o-transform-style: preserve-3d;
+		        transform-style: preserve-3d;
+		
+		// For page transitions
+		&.pt-current {
+			display: block;
+		}
+
+		// For the backdrop
+		.backdrop {
+			.pointer-events( none );
+			position: absolute;
+			left: 0; top: 0;
+			width: 100%; height: 100%;
+			overflow: hidden;
+		}
+
+		// For the foredrop
+		.foreground {
+			position: absolute;
+			left: 0; top: 0;
+			width: 100%; height: 100%;
+			overflow: hidden;
+		}
+
+	}
+
+	// The main game component
+	.host-main {
+		.transition( all 0.5s );
+		&.fx-blur {
+			.filter( blur(10px) );
+		}
+	}
+	
+	// The overlay game component
+	.host-overlay {
+		.overlay-window {
+			position: absolute;
+			left: 10%; top: 10%;
+			width: 80%; height: 80%;
+			
+			h1,h2,h3,h4,h5 {
+				.glyphicon {
+					opacity: 0.5;
+				}
+			}
+
+		}
+
+		.host-overlay-navbar {
+			position: absolute;
+			left: 10px;
+			top: 10px;
+		}
+	}
+
+}

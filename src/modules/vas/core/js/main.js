@@ -78,7 +78,7 @@ define("vas/core",
 								}
 							}
 						],
-						"logo.png"
+						"logo/vas.png"
 					);
 
 			} else {
@@ -145,49 +145,6 @@ define("vas/core",
 			var mininavDOM = $('<div class="'+config.css['nav-mini']+'"></div>');
 			UI.host.append(mininavDOM);
 			
-			// Try to create mini-nav
-			UI.mininav = R.instanceComponent("nav.mini", mininavDOM);
-			if (UI.mininav !== undefined) {
-
-				// Check for preferred dimentions
-				var dim = UI.mininav.getPreferredSize();
-				if (dim !== undefined) {
-					mininavDOM,css({
-						'width': dim[0],
-						'height': dim[1]
-					});
-					UI.mininav.onResize( dim[0], dim[1] );
-				} else {
-					UI.mininav.onResize( mininavDOM.width(), mininavDOM.height() );
-				}
-
-				// Bind events
-				UI.mininav.on("changeScreen", function(to) {
-					if (to == "screen.home") {
-						VAS.displayHome(true);
-					} else {
-						UI.selectScreen(to, UI.Transitions.ZOOM_OUT);
-					}
-				});
-				// Bind events
-				UI.mininav.on("displayKnowledge", function() {
-					VAS.displayKnowledge();
-				});
-				UI.mininav.on("displayStatus", function() {
-					VAS.displayStatus();
-				});
-				UI.mininav.on("displayTuningScreen", function() {
-					VAS.displayTuningScreen();
-				});
-				UI.mininav.on("displayJobs", function() {
-					VAS.displayJobs();
-				});
-				UI.mininav.on('displayMenu', function() {
-					VAS.displayMenu();
-				});
-
-			}
-
 			// Add CernVM WebAPI script to the main page
 			$('head').append('<script type="text/javascript" src="http://cernvm.cern.ch/releases/webapi/js/cvmwebapi-latest.js"></script>');
 
@@ -330,7 +287,7 @@ define("vas/core",
 								// Post-login initialize
 								VAS.postLoginInitialize(function() {
 									// Display home page
-									VAS.displayTuningScreen();
+									VAS.displayHomeScreen();
 								});
 
 							}
@@ -353,7 +310,7 @@ define("vas/core",
 							} else {
 
 								// When the reset e-mail is sent, open the reset password interface
-								UI.showOverlay("screen.resetpassword", function(scrReset) {
+								UI.showOverlay("overlay.passwordreset", function(scrReset) {
 
 									UI.growl( "We have sent a password reset pin to your e-mail address", "info", 10000 );
 
@@ -388,7 +345,7 @@ define("vas/core",
 												// Post-login initialize
 												VAS.postLoginInitialize(function() {
 													// Display home page
-													VAS.displayTuningScreen();
+													VAS.displayHomeScreen();
 												});
 
 												// ----------------------------
@@ -406,7 +363,7 @@ define("vas/core",
 
 					});
 					scrLogin.on('register', function(email, password) {
-						UI.showOverlay("screen.register", function(scrRegister) {
+						UI.showOverlay("overlay.register", function(scrRegister) {
 
 							// Update information
 							scrRegister.onProfileDefined({
@@ -444,7 +401,7 @@ define("vas/core",
 										// Post-login initialize
 										VAS.postLoginInitialize(function() {
 											// Display home page
-											VAS.displayTuningScreen();
+											VAS.displayHomeScreen();
 										});
 
 									}
@@ -468,11 +425,11 @@ define("vas/core",
 					}
 
 					// Complete login
-					prog_introstats.ok("Statistics tutorial ready");
+					prog_introstats.ok("Statistics tutorial is ready");
 					cb();
 				};	
 
-			var prog_results = progressAggregator.begin(1),
+			var //prog_results = progressAggregator.begin(1),
 				init_results = function(cb) {
 					var scrResults = VAS.scrResults = UI.initAndPlaceScreen("screen.results");
 					if (!scrResults) {
@@ -493,7 +450,7 @@ define("vas/core",
 					cb();
 				};	
 
-			var prog_status = progressAggregator.begin(1),
+			var //prog_status = progressAggregator.begin(1),
 				init_status = function(cb) {
 					var scrStatus = VAS.scrStatus = UI.initAndPlaceScreen("screen.status");
 					if (!scrStatus) {
@@ -529,7 +486,7 @@ define("vas/core",
 					cb();
 				};	
 
-			var prog_team = progressAggregator.begin(1),
+			var //prog_team = progressAggregator.begin(1),
 				init_team = function(cb) {
 
 					// Prepare team screens
@@ -564,30 +521,10 @@ define("vas/core",
 					}
 
 					// Bind events
-					scrHome.on('help', function(term) {
-						VAS.displayHelp(term);
-					});
-					scrHome.on('changeScreen', function(name) {
-						UI.selectScreen(name);
-					});
-					scrHome.on('showKnowledge', function() {
-						VAS.displayKnowledge();
-					});
-					scrHome.on('showMachine', function(name) {
-						VAS.displayTuningScreen();
-					});
-					scrHome.on('showJobs', function() {
-						VAS.displayJobs();
-					});
-					scrHome.on('flash', function(title,body,icon) {
-						UI.scheduleFlash(title, body, icon);
-					});
-
-					// Fire the basic state change events
-					scrHome.onStateChanged( 'simulating', false );
+					// TODO: Implement the home screen events
 
 					// Complete home
-					prog_home.ok("Home screen ready");
+					prog_home.ok("Home screen is ready");
 					cb();
 				};
 
@@ -600,12 +537,12 @@ define("vas/core",
 					}
 
 					// Complete login
-					prog_cinematic.ok("Cinematic screen ready");
+					prog_cinematic.ok("Cinematic screen is ready");
 					cb();
 				};				
 
-			var prog_jobs = progressAggregator.begin(1),
-				init_jobs = function(cb) {
+			var prog_sim = progressAggregator.begin(1),
+				init_sim = function(cb) {
 					var scrJobs = VAS.scrJobs = UI.initAndPlaceScreen("screen.simulation");
 					if (!scrJobs) {
 						UI.logError("Core: Unable to initialize jobs screen!");
@@ -617,7 +554,7 @@ define("vas/core",
 						VAS.displayHelp(term);
 					});
 					scrJobs.on('hideJobs', function() {
-						VAS.displayTuningScreen(UI.Transitions.DIFF_BOTTOM);
+						VAS.displayHomeScreen(UI.Transitions.DIFF_BOTTOM);
 					});
 					scrJobs.on('feedback', function(data) {
 						VAS.sendFeedback(data);
@@ -630,11 +567,11 @@ define("vas/core",
 					});
 
 					// Complete login
-					prog_jobs.ok("Jobs screen ready");
+					prog_sim.ok("Simulation screen is ready");
 					cb();
 				};				
 
-			var prog_courseroom = progressAggregator.begin(1),
+			var //prog_courseroom = progressAggregator.begin(1),
 				init_courseroom = function(cb) {
 					var scrCourseroom = VAS.scrCourseroom = UI.initAndPlaceScreen("screen.courseroom");
 					if (!scrCourseroom) {
@@ -647,7 +584,7 @@ define("vas/core",
 					cb();
 				};
 
-			var prog_menu = progressAggregator.begin(1),
+			var //prog_menu = progressAggregator.begin(1),
 				init_menu = function(cb) {
 					var scrMenu = VAS.scrMenu = UI.initAndPlaceScreen("screen.menu");
 					if (!scrMenu) {
@@ -662,7 +599,7 @@ define("vas/core",
 						VAS.displayTeam();
 					});
 					scrMenu.on('showJobs', function() {
-						VAS.displayJobs();
+						VAS.displaySimulation();
 					});
 					scrMenu.on('showKnowledge', function() {
 						VAS.displayKnowledge();
@@ -673,7 +610,7 @@ define("vas/core",
 					cb();
 				};				
 
-			var prog_courses = progressAggregator.begin(1),
+			var //prog_courses = progressAggregator.begin(1),
 				init_courses = function(cb) {
 					var scrKnowledge = VAS.scrKnowledge = UI.initAndPlaceScreen("screen.knowledge");
 					if (!scrKnowledge) {
@@ -740,7 +677,7 @@ define("vas/core",
 					cb();
 				};				
 
-			var prog_tune = progressAggregator.begin(1),
+			var //prog_tune = progressAggregator.begin(1),
 				init_tune = function(cb) {
 
 					// Create tuning screen
@@ -766,7 +703,7 @@ define("vas/core",
 
 						// Set job detals and display jobs screen
 						VAS.scrJobs.onSubmitRequest( values, observables );
-						VAS.displayJobs();
+						VAS.displaySimulation();
 
 					});
 					scrTuning.on('interpolateParameters', function(values) {
@@ -787,8 +724,8 @@ define("vas/core",
 					scrTuning.on('displayStatus', function() {
 						VAS.displayStatus();
 					});
-					scrTuning.on('displayJobs', function() {
-						VAS.displayJobs();
+					scrTuning.on('displaySimulation', function() {
+						VAS.displaySimulation();
 					});
 					scrTuning.on('feedback', function(data) {
 						VAS.sendFeedback(data);
@@ -819,9 +756,19 @@ define("vas/core",
 			setTimeout(function() {
 
 				var chainRun = [
-						init_api, init_home, init_jobs, init_cinematic, init_courseroom, init_courses, 
-						init_introstats, init_login, init_status, init_team, init_tune, init_results,
-						init_menu
+						init_api, 
+						init_home, 
+						init_sim, 
+						init_cinematic, 
+						// init_courseroom, 
+						// init_courses, 
+						init_introstats, 
+						init_login, 
+						// init_status, 
+						// init_team,
+						// init_tune, 
+						// init_results,
+						// init_menu
 					],
 					runChain = function(cb, index) {
 						var i = index || 0;
@@ -1001,17 +948,18 @@ define("vas/core",
 		 * Check user's record and show the appropriate home screen
 		 * configuration.
 		 */
-		VAS.displayHome = function( animateBackwards ) {
+		VAS.displayHomeScreen = function( anim ) {
 
 			// Select home screen
-			UI.selectScreen("screen.home", animateBackwards ? UI.Transitions.ZOOM_OUT : UI.Transitions.ZOOM_IN);
+			if (anim == undefined) anim = UI.Transitions.ZOOM_IN;
+			UI.selectScreen("screen.home", anim );
 
 		}
 
 		/**
 		 * Display the jobs screen
 		 */
-		VAS.displayJobs = function( animateBackwards ) {
+		VAS.displaySimulation = function( animateBackwards ) {
 
 			// Select jobs screen
 			UI.selectScreen("screen.simulation", animateBackwards ? UI.Transitions.DIFF_BOTTOM : UI.Transitions.DIFF_TOP);
@@ -1221,10 +1169,8 @@ define("vas/core",
 
 			// Display the intro sequence
 			UI.scheduleSequence( DB.cache['definitions']['intro-sequence']['sequence'] , function() {
-
 				// Display home page
-				VAS.displayTuningScreen();
-
+				VAS.displayHomeScreen();
 			});
 
 		}

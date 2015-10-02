@@ -1,0 +1,179 @@
+
+// ===============================
+//  On-Screen Pop-Up Window
+// ===============================
+.onscreen {
+	position: absolute;
+	background: rgba(64,64,64,0.9);
+	width: 350px;
+	height: 250px;
+	opacity: 0;
+	z-index: 0;
+
+	.border-radius( 8px );
+
+	.transform( scale(0.1) );
+	.easing-back-in();
+
+	&:after {
+		top: 50%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+		border-color: rgba(153, 153, 153, 0);
+		border-width: 16px;
+		margin-top: -16px;
+	}
+
+	&.visible {
+		z-index: 500;
+		opacity: 1;
+		.transform( scale(1) );
+		.easing-back-out( );
+	}
+
+	&.left {
+		&:after {
+			left: 100%;
+			border-left-color: rgba(64,64,64,0.9);
+		}
+	}
+
+	&.right {
+		&:after {
+			right: 100%;
+			border-right-color: rgba(64,64,64,0.9);
+		}
+	}
+
+	.bullet {
+		.border-radius( 8px );
+		position: absolute;
+		width: 10px;
+		height: 10px;
+		background: #e74c3c;
+		left: 8px;
+		top: 10px;
+	}
+
+	.title {
+		position: absolute;
+		left: 22px;
+		top: 5px;
+		right: 5px;
+		height: 18px;
+		overflow: hidden;
+		color: #FFF;
+		font-weight: bold;
+		font-size: 15px;
+
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+
+	.document {
+		position: absolute;
+		width: 340px;
+		height: 220px;
+		left: 5px;
+		top: 25px;
+		overflow-x: hidden;
+		overflow-y: auto;
+		color: #eee;
+	}
+
+	// Body with icon links
+	.body-more {
+		position: relative;
+		overflow: hidden;
+		width: 100%; height: 100%;
+
+		.body {
+			position: absolute;
+			overflow-x: hidden;
+			overflow-y: auto;
+			left: 0; top: 0;
+			width: 100%;
+			bottom: 36px;
+
+			&.tabular {
+				overflow: hidden;
+				> div {
+					position: absolute;
+					left: 0; width: 100%;
+					top: 0; height: 100%;
+					overflow-x: hidden;
+					overflow-y: auto;
+				}
+			}
+
+			a.tile-row {
+				display: block;
+				position: relative;
+				height: 45px;
+				color: #fff;
+				overflow: hidden;
+				text-align: left;
+				margin: 2px;
+
+				div.icon {
+					background-color: #666;
+					position: absolute;
+					left: 6px; top: 6px;
+					height: 32px; width: 32px;
+					background-position: center center;
+					background-repeat: no-repeat;
+					background-size: contain;
+				}
+
+				div.text {
+					display: block;
+					font-size: 14px;
+					position: absolute;
+					left: 45px; top: 11px;
+					text-align: left;
+				}
+
+				&:hover {
+					background-color: #666;
+				}
+
+			}
+		}
+		.more {
+			background-color: rgba(0,0,0,0.4);
+			.border-radius( 0px 0px 8px 8px );
+			position: absolute;
+			left: 0; right: 0; bottom: 0;
+			padding: 2px;
+			height: 28px;
+
+			a {
+				font-size: 14px;
+				display: inline-block;
+				text-decoration: none;
+				color: #FFF;
+				line-height: 24px;
+				height: 24px;
+				padding: 2px;
+				margin: 0px 2px;
+				border-radius: 4px;
+
+				&:hover, &.active {
+					background: #666;
+				}
+
+				&.important {
+					background-color: #e74c3c;
+				}
+
+			}
+		}
+
+	}
+
+}
+

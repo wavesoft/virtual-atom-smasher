@@ -1,0 +1,700 @@
+
+///////////////////////////////////////////////////
+// components.less - Complete, reusable components
+// ------------------------------------------------
+// The classes in this file define complete, styled
+// DOM composites. 
+///////////////////////////////////////////////////
+
+// ===============================
+// Custom table with bordered container
+// ===============================
+div.table-list {
+	background: rgba(255, 255, 255, 0.3);
+	border-top: solid 1px #cccccc;
+	border-bottom: solid 1px #cccccc;	
+
+	&.table-absolute {
+		table {
+			position: absolute;
+			thead {
+				position: absolute;
+			}
+			tbody {
+				position: absolute;
+			}
+		}
+	}
+
+	// Table subcontainer
+	table {
+		left: 0; width: 100%;
+		top: 0; height: 100%;
+
+		thead {
+			display: block;
+			left: 0; right: 0; top: 0;
+
+			border-bottom: solid 1px #CCC;
+			background-color: rgba(255,255,255,0.5);
+		}
+
+		tbody {
+			display: block;
+			left: 0; width: 100%;
+			bottom: 0;
+			top: 28px;
+		}
+
+		tr {
+			display: block;
+			height: 27px;
+
+			td, th {
+				float: left;
+				display: block;
+				overflow: hidden;
+				height: 25px;
+				line-height: 25px;
+				text-indent: 5px;
+				text-align: left;
+			}
+		}
+
+		tbody {
+			tr {
+				cursor: pointer;
+				&:hover {
+					background-color: rgba(255,255,255,0.4);
+				}
+				&:nth-child(odd) {
+					background-color: rgba(255,255,255,0.2);
+					&:hover {
+						background-color: rgba(255,255,255,0.6);
+					}
+				}
+				&.selected {
+					background-color: rgba(0, 0, 0, 0.6);
+					color: #fff;
+					&:hover {
+						background-color: rgba(0, 0, 0, 0.6);
+					}
+				}
+			}
+		}
+
+		// Column dimentions
+		.col-1   { width: 8.0% }
+		.col-2   { width: 16.0% }
+		.col-3   { width: 24.0% }
+		.col-4   { width: 32.0% }
+		.col-5   { width: 40.0% }
+		.col-6   { width: 48.0% }
+		.col-7   { width: 56.0% }
+		.col-8   { width: 64.0% }
+		.col-9   { width: 72.0% }
+		.col-10  { width: 80.0% }
+		.col-11  { width: 88.0% }
+		.col-12  { width: 100% }
+
+	}
+
+	// Scroll additions
+	&.table-scroll {
+		table {
+			thead {
+				tr {
+					margin-right: 18px;
+				}
+			}
+			tbody {
+				overflow-y: scroll;
+				overflow-x: none;
+			}
+		}
+	}
+
+	// Large line heights
+	&.table-sm {
+		table {
+			tr {
+				height: 20px;
+				td, th {
+					height: 18px;
+					line-height: 18px;
+				}
+			}
+			tbody {
+				top: 20px; 
+			}
+		}
+	}
+	&.table-lg {
+		table {
+			tr {
+				height: 36px;
+				td, th {
+					height: 34px;
+					line-height: 34px;
+				}
+			}
+			tbody {
+				top: 36px; 
+			}
+		}
+	}
+	&.table-center {
+		table {
+			tr {
+				td, th {
+					text-align: center;
+				}
+			}
+		}
+
+	}
+
+}
+
+// ===============================
+// Big navigation buttons
+// ===============================
+
+.navbtn-large {
+	.border-radius( 40px );
+	display: inline-block;
+	width: 64px;
+	height: 64px;
+	margin: 0 5px;
+	cursor: pointer;
+	line-height: 70px;
+	font-size: 32px;
+	text-align: center;
+	color: rgba(255,255,255,0.8);
+	position: relative;
+	z-index: 100;
+
+	div.title {
+		.transition( opacity 0.25s );
+		.pointer-events( none );
+		position: absolute;
+		width: 100px;
+		left: -22px;
+		font-size: 16px;
+		margin: 0;
+		padding: 4px;
+		line-height: 16px;
+		top: 65px;
+		color: #333;
+		opacity: 0;
+
+		&.title-top {
+			top: -28px;
+		}
+	}
+
+	&:hover {
+		.transform( scale(1.1) );
+		div.title {
+			opacity: 1;
+		}
+	}
+
+	&.navbtn-lower {
+		color: rgba(255,255,255,0.8);
+		background-color: #34495e;
+		&.active {
+			border: solid 4px #34495e;
+			.transform( scale(1.1) );
+			background-color: #ecf0f1;
+			color: #34495e;
+		}
+		div.title {
+			color: #2c3e50;
+		}
+	}
+	&.navbtn-upper {
+		background-color: #16a085;
+		div.title {
+			color: #16a085;
+		}
+	}
+
+	&.navbtn-feedback {
+		background-color: #7F8C8D;
+		div.title {
+			color: #7F8C8D;
+		}
+	}
+
+	&.navbtn-log-out {
+		background-color: #e74c3c;
+		div.title {
+			color: #e74c3c;
+		}
+	}
+
+	span.icon-direction {
+	    font-size:20px;
+	    position: absolute;
+	    opacity: 0.6;
+
+	    &.icon-direction-up {
+		    left: 22px;
+		    top: 2px;
+		    + span {
+			    top: 6px;
+			}
+		}
+
+	    &.icon-direction-down {
+		    left: 22px;
+		    top: 42px;
+		    + span {
+			    top: -6px;
+			}
+		}
+
+	    &.icon-direction-left {
+		    top: 22px;
+		    left: 2px;
+		    + span {
+			    left: 6px;
+			}
+		}
+
+	    &.icon-direction-right {
+		    top: 22px;
+		    left: 42px;
+		    + span {
+			    left: -6px;
+			}
+		}
+
+	}
+
+}
+
+// ===============================
+// Flat buttons
+// ===============================
+
+.btn-flat {
+	color: #2980b9;
+	padding: 4px 2px;
+	.border-radius( 2px );
+}
+
+.btn-flat:hover {
+	text-decoration: none;
+		
+	&.btn-flat-red {
+		color: #fff;
+		background-color: #e74c3c;	
+	}
+	&.btn-flat-green {
+		color: #fff;
+		background-color: #2ecc71;
+	}
+	&.btn-flat-blue {
+		color: #fff;
+		background-color: #3498db;
+	}
+	&.btn-flat-orange {
+		color: #fff;
+		background-color: #e67e22;
+	}
+	&.btn-flat-yellow {
+		color: #fff;
+		background-color: #f1c40f;
+	}
+	&.btn-flat-darkblue {
+		color: #fff;
+		background-color: #34495e;
+	}
+	&.btn-flat-purple {
+		color: #fff;
+		background-color: #9b59b6;
+	}
+	&.btn-flat-grey {
+		color: #fff;
+		background-color: #ecf0f1;
+	}
+
+}
+
+
+// ===============================
+// Rusable General-Purpose List
+// ===============================
+
+.list {
+	overflow-y: auto;
+	overflow-x: hidden;
+	> .list-item {
+		padding: 5px;
+		cursor: pointer;
+		.title {
+			font-weight: bold;
+		}
+		.subtitle {
+			font-size: 12px;
+		}
+		&.active {
+			background-color: rgba(0,0,0,0.3);
+		}
+	}
+
+	&.list-invert {
+		> .list-item.active {
+			background-color: rgba(255,255,255,0.3);
+		}
+	}
+}
+
+
+// ===============================
+// Shaded components
+// ===============================
+
+// A Shaded Panel
+.panel-shaded {
+	border-radius: 4px;
+	outline: none;
+	border-style: solid;
+	border-width: 2px 1px 1px;
+	text-align: center;
+	font-family: "Lucida Console", Monaco, monospace;
+	background-color: #EEE;
+	border-color: #BBB;
+}
+
+// A Shaded Button
+.btn-shaded {
+	.border-radius(4px);
+	position: relative;
+	outline: none;
+	color: #fff;
+	cursor: pointer;
+	border-style: none none solid none;
+	border-width: 5px;
+	text-align: center;
+	padding: 5px;
+
+	&.btn-with-icon {
+		font-size: 12px;
+
+		.glyphicon {
+			opacity: 0.9;
+			font-size: 20px;
+			margin-bottom: 8px;		
+		}
+		.uicon {
+			margin-bottom: 4px;
+		}
+	}
+
+	&.btn-lg {
+		padding: 20px;
+	}
+
+	&.disabled {
+		.pointer-events(none);
+		cursor: not-allowed;
+		background-color: #ccc !important;
+		border-color: #aaa !important;
+		color: #666 !important;
+		background-image: none !important;
+	}
+
+	// Stripped button
+	&.btn-striped {
+		background-image: url("@{vas-basic-img-path}/button/btn-striped-rect.png");
+		background-repeat: no-repeat;
+		background-position: center top;
+	}
+
+	// Coloring of the buttons
+	&.btn-red {
+		background-color: #e74c3c;
+		border-color: #c0392b;
+	}
+	&.btn-teal {
+		background-color: #1abc9c;
+		border-color: #16a085;
+	}
+	&.btn-green {
+		background-color: #2ecc71;
+		border-color: #27ae60;
+	}
+	&.btn-blue {
+		background-color: #3498db;
+		border-color: #2980b9;
+	}
+	&.btn-orange {
+		background-color: #e67e22;
+		border-color: #d35400;
+		color: #930;
+	}
+	&.btn-yellow {
+		background-color: #f1c40f;
+		border-color: #f39c12;
+		color: #630;
+	}
+	&.btn-darkblue {
+		background-color: #34495e;
+		border-color: #2c3e50;
+	}
+	&.btn-purple {
+		background-color: #9b59b6;
+		border-color: #8e44ad;
+	}
+	&.btn-grey {
+		background-color: #ecf0f1;
+		border-color: #bdc3c7;
+		color: #333;
+	}
+
+}
+
+.btn-shaded:active {
+	margin-top: 2px !important;
+	border-width: 2px;
+}
+
+// ===============================
+// Round buttons
+// ===============================
+
+.btn-round {
+	width: 45px;
+	height: 45px;
+	border-style: solid;
+	border-width: 2px;
+	line-height: 45px;
+	text-align: center;
+	cursor: pointer;
+	float: left;
+	margin: 0 5px 0 0;
+
+	.border-radius( 45px );
+
+	-webkit-transition: -webkit-transform 0.25s;
+	   -moz-transition: -moz-transform 0.25s;
+	   -o-transition: -o-transform 0.25s;
+	      transition: transform 0.25s;
+
+	&.btn-red {
+		background-color: #e74c3c;
+		border-color: #c0392b;
+	}
+	&.btn-green {
+		background-color: #2ecc71;
+		border-color: #27ae60;
+	}
+	&.btn-blue {
+		background-color: #3498db;
+		border-color: #2980b9;
+	}
+	&.btn-orange {
+		background-color: #e67e22;
+		border-color: #d35400;
+	}
+	&.btn-yellow {
+		background-color: #f1c40f;
+		border-color: #f39c12;
+	}
+	&.btn-darkblue {
+		background-color: #34495e;
+		border-color: #2c3e50;
+	}
+	&.btn-purple {
+		background-color: #9b59b6;
+		border-color: #8e44ad;
+	}
+	&.btn-grey {
+		background-color: #ecf0f1;
+		border-color: #bdc3c7;
+	}
+
+	&:hover {
+		.transform( scale(1.1) );
+	}
+
+}
+
+// ===============================
+//  Vertical grid system
+//  (Are we really using this?)
+// ===============================
+
+.vrows {
+
+	padding: 0;
+
+	.vrow-12, .vrow-1, .vrow-2, .vrow-3, .vrow-4, .vrow-5, .vrow-6,
+	.vrow-7, .vrow-8, .vrow-9, .vrow-10, .vrow-11, .vrow-12 {
+		margin: 0;
+		display: block;
+	}
+
+	.vrow-1 { height: 8.33%; }
+	.vrow-2 { height: 16.66%; }
+	.vrow-3 { height: 25%; }
+	.vrow-4 { height: 33.33%; }
+	.vrow-5 { height: 41.67%; }
+	.vrow-6 { height: 50%; }
+	.vrow-7 { height: 58.33%; }
+	.vrow-8 { height: 66.66%; }
+	.vrow-9 { height: 75%; }
+	.vrow-10 { height: 83.33%; }
+	.vrow-11 { height: 91.66%; }
+	.vrow-12 { height: 100%; }
+
+}
+
+// ===============================
+//  User interface icons
+// ===============================
+
+.glyphicon-uicon {
+	display: inline-block;
+	vertical-align: middle;
+	width: 24px;
+	height: 24px;
+	color: #ECF0F1;
+	text-align: center;
+	font-size: 18px;
+}
+
+.uicon {
+	background-image: url("@{vas-basic-img-path}/sprite/uicons-24.png");
+	background-repeat: no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+	width: 24px;
+	height: 24px;
+
+	&.uicon-explain {
+		background-position: 0px 0px;
+	}
+	&.uicon-gear {
+		background-position: -24px 0px;
+	}
+	&.uicon-eye {
+		background-position: -48px 0px;
+	}
+	&.uicon-pin {
+		background-position: -72px 0px;
+	}
+	&.uicon-x {
+		background-position: -96px 0px;
+	}
+	&.uicon-info {
+		background-position: -120px 0px;
+	}
+	&.uicon-game {
+		background-position: -144px 0px;
+	}
+	&.uicon-find {
+		background-position: -168px 0px;
+	}
+	&.uicon-warning {
+		background-position: -192px 0px;
+	}
+	&.uicon-plot-sideside {
+		background-position: -216px 0px;
+	}
+	&.uicon-plot-ratio {
+		background-position: -240px 0px;
+	}
+	&.uicon-play {
+		background-position: -264px 0px;
+	}
+	&.uicon-play-media {
+		background-position: -288px 0px;
+	}
+	&.uicon-sd {
+		background-position: -312px 0px;
+	}
+	&.uicon-undo {
+		background-position: -336px 0px;
+	}
+	&.uicon-next {
+		background-position: -360px 0px;
+	}
+	&.uicon-previous {
+		background-position: -384px 0px;
+	}
+	&.uicon-book {
+		background-position: -408px 0px;
+	}
+	&.uicon-book {
+		background-position: -408px 0px;
+	}
+	&.uicon-course {
+		background-position: -432px 0px;
+	}
+	&.uicon-money {
+		background-position: -456px 0px;
+	}
+}
+
+// ===============================
+//  Tabular layout
+// ===============================
+
+.tabs {
+	width: 100%;
+	height: 100%;
+	position: relative;
+
+	.tabs-body, .tabs-buttons {
+		position: absolute;
+		display: block;
+		overflow: hidden;
+	}
+
+	.tabs-body > .tab {
+		position: absolute;
+		left: 0; top: 0;
+		width: 100%; height: 100%;
+		overflow: hidden;
+
+		.tab-scrollable {
+			overflow-y: auto;
+		}
+
+		&.back-white {
+			background-color: rgba(255,255,255,0.9);
+		}
+	}
+
+	.tabs-buttons {
+		>* {
+			display: inline-block;
+			margin: 0;
+			padding: 2px;
+			text-decoration: none;
+
+			&:hover, &.active {
+				background-color: rgba(255,255,255,0.4);
+				color: #000;
+			}
+
+		}
+	}
+
+	&.tabs-right {
+		.tabs-body {
+			left: 0; right: 28px;
+			top: 0; bottom: 0;
+		}
+		.tabs-buttons {
+			right: 0; width: 28px;
+			top: 0; bottom: 0;
+			border-left: solid 1px #DDD;
+		}
+	}
+
+}

@@ -1,0 +1,390 @@
+
+///////////////////////////////////////////////
+// home.less - Home Screen
+///////////////////////////////////////////////
+
+//
+// Left menu buttons
+//
+
+.navbtn-left {
+  position: absolute;
+  width: 77px;
+  height: 42px;
+  cursor: pointer;
+
+  div.glyphicon {
+    position: absolute;
+    width: 77px;
+    height: 42px;
+    text-align: center;
+    font-size: 20px;
+    top: 4px;
+    left: -4px;
+    color: white;
+  }
+
+  div.title {
+    .pointer-events(none);
+    position: absolute;
+    padding: 4px;
+    width: 77px;
+    left: -8px;
+    top: 42px;
+    text-align: center;
+    opacity: 0;
+  }
+
+  &:hover {
+    div.title {
+      opacity: 1;
+    }
+    background-position: 0 42px;
+  }
+
+  &:active {
+    background-position: 0 84px;
+  }
+
+}
+
+//
+// Center menu buttons
+//
+
+.navbtn-center {
+  position: absolute;
+  width: 119px;
+  height: 112px;
+  top: -67px;
+  cursor: pointer;
+  background: url("modules/vas/basic/img/button/btn-middle.png") 0 0;
+
+  div.title {
+    .font-handwriting();
+    position: absolute;
+    width: 119px;
+    height: 42px;
+    bottom: 4px;
+    text-align: center;
+  }
+
+  div.info {
+    position: absolute;
+    width: 94px;
+    margin-right: 16px;
+    margin-left: 16px;
+    top: 0;
+    left: -4px;
+    color: white;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-height: 21px;
+    max-height: 63px;
+  }
+
+  &:hover {
+    // TODO check btn-middle.png
+
+    top: 0;
+    background-position: 0 -112px;
+
+    .transition(top 0.5s);
+
+  }
+
+  &:active {
+    background-position: 0 -224px;
+  }
+
+}
+
+//
+// Home Screen
+//
+
+.screen.home-new {
+  //width: 100%; height: 100%;
+  .fullscreen;
+  .unselectable;
+  .fx-animated;
+
+  min-width: 800px;
+  min-height: 600px;
+
+  background-image: url("modules/vas/basic/img/background/machine-back.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  // Top-left menu icons
+  .menu-icons {
+
+    // Top-left menu icons
+    .left-menu-icons {
+      float: left;
+
+      .navbtn-help {
+        background-image: url("modules/vas/basic/img/button/btn-help.png");
+      }
+
+      .navbtn-profile {
+        left: 77px;
+        background-image: url("modules/vas/basic/img/button/btn-profile.png");
+      }
+
+    }
+
+    // Center menu icons
+    .center-menu-icons {
+      //float: top;
+      //width: 485px;
+      width: 476px;
+      margin: 0 auto;
+
+      .navbtn-knowledge {
+
+      }
+
+      .navbtn-papers {
+        margin-left: 119px;
+      }
+
+      .navbtn-teams {
+        margin-left: 238px;
+      }
+
+      .navbtn-forum {
+        margin-left: 357px;
+      }
+
+    }
+
+    // Status frame
+    .status-frame {
+      //position: absolute;
+      float: right;
+      width: 152px;
+      height: 42px;
+      margin-top: 0;
+      background: url("modules/vas/basic/img/bits/status-frame.png") 0 0;
+    }
+
+  }
+
+  .machine-frame {
+    position: absolute;
+    width: 100%; height: 40%;
+    top: 119px;
+
+    .machine {
+      background-image: url("modules/vas/basic/img/background/machine.png");
+      position: absolute;
+      width: 1100px; height: 345px;
+      //margin: 0 auto;
+      left: 50%; top: 50%;
+      -webkit-transform: translate(-550px,-172px);
+      transform: translate(-550px,-172px);
+    }
+
+    .machine-overlay {}
+
+  }
+
+  .levels-container {
+    background-image: url("modules/vas/basic/img/background/machine-black-back.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40%;
+    //height: 215px;
+
+    .levels-frame {
+      position: absolute;
+      width: 100%;
+      //height: 40%;
+      height: 257px;
+      left: 0; bottom: 0;
+
+      .levels {
+        background-image: url("modules/vas/basic/img/background/levels.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        position: absolute;
+        width: 1024px;
+        height: 257px;
+        left: 50%; top: 100%;
+        -webkit-transform: translate(-512px,-256px);
+        transform: translate(-512px,-256px);
+        
+        .levelbtn {
+          display: block;
+          position: absolute;
+          width: 142px;
+          height: 142px;
+          cursor: pointer;
+          .transform( translate(-71px, -71px) );
+
+          .level-back {
+            position: absolute;
+            left: 0; top: 0;
+            width: 142px; height: 142px;
+            background-image: url("modules/vas/basic/img/button/btn-levels.png");
+            background-repeat: no-repeat;
+            background-position: 0 142px;
+            opacity: 0;
+            .transition( opacity 0.25s );
+          }
+
+          &.inactive {
+            .level-back {
+              background-position: 0 -284px;
+              opacity: 1;
+            }
+            &:hover .level-back {
+              background-position: 0 -284px;
+            }
+            &:active .level-back{
+              background-position: 0 -284px;
+            }
+          }
+          &:hover .level-back {
+            opacity: 1;
+            background-position: 0 0;
+          }
+          &:active .level-back {
+            opacity: 1;
+            background-position: 0 -142px;
+          }
+
+          &.level-1 {
+            left: 107px; top: 162px;
+          }
+          &.level-2 {
+            left: 259px; top: 168px;
+          }
+          &.level-3 {
+            left: 409px; top: 115px;
+          }
+          &.level-4 {
+            left: 566px; top: 170px;
+          }
+          &.level-5 {
+            left: 693px; top: 191px;
+          }
+          &.level-6 {
+            left: 814px; top: 134px;
+          }
+          &.level-7 {
+            left: 935px; top: 176px;
+          }
+
+          .level-title {
+              .font-handwriting();
+              font-size: 36px;
+              color: #fff;
+              font-weight: bold;
+              position: absolute;
+              text-align: center;
+              width: 100%;
+              top: 12px;
+          }
+
+          .level-stars {
+            width: 124px;
+            height: 60px;
+            background-image: url("modules/vas/basic/img/sprite/stars.png");
+            background-repeat: no-repeat;
+            background-position: 0 0;
+            position: absolute;
+            left: 12px;
+            top: 60px;
+
+            &.stars-1 {
+              background-position: 0 -60px;            
+            }
+            &.stars-2 {
+              background-position: 0 -120px;            
+            }
+            &.stars-3 {
+              background-position: 0 -180px;            
+            }
+            &.stars-hide {
+              display: none;
+            }
+
+          }
+
+        }
+
+      }
+
+      .navbtn-levels {
+        .transition( color 0.5s );
+        position: absolute;
+        height: 257px;
+        width: 100px;
+        cursor: pointer;
+        font-size: 38px;
+        text-align: center;
+        padding-top: 63px;
+        color: #f1c40f;
+        
+        &::after {
+          .transition( opacity 0.5s );
+          position: absolute;
+          left: 0; top: 0;
+          height: 257px;
+          width: 100px;
+          opacity: 0;
+          content: " ";
+        }
+
+        &:hover {
+          color: #FFF;
+        }
+
+        &.navbtn-lvl-left:hover::after {
+          opacity: 1;
+          /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0+100;White+to+Transparent */
+          background: -moz-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+          background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+          background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+          background: -o-linear-gradient(left, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+          background: -ms-linear-gradient(left, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
+          background: linear-gradient(to right, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C */
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 */
+        }
+        &.navbtn-lvl-right:hover::after {
+          opacity: 1;
+          /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&0+1,1+99 */
+          background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 1%, rgba(255,255,255,1) 99%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+          background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(1%,rgba(255,255,255,0)), color-stop(99%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+          background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0) 1%,rgba(255,255,255,1) 99%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+          background: -o-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0) 1%,rgba(255,255,255,1) 99%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+          background: -ms-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0) 1%,rgba(255,255,255,1) 99%,rgba(255,255,255,1) 100%); /* IE10+ */
+          background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0) 1%,rgba(255,255,255,1) 99%,rgba(255,255,255,1) 100%); /* W3C */
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 */
+        }
+      }
+
+      .navbtn-lvl-left {
+        left: 0;
+      }
+
+      .navbtn-lvl-right {
+        right: 0;
+      }
+
+    }
+
+  }
+
+}

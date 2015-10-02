@@ -1,0 +1,225 @@
+
+///////////////////////////////////////////////////
+// modifiers.less - Classes that append attributes
+// ------------------------------------------------
+// The classes in this file append some syled or
+// unstyled attributes to the DOM elements.
+///////////////////////////////////////////////////
+
+// ===============================
+// Unstyled Modifiers
+// ===============================
+
+//
+// Make the element occupy the full size of it's container
+// -----------------------------------
+//
+
+.fullscreen {
+	position: absolute;
+	left: 0; top: 0;
+	width: 100%; height: 100%;
+}
+
+//
+// Make the element unselectable
+// -----------------------------------
+//
+
+.unselectable {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+//
+// Text alignment classes
+// -----------------------------------
+//
+
+.text-right {
+	text-align: right !important;
+}
+.text-left {
+	text-align: left !important;
+}
+.text-center {
+	text-align: center !important;
+}
+
+//
+// Floating left and right
+// -----------------------------------
+//
+
+.pull-right {
+	float: right !important;
+}
+.pull-left {
+	float: left !important;
+}
+
+//
+// Vertical alignment classes
+// -----------------------------------
+//
+
+.align-top {
+	vertical-align: top;
+}
+.align-middle {
+	vertical-align: middle;
+}
+.align-bottom {
+	vertical-align: bottom;
+}
+
+// 
+// General purpose visual fx
+// -----------------------------------
+//
+
+// Add transition in all properties
+.fx-animated {
+	.transition(0.2s);
+}
+
+// When applied, it blurs the background
+.fx-backblur {
+	.transform( scale(0.8) );
+	opacity: 0.2;
+}
+
+// Used in conjuction with javascript for parallax effect 
+.fx-back-parallax {
+
+	background-position: center center;
+	background-size: cover;
+	position: absolute;
+	left: 0;
+	top: 0;
+
+	&.fx-parallax-5 {
+		width: 110%;
+		height: 110%;
+	}
+	&.fx-parallax-10 {
+		width: 120%;
+		height: 120%;
+	}
+	&.fx-parallax-20 {
+		width: 140%;
+		height: 140%;
+	}
+}
+
+// ===============================
+// Syled Modifiers
+// ===============================
+
+// 
+// General purpose colors
+// -----------------------------------
+//
+
+// Foreground
+.f-red {
+	color: #c0392b;
+}
+.f-green {
+	color: #27ae60;
+}
+.f-blue {
+	color: #2980b9;
+}
+.f-orange {
+	color: #d35400;
+}
+.f-yellow {
+	color: #f39c12;
+}
+.f-darkblue {
+	color: #2c3e50;
+}
+.f-purple {
+	color: #8e44ad;
+}
+.f-grey {
+	color: #bdc3c7;
+}
+.f-teal {
+	color: #16a085;
+}
+
+// Background
+.b-red {
+	background-color: #e74c3c;	
+}
+.b-green {
+	background-color: #2ecc71;
+}
+.b-blue {
+	background-color: #3498db;
+}
+.b-orange {
+	background-color: #e67e22;
+}
+.b-yellow {
+	background-color: #f1c40f;
+}
+.b-darkblue {
+	background-color: #34495e;
+}
+.b-purple {
+	background-color: #9b59b6;
+}
+.b-grey {
+	background-color: #ecf0f1;
+}
+.b-teal {
+	background-color: #1abc9c;
+}
+
+// 
+// Round-framed overlays
+// -----------------------------------
+//
+
+.overlay-rounded-frame {
+	.border-radius(20px);
+	background: #fff;
+	border: solid 5px #DDD;
+	padding: 10px;
+}
+
+//
+// Flat input elements
+// -----------------------------------
+//
+
+.editable-mark {
+	border: dashed 1px #999 !important;
+}
+
+input.flat-h1 {
+	border: none;
+	background: transparent;
+	font-weight: bold;
+	font-size: 2em;
+}
+
+input.flat-h2 {
+	border: none;
+	background: transparent;
+	font-weight: bold;
+	font-size: 1.5em;
+}
+
+input.flat {
+	border: none;
+	background: transparent;
+	font-size: 13px;
+}

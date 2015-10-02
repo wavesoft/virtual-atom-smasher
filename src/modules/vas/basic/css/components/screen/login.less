@@ -1,0 +1,107 @@
+
+///////////////////////////////////////////////
+// login.less - Login Game Screen
+///////////////////////////////////////////////
+
+.screen.login {
+
+	.host {
+		width: 670px;
+		margin: 50px auto;
+	}
+
+	.header {
+
+		div.logo-icon {
+			float: left;
+			width: 125px; height: 125px;
+			background: url("modules/vas/basic/img/logo/vas.png") no-repeat center center;
+			background-size: contain;
+		}
+		div.logo-text {
+			text-align: left;
+			width: 400px; height: 125px;
+			padding: 20px;
+			margin-left: 125px;
+			text-shadow: 0 0 10px #fff;
+
+			h1 {
+				padding: 0; margin: 0;
+				font-size: 34px;
+
+				color: #2c3e50;
+				span {
+					color: #e67e22;
+				}
+			}
+			p {
+				padding: 0; margin: 0;
+				font-size: 20px;
+				color: #2c3e50;
+			}
+
+		}
+
+	}
+
+	.footer {
+		position: absolute;
+	    right: 0px;
+	    bottom: 0;
+	    border-radius: 10px 0 0 0;
+	    background-color: #FFF;
+	    padding: 7px 7px 0;
+	    img {
+	    	max-height: 45px;
+	    }
+	}
+
+	.body {
+		background: rgba(255,255,255,0.3);
+		border-top: solid 1px #ccc;
+		border-bottom: solid 1px #ccc;
+
+		div.left {
+			float: left;
+			width: 300px; height: 280px;
+			padding: 15px;
+
+			a img {
+				border: none;
+			}
+		}
+		div.right {
+			text-align: right;
+			margin-left: 300px;
+			height: 280px;
+			padding: 15px;
+
+			.btn-forgot-password {
+				color: #000;
+				&:hover {
+					color: #333;
+				}
+			}
+	
+			table {
+				margin: 0 0 0 auto;
+
+				td {
+					margin: 4px;
+				}
+			}
+
+			input {
+				border: solid 1px #b3b3b3;
+				background: transparent;
+				padding: 2px;
+
+				&[type=button] {
+					padding: 8px;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+
+}

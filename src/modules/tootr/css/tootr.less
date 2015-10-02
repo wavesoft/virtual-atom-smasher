@@ -1,0 +1,111 @@
+
+///////////////////////////////////////////////////
+// tootr.less - Tootr-lrelated Classes
+///////////////////////////////////////////////////
+
+// ===============================
+//  TV-Head Explainations
+// ===============================
+
+.visual-agent {
+	position: absolute;
+}
+
+.tvhead {
+
+	display: block;
+	position: absolute;
+	width: 415px;
+	height: 390px;
+	.transition( ~"left 0.2s, top 0.2s" );
+
+	img.escIcon {
+		position: absolute;
+		left: -20px;
+		bottom: 0;
+	}
+
+	div.head {
+		background: url(modules/tootr/img/tvhead.png) no-repeat 0px 0px;
+		position: absolute;
+		overflow: hidden;
+		padding: 21px 27px;
+		width: 360px;
+		height: 203px;
+	}
+
+	div.body {
+		background: url(modules/tootr/img/tvhead.png) no-repeat;
+		position: absolute;
+		width: 290px;
+		height: 145px;
+		top: 241px;
+		left: 62px;
+		background-position: 0px -245px;
+	}
+
+	&.right {
+		div.body {
+			background-position: -290px -245px;
+		}
+	}
+
+	&.left {
+		div.body {
+			background-position: -580px -245px;
+		}
+	}
+
+}
+
+// ===============================
+//  Popup description for an item
+// ===============================
+
+.newitem-popup {
+	position: absolute;
+	display: block;
+	width: 214px;
+	height: 119px;
+	background: url(modules/tootr/img/info-popup.png) center center no-repeat;
+	color: #fff;
+	font-size: 14px;
+	cursor: pointer;
+
+	div.text {
+		position: absolute;
+		left: 32px; top: 16px;
+		width: 160px; height: 80px;
+	}
+
+	&:after {
+		position: absolute;
+		width: 10px;
+		height: 10px;
+		color: #FFF;
+		font-size: 20px;
+		font-weight: bold;
+		content: "x";
+		right: 11px;
+		top: 4px;
+	}
+
+	&.flip-x {
+		.transform( scaleX(-1) );
+		div.text {
+			.transform( scaleX(-1) );
+		}
+	}
+	&.flip-y {
+		.transform( scaleY(-1) );
+		div.text {
+			.transform( scaleY(-1) );
+		}
+	}
+	&.flip-x.flip-y {
+		.transform( scaleX(-1) scaleY(-1) );
+		div.text {
+			.transform( scaleX(-1) scaleY(-1) );
+		}
+	}
+}
