@@ -5,7 +5,7 @@ define(["jquery", "vas/core/base/component", "core/ui/view"],
 	 * This module extends the component class in order to provide a renderable view
 	 * using mustache.js templates.
 	 *
-	 * @exports core/base/view
+	 * @exports vas-core/base/view
 	 */
 	function ($, Component, BaseView) {
 
@@ -15,7 +15,7 @@ define(["jquery", "vas/core/base/component", "core/ui/view"],
 		 * @class
 		 * @classdesc The base View class, for rendering HTML-Templated views.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/util/event_base~EventBase|EventBase} (Parent class)
+		 * @see {@link module:vas-core/util/event_base~EventBase|EventBase} (Parent class)
 		 */
 		var View = function( hostDOM ) {
 

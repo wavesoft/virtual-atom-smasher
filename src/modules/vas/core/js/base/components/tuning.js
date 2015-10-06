@@ -19,7 +19,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		 * @class
 		 * @classdesc Base class for providing a tunable parameter editing interface.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @augments module:core/base/data_widget~DataWidget
+		 * @augments module:vas-core/base/data_widget~DataWidget
 		 *
 		 */
 		var TunableWidget = function( hostDOM ) {
@@ -47,7 +47,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		 * @class
 		 * @classdesc Base class for providing a tunable visualization.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @augments module:core/base/data_widget~DataWidget
+		 * @augments module:vas-core/base/data_widget~DataWidget
 		 *
 		 */
 		var ObservableWidget = function( hostDOM ) {
@@ -70,7 +70,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		 * @class
 		 * @classdesc Base class for providing a tunable visualization.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @augments module:core/base/data_widget~DataWidget
+		 * @augments module:vas-core/base/data_widget~DataWidget
 		 *
 		 */
 		var TuningPanel = function( hostDOM ) {
@@ -146,20 +146,20 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		 * a couple of milliseconds on the tile)
 		 *
 		 * @param {object} meta - The metadata of the tunable widget to show more details for
-		 * @event module:core/base/tuning_components~TunableWidget#showDetails		
+		 * @event module:vas-core/base/tuning_components~TunableWidget#showDetails		
 		 */
 
 		/**
 		 * This event is fired when the tunable component does not require to 
 		 * the additional information displayed.
 		 *
-		 * @event module:core/base/tuning_components~TunableWidget#hideDetails		
+		 * @event module:vas-core/base/tuning_components~TunableWidget#hideDetails		
 		 */
 
 		/**
 		 * This event is fired when the user has clicked on the tunable component.
 		 *
-		 * @event module:core/base/tuning_components~TunableWidget#click	
+		 * @event module:vas-core/base/tuning_components~TunableWidget#click	
 		 */
 
 		/**
@@ -168,7 +168,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		 * @param {number} value - The current value of the widget
 		 * @param {number} prevValue - The previous value of the widget
 		 * @param {object} meta - The metadata of the tunable widget
-		 * @event module:core/base/tuning_components~TunableWidget#valueChanged	
+		 * @event module:vas-core/base/tuning_components~TunableWidget#valueChanged	
 		 */
 
 		/**
@@ -177,20 +177,20 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		 * a couple of milliseconds on the tile)
 		 *
 		 * @param {object} meta - The metadata of the observable widget to show more details for
-		 * @event module:core/base/tuning_components~ObservableWidget#showDetails		
+		 * @event module:vas-core/base/tuning_components~ObservableWidget#showDetails		
 		 */
 
 		/**
 		 * This event is fired when the observable component does not require to 
 		 * the additional information displayed.
 		 *
-		 * @event module:core/base/tuning_components~ObservableWidget#hideDetails		
+		 * @event module:vas-core/base/tuning_components~ObservableWidget#hideDetails		
 		 */
 
 		/**
 		 * This event is fired when the user has clicked on the observable component.
 		 *
-		 * @event module:core/base/tuning_components~ObservableWidget#click	
+		 * @event module:vas-core/base/tuning_components~ObservableWidget#click	
 		 */
 
 		////////////////////////////////////////////////////////////

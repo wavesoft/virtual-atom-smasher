@@ -5,7 +5,7 @@ define(["jquery", "core/util/event_base", "core/ui/view", "vas/config"],
 	 * This module provides the base component class which is used for derriving all of the
 	 * user interface widgets and screens.
 	 *
-	 * @exports core/base/component
+	 * @exports vas-core/base/component
 	 */
 	function ($, EventBase, View, config) {
 
@@ -15,7 +15,7 @@ define(["jquery", "core/util/event_base", "core/ui/view", "vas/config"],
 		 * @class
 		 * @classdesc The base Component class. All other components are derrived from this.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/util/event_base~EventBase|EventBase} (Parent class)
+		 * @see {@link module:vas-core/util/event_base~EventBase|EventBase} (Parent class)
 		 */
 		var Component = function( hostDOM ) {
 

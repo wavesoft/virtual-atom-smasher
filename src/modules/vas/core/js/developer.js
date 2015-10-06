@@ -9,7 +9,7 @@ define(["vas/config", "vas/core/ui", "vas/core/registry"],
 		/**
 		 * Global scope where system-wide resources can be placed.
 		 *
-		 * @exports core/developer
+		 * @exports vas-core/developer
 		 */
 		var Developer = { };
 

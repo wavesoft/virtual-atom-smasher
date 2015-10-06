@@ -5,7 +5,7 @@ define(["vas/core/base/component"],
 	 * This module provides the DataWidget class which is used for defining
 	 * data-driven widgets. 
 	 *
-	 * @exports core/base/data_widget
+	 * @exports vas-core/base/data_widget
 	 */
 	function (Component) {
 
@@ -15,7 +15,7 @@ define(["vas/core/base/component"],
 		 * @class
 		 * @classdesc The base DataWidget class. All other data-drven Widgets are derrived from this.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 */
 		var DataWidget = function( hostDOM ) {
 
@@ -60,7 +60,7 @@ define(["vas/core/base/component"],
 		 * of the widget.
 		 *
 		 * @param {object} value - The new value
-		 * @event module:core/base/data_widget~DataWidget#valueChanged		
+		 * @event module:vas-core/base/data_widget~DataWidget#valueChanged		
 		 */
 
 		// Return component

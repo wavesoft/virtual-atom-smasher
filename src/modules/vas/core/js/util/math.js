@@ -4,7 +4,7 @@ define(["vas/config"],
 	/**
 	 * This module provides mathematical functions to be used in various locations.
 	 *
-	 * @exports core/util/math
+	 * @exports vas-core/util/math
 	 */
 	function (config) {
 

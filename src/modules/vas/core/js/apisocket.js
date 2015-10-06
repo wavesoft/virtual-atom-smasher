@@ -23,8 +23,8 @@ define(
 		 *
 		 * @class
 		 * @classdesc The APISocket class
-		 * @see {@link module:core/util/event_base~EventBase|EventBase} (Parent class)
-		 * @exports core/apisocket
+		 * @see {@link module:vas-core/util/event_base~EventBase|EventBase} (Parent class)
+		 * @exports vas-core/apisocket
 		 */
 		var APISocket = function( hostDOM ) {
 

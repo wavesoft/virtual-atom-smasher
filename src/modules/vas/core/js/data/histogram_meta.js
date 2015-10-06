@@ -4,7 +4,7 @@ define(["core/util/event_base"],
 	/**
 	 * This module provides histogram metadata 
 	 *
-	 * @exports core/data/histogram_meta
+	 * @exports vas-core/data/histogram_meta
 	 */
 	function(EventBase) {
 
@@ -13,7 +13,7 @@ define(["core/util/event_base"],
 		 *
 		 * @class
 		 * @classdesc The base Component class. All other components are derrived from this.
-		 * @see {@link module:core/util/event_base~EventBase|EventBase} (Parent class)
+		 * @see {@link module:vas-core/util/event_base~EventBase|EventBase} (Parent class)
 		 */
 		var HistogramMetadata = function() {
 

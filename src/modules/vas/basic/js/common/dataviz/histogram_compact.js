@@ -16,7 +16,7 @@ define(
 		 * @class
 		 * @registry dataviz.histogram.compact
 	 	 * @thumbnail doc/Thumbnails/dataviz.histogram_plain.png
-	 	 * @augments module:core/base/data_widget~DataWidget
+	 	 * @augments module:vas-core/base/data_widget~DataWidget
 	 	 * @css vas/basic/css/components/common/dataviz/dataviz.less
 		 */
 		var DataVizHistogram = function(hostDOM) {

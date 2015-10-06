@@ -9,7 +9,7 @@ define(["jquery", "vas/config"],
 		/**
 		 * User feedback mechanism
 		 *
-		 * @exports core/feedback
+		 * @exports vas-core/feedback
 		 */
 		var Feedback = { };
 

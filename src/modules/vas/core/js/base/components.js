@@ -28,7 +28,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 	 *
      *    }
      * );
- 	 * @exports core/base/components
+ 	 * @exports vas-core/base/components
 	 */
 	function(config, Component, View) {
 
@@ -39,7 +39,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * Initializes a new TuningScreen Component.
 		 *
 		 * This component is displayed when the user is tuning the Monte-Carlo
-		 * generator. Before calling the component's {@link module:core/base/component~Component#focus|focus()} function
+		 * generator. Before calling the component's {@link module:vas-core/base/component~Component#focus|focus()} function
 		 * the functions setTunables and setObservables are fired.
 		 *
 		 * For further dynamic updates, each tunable and observable class provide a dynamic
@@ -48,7 +48,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract class for the tuning screen where the user can tune the configuration.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var TuningScreen = function( hostDOM ) {
@@ -193,7 +193,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc User log-in screen component.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var LoginScreen = function( hostDOM ) {
@@ -226,7 +226,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Tutorial screen component.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var ObservableScreen = function( hostDOM ) {
@@ -266,7 +266,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Tutorial screen component.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var TutorialScreen = function( hostDOM ) {
@@ -288,7 +288,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Tutorial screen component.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var QuestionaireScreen = function( hostDOM ) {
@@ -330,7 +330,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Tutorial screen component.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var TeamScreen = function( hostDOM ) {
@@ -362,7 +362,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Tutorial screen component.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var CourseroomScene = function( hostDOM ) {
@@ -393,7 +393,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Tutorial screen component.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var RegisterScreen = function( hostDOM ) {
@@ -425,7 +425,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Tutorial screen component.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var BSODScreen = function( hostDOM ) {
@@ -457,7 +457,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Tutorial screen component.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var IPIDEScreen = function( hostDOM ) {
@@ -491,7 +491,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract class for the running screen where the user can see the run results.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var RunningScreen = function( hostDOM ) {
@@ -567,7 +567,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract clas for the running screen where the user can tune the configuration.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var ExplainScreen = function( hostDOM ) {
@@ -647,7 +647,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract clas for the home screen where the user sees an overview.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var HomeScreen = function( hostDOM ) {
@@ -697,7 +697,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract class for defining backdrop images.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var ResultsScreen = function( hostDOM ) {
@@ -730,7 +730,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract class for defining backdrop images.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var PasswordResetScreen = function( hostDOM ) {
@@ -771,7 +771,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract class for defining cinematic cutoffs.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var CinematicScreen = function( hostDOM ) {
@@ -823,7 +823,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract class for defining backdrop images.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var BookScreen = function( hostDOM ) {
@@ -845,7 +845,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract class for defining backdrop images.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var ProgressScreen = function( hostDOM ) {
@@ -894,7 +894,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract class for navigation controls.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var Nav = function( hostDOM ) {
@@ -938,7 +938,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract class for defining backdrop images.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var Backdrop = function( hostDOM ) {
@@ -961,7 +961,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract class for defining backdrop images.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var Popup = function( hostDOM ) {
@@ -995,7 +995,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract class for defining backdrop images.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var SimulationScreen = function( hostDOM ) {
@@ -1016,7 +1016,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * @class
 		 * @classdesc Abstract class for defining backdrop images.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 *
 		 */
 		var EligibilityScreen = function( hostDOM ) {
@@ -1045,7 +1045,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * This event is fired by the home screen in order to focus on another
 		 * screen.
 		 *
-		 * @event module:core/base/components~HomeScreen#changeScreen
+		 * @event module:vas-core/base/components~HomeScreen#changeScreen
 		 */
 
 		/**
@@ -1053,14 +1053,14 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * a level of a particular ID
 		 *
 		 * @param {int} level - A zero-based index of the level
-		 * @event module:core/base/components~HomeScreen#playLevel
+		 * @event module:vas-core/base/components~HomeScreen#playLevel
 		 */
 
 		/**
 		 * This event should be fired when the user wants to abort the running
 		 * simulation.
 		 *
-		 * @event module:core/base/components~RunningScreen#abortRun		
+		 * @event module:vas-core/base/components~RunningScreen#abortRun		
 		 */
 
 		/**
@@ -1069,21 +1069,21 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * will fire the respective updates on the tunable histograms.
 		 *
 		 * @param {object} parameters - A key/value pair with the tunable name and it's value.
-		 * @event module:core/base/components~TuningScreen#changeParameters		
+		 * @event module:vas-core/base/components~TuningScreen#changeParameters		
 		 */
 
 		/**
 		 * This event should be fired when the user wants to submit the values.
 		 *
 		 * @param {object} parameters - A key/value pair with the tunable name and it's value.
-		 * @event module:core/base/components~TuningScreen#submitParameters		
+		 * @event module:vas-core/base/components~TuningScreen#submitParameters		
 		 */
 
 		/**
 		 * This event should be fired when the user wants more information regarding a particular parameter.
 		 *
 		 * @param {string} parameter - The name of the parameter to request explaination for
-		 * @event module:core/base/components~TuningScreen#explainParameter		
+		 * @event module:vas-core/base/components~TuningScreen#explainParameter		
 		 */
 
 		/**
@@ -1091,7 +1091,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * another parameter.
 		 *
 		 * @param {string} parameter - The name of the parameter to request explaination for
-		 * @event module:core/base/components~ExplainScreen#explainParameter		
+		 * @event module:vas-core/base/components~ExplainScreen#explainParameter		
 		 */
 
 		/**
@@ -1099,7 +1099,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * another parameter.
 		 *
 		 * @param {string} game_id - The ID of the game to launch
-		 * @event module:core/base/components~ExplainScreen#openGame		
+		 * @event module:vas-core/base/components~ExplainScreen#openGame		
 		 */
 
 		/**
@@ -1108,7 +1108,7 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 * redirecting the user.
 		 *
 		 * @param {string} url - The URL to navigate to
-		 * @event module:core/base/components~ExplainScreen#openURL		
+		 * @event module:vas-core/base/components~ExplainScreen#openURL		
 		 */
 
 		/**
@@ -1116,13 +1116,13 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		 *
 		 * @param {string} username - The user name
 		 * @param {string} password - The user password
-		 * @event module:core/base/components~LoginScreen#login		
+		 * @event module:vas-core/base/components~LoginScreen#login		
 		 */
 
 		/**
 		 * This event should be fired by the CinematicScreen when the video is completed.
 		 *
-		 * @event module:core/base/components~CinematicScreen#completed		
+		 * @event module:vas-core/base/components~CinematicScreen#completed		
 		 */
 
 		////////////////////////////////////////////////////////////

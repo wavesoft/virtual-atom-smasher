@@ -10,8 +10,8 @@ define(["core/util/event_base"],
 		 *
 		 * @class
 		 * @classdesc The APISocket class
-		 * @see {@link module:core/util/event_base~EventBase|EventBase} (Parent class)
-		 * @exports core/api/interface
+		 * @see {@link module:vas-core/util/event_base~EventBase|EventBase} (Parent class)
+		 * @exports vas-core/api/interface
 		 */
 		var APIInterface = function(apiSocket) {
 

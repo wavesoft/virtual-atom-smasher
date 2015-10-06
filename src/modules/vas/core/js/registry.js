@@ -18,29 +18,29 @@ define(["vas/config", "vas/core/base/component"],
 		 * <table class="table">
 		 *   <tr><th> Name </th><th> Module.Class </th><th> Weight </th><th> Used on </th></tr>
 		 *   <tr>
-		 *      <th> home_screen </th><td>{@link module:core/base/components~HomeScreen|core/base/components.HomeScreen}</td><td>1</td>
+		 *      <th> home_screen </th><td>{@link module:vas-core/base/components~HomeScreen|core/base/components.HomeScreen}</td><td>1</td>
 		 *      <td> This is a screen component (full-screen) which hosts the game's home screen. </td>
 		 *   </tr>
 		 *   <tr>
-		 *      <th> explain_screen </th><td>{@link module:core/base/components~ExplainScreen|core/base/components.ExplainScreen}</td><td>1</td>
+		 *      <th> explain_screen </th><td>{@link module:vas-core/base/components~ExplainScreen|core/base/components.ExplainScreen}</td><td>1</td>
 		 *      <td> This is a screen component where the user can browse descriptions for the tunable/observable parameters. </td>
 		 *   </tr>
 		 *   <tr>
-		 *      <th> tuning_screen </th><td>{@link module:core/base/components~TuningScreen|core/base/components.TuningScreen}</td><td>1</td>
+		 *      <th> tuning_screen </th><td>{@link module:vas-core/base/components~TuningScreen|core/base/components.TuningScreen}</td><td>1</td>
 		 *      <td> This is a screen component that renders the user input screen. </td>
 		 *   </tr>
 		 *   <tr>
-		 *      <th> running_screen </th><td>{@link module:core/base/components~RunningScreen|core/base/components.RunningScreen}</td><td>1</td>
+		 *      <th> running_screen </th><td>{@link module:vas-core/base/components~RunningScreen|core/base/components.RunningScreen}</td><td>1</td>
 		 *      <td> This is a screen component that displays the progress of the simulation. </td>
 		 *   </tr>
 		 *   <tr>
-		 *      <th> nav_mini </th><td>{@link module:core/base/components~Nav|core/base/components.Nav}</td><td>1</td>
+		 *      <th> nav_mini </th><td>{@link module:vas-core/base/components~Nav|core/base/components.Nav}</td><td>1</td>
 		 *      <td> This is a mini-bar for navigating the user. This component stays always on top and allows the user to change location. </td>
 		 *   </tr>
 		 * </table>
 		 *
 		 *
-		 * @exports core/registry
+		 * @exports vas-core/registry
 		 */
 		var registry = {};
 

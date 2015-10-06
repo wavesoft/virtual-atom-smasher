@@ -8,8 +8,8 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		/**
 		 * APISocket LabTrain
 		 *
-		 * @see {@link module:core/api/interface~APIInterface|APIInterface} (Parent class)
-		 * @exports core/api/labtrain
+		 * @see {@link module:vas-core/api/interface~APIInterface|APIInterface} (Parent class)
+		 * @exports vas-core/api/labtrain
 		 */
 		var APILabTrain = function(apiSocket, sequenceID, observables) {
 
@@ -129,13 +129,13 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		/**
 		 * This event is fired when the socket is connected.
 		 *
-		 * @event module:core/api/labsocket~APILabTrain#connected		
+		 * @event module:vas-core/api/labsocket~APILabTrain#connected		
 		 */
 
 		/**
 		 * This event is fired when the socket is disconnected.
 		 *
-		 * @event module:core/api/labsocket~APILabTrain#disconnected		
+		 * @event module:vas-core/api/labsocket~APILabTrain#disconnected		
 		 */
 
 		/**
@@ -143,27 +143,27 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		 *
 		 * @param {string} errorMessage - The error message
 		 * @param {boolean} recoverable - If true the error is recoverable
-		 * @event module:core/api/labsocket~APILabTrain#error		
+		 * @event module:vas-core/api/labsocket~APILabTrain#error		
 		 */
 
 		/**
 		 * This event is fired when there was a simulation error.
 		 *
 		 * @param {string} errorMessage - The error message
-		 * @event module:core/api/labsocket~APILabTrain#runError		
+		 * @event module:vas-core/api/labsocket~APILabTrain#runError		
 		 */
 
 		/**
 		 * This event is fired when the simulation is completed.
 		 *
-		 * @event module:core/api/labsocket~APILabTrain#completed		
+		 * @event module:vas-core/api/labsocket~APILabTrain#completed		
 		 */
 
 		/**
 		 * A log message arrived from the server.
 		 *
 		 * @param {string} logMessage - The message to log
-		 * @event module:core/api/labsocket~APILabTrain#log		
+		 * @event module:vas-core/api/labsocket~APILabTrain#log		
 		 */
 
 		// Return the APILabTrain class

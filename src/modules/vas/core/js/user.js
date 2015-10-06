@@ -9,7 +9,7 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		 * Database interface
 		 *
 		 * @class
-		 * @exports core/user
+		 * @exports vas-core/user
 		 */
 		var User = function() {
 			window.user = this;

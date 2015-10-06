@@ -8,8 +8,8 @@ define(["vas/core/api/interface", "vas/config"],
 		/**
 		 * APISocket Chatroom
 		 *
-		 * @see {@link module:core/api/interface~APIInterface|APIInterface} (Parent class)
-		 * @exports core/api/course
+		 * @see {@link module:vas-core/api/interface~APIInterface|APIInterface} (Parent class)
+		 * @exports vas-core/api/course
 		 */
 		var APICourseroom = function(apiSocket, course) {
 

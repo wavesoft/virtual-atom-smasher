@@ -11,8 +11,8 @@ define(["vas/core/api/interface", "vas/config"],
 		 * This socket manages the team information such as messaging, invitation requests,
 		 * and team achievements.
 		 *
-		 * @see {@link module:core/api/interface~APIInterface|APIInterface} (Parent class)
-		 * @exports core/api/team
+		 * @see {@link module:vas-core/api/interface~APIInterface|APIInterface} (Parent class)
+		 * @exports vas-core/api/team
 		 */
 		var APITeam = function(apiSocket, chatroom) {
 

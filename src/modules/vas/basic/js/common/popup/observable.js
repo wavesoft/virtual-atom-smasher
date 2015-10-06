@@ -19,7 +19,7 @@ define(
 		 * @class
 		 * @registry popup.observable
 	 	 * @thumbnail doc/Thumbnails/infoblock.observable.png
-	 	 * @augments module:core/base/data_widget~DataWidget
+	 	 * @augments module:vas-core/base/data_widget~DataWidget
 		 */
 		var ObservableBody = function(hostDOM) {
 

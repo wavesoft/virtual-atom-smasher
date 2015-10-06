@@ -283,7 +283,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 		 * This module provides the basic user interface functionality 
 		 * to the Virtual Atom Smasher.
 		 *
-		 * @exports core/ui
+		 * @exports vas-core/ui
 		 */
 		var UI = {};
 

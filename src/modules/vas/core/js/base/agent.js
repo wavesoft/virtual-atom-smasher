@@ -8,7 +8,7 @@ define(["vas/core/base/component"],
 	 * The name 'Agent' is borrowed by microsoft's agents, who kept us company througout
 	 * the older office suites.
 	 *
-	 * @exports core/base/agent
+	 * @exports vas-core/base/agent
 	 */
 	function (Component) {
 
@@ -18,7 +18,7 @@ define(["vas/core/base/component"],
 		 * @class
 		 * @classdesc The base VisualAgent class. All other presentation agents are derrived from this.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/component~Component|Component} (Parent class)
+		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
 		 */
 		var VisualAgent = function( hostDOM ) {
 
@@ -68,20 +68,20 @@ define(["vas/core/base/component"],
 		 * @param {string} key - The key of the visual element to focus
 		 * @param {int} duration - How long shall we keep focus
 		 * @param {string} classes - A number of additional classes to put on the focused element
-		 * @event module:core/base/data_widget~VisualAgent#focusVisualAid		
+		 * @event module:vas-core/base/data_widget~VisualAgent#focusVisualAid		
 		 */
 
 		/**
 		 * This event is fired by the visual agent when a component of the user
 		 * interface must be focused.
 		 *
-		 * @event module:core/base/data_widget~VisualAgent#blurVisualAid		
+		 * @event module:vas-core/base/data_widget~VisualAgent#blurVisualAid		
 		 */
 
 		/**
 		 * This event is fired when the tutorial is completed.
 		 *
-		 * @event module:core/base/data_widget~VisualAgent#completed		
+		 * @event module:vas-core/base/data_widget~VisualAgent#completed		
 		 */
 
 		// Return component

@@ -8,8 +8,8 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		/**
 		 * APISocket LabSocket
 		 *
-		 * @see {@link module:core/api/interface~APIInterface|APIInterface} (Parent class)
-		 * @exports core/api/labsocket
+		 * @see {@link module:vas-core/api/interface~APIInterface|APIInterface} (Parent class)
+		 * @exports vas-core/api/labsocket
 		 */
 		var APILabSocket = function(apiSocket, config) {
 
@@ -299,13 +299,13 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		/**
 		 * This event is fired when the socket is connected.
 		 *
-		 * @event module:core/api/labsocket~APILabSocket#connected		
+		 * @event module:vas-core/api/labsocket~APILabSocket#connected		
 		 */
 
 		/**
 		 * This event is fired when the socket is disconnected.
 		 *
-		 * @event module:core/api/labsocket~APILabSocket#disconnected		
+		 * @event module:vas-core/api/labsocket~APILabSocket#disconnected		
 		 */
 
 		/**
@@ -313,27 +313,27 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		 *
 		 * @param {string} errorMessage - The error message
 		 * @param {boolean} recoverable - If true the error is recoverable
-		 * @event module:core/api/labsocket~APILabSocket#error		
+		 * @event module:vas-core/api/labsocket~APILabSocket#error		
 		 */
 
 		/**
 		 * This event is fired when there was a simulation error.
 		 *
 		 * @param {string} errorMessage - The error message
-		 * @event module:core/api/labsocket~APILabSocket#runError		
+		 * @event module:vas-core/api/labsocket~APILabSocket#runError		
 		 */
 
 		/**
 		 * This event is fired when the simulation is completed.
 		 *
-		 * @event module:core/api/labsocket~APILabSocket#runCompleted		
+		 * @event module:vas-core/api/labsocket~APILabSocket#runCompleted		
 		 */
 
 		/**
 		 * A log message arrived from the server.
 		 *
 		 * @param {string} logMessage - The message to log
-		 * @event module:core/api/labsocket~APILabSocket#log		
+		 * @event module:vas-core/api/labsocket~APILabSocket#log		
 		 */
 
 		// Return the APILabSocket class

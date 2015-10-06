@@ -9,13 +9,13 @@ define(["vas/config", "core/util/event_base"],
 		/**
 		 * Global scope where system-wide resources can be placed.
 		 *
-		 * @exports core/global
+		 * @exports vas-core/global
 		 */
 		var Global = { };
 
 		/**
 		 * System-wide events
-		 * @type {module:core/util/event_base~EventBase}
+		 * @type {module:vas-core/util/event_base~EventBase}
 		 */
 		Global.events = new EventBase();
 
