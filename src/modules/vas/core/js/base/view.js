@@ -15,7 +15,7 @@ define(["jquery", "vas/core/base/component", "core/ui/view"],
 		 * @class
 		 * @classdesc The base View class, for rendering HTML-Templated views.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:vas-core/util/event_base~EventBase|EventBase} (Parent class)
+		 * @augments module:core/util/event_base~EventBase
 		 */
 		var View = function( hostDOM ) {
 

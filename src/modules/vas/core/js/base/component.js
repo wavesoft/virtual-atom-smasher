@@ -15,7 +15,7 @@ define(["jquery", "core/util/event_base", "core/ui/view", "vas/config"],
 		 * @class
 		 * @classdesc The base Component class. All other components are derrived from this.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:vas-core/util/event_base~EventBase|EventBase} (Parent class)
+		 * @augments module:core/util/event_base~EventBase
 		 */
 		var Component = function( hostDOM ) {
 
@@ -281,6 +281,7 @@ define(["jquery", "core/util/event_base", "core/ui/view", "vas/config"],
 		 * additional information regarding the component position. 
 		 *
 		 * Format of sizeInfo object:
+		 * ```js
 		 *  {
 		 *    'left' : 10,		// Left position in pixels if number is integer
 		 *    'top'  : '50%',	// Top position in percent if contains '%' symbol
@@ -294,7 +295,7 @@ define(["jquery", "core/util/event_base", "core/ui/view", "vas/config"],
 		 *    'height': '50%',
 		 *
 		 *  }
-		 *
+		 * ```
 		 *
 		 * @param {Component|array} com - The component to forward events to
 		 * @param {Object} - sizeInfo - (Optional) Alignment information to use for onResize

@@ -53,6 +53,10 @@ li {
   overflow: auto;
   width: 100%;
 }
+.navigation span.prefix {
+  font-size: 10px;
+  color: #666;
+}
 .navigation li.item {
   margin-bottom: 8px;
   padding-bottom: 8px;

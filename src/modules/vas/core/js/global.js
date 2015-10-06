@@ -15,7 +15,7 @@ define(["vas/config", "core/util/event_base"],
 
 		/**
 		 * System-wide events
-		 * @type {module:vas-core/util/event_base~EventBase}
+		 * @type {module:core/util/event_base~EventBase}
 		 */
 		Global.events = new EventBase();
 

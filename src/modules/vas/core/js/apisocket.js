@@ -8,6 +8,12 @@ define(
  		"vas/core/api/db", "vas/core/api/account", "vas/core/api/chatroom", "vas/core/api/course",
  		"vas/core/api/labsocket", "vas/core/api/labtrain" ], 
 
+	/**
+	 * The APISocket class provides all the required functionality to interact in real time
+	 * with other APISocket members.
+	 *
+	 * @exports vas-core/apisocket
+	 */
 	function( EventBase, SHA1, Config,
 			  IDb, IAccount, IChatroom, ICourse, ILabsocket, ILabtrain ) {
 
@@ -23,8 +29,7 @@ define(
 		 *
 		 * @class
 		 * @classdesc The APISocket class
-		 * @see {@link module:vas-core/util/event_base~EventBase|EventBase} (Parent class)
-		 * @exports vas-core/apisocket
+		 * @augments module:core/util/event_base~EventBase
 		 */
 		var APISocket = function( hostDOM ) {
 

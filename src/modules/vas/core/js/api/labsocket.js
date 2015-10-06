@@ -8,7 +8,7 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		/**
 		 * APISocket LabSocket
 		 *
-		 * @see {@link module:vas-core/api/interface~APIInterface|APIInterface} (Parent class)
+		 * @augments module:vas-core/api/interface~APIInterface
 		 * @exports vas-core/api/labsocket
 		 */
 		var APILabSocket = function(apiSocket, config) {

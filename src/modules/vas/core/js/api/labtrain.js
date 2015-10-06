@@ -8,7 +8,7 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 		/**
 		 * APISocket LabTrain
 		 *
-		 * @see {@link module:vas-core/api/interface~APIInterface|APIInterface} (Parent class)
+		 * @augments module:vas-core/api/interface~APIInterface
 		 * @exports vas-core/api/labtrain
 		 */
 		var APILabTrain = function(apiSocket, sequenceID, observables) {

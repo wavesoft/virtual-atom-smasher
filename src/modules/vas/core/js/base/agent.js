@@ -18,7 +18,7 @@ define(["vas/core/base/component"],
 		 * @class
 		 * @classdesc The base VisualAgent class. All other presentation agents are derrived from this.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
+		 * @augments module:vas-core/base/component~Component
 		 */
 		var VisualAgent = function( hostDOM ) {
 

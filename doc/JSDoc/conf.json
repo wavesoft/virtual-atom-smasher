@@ -12,7 +12,10 @@
         "destination": "./doc/JSDoc/html",
         "recurse": true
     },
-    "plugins": [ "doc/JSDoc/plugins/vas" ],
+    "plugins": [ 
+        "plugins/markdown",
+        "localplugins/vas" 
+    ],
     "templates": {
         "applicationName": "Virtual Atom Smasher",
         "disqus": "",

@@ -164,6 +164,12 @@ function shortName( longName ) {
     return longName.split(/[#~]/).pop();
 }
 
+function moduleName( longName ) {
+    if (longName.substr(0,7) == "module:")
+        longName = longName.substr(7);
+    return longName.split("/").shift();
+}
+
 /**
  * Look for classes or functions with the same name as modules (which indicates that the module
  * exports only that class or function), then attach the classes or functions to the `module`
@@ -478,6 +484,7 @@ exports.publish = function(taffyData, opts, tutorials) {
 
     // add functions
     view.shortName = shortName;
+    view.moduleName = moduleName;
 
     // once for all
     view.nav = buildNav(members, registryMembers);

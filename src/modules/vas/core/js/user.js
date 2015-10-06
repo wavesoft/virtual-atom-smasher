@@ -3,13 +3,18 @@
  */
 define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket", "vas/core/global", "ccl-tracker"], 
 
+	/**
+	 * User API fast interface.
+	 *
+	 * @class
+	 * @exports vas-core/user
+	 */
 	function(Config, EventBase, DB, APISocket, Global, Analytics) {
 
 		/**
-		 * Database interface
+		 * User API fast interface.
 		 *
 		 * @class
-		 * @exports vas-core/user
 		 */
 		var User = function() {
 			window.user = this;

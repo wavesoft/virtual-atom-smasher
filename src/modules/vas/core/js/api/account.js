@@ -11,7 +11,7 @@ define(["vas/core/api/interface", "vas/config"],
 		 * This socket manages the user account information, such as session management,
 		 * profile information and progress-state information.
 		 *
-		 * @see {@link module:vas-core/api/interface~APIInterface|APIInterface} (Parent class)
+		 * @augments module:vas-core/api/interface~APIInterface
 		 * @exports vas-core/api/account
 		 */
 		var APIAccount = function(apiSocket) {

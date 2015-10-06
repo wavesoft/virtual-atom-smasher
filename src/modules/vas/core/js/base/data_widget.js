@@ -15,7 +15,7 @@ define(["vas/core/base/component"],
 		 * @class
 		 * @classdesc The base DataWidget class. All other data-drven Widgets are derrived from this.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:vas-core/base/component~Component|Component} (Parent class)
+		 * @augments module:vas-core/base/component~Component
 		 */
 		var DataWidget = function( hostDOM ) {
 

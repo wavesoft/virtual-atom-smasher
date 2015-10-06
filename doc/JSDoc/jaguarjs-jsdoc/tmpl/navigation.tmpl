@@ -13,7 +13,10 @@ var self = this;
     ?>
         <li class="item" data-name="<?js= item.filename ?>">
             <span class="title">
-                <?js= self.linkto(item.longname, item.name) ?>
+                <?js= self.linkto(
+                    item.longname, 
+                    (item.type == 'registry') ? item.name : ('<span class="prefix">'+self.moduleName(item.longname) + ' / </span>' + item.name)
+                ) ?>
                 <?js if (item.type === 'namespace') { ?>
                 <span class="static">static</span>
                 <?js } else if (item.type === 'registry') { ?>

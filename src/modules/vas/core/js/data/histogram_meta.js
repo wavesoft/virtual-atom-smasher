@@ -13,7 +13,7 @@ define(["core/util/event_base"],
 		 *
 		 * @class
 		 * @classdesc The base Component class. All other components are derrived from this.
-		 * @see {@link module:vas-core/util/event_base~EventBase|EventBase} (Parent class)
+		 * @augments module:core/util/event_base~EventBase
 		 */
 		var HistogramMetadata = function() {
 
