@@ -191,6 +191,13 @@ li {
 .main span.boolean {
   background-color: #ee7d7d !important;
 }
+.main img.thumb {
+  background: #EEE;
+  border: solid 1px #CCC;
+  padding: 5px;
+  max-width: 350px;
+  max-height: 250px;
+}
 .main p.registry-use {
   font-size: 0.7em;
   font-weight: normal;
@@ -235,6 +242,9 @@ li {
   color: #fff;
   padding: 2px 4px;
   border-radius: 5px;
+}
+.main dl.details {
+  margin-top: 20px;
 }
 .main .type-signature {
   font-size: 12px;

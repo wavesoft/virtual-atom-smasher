@@ -15,6 +15,8 @@ define(
 		 *
 		 * @class
 		 * @registry popup.tab.observable_desc
+	 	 * @thumbnail doc/Thumbnails/infoblock.observable.png
+	 	 * @augments module:core/base/data_widget~DataWidget
 		 */
 		var DataVizObservable = function(hostDOM) {
 

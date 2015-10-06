@@ -7,7 +7,7 @@ define(
 	/**
 	 * Basic version of the home backdrop
 	 *
-	 * @exports basic/components/backdrop_home
+	 * @exports vas-basic/components/backdrop_home
 	 */
 	function( R,C, tpl) {
 

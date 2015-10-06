@@ -5,7 +5,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 	 * This module provides the base classes for all the tuning-related operations
 	 * such as editing a tunable parameters and visualizing observable results.
 	 *
- 	 * @exports core/base/tuning_components
+ 	 * @exports vas-core/base/components/tuning
 	 */
 	function(config, DataWidget, Component) {
 
@@ -19,7 +19,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		 * @class
 		 * @classdesc Base class for providing a tunable parameter editing interface.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/data_widget~DataWidget|DataWidget} (Parent class)
+		 * @augments module:core/base/data_widget~DataWidget
 		 *
 		 */
 		var TunableWidget = function( hostDOM ) {
@@ -47,7 +47,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		 * @class
 		 * @classdesc Base class for providing a tunable visualization.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/data_widget~DataWidget|DataWidget} (Parent class)
+		 * @augments module:core/base/data_widget~DataWidget
 		 *
 		 */
 		var ObservableWidget = function( hostDOM ) {
@@ -70,7 +70,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		 * @class
 		 * @classdesc Base class for providing a tunable visualization.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
-		 * @see {@link module:core/base/data_widget~DataWidget|DataWidget} (Parent class)
+		 * @augments module:core/base/data_widget~DataWidget
 		 *
 		 */
 		var TuningPanel = function( hostDOM ) {
@@ -93,6 +93,47 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		 * Update tuning panel
 		 */
 		TuningPanel.prototype.onParameterChanged = function(parameter, value) {	
+		}
+
+		////////////////////////////////////////////////////////////
+		/**
+		 * Initializes a new Tuning Screen component.
+		 *
+		 * This component is embedded in the home or other screens in order
+		 * to display the tuning configuration.
+		 *
+		 * @class
+		 * @classdesc Base class for providing a tunable visualization.
+		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
+		 * @augments module:vas-core/base/component~Component
+		 *
+		 */
+		var TuningScreen = function( hostDOM ) {
+
+			// Initialize base class
+			Component.call(this, hostDOM);
+
+		}
+
+		// Subclass from DataWidget
+		TuningScreen.prototype = Object.create( Component.prototype );
+
+		/**
+		 * This function is called when the level details are defined
+		 *
+		 * @param {array} tunables - A list of the tunables the user can change
+		 */
+		TuningScreen.prototype.onLevelDefined = function( tunables ) {
+		}
+
+		/**
+		 * This function is called when the user has submitted a simulation.
+		 * The simulation values are specified in order to update the tunable
+		 * labels.
+		 *
+		 * @param {object} values - The values of the current run or NULL if inactive
+		 */
+		TuningScreen.prototype.onActiveRunDefined = function( values ) {
 		}
 
 		////////////////////////////////////////////////////////////

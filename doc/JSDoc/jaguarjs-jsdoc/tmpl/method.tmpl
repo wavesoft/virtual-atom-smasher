@@ -13,17 +13,26 @@ var self = this;
         </h4>    
         <?js if (data.meta) {?>
         <div class="tag-source">
+            <a target="_blank" href="https://github.com/wavesoft/virtual-atom-smasher/blob/master/src/modules/vas/<?js= meta.filename ?>#L<?js= meta.lineno ?>">
+                <?js= meta.filename + ', line ' + meta.lineno ?>
+            </a>
+            <!--
             <?js= self.linkto(meta.filename) ?>, <?js= self.linkto(meta.filename, 'line ' + meta.lineno, null, 'line' + meta.lineno) ?>
+            -->
         </div>
         <?js } ?>
     </div>
 
     <?js if (data.registry) {?>
-    <p class="registry-use">R.instanceComponent( "<em><?js= data.registry ?></em>" )</p>
+    <p class="registry-use">&larr; R.instanceComponent( "<em><?js= data.registry ?></em>" )</p>
     <?js } ?>
 
     <?js if (data.summary) { ?>
     <p class="summary"><?js= summary ?></p>
+    <?js } ?>
+
+    <?js if (data.thumbnail) { ?>
+    <img class="thumb" src="https://raw.githubusercontent.com/wavesoft/virtual-atom-smasher/master/<?js= data.thumbnail ?>"
     <?js } ?>
 </dt>
 <dd>

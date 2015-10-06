@@ -11,7 +11,7 @@ define(
 	/**
 	 * Basic version of the jobs screen
 	 *
-	 * @exports basic/components/simulation/observable_point
+	 * @exports vas-basic/components/simulation/observable_point
 	 */
 	function( MathJax, R, UI, DataWidget, Calculate, tpl ) {
 

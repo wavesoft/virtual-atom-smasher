@@ -15,6 +15,9 @@ define(
 		 *
 		 * @class
 		 * @registry dataviz.histogram_ratio.full
+	 	 * @thumbnail doc/Thumbnails/dataviz.histogram_fullratio.png
+	 	 * @augments module:core/base/data_widget~DataWidget
+	 	 * @css vas/basic/css/components/common/dataviz/dataviz.less
 		 */
 		var DataVizHistogram = function(hostDOM) {
 

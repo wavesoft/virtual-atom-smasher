@@ -81,4 +81,23 @@ var self = this;
         <?js }); ?></ul>
     </dd>
     <?js } ?>
+
+    <?js if (data.css && css.length) {?>
+    <dt class="tag-css">Stylesheets used:</dt>
+    <dd class="tag-css">
+        <ul><?js css.forEach(function(t) { ?>
+            <li><a target="_blank" href="https://github.com/wavesoft/virtual-atom-smasher/blob/master/src/modules/<?js= t ?>"><?js= t ?></a></li>
+        <?js }); ?></ul>
+    </dd>
+    <?js } ?>
+
+    <?js if (data.tpl && tpl.length) {?>
+    <dt class="tag-tpl">Templates used:</dt>
+    <dd class="tag-tpl">
+        <ul><?js tpl.forEach(function(t) { ?>
+            <li><a target="_blank" href="https://github.com/wavesoft/virtual-atom-smasher/blob/master/src/modules/<?js= t ?>"><?js= t ?></a></li>
+        <?js }); ?></ul>
+    </dd>
+    <?js } ?>
+
 </dl>

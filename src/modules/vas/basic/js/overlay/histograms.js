@@ -22,6 +22,7 @@ define(
 		 *
 		 * @class
 		 * @registry overlay.histograms
+		 * @template vas/basic/tpl/overlay/histograms.html
 		 */
 		var OverlayHistograms = function(hostDOM) {
 

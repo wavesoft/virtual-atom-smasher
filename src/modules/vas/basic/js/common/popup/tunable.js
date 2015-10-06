@@ -14,6 +14,8 @@ define(
 		 * The default tunable body class
 		 * @class
 		 * @registry popup.tunable
+	 	 * @thumbnail doc/Thumbnails/infoblock.tunable.png
+	 	 * @augments module:core/base/data_widget~DataWidget
 		 */
 		var TunableBody = function(hostDOM) {
 

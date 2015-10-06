@@ -159,6 +159,11 @@ function generateSourceFiles(sourceFiles) {
     });
 }
 
+function shortName( longName ) {
+    if ((longName.indexOf("#") == 0) && (longName.indexOf("~") == 0)) return longName;
+    return longName.split(/[#~]/).pop();
+}
+
 /**
  * Look for classes or functions with the same name as modules (which indicates that the module
  * exports only that class or function), then attach the classes or functions to the `module`
@@ -470,6 +475,9 @@ exports.publish = function(taffyData, opts, tutorials) {
     view.htmlsafe = htmlsafe;
     view.members = members; //@davidshimjs: To make navigation for customizing
     view.registryMembers = registryMembers;
+
+    // add functions
+    view.shortName = shortName;
 
     // once for all
     view.nav = buildNav(members, registryMembers);

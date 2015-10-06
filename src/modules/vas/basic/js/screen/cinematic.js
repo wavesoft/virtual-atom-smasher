@@ -8,7 +8,7 @@ define(
 	/**
 	 * Basic version of the home screen
 	 *
-	 * @exports basic/screen/cinematic
+	 * @exports vas-basic/screen/cinematic
 	 */
 	function($, Popcorn, Media, DB, UI, config, R,C, User) {
 

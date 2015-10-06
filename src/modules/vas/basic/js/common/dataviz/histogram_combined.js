@@ -15,6 +15,9 @@ define(
 		 *
 		 * @class
 		 * @registry dataviz.histogram.combined
+	 	 * @thumbnail doc/Thumbnails/dataviz.histogram_combined.png
+	 	 * @augments module:core/base/data_widget~DataWidget
+	 	 * @css vas/basic/css/components/common/dataviz/dataviz.less
 		 */
 		var CombinedHistogram = function(hostDOM) {
 

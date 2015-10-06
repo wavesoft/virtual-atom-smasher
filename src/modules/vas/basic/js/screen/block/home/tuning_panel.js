@@ -1,12 +1,12 @@
 define(
 
 	// Dependencies
-	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/tuning_components" ], 
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/components/tuning" ], 
 
 	/**
 	 * This is the default tunable widget component for the base interface.
 	 *
- 	 * @exports vas-base/screen/block/tuning/tuning_panel
+ 	 * @exports vas-basic/screen/block/home/tuning_panel
 	 */
 	function($, R, UI, TC) {
 

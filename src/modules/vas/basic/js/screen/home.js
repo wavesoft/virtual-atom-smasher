@@ -32,9 +32,14 @@ define(
             this.loadTemplate(tpl);
             this.renderView();
 
-            /**
-             * Sub-components
-             */
+            //
+            // Sub-components
+            //
+            this.tuningScreen = R.instanceComponent("screen.block.tuning_screen", this.select(".backdrop"));
+            this.forwardVisualEvents( this.backdrop, { 'left':0, 'top': 0, 'width': '100%', 'height': '100%' } );               
+
+            this.select(".machine-frame")
+
             // this.select(".machine-frame", (function(dom) {
 
             //     // Instance machine component
@@ -46,20 +51,21 @@ define(
 
             // }).bind(this));
 
-            /**
-             * Backdrop
-             */
+            //
+            // Backdrop
+            //
+
             this.backdrop = R.instanceComponent("backdrop.home", this.select(".backdrop"));
             this.forwardVisualEvents( this.backdrop, { 'left':0, 'top': 0, 'width': '100%', 'height': '100%' } );               
 
-            /**
-             * Left menu buttons
-             */
+            //
+            // Left menu buttons
+            //
 
             // Help button
             this.select(".navbtn-help").click((function () {
                 // Do something when pressed
-                window.alert("help");
+                this.trigger('explain', 1);
             }).bind(this));
 
             // Profile button
@@ -68,9 +74,9 @@ define(
                 window.alert("profile");
             }).bind(this));
 
-            /**
-             * Center menu buttons
-             */
+            ///
+            // Center menu buttons
+            //
 
             // Knowledge button
             this.select(".navbtn-knowledge").click((function () {
@@ -96,9 +102,9 @@ define(
                 window.alert("forum");
             }).bind(this));
 
-            /**
-             * Levels navigation buttons
-             */
+            //
+            // Levels navigation buttons
+            //
 
             // Left button
             this.select(".navbtn-lvl-left").click((function () {
@@ -116,9 +122,10 @@ define(
                 }).bind(this))
             }).bind(this));
 
-            /**
-             * Handle dynamic levels
-             */
+            //
+            // Handle dynamic levels
+            //
+
             this.select(".levels-container .levels .levelbtn").each((function(i, elm) {
 
                 // Handle click
@@ -138,9 +145,10 @@ define(
 
             }).bind(this));
 
-            /**
-             * Handle mouse movement
-             */
+            //
+            // Handle mouse movement
+            //
+
             this.mouseX = 0;
             this.mouseY = 0;
             hostDOM.mousemove((function(e) {

@@ -50,7 +50,7 @@
         <h3 class="subsection-title">Extends</h3>
         
         <ul><?js doc.augments.forEach(function(a) { ?>
-            <li><?js= self.linkto(a, a) ?></li>
+            <li><?js= self.linkto(a, self.shortName(a)) ?> <small>(<?js= a ?>)</small></li>
         <?js }); ?></ul>
     <?js } ?>
     
