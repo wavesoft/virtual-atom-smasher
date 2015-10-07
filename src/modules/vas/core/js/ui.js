@@ -675,7 +675,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 			var doShowOverlay = function() {
 
 				// Create host DOM for the component
-				var comDOM = $('<div class="'+config.css['screen']+'"></div>');
+				var comDOM = $('<div class="'+config.css['screen']+' screen-overlay"></div>');
 				UI.hostOverlayWindow.append(comDOM);
 
 				// Add 'back' button

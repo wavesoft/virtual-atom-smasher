@@ -51,6 +51,9 @@ define("vas/basic", ['require',
 	'./overlay/feedback',
 	'./overlay/passwordreset',
 	'./overlay/book',
+	'./overlay/knowledge',
+	'./overlay/papers',
+	'./overlay/teams',
 
 
 ], function(require) {

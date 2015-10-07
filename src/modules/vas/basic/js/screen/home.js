@@ -77,19 +77,19 @@ define(
             // Knowledge button
             this.select(".navbtn-knowledge").click((function () {
                 // Do something when pressed
-                window.alert("knowledge");
+                UI.showOverlay('overlay.knowledge', UI.Transitions.SCALEDOWN_TOP);
             }).bind(this));
 
             // Papers button
             this.select(".navbtn-papers").click((function () {
                 // Do something when pressed
-                window.alert("papers");
+                UI.showOverlay('overlay.papers', UI.Transitions.SCALEDOWN_TOP);
             }).bind(this));
 
             // Teams button
             this.select(".navbtn-teams").click((function () {
                 // Do something when pressed
-                window.alert("teams");
+                UI.showOverlay('overlay.teams', UI.Transitions.SCALEDOWN_TOP);
             }).bind(this));
 
             // Forum button
