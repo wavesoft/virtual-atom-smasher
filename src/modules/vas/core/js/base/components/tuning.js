@@ -137,6 +137,29 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		}
 
 		////////////////////////////////////////////////////////////
+		/**
+		 * Initializes a new Tuning Notepad.
+		 *
+		 * This component is shown next to the tuning panel and displays
+		 * useful information to the user regarding the current simulation.
+		 *
+		 * @class
+		 * @classdesc Base class for providing a tunable visualization.
+		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
+		 * @augments module:vas-core/base/component~Component
+		 *
+		 */
+		var TuningNotepad = function( hostDOM ) {
+
+			// Initialize base class
+			Component.call(this, hostDOM);
+
+		}
+
+		// Subclass from DataWidget
+		TuningNotepad.prototype = Object.create( Component.prototype );
+
+		////////////////////////////////////////////////////////////
 		//             Event definitions for JSDoc                //
 		////////////////////////////////////////////////////////////
 
@@ -200,6 +223,8 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 			'TunableWidget'		: TunableWidget,
 			'TuningPanel'		: TuningPanel,
 			'ObservableWidget'	: ObservableWidget,
+			'TuningScreen'		: TuningScreen,
+			'TuningNotepad'		: TuningNotepad,
 		};
 
 		return tuningComponents;

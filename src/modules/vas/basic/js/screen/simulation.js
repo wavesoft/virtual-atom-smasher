@@ -18,6 +18,8 @@ define(
 		/**
 		 * @class
 		 * @classdesc The basic simulation screen
+         * @augments module:vas-core/base/components~SimulationScreen
+         * @template vas/basic/tpl/screen/simulation.html
          * @registry screen.simulation
 		 */
 		var SimulationScreen = function( hostDOM ) {

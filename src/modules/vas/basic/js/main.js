@@ -32,7 +32,8 @@ define("vas/basic", ['require',
 	'./screen/block/simulation/observable_point',
 	'./screen/block/home/tuning_panel',
 	'./screen/block/home/tuning_screen',
-	'./screen/block/home/tuning_machine',
+	'./screen/block/home/tuning_notepad',
+	'./screen/block/home/machine',
 
 	// Backdrops
 	'./screen/backdrop/login',

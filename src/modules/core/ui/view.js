@@ -125,7 +125,16 @@ define(["require", "mustache", "jquery",
 		}
 
 		/**
-		 * A templated view
+		 * This class provides the base abstraction for rendered views,
+		 * using the [mustache.js](https://github.com/janl/mustache.js) template engine.
+		 * 
+		 * To initialize the view class, call the {@link module:core/ui/view~View#loadTemplate|loadTemplate} function,
+		 * passing the payload of the template. You will need to call {@link module:core/ui/view~View#renderView|renderView} function
+		 * in order to render the view. This is not done automatically.
+		 *
+		 * Having the template you can either update the values of templated elements with the
+		 * {@link module:core/ui/view~View#setViewData|setViewData} function, or you can get a jQuery
+		 * selector on the elements using the {@link module:core/ui/view~View#select|select} function.
 		 *
 		 * @class
 		 * @classdesc The base class for creating templated views
@@ -136,6 +145,7 @@ define(["require", "mustache", "jquery",
 			this.viewData = {};
 			this.hostDOM = hostDOM;
 			this.viewSelectors = [];
+			this.rendered = false;
 
 			// View input elements
 			this.forms = [];
@@ -159,6 +169,8 @@ define(["require", "mustache", "jquery",
 
 		/**
 		 * Register a template plugin
+		 *
+		 * @param {constructor} pluginClass - A constructor of a plugin
 		 */
 		View.prototype.registerTemplatePlugin = function( pluginClass ) {
 
@@ -186,6 +198,9 @@ define(["require", "mustache", "jquery",
 
 		/**
 		 * Load a template plugin
+		 *
+		 * @param {string} path - The path to a module that exports the plugin constructor
+		 * @param {function} callback - The callback to fire when the plugin is loaded
 		 */
 		View.prototype.loadTemplatePlugin = function( path, callback ) {
 
@@ -205,7 +220,9 @@ define(["require", "mustache", "jquery",
 		}
 
 		/**
-		 * Set a view field
+		 * Load a template from it's contents
+		 *
+		 * @param {string} template - The template bffer
 		 */
 		View.prototype.loadTemplate = function( template ) {
 			// Import template
@@ -214,7 +231,12 @@ define(["require", "mustache", "jquery",
 		}
 
 		/**
-		 * Set a view field
+		 * Set a view data
+		 *
+		 * Note: This function does not re-render the UI.
+		 * 
+		 * @param {string|object} key - The parameter to update or a dictionary with key/value fields
+		 * @param {any} value - If key is a string, this is the value of the parameter to update
 		 */
 		View.prototype.setViewData = function(key, value) {
 			var transaction = {};
@@ -234,14 +256,21 @@ define(["require", "mustache", "jquery",
 		}
 
 		/**
-		 * Get a view field value
+		 * Return contents of the pecified view key
+		 *
+		 * @param {string} key - The key to return
+		 * @returns {any} The key value 
 		 */
 		View.prototype.getViewData = function(key) {
 			return this.viewData[key];
 		}
 
 		/**
-		 * Get a value from an input element in the view
+		 * Return the value of a particular form element
+		 * in the vew.
+		 * 
+		 * @param {string} selector - The CSS selector of the elements to read
+		 * @returns {string} - The element value
 		 */
 		View.prototype.valueOf = function(selector) {
 			// No DOM? Empty...
@@ -251,7 +280,11 @@ define(["require", "mustache", "jquery",
 		}
 
 		/**
-		 * Set a value to an input element
+		 * Update the value of a particular form element
+		 * in the view.
+		 * 
+		 * @param {string} selector - The CSS selector of the element(s) to update
+		 * @param {string} value - The value to set
 		 */
 		View.prototype.setValue = function(selector, value) {
 			// No DOM? Empty...
@@ -261,15 +294,22 @@ define(["require", "mustache", "jquery",
 		}
 
 		/**
-		 * Bind a DOM handler on the given path
+		 * Perform a CSS query and return the DOM elements.
+		 *
+		 * If you want to handle the cases when the UI is updated, you can
+		 * provide a callback that will be fired after every render.
+		 *
+		 * @param {string} selector - The CSS Selector
+		 * @param {function} callback - The callback function to fire when DOM changes 
+		 * @returns {DOMElement} Returns a jQuery selector if the element is found, or an empty selector if not
 		 */
 		View.prototype.select = function(selector, callback) {
 			// If we have no callback, find and return
 			if (callback) {
 				// Store selectors on list
 				this.viewSelectors.push([selector, callback]);
-				// If we have DOM, also run it now
-				if (this.hostDOM) {
+				// If we have are rendered, also run it now
+				if (this.rendered) {
 					var sel = this.hostDOM.find(selector);
 					if ((sel.length > 0) && callback) callback();
 				}
@@ -281,7 +321,11 @@ define(["require", "mustache", "jquery",
 		};
 
 		/**
-		 * Update view
+		 * Render view
+		 *
+		 * This function re-constructs the DOM by rendering the mustache template
+		 *
+		 * @param {function|string} transitionFunction - An optional function to use for transitioning between the two states
 		 */
 		View.prototype.renderView = function( transitionFunction ) {
 
@@ -368,6 +412,9 @@ define(["require", "mustache", "jquery",
 					// In any case, we have a new DOM, run selectors
 					self._updateSelectors();
 
+					// We are now rendered
+					this.rendered = true;
+
 					// Fade-in
 					fadeFn(self.hostDOM, true);
 
@@ -387,6 +434,8 @@ define(["require", "mustache", "jquery",
 
 		/**
 		 * Run the selectors
+		 *
+		 * @private
 		 */
 		View.prototype._updateSelectors = function() {
 			// If we don't have any DOM, that's useless

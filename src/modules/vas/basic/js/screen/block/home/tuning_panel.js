@@ -198,6 +198,8 @@ define(
 				'width': width,
 				'height': height,
 				// Centering
+				'left': width/2,
+				'top': height/2,
 				'transform': win_t,
 				'oTransform': win_t,
 				'msTransform': win_t,

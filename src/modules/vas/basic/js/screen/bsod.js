@@ -17,6 +17,7 @@ define(
 		 *
 		 * @class
 		 * @classdesc The basic black screen of death
+		 * @augments module:vas-core/base/components~BSODScreen
 		 * @registry screen.bsod
 		 */
 		var BSODScreen = function( hostDOM ) {

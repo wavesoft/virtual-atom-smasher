@@ -20,13 +20,15 @@ define(
          *
          * @class
          * @classdesc The basic home screen
+         * @augments module:vas-core/base/components~HomeScreen
+         * @template vas/basic/tpl/screen/home.html
          * @registry screen.home
          */
         var HomeScreen = function(hostDOM) {
             C.HomeScreen.call(this, hostDOM);
 
             // Prepare host
-            hostDOM.addClass("home-new");
+            hostDOM.addClass("home");
 
             // Render template
             this.loadTemplate(tpl);
@@ -35,28 +37,22 @@ define(
             //
             // Sub-components
             //
-            this.tuningScreen = R.instanceComponent("screen.block.tuning_screen", this.select(".backdrop"));
-            this.forwardVisualEvents( this.backdrop, { 'left':0, 'top': 0, 'width': '100%', 'height': '100%' } );               
 
-            this.select(".machine-frame")
-
-            // this.select(".machine-frame", (function(dom) {
-
-            //     // Instance machine component
-            //     this.machine = R.instanceComponent("backdrop.machine", dom);
-            //     this.forwardVisualEvents( this.machine, { 'left':0, 'top': 0, 'width': '100%', 'height': '100%' } );
-                
-            //     // Setup machine
-            //     this.machine.onMachinePartsEnabled({});
-
-            // }).bind(this));
-
-            //
             // Backdrop
-            //
-
             this.backdrop = R.instanceComponent("backdrop.home", this.select(".backdrop"));
             this.forwardVisualEvents( this.backdrop, { 'left':0, 'top': 0, 'width': '100%', 'height': '100%' } );               
+
+            // Tuning machine
+            this.machine = R.instanceComponent("screen.block.machine", this.select(".machine"));
+            this.forwardVisualEvents( this.machine );
+
+            // Tuning screen
+            this.tuningScreen = R.instanceComponent("screen.block.tuning_screen", this.select(".screen-tuning").hide() );
+            this.forwardVisualEvents( this.tuningScreen, { 'left':0, 'top': 50, 'right': 0, 'bottom': 15 } );               
+            this.tuningScreen.on('close', (function() {
+                this.hideTuningScren();
+            }).bind(this));
+
 
             //
             // Left menu buttons
@@ -201,7 +197,7 @@ define(
          * Handle clicking on a level button
          */
         HomeScreen.prototype.handleLevelClick = function( levelConfig ) {
-
+            this.showTuningScreen( levelConfig );
         }
 
         /**
@@ -302,7 +298,7 @@ define(
         /**
          * Realign levels layout
          */
-        HomeScreen.prototype.realignLevels = function(realignCounters) {
+        HomeScreen.prototype.realignLevels = function( realignCounters ) {
             var levelsW = this.select(".levels").width() + 80,
                 levelsH = this.select(".levels").height();
 
@@ -318,6 +314,30 @@ define(
                     'left': 0
                 });
             }
+
+        }
+
+        /**
+         * Show tuing screen
+         */
+        HomeScreen.prototype.showTuningScreen = function( level ) {
+
+            // Hide all hideable elements
+            this.hostDOM.addClass("hide-hideable");
+            // Fade-in tuning screen
+            this.select(".screen-tuning").fadeIn();
+
+        }
+
+        /**
+         * Hide tuing screen
+         */
+        HomeScreen.prototype.hideTuningScren = function( level ) {
+
+            // Fade-out tuning screen
+            this.select(".screen-tuning").fadeOut();
+            // Unhide all hideable elements
+            this.hostDOM.removeClass("hide-hideable");
 
         }
 

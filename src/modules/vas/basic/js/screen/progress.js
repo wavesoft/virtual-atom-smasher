@@ -14,6 +14,7 @@ define(
 		/**
 		 * @class
 		 * @classdesc The basic home screen
+         * @augments module:vas-core/base/components~ProgressScreen
          * @registry screen.progress
 		 */
 		var ProgressScreen = function( hostDOM ) {

@@ -61,6 +61,8 @@ define(
 		/**
 		 * @class
 		 * @classdesc The introduction game screen
+         * @augments module:vas-core/base/components~IntroGameScreen
+         * @template vas/basic/tpl/screen/introgame.html
          * @registry screen.tutorial.introstats
 		 */
 		var IntroGameScreen = function( hostDOM ) {

@@ -18,6 +18,8 @@ define(
 		/**
 		 * @class
 		 * @classdesc The basic home screen
+         * @augments module:vas-core/base/components~LoginScreen
+         * @template vas/basic/tpl/screen/login.html
          * @registry screen.login
 		 */
 		var LoginScreen = function (hostDOM) {

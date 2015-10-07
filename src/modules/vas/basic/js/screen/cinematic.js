@@ -18,6 +18,7 @@ define(
 		 * 
 		 * @class
 		 * @classdesc The basic cinematic screen
+		 * @augments module:vas-core/base/components~CinematicScreen
 		 * @registry screen.cinematic
 		 */
 		var CinematicScreen = function( hostDOM ) {

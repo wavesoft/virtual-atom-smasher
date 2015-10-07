@@ -15,6 +15,7 @@ define(["jquery", "core/util/event_base", "core/ui/view", "vas/config"],
 		 * @class
 		 * @classdesc The base Component class. All other components are derrived from this.
 		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
+		 * @augments module:core/ui/view~View
 		 * @augments module:core/util/event_base~EventBase
 		 */
 		var Component = function( hostDOM ) {
@@ -55,6 +56,13 @@ define(["jquery", "core/util/event_base", "core/ui/view", "vas/config"],
 
 		// Subclass from EventBase
 		Component.prototype = Object.create( EventBase.prototype );
+
+		// Subclass additionally from View
+		{
+			var viewBase = Object.create( View.prototype );
+			for (var k in viewBase)
+				Component.prototype[k] = viewBase[k];
+		}
 
 		/**
 		 * This function is called when the component is about to be
@@ -318,7 +326,7 @@ define(["jquery", "core/util/event_base", "core/ui/view", "vas/config"],
 			// Utility function to convert relative scales to numers
 			var getValue = function( value, relValue, defValue ) {
 				if (!value) return defValue;
-				if (value.indexOf('%') < 0) {
+				if (String(value).indexOf('%') < 0) {
 					return parseInt(value);
 				} else {
 					return parseInt(value) * relValue / 100;

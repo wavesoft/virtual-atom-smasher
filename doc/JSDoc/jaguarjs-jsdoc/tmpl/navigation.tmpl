@@ -57,10 +57,9 @@ var self = this;
             ?>
             <span class="subtitle">Methods</span>
             <?js
-
                 item.methods.forEach(function (v) {
             ?>
-                <li data-name="<?js= v.longname ?>"><?js= self.linkto(v.longname, v.name) ?></li>
+                <li class="<?js= v.inherited ? 'inherited' : '' ?>" data-name="<?js= v.longname ?>"><?js= self.linkto(v.longname, v.name) ?></li>
             <?js
                 });
             }
