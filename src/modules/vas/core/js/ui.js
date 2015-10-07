@@ -678,8 +678,17 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 				var comDOM = $('<div class="'+config.css['screen']+' screen-overlay"></div>');
 				UI.hostOverlayWindow.append(comDOM);
 
+				// Reset navbar
+				UI.hostOverlayNavbar.empty().hide();
+
+				// Add 'close' button
+				var btnClose = $('<div class="navbtn-large navbtn-upper navbtn-close"><span class="glyphicon glyphicon-remove"></span></div>').appendTo(UI.hostOverlayNavbar);
+				btnClose.click((function(e) {
+					overlayStack = [];
+					UI.hideOverlay();
+				}).bind(this));
+
 				// Add 'back' button
-				UI.hostOverlayNavbar.empty();
 				if (overlayStack.length > 1) {
 
 					// Create back button
@@ -729,6 +738,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 				setTimeout(function() {
 					s.onWillShow(function() {
 						pageTransition( UI.blankOverlayScreen, comDOM, transition, function() {
+							UI.hostOverlayNavbar.fadeIn();
 							s.onShown();
 						});
 					});
@@ -972,26 +982,35 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 			// Unblur background
 			UI.host.removeClass("fx-blur");
 
-			// Transition current screen and blank
-			UI.activeOverlayComponent.onWillHide(function() {
-				pageTransition( UI.activeOverlayComponent.hostDOM, UI.blankOverlayScreen, transition, function() {
-					if (UI.activeOverlayComponent)
-						UI.activeOverlayComponent.onHidden();
-					
-					// Reset overlay
-					if (UI.activeOverlayComponent) {
-						UI.activeOverlayComponent.hostDOM.remove();
-						UI.activeOverlayComponent = null;
-					}
-					UI.hostOverlay.hide();
+			// Fadeout navbar
+			UI.hostOverlayNavbar.fadeOut(250, function() {
 
-					// Fire callback
-					if (cb_ready) cb_ready();
+				// Transition current screen and blank
+				UI.activeOverlayComponent.onWillHide(function() {
 
-					// Unblock sequencer
-					//Sequencer.unblock();
+					// Transition
+					pageTransition( UI.activeOverlayComponent.hostDOM, UI.blankOverlayScreen, transition, function() {
 
+						// Trigger hidden
+						if (UI.activeOverlayComponent)
+							UI.activeOverlayComponent.onHidden();
+
+						// Reset overlay
+						if (UI.activeOverlayComponent) {
+							UI.activeOverlayComponent.hostDOM.remove();
+							UI.activeOverlayComponent = null;
+						}
+						UI.hostOverlay.hide();
+
+						// Fire callback
+						if (cb_ready) cb_ready();
+
+						// Unblock sequencer
+						//Sequencer.unblock();
+
+					});
 				});
+
 			});
 
 
