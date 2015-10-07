@@ -18,6 +18,7 @@ define("vas/basic", ['require',
 
 	// Widgets
 	'./common/widget/tunable_slider',
+	'./common/widget/book',
 
 	// Screens
 	'./screen/bsod',
