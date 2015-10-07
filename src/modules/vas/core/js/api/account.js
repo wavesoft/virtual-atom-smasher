@@ -419,6 +419,17 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get level details for the specified level
+		 */
+		APIAccount.prototype.getLevelDetails = function(level, callback) {
+			// Query server
+			this.sendAction("levels.details", {
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
 		 * Unlock a particular machine part stage
 		 */
 		APIAccount.prototype.unlockMachineStage = function(stage, callback) {
