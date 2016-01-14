@@ -1,7 +1,7 @@
 define(
 
 	// Dependencies
-	["jquery", "vas/core/registry", "vas/core/base/components/widget_book",
+	["jquery", "vas/core/registry", "vas/config", "vas/core/user", "vas/core/base/components/widget_book",
 	 "text!vas/basic/tpl/widget/book.html" ], 
 
 	/**
@@ -9,7 +9,7 @@ define(
 	 *
  	 * @exports vas-basic/common/widget/book
 	 */
-	function($, R, BookWidget, tpl) {
+	function($, R, Config, User, BookWidget, tpl) {
 
 		/**
 		 * This is a reusable component for showing the multi-tabbed book interface.
@@ -36,6 +36,14 @@ define(
 
             // Select description tab
             this.selectTab("description");
+
+            // Load first sub-tab only when component is clicked
+            this.select(".tab-material, .tab-research, .tab-discuss").click((function(e) {
+            	var bodyElm = this.select(".body-" + $(e.target).data('id') );
+            	// Click first unselected tab
+            	if (bodyElm.find(".horiz-tab-bar > ul > li.active").length == 0)
+            		bodyElm.find(".horiz-tab-bar > ul > li:first").click();
+            }).bind(this));
 
 		};
 
@@ -87,6 +95,10 @@ define(
 				this.trigger("explain", $(e.target).data("book") );
 			}).bind(this));
 
+			// When defined, it means that the item is reset, therefore focus
+			// on the first tab
+            this.selectTab("description");
+
 		}
 
 		/**
@@ -99,8 +111,28 @@ define(
 				this.select(".tab-material").hide();
 			} else {
 
-				// Show description tab
+				// Show material tab
 				this.select(".tab-material").show();
+
+				// Get a reference to the contnet iframe
+				var iframe = this.select(".body-material iframe");
+
+				// Populate tabs
+				var tabs = this.select(".body-material .horiz-tab-bar > ul").empty();
+				for (var i=0; i<items.length; i++) {
+					var tab = $('<li></li>')
+						.append( $('<span></span>').text(items[i].title + ' ') )
+						.append( $('<a target="_blank"><span class="glyphicon glyphicon-new-window"></span></a>').attr("href", items[i].url) )
+						.data("url", items[i].url)
+						.appendTo(tabs)
+						.click(function() {
+							// Set URL
+							iframe.attr("src", $(this).data("url"));
+							// Select
+							$(this).parent().find("li.active").removeClass("active");
+							$(this).addClass("active");
+						});
+				}
 
 			}
 		}
@@ -118,6 +150,26 @@ define(
 				// Show research tab
 				this.select(".tab-research").show();
 
+				// Get a reference to the contnet iframe
+				var iframe = this.select(".body-research iframe");
+
+				// Populate tabs
+				var tabs = this.select(".body-research .horiz-tab-bar > ul").empty();
+				for (var i=0; i<items.length; i++) {
+					var tab = $('<li></li>')
+						.append( $('<span></span>').text(items[i].title + ' ') )
+						.append( $('<a target="_blank"><span class="glyphicon glyphicon-new-window"></span></a>').attr("href", items[i].url) )
+						.data("url", items[i].url)
+						.appendTo(tabs)
+						.click(function() {
+							// Navigate
+							iframe.attr("src", $(this).data("url"));
+							// Select
+							$(this).parent().find("li.active").removeClass("active");
+							$(this).addClass("active");
+						});
+				}
+
 			}
 		}
 
@@ -127,6 +179,45 @@ define(
 		 * @param {string} thread - The forum thread ID
 		 */
 		DefaultBookWidget.prototype.onDefineDiscuss = function( book_id ) {
+
+			// Prepare tabs
+			var items = [
+				{
+					'title': 'Team (Private)',
+					'short': 'Discuss with your teammates',
+					'url'  : Config['forum_vas_api'] + "?auth=" + User.profile['token'] + '&scope=team&term=' + escape(book_id) + '#content'
+				},
+				{
+					'title': 'Public',
+					'short': 'Discuss with everyone in the forum',
+					'url'  : Config['forum_vas_api'] + "?auth=" + User.profile['token'] + '&scope=public&term=' + escape(book_id) + '#content'
+				},
+				{
+					'title': 'Scientists',
+					'short': 'Discuss with the scientists',
+					'url'  : Config['forum_vas_api'] + "?auth=" + User.profile['token'] + '&scope=experts&term=' + escape(book_id) + '#content'
+				}
+			];
+
+			// Get a reference to the contnet iframe
+			var iframe = this.select(".body-discuss iframe");
+
+			// Populate tabs
+			var tabs = this.select(".body-discuss .horiz-tab-bar > ul").empty();
+			for (var i=0; i<items.length; i++) {
+				var tab = $('<li></li>')
+					.append( $('<span></span>').text(items[i].title + ' ') )
+					.append( $('<a target="_blank"><span class="glyphicon glyphicon-new-window"></span></a>').attr("href", items[i].url) )
+					.data("url", items[i].url)
+					.appendTo(tabs)
+					.click(function() {
+						// Navigate
+						iframe.attr("src", $(this).data("url"));
+						// Select
+						$(this).parent().find("li.active").removeClass("active");
+						$(this).addClass("active");
+					});
+			}
 
 		}
 

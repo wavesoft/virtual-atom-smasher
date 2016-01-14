@@ -5,15 +5,19 @@ define(
 	["jquery", "vas/core/registry", "vas/core/base/components", "tootr/canvas" ],
 
 	/**
-	 * Basic version of the engine description
+	 * Basic version of the blackboard description
 	 *
-	 * @exports basic/components/explain_physics
+	 * @exports vas-basic/common/explain/blackboard
 	 */
 	function($,R,C,Canvas) {
 
 		/**
+		 * This component instantiates a TootR canvas where 
+		 * the procedural audiovisual explanations are presented.
+		 *
 		 * @class
-		 * @classdesc The basic home screen
+		 * @classdesc The basic explanation blackboard
+		 * @registry common.explain.blackboard
 		 */
 		var ExplainBlackboard = function( hostDOM ) {
 			C.ExplainScreen.call(this, hostDOM);
@@ -127,7 +131,7 @@ define(
 		}
 
 		// Register home screen
-		R.registerComponent( "explain.blackboard", ExplainBlackboard, 1 );
+		R.registerComponent( "common.explain.blackboard", ExplainBlackboard, 1 );
 
 	}
 

@@ -737,8 +737,8 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 				// Transition between blank screen and current
 				setTimeout(function() {
 					s.onWillShow(function() {
+						UI.hostOverlayNavbar.fadeIn();
 						pageTransition( UI.blankOverlayScreen, comDOM, transition, function() {
-							UI.hostOverlayNavbar.fadeIn();
 							s.onShown();
 						});
 					});
@@ -982,36 +982,35 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 			// Unblur background
 			UI.host.removeClass("fx-blur");
 
-			// Fadeout navbar
-			UI.hostOverlayNavbar.fadeOut(250, function() {
+			// Transition current screen and blank
+			UI.activeOverlayComponent.onWillHide(function() {
 
-				// Transition current screen and blank
-				UI.activeOverlayComponent.onWillHide(function() {
+				// Fadeout nav bar
+				UI.hostOverlayNavbar.fadeOut();
 
-					// Transition
-					pageTransition( UI.activeOverlayComponent.hostDOM, UI.blankOverlayScreen, transition, function() {
+				// Transition
+				pageTransition( UI.activeOverlayComponent.hostDOM, UI.blankOverlayScreen, transition, function() {
 
-						// Trigger hidden
-						if (UI.activeOverlayComponent)
-							UI.activeOverlayComponent.onHidden();
+					// Trigger hidden
+					if (UI.activeOverlayComponent)
+						UI.activeOverlayComponent.onHidden();
 
-						// Reset overlay
-						if (UI.activeOverlayComponent) {
-							UI.activeOverlayComponent.hostDOM.remove();
-							UI.activeOverlayComponent = null;
-						}
-						UI.hostOverlay.hide();
+					// Reset overlay
+					if (UI.activeOverlayComponent) {
+						UI.activeOverlayComponent.hostDOM.remove();
+						UI.activeOverlayComponent = null;
+					}
+					UI.hostOverlay.hide();
 
-						// Fire callback
-						if (cb_ready) cb_ready();
+					// Fire callback
+					if (cb_ready) cb_ready();
 
-						// Unblock sequencer
-						//Sequencer.unblock();
+					// Unblock sequencer
+					//Sequencer.unblock();
 
-					});
 				});
-
 			});
+
 
 
 		}

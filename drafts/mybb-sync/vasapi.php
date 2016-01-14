@@ -568,7 +568,7 @@ if (isset($_GET['term'])) {
 	} else {
 
 		// Nagivate to the thread
-		header("Location: showthread.php?tid=" . $tid);
+		header("Location: showthread.php?tid=" . $tid . "#content");
 
 	}
 
@@ -632,7 +632,7 @@ if (isset($_GET['term'])) {
 		$fid = get_or_create_team_forum( $details, FORUM_PARENT_TEAM, $mybb_group['gid'] );
 
 		// Redirect to forum display
-		header("Location: forumdisplay.php?fid=" . $fid );
+		header("Location: forumdisplay.php?fid=" . $fid . "#content" );
 
 	} else if ($target == 'compose') {
 

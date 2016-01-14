@@ -16,6 +16,9 @@ define("vas/basic", ['require',
 	'./common/dataviz/histogram_full_ratio',
 	'./common/dataviz/histogram_combined',
 
+	// Explanation components
+	'./common/explain/blackboard',
+
 	// Widgets
 	'./common/widget/tunable_slider',
 	'./common/widget/book',
@@ -28,6 +31,7 @@ define("vas/basic", ['require',
 	'./screen/cinematic',
 	'./screen/introgame',
 	'./screen/simulation',
+	'./screen/courseroom',
 
 	// Blocks
 	'./screen/block/simulation/observable_point',

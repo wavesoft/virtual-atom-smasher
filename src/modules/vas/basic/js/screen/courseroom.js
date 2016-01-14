@@ -7,13 +7,17 @@ define(
 	/**
 	 * Basic version of the courseroom screen
 	 *
-	 * @exports basic/components/screem_courseroom
+	 * @exports vas-basic/screen/courseroom
 	 */
 	function($, DB, UI, config, R,C, API, Analytics) {
 
 		/**
+		 * This screen contains an explanation whiteboard where courses
+		 * can be presented. In addition to the 
+		 *
 		 * @class
-		 * @classdesc The basic home screen
+		 * @classdesc The basic courseroom screen
+		 * @registry screen.courseroom
 		 */
 		var CourseroomScene = function( hostDOM ) {
 			C.CourseroomScene.call(this, hostDOM);
@@ -106,7 +110,7 @@ define(
 		 */
 		CourseroomScene.prototype.createExplainScreen = function() {
 
-			var com = R.instanceComponent("explain.blackboard", this.eMonitor);
+			var com = R.instanceComponent("common.explain.blackboard", this.eMonitor);
 
 			if (!com) {
 				console.warn("CourseroomScene: Unable to ininitalize explain blackboard!");
