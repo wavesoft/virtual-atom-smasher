@@ -730,6 +730,14 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		};
 
 		/**
+		 * Get level details
+		 */
+		User.prototype.getLevelDetails = function( id, callback ) {
+			// Pass query to account API
+			this.accountIO.getLevelDetails( id, callback );
+		};
+
+		/**
 		 * Get user's eligibility status to the active awards
 		 */
 		User.prototype.getEligibilityStatus = function( callback ) {

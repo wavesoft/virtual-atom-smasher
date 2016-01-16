@@ -7,12 +7,40 @@
 
 	// Block
 	display: block;
-    width: 320px;
-    height: 390px;
+	width: 320px;
+	height: 390px;
 
 	// Background
-    background-repeat: no-repeat;
+	background-repeat: no-repeat;
 	background-image: url("modules/vas/basic/img/frame/spiral.png");
 	background-size: contain;
+
+	.notepad-title {
+		.font-handwriting();
+		text-align: center;
+		font-size: 2em;
+		line-height: 100%;
+		margin-top: -81px;
+		text-shadow: 0 0 10px #FFF;
+
+		span.title {
+			font-size: 0.7em
+		}
+	}
+	
+	.notepad-body {
+		position: absolute;
+		left: 65px; right: 40px;
+		top: 25px; bottom: 30px;
+		overflow: auto;
+	}
+
+	.notepad-tabs {
+		.tab-buttons(); .tab-buttons-small();
+		position: absolute;
+		width: 100%;
+		bottom: -16px;
+		left: 60px;
+	}
 
 }

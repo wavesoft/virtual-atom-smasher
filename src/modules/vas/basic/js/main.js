@@ -6,6 +6,7 @@ define("vas/basic", ['require',
 	'./common/tvhead_agent',
 
 	// Common popus
+	'./common/popup/tunable',
 	'./common/popup/observable',
 	'./common/popup/tab/observable_desc',
 
@@ -59,6 +60,7 @@ define("vas/basic", ['require',
 	'./overlay/knowledge',
 	'./overlay/papers',
 	'./overlay/teams',
+	'./overlay/profile',
 
 
 ], function(require) {

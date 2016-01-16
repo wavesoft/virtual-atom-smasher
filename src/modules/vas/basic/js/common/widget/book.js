@@ -1,7 +1,7 @@
 define(
 
 	// Dependencies
-	["jquery", "vas/core/registry", "vas/config", "vas/core/user", "vas/core/base/components/widget_book",
+	["jquery", "core/ui/tabs", "vas/core/registry", "vas/config", "vas/core/user", "vas/core/base/components/widget_book",
 	 "text!vas/basic/tpl/widget/book.html" ], 
 
 	/**
@@ -9,7 +9,7 @@ define(
 	 *
  	 * @exports vas-basic/common/widget/book
 	 */
-	function($, R, Config, User, BookWidget, tpl) {
+	function($, Tabs, R, Config, User, BookWidget, tpl) {
 
 		/**
 		 * This is a reusable component for showing the multi-tabbed book interface.
@@ -27,15 +27,14 @@ define(
 			this.loadTemplate(tpl);
             this.renderView();
 
-            // Bind listeners on tab buttons
-            this.select(".tab-bar > ul > li").click((function(e) {
-            	// Select appropriate group
-            	var elm = $(e.target);
-            	this.selectTab(elm.data("id"));
-            }).bind(this));
+            // Setup buttons
+            this.tabsController = new Tabs(
+            		this.select(".tab-body"),
+            		this.select(".tab-bar > ul")
+            	);
 
             // Select description tab
-            this.selectTab("description");
+            this.tabsController.selectTab("description");
 
             // Load first sub-tab only when component is clicked
             this.select(".tab-material, .tab-research, .tab-discuss").click((function(e) {
@@ -49,27 +48,6 @@ define(
 
 		// Subclass from BookWidget
 		DefaultBookWidget.prototype = Object.create( BookWidget.prototype );
-
-		////////////////////////////////////////////////////////////
-		//                    Helper Functions                    //
-		////////////////////////////////////////////////////////////
-
-		/**
-		 * Select a tab by it's class name
-		 *
-		 * @param {string} name - The tab name
-		 */
-		DefaultBookWidget.prototype.selectTab = function( name ) {
-
-			// Hide all tabs 
-			this.select(".tab-body > div").hide();
-			this.select(".tab-bar > ul > li").removeClass("active");
-
-			// Activate requested tab
-			this.select(".tab-body > div.body-" + name).show();
-			this.select(".tab-bar > ul > li.tab-" + name).addClass("active");
-
-		}
 
 		////////////////////////////////////////////////////////////
 		//            Implementation of the BookWidget            //
@@ -97,7 +75,7 @@ define(
 
 			// When defined, it means that the item is reset, therefore focus
 			// on the first tab
-            this.selectTab("description");
+            this.tabsController.selectTab("description");
 
 		}
 
@@ -228,7 +206,7 @@ define(
 		 */
 		DefaultBookWidget.prototype.onLoadError = function( message ) {
 			this.select(".tab-bar > ul > li").hide();
-			this.selectTab("error");
+			this.tabsController.selectTab("error");
 		}
 
 		// Store tuning widget component on registry

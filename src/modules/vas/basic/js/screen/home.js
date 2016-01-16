@@ -67,7 +67,7 @@ define(
             // Profile button
             this.select(".navbtn-profile").click((function () {
                 // Do something when pressed
-                window.alert("profile");
+                UI.showOverlay('overlay.profile', UI.Transitions.SCALEDOWN_TOP);
             }).bind(this));
 
             ///
@@ -202,7 +202,12 @@ define(
          * Handle clicking on a level button
          */
         HomeScreen.prototype.handleLevelClick = function( levelConfig ) {
-            this.showTuningScreen( levelConfig );
+            User.getLevelDetails( levelConfig['index'], (function(details) {
+                // Define level details
+                this.tuningScreen.onLevelDefined( details );
+                // Show tuning screen
+                this.showTuningScreen();
+            }).bind(this));
         }
 
         /**

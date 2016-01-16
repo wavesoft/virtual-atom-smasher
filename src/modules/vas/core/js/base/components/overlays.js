@@ -53,6 +53,28 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		TeamsOverlay.prototype = Object.create( Component.prototype );
 
 		////////////////////////////////////////////////////////////
+		/**
+		 * Initializes a new Profile Overlay Component.
+		 *
+		 * This is the component were the user can see and edit his/her
+		 * profile details.
+		 *
+		 * @class
+		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
+		 * @augments module:vas-core/base/component~Component
+		 *
+		 */
+		var ProfileOverlay = function( hostDOM ) {
+
+			// Initialize base class
+			Component.call(this, hostDOM);
+
+		}
+
+		// Subclass from Component
+		ProfileOverlay.prototype = Object.create( Component.prototype );
+
+		////////////////////////////////////////////////////////////
 		//             Event definitions for JSDoc                //
 		////////////////////////////////////////////////////////////
 
@@ -62,6 +84,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		var overlays = {
 			'PapersOverlay'			: PapersOverlay,
 			'TeamsOverlay'			: TeamsOverlay,
+			'ProfileOverlay'		: ProfileOverlay,
 		};
 
 		return overlays;

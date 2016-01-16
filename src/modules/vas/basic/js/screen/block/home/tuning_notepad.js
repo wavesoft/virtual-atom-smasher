@@ -1,7 +1,7 @@
 define(
 
 	// Dependencies
-	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/components/tuning",
+	["jquery", "core/ui/tabs", "vas/core/registry", "vas/core/ui", "vas/core/base/components/tuning",
 	 "text!vas/basic/tpl/screen/block/home/tuning_notepad.html" ], 
 
 	/**
@@ -9,7 +9,7 @@ define(
 	 *
  	 * @exports vas-basic/screen/block/home/tuning_notepad
 	 */
-	function($, R, UI, TC, tpl) {
+	function($, Tabs, R, UI, TC, tpl) {
 
 		/**
 		 * @class
@@ -24,6 +24,13 @@ define(
 			// Render template
             this.loadTemplate(tpl);
             this.renderView();
+
+			// Create a tabs controller
+			this.tabsController = new Tabs(
+					this.select(".notepad-body"),
+					this.select(".notepad-tabs > ul")
+				);
+
 		}
 
 		// Subclass from TuningNotepad
@@ -50,6 +57,15 @@ define(
 		 */
 		DefaultTuningNotepad.prototype.getPreferredSize = function() {
 			return [ 320, 390 ];
+		}
+
+		/**
+		 * Update level information
+		 */
+		DefaultTuningNotepad.prototype.onLevelDefined = function(details) {
+			this.select(".notepad-title > .level").text("Level "+details['index']);
+			this.select(".notepad-title > .title").text(details['title']);
+			this.select(".body-help").html(details['desc']);
 		}
 
 		// Store tuning widget component on registry

@@ -1,14 +1,15 @@
 define(
 
 	// Dependencies
-	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/components/tuning" ], 
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/components/tuning", 
+	 "text!vas/basic/tpl/screen/block/home/tuning_panel.html" ], 
 
 	/**
 	 * This is the default tunable widget component for the base interface.
 	 *
  	 * @exports vas-basic/screen/block/home/tuning_panel
 	 */
-	function($, R, UI, TC) {
+	function($, R, UI, TC, tpl) {
 
 		/**
 		 * A pop-up tuning panel.
@@ -21,10 +22,14 @@ define(
 			// Initialize widget
 			TC.TuningPanel.call(this, hostDOM);
 
+			// Render template
+            this.loadTemplate(tpl);
+            this.renderView();
+
 			// Prepare DOM
-			hostDOM.addClass("tuning-panel hidden");
-			this.headerElm = $('<div class="header">Test</div>').appendTo(hostDOM);
-			this.tunablesElm = $('<div class="tunables"></div>').appendTo(hostDOM);
+			hostDOM.addClass("tuning-panel");
+			this.headerElm = this.select(".tuning-header");
+			this.tunablesElm = this.select(".tunables");
 
 			// Map of tunables
 			this.tunablesMap = {};
@@ -98,6 +103,15 @@ define(
 		////////////////////////////////////////////////////////////
 		//           Implementation of the TuningWidget           //
 		////////////////////////////////////////////////////////////
+
+		/**
+		 * Update level information
+		 */
+		DefaultTuningPanel.prototype.onLevelDefined = function(details) {
+			console.log(details);
+
+			this.onTuningPanelDefined("", details['tunables']);
+		}
 
 		/**
 		 * This event is fired when the tunables of this panel should be defined

@@ -424,6 +424,7 @@ define(["vas/core/api/interface", "vas/config"],
 		APIAccount.prototype.getLevelDetails = function(level, callback) {
 			// Query server
 			this.sendAction("levels.details", {
+				'level': level
 			}, function(data) {
 				if (data && callback) callback(data['data']);
 			});

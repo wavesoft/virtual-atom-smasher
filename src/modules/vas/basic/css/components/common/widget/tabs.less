@@ -1,0 +1,75 @@
+
+///////////////////////////////////////////////
+// tabs.less - Reusable tab code
+///////////////////////////////////////////////
+
+.tab-body {
+	> div {
+		display: block;
+		position: absolute;
+		left: 0; right: 0;
+		width: 100%; height: 100%;
+	}
+}
+
+.tab-buttons {
+	> ul {
+		list-style: none;
+		padding: 0; margin: 0;
+		> li {
+			display: inline-block;
+			position: relative;
+			width: 100px; height: 40px;
+			cursor: pointer;
+			margin-left: -5px;
+			text-align: center;
+		    padding-top: 10px;
+
+			// Background 
+			background-image: url(modules/vas/basic/img/button/btn-tab.png);
+			background-repeat: no-repeat;
+			background-position: 0 0;
+			&:hover { background-position: 0 -50px; }
+			&:active { background-position: 0 -100px; }
+
+			// Active background and styling
+			&.active {
+				height: 35px; top: -1px;
+				background-position: 0 -155px;
+
+				// Lock background
+				&:hover, &:active {
+					background-position: 0 -155px;
+				}
+			}
+
+		}
+	}
+}
+
+.tab-buttons-small {
+	> ul {
+		> li {
+			width: 80px; height: 32px;
+			margin-left: -6px;
+		    padding-top: 8px;
+
+			// Background 
+			background-image: url(modules/vas/basic/img/button/btn-tab-small.png);
+			&:hover { background-position: 0 -40px; }
+			&:active { background-position: 0 -80px; }
+
+			// Active background and styling
+			&.active {
+				height: 28px; top: -1px;
+				background-position: 0 -124px;
+
+				// Lock background
+				&:hover, &:active {
+					background-position: 0 -124px;
+				}
+			}
+
+		}
+	}
+}

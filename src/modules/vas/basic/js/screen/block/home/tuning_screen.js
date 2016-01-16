@@ -1,7 +1,7 @@
 define(
 
 	// Dependencies
-	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/base/components/tuning",
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/user", "vas/core/base/components/tuning",
 	 "text!vas/basic/tpl/screen/block/home/tuning_screen.html" ], 
 
 	/**
@@ -9,7 +9,7 @@ define(
 	 *
  	 * @exports vas-basic/screen/block/home/tuning_screen
 	 */
-	function($, R, UI, TC, tpl) {
+	function($, R, UI, User, TC, tpl) {
 
 		/**
 		 * @class
@@ -36,10 +36,6 @@ define(
             // Tuning notepad
             this.tuningNotepad = R.instanceComponent("screen.block.tuning_notepad", this.select(".tuning-notepad"));
             this.forwardVisualEvents( this.tuningNotepad );
-            
-            this.hostDOM.click((function() {
-            	this.trigger('close');
-            }).bind(this));
 
 		}
 
@@ -72,6 +68,14 @@ define(
 			this.tuningNotepad.onResize( notepadSize[0], height );
 			this.tuningPanel.onResize( width - notepadSize[0], height );
 
+		}
+
+		/**
+		 * Update level details
+		 */
+		DefaultTuningScreen.prototype.onLevelDefined = function(details) {
+			this.tuningPanel.onLevelDefined(details);
+			this.tuningNotepad.onLevelDefined(details);
 		}
 
 		// Store tuning widget component on registry

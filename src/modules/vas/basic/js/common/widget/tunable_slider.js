@@ -117,7 +117,7 @@ define(
 						Analytics.restartTimer("info-popup");
 
 						// Prepare the body
-						var comBody = R.instanceComponent("infoblock.tunable", hostDOM);
+						var comBody = R.instanceComponent("popup.tunable", hostDOM);
 						if (comBody) {
 
 							// Update infoblock 
