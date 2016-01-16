@@ -47,8 +47,8 @@ define(
             this.forwardVisualEvents( this.machine );
 
             // Tuning screen
-            this.tuningScreen = R.instanceComponent("screen.block.tuning_screen", this.select(".screen-tuning").hide() );
-            this.forwardVisualEvents( this.tuningScreen, { 'left':0, 'top': 50, 'right': 0, 'bottom': 15 } );               
+            this.tuningScreen = R.instanceComponent("screen.block.tuning_screen", this.select(".home-content-tuning") );
+            this.forwardVisualEvents( this.tuningScreen, { 'left':0, 'top': 50, 'right': 0, 'bottom': 0 } );               
             this.tuningScreen.on('close', (function() {
                 this.hideTuningScren();
             }).bind(this));
@@ -157,6 +157,11 @@ define(
             // Level offset
             this.levelOffset = 0;
             this.levels = [];
+
+            //
+            // Enable page transitions on content
+            //
+            UI.enablePageTransitions( this.select(".home-content") );
 
         }
 
@@ -322,10 +327,12 @@ define(
          */
         HomeScreen.prototype.showTuningScreen = function( level ) {
 
-            // Hide all hideable elements
-            this.hostDOM.addClass("hide-hideable");
             // Fade-in tuning screen
-            this.select(".screen-tuning").fadeIn();
+            UI.pageTransition(
+                    this.select(".home-content-machine"),
+                    this.select(".home-content-tuning"),
+                    UI.Transitions.DIFF_TOP
+                );
 
         }
 
@@ -335,9 +342,11 @@ define(
         HomeScreen.prototype.hideTuningScren = function( level ) {
 
             // Fade-out tuning screen
-            this.select(".screen-tuning").fadeOut();
-            // Unhide all hideable elements
-            this.hostDOM.removeClass("hide-hideable");
+            UI.pageTransition(
+                    this.select(".home-content-tuning"),
+                    this.select(".home-content-machine"),
+                    UI.Transitions.DIFF_BOTTOM
+                );
 
         }
 

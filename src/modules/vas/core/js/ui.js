@@ -121,61 +121,6 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 		}
 
 		/**
-		 * Cross-transition between two CSS elements with callback
-		 */
-		function pageTransition(elmPrev, elmNext, transition, cb) {
-
-			// Find the event name for the 'animation completed' event
-			var animEndEventNames = {
-					'webkitAnimation' : 'webkitAnimationEnd',
-					'oAnimation' : 'oAnimationEnd',
-					'msAnimation' : 'MSAnimationEnd',
-					'animation' : 'animationend',
-					'mozAnimation': 'mozAnimation'
-				},
-				animEndEventName = animEndEventNames[ with_vendor_suffix('animation') ];
-
-			// Add page-transitions for moving out
-			elmPrev.addClass( transition[0] );
-			elmNext.addClass( transition[1] + " pt-page-ontop pt-current");
-
-			// Local function to finalize animation
-			var finalizeAnimation = function() {
-
-				// Remove all the page transition classes from both pages
-				elmNext.attr("class", elmNext.data("originalClasses") + " pt-current" );
-				elmPrev.attr("class", elmPrev.data("originalClasses") );
-
-				// Fire callback
-				cb();
-
-			}
-
-			// Callbacks as functions
-			var prevOk = false, nextOk = false,
-				fnPrevComplete = function() {
-					if (prevOk) return; prevOk = true;
-					elmPrev.off( animEndEventName );
-					if (++vc == 2) finalizeAnimation();
-				},
-				fnNextComplete = function() {
-					if (nextOk) return; nextOk = true;
-					elmNext.off( animEndEventName );
-					if (++vc == 2) finalizeAnimation();
-				};
-
-			// Listen for CSS 'animation completed' events
-			var vc = 0; 
-			elmPrev.on( animEndEventName, fnPrevComplete );
-			elmNext.on( animEndEventName, fnNextComplete );
-
-			// Fire failover callbacks with timeouts
-			setTimeout( fnPrevComplete, 800 );
-			setTimeout( fnNextComplete, 800 );
-
-		}
-
-		/**
 		 * Functions to makage a 4-segment black masks that can be used to hide/show
 		 * any arbitrary object on the UI, just by it's coorinates
 		 */
@@ -637,6 +582,72 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 		}
 
 		/**
+		 * Enable CSS transitions on the specified element host
+		 */
+		UI.enablePageTransitions = function(elmHost) {
+			elmHost.addClass("pt-perspective");
+			elmHost.children().each(function(i,e) {
+				$(e).data("originalClasses", $(e).attr("class"));
+				if (i == 0) $(e).addClass("pt-current pt-page-ontop");
+			});
+		}
+
+		/**
+		 * CSS Transition helper between two DOM Elements
+		 */
+		UI.pageTransition = function(elmPrev, elmNext, transition, cb) {
+
+			// Find the event name for the 'animation completed' event
+			var animEndEventNames = {
+					'webkitAnimation' : 'webkitAnimationEnd',
+					'oAnimation' : 'oAnimationEnd',
+					'msAnimation' : 'MSAnimationEnd',
+					'animation' : 'animationend',
+					'mozAnimation': 'mozAnimation'
+				},
+				animEndEventName = animEndEventNames[ with_vendor_suffix('animation') ];
+
+			// Add page-transitions for moving out
+			elmPrev.addClass( transition[0] );
+			elmNext.addClass( transition[1] + " pt-page-ontop pt-current");
+
+			// Local function to finalize animation
+			var finalizeAnimation = function() {
+
+				// Remove all the page transition classes from both pages
+				elmNext.attr("class", elmNext.data("originalClasses") + " pt-current" );
+				elmPrev.attr("class", elmPrev.data("originalClasses") );
+
+				// Fire callback
+				if (cb) cb();
+
+			}
+
+			// Callbacks as functions
+			var prevOk = false, nextOk = false,
+				fnPrevComplete = function() {
+					if (prevOk) return; prevOk = true;
+					elmPrev.off( animEndEventName );
+					if (++vc == 2) finalizeAnimation();
+				},
+				fnNextComplete = function() {
+					if (nextOk) return; nextOk = true;
+					elmNext.off( animEndEventName );
+					if (++vc == 2) finalizeAnimation();
+				};
+
+			// Listen for CSS 'animation completed' events
+			var vc = 0; 
+			elmPrev.on( animEndEventName, fnPrevComplete );
+			elmNext.on( animEndEventName, fnNextComplete );
+
+			// Fire failover callbacks with timeouts
+			//setTimeout( fnPrevComplete, 800 );
+			//setTimeout( fnNextComplete, 800 );
+
+		}
+
+		/**
 		 * Slide an overlay module as screen.
 		 *
 		 * @param {string} name - The name of the module to focus.
@@ -738,7 +749,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 				setTimeout(function() {
 					s.onWillShow(function() {
 						UI.hostOverlayNavbar.fadeIn();
-						pageTransition( UI.blankOverlayScreen, comDOM, transition, function() {
+						UI.pageTransition( UI.blankOverlayScreen, comDOM, transition, function() {
 							s.onShown();
 						});
 					});
@@ -989,7 +1000,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 				UI.hostOverlayNavbar.fadeOut();
 
 				// Transition
-				pageTransition( UI.activeOverlayComponent.hostDOM, UI.blankOverlayScreen, transition, function() {
+				UI.pageTransition( UI.activeOverlayComponent.hostDOM, UI.blankOverlayScreen, transition, function() {
 
 					// Trigger hidden
 					if (UI.activeOverlayComponent)
@@ -1918,7 +1929,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 					UI.mininav.onPageWillChange( prevScreen, name );
 
 				// And cross-fade simultanously
-				pageTransition(ePrev.hostDOM, eNext.hostDOM, transition, function() {
+				UI.pageTransition(ePrev.hostDOM, eNext.hostDOM, transition, function() {
 
 					// Fire shown/hidden
 					if (ePrev !== undefined) ePrev.onHidden();
