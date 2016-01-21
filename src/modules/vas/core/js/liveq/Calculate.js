@@ -189,12 +189,12 @@ define(
 					nPointsChi2++;
 
 					var chi2th5 = ( yN > 1.0 )
-						? Math.pow(yN - 1.0,2.)/(Math.pow(eyDenomNhi,2.)+Math.pow(0.05*yN,2.))
-						: Math.pow(yN - 1.0,2.)/(Math.pow(eyDenomNlo,2.)+Math.pow(0.05*yN,2.));
+						? Math.pow(yN - 1.0,2.)/(Math.pow(eyDenomNhi,2.)+Math.pow(uncertainty*yN,2.))
+						: Math.pow(yN - 1.0,2.)/(Math.pow(eyDenomNlo,2.)+Math.pow(uncertainty*yN,2.));
 
 					var sigma2chi2th5 = ( yN > 1.0 )
-						? chi2th5 * 4.*Math.pow(sigChi2*eyStatLoN,2.) / (Math.pow(eyDenomNhi,2.)+Math.pow(0.05,2.))
-						: chi2th5 * 4.*Math.pow(sigChi2*eyStatHiN,2.) / (Math.pow(eyDenomNlo,2.)+Math.pow(0.05,2.));
+						? chi2th5 * 4.*Math.pow(sigChi2*eyStatLoN,2.) / (Math.pow(eyDenomNhi,2.)+Math.pow(uncertainty,2.))
+						: chi2th5 * 4.*Math.pow(sigChi2*eyStatHiN,2.) / (Math.pow(eyDenomNlo,2.)+Math.pow(uncertainty,2.));
 
 					sumChi2th5       += chi2th5;
 					sumSigma2chi2th5 += sigma2chi2th5;

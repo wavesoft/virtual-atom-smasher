@@ -1,0 +1,814 @@
+/**
+ * [core/main] - Core initialization module
+ */
+define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisocket", "vas/core/global", 
+		"vas/core/liveq/Calculate", "ccl-tracker"], 
+
+	/**
+	 * User API fast interface.
+	 */
+	function(Config, User, EventBase, APISocket, Global, Calculate, Analytics) {
+
+		/**
+		 * Class that holds and maintains the active job details
+		 * @class
+		 */
+		var SimulationJob = function( parent, id ) {
+			this.parent = parent;
+
+			/**
+			 * The Job ID
+			 * @type {string}
+			 */
+			this.id = id;
+
+			/**
+			 * The linked level details
+			 * @type {Object}
+			 */
+			this.levelDetails = null;
+
+			/**
+			 * The hisograms
+			 * @type {array}
+			 */
+			this.histograms = [];
+
+			/**
+			 * The goodness of fit for each histogram
+			 * @type {array}
+			 */
+			this.fits = [];
+
+			/**
+			 * The average value of the chi² distribution
+			 * @type {Number}
+			 */
+			this.fitAverage = 0;
+
+			/**
+			 * The observable metadata
+			 * @type {object}
+			 */
+			this.observablesMetadata = {};
+
+			/**
+			 * Rate of events per second
+			 * @type {Number}
+			 */
+			this.eventRate = 0;
+
+			/**
+			 * Number of events
+			 * @type {Number}
+			 */
+			this.events = 0;
+
+			/**
+			 * Maximum number of events
+			 * @type {Number}
+			 */
+			this.maxEvents = 0;
+
+			/**
+			 * Progress in the simulation
+			 * @type {Number}
+			 */
+			this.progress = 0;
+
+			/**
+			 * Rest of job metadata
+			 * @type {object}
+			 */
+			this.meta = {};
+
+			/**
+			 * Agent details
+			 * @type {array}
+			 */
+			this.agents = [];
+
+			// Last properties for rate counting
+			this._lastNevtsTimestamp = 0;
+			this._rateRing = [];
+
+		};
+
+		/**
+		 * Update the histograms
+		 */
+		SimulationJob.prototype.setHistograms = function( histograms ) {
+
+			// Update histograms
+			this.histograms = histograms;
+
+			// Update histograms
+			this.parent.trigger('update.histograms', this.histograms);
+
+			// Run analysis over the histograms
+			var fitCount = 0;
+			this.fitAverage = 0;
+			this.fits = [];
+			for (var i=0; i<histograms.length; i++) {
+				var h = histograms[i],
+					chi2 = Calculate.chi2WithError( h.ref.data, h.data, 0.05 );
+
+				// If chi2 is null, set some defaults
+				if (!chi2) {
+
+					// Update fits
+					this.fits.push({
+						'id': h.id,
+						'fit': 0,
+						'error': 0,
+					});
+
+				} else {
+					// Update fits
+					this.fits.push({
+						'id': h.id,
+						'fit': chi2[0],
+						'error': chi2[1]
+					});
+
+					// Update average
+					this.fitAverage += chi2[0];
+					fitCount++;
+				}
+
+			}
+			if (fitCount > 0) this.fitAverage /= fitCount;
+
+			// Update fits
+			this.parent.trigger('update.fits', this.fits);
+
+			// Update average fit
+			this.parent.trigger('update.fitAverage', this.fitAverage);
+
+		}
+
+		/**
+		 * Update the current number of events and the event rate estimate
+		 */
+		SimulationJob.prototype.updateNevts = function( nevts ) {
+
+			// Update number
+			var currTime = Date.now();
+
+			// Define or update rate
+			if (this._lastNevtsTimestamp == 0) {
+				this._lastNevtsTimestamp = currTime;
+
+			} else {
+
+				// If for any reason nevts is smaller, reset
+				if (nevts < this.events) {
+					this._rateRing = [];
+					this.eventRate = 0;
+
+				} else {
+
+					// Calculate rate (events / ms)
+					var rate = (nevts - this.events) * 1000 / (currTime - this._lastNevtsTimestamp);
+
+					// Round values through event rate ring
+					this._rateRing.push(rate);
+					if (this._rateRing.length > 10) this._rateRing.shift();
+
+					// Average
+					this.eventRate = 0;
+					for (var i=0; i<this._rateRing.length; i++)
+						this.eventRate += this._rateRing[i];
+					this.eventRate /= this._rateRing.length;
+
+					// Update event rate
+					this.parent.trigger('update.eventRate', this.eventRate);
+
+				}
+
+			}
+
+			// Update events
+			this._lastNevtsTimestamp = currTime;
+			this.events = nevts;
+
+			// If we have max events, update progress
+			if (this.maxEvents) {
+				this.progress = 100 * nevts / this.maxEvents;
+				this.parent.trigger('update.progress', this.progress);
+			}
+
+			// Update number of events
+			this.parent.trigger('update.events', nevts);
+
+		}
+
+		/**
+		 * Update the current agents
+		 */
+		SimulationJob.prototype.setAgents = function( agents ) {
+
+			// Reset agents array
+			this.agents = [];
+			for (var i=0; i<agents.length; i++) {
+				var a = agents[i];
+
+				// Parse lat/lng if exist, otherwise use random
+				var lat = String(Math.random() * 180 - 90),
+					lng = String(Math.random() * 180);
+
+				// Update lat/lng
+				if (a['latlng'] != undefined) {
+					var parts = a['latlng'].split(",");
+					lat = Number(parts[0]);
+					lng = Number(parts[1]);
+				}
+
+				// Add agent
+				this.agents.push({
+					'uuid': a['uuid'],
+					'lat': lat,
+					'lng': lng
+				});
+			}
+
+			// Update agents
+			this.parent.trigger('update.agents', this.agents);
+
+		}
+
+		/**
+		 * Add an agent
+		 */
+		SimulationJob.prototype.addAgent = function( uuid, lat, lng ) {
+			// Add agent
+			this.agents.push({
+				'uuid' : uuid,
+				'lat'  : lat,
+				'lng'  : lng
+			});
+
+			// Update agents
+			this.parent.trigger('update.agents', this.agents);
+		}
+
+		/**
+		 * Remove an agent
+		 */
+		SimulationJob.prototype.removeAgent = function( uuid ) {
+			for (var i=0; i<this.agents.length; i++) {
+				if (this.agents[i].uuid == uuid) {
+
+					// Delete agent
+					this.agents.splice(i,1);
+
+					// Update agents
+					this.parent.trigger('update.agents', this.agents);
+
+					// Do not continue
+					return;
+				}
+			}
+		}
+
+		/**
+		 * Reset all properties
+		 */
+		SimulationJob.prototype.reset = function() {
+
+			// Reset properties
+			this.histograms = {};
+			this.observablesMetadata = {};
+			this.fits = [];
+			this.fitAverage = 0;
+			this.events = 0;
+			this.eventRate = 0;
+			this.maxEvents = 0;
+			this.progress = 0;
+			this.meta = {};
+			this.agents = [];
+			this._lastNevtsTimestamp = 0;
+			this._rateRing = [];
+
+			// Send interface udpate events to reset
+			this.triggerUpdates();
+
+		}
+
+		/**
+		 * Trigger updates
+		 */
+		SimulationJob.prototype.triggerUpdates = function() {
+			this.parent.trigger('update.eventRate', this.eventRate);
+			this.parent.trigger('update.progress', this.progress);
+			this.parent.trigger('update.events', this.events);
+			this.parent.trigger('update.agents', this.agents);
+			this.parent.trigger('update.histograms', this.histograms);
+			this.parent.trigger('update.fits', this.fits);
+			this.parent.trigger('update.fitAverage', this.fitAverage);
+		}
+
+		/**
+		 * Simulation Control and Realtime Feedback
+		 *
+		 * @class
+		 * @classdesc Simulation Control and Realtime Feedback Class
+		 * @augments module:core/util/event_base~EventBase
+		 * @exports vas-core/simulation
+		 */
+		var Simulation = function() {
+
+			// Subclass from EventBase
+			EventBase.call(this);
+
+			/**
+			 * Cache of observable definitions
+			 * @type {object}
+			 */
+			this._observableDetails = {};
+
+			/**
+			 * Active job metadata
+			 * @type {vas-core/simulation~SimulationJob}
+			 */
+			this.activeJob = null;
+
+			// On user log-in update status
+			Global.events.on('login', (function(profile) {
+
+				// Open a LabSocket interface
+				this.labapi = APISocket.openLabsocket();
+				this.bindToLabsocket( this.labapi );
+
+				// Enumerate pending jobs
+				this.labapi.enumJobs();
+
+			}).bind(this));
+
+		};
+
+		// Subclass from EventBase
+		Simulation.prototype = Object.create( EventBase.prototype );
+
+		///////////////////////////////////////////////////////
+		// Helper Functions
+		///////////////////////////////////////////////////////
+
+		/**
+		 * Get (optionally cached) definitions of the specified list of observables
+		 */
+		Simulation.prototype.getObservableDetails = function( names, callback ) {
+
+			// Check what is not cached
+			var ans = {},
+				queryNames = [];
+			for (var i=0; i<names.length; i++) {
+				if (this._observableDetails[names[i]] === undefined) {
+					// Schedule for query
+					queryNames.push( names[i] );
+				} else {
+					// Oterwise update right now
+					ans[ names[i] ] = this._observableDetails[names[i]];
+				}
+			}
+
+			// If everything is cached, callback now
+			if (queryNames.length == 0) {
+				callback( ans );
+				return;
+			}
+
+			// Otherwise, query DB
+			var DB = APISocket.openDb();
+			DB.getMultipleRecords("observable", names, (function(docs) {
+
+				// Handle response
+				for (var i=0; i<docs.length; i++) {
+					var obs = docs[i];
+
+					// Update cache and answer
+					this._observableDetails[obs['name']] = obs;
+					ans[obs['name']] = obs;
+
+				}
+
+				// Fire callback
+				callback( ans );
+
+			}).bind(this));
+
+		}
+
+		/**
+		 * Bind to a particular job
+		 */
+		Simulation.prototype.bindToJob = function( jid ) {
+
+			// Crete management class
+			this.activeJob = new SimulationJob( this, jid );
+
+			// Select the particular job
+			// (This will trigger a 'jobDetails' event)
+			this.labapi.selectJob( jid );
+
+		}
+
+		/**
+		 * Unbind from the active job
+		 */
+		Simulation.prototype.unbindFromJob = function() {
+
+			// Release job description
+			if (this.activeJob) {
+				this.activeJob.reset();			
+				this.activeJob = null;
+
+				// The job is now undefined
+				this.trigger('job.undefined');
+			}
+
+			// Change state to idle
+			this.trigger('stateChanged', 'idle');
+
+		}
+
+		/**
+		 * Bind to lab socket events
+		 */
+		Simulation.prototype.bindToLabsocket = function( labSocket ) {
+
+			//
+			// All LabSocket errors are logged to console
+			//
+			labSocket.on('error', (function(message, critical) {
+
+				// Forward event
+				this.trigger('error', message, critical);
+
+			}).bind(this));
+
+			//
+			// When a histogram is added, we are creating an observable
+			//
+			labSocket.on('histogramsAdded', (function(histos) {
+
+				// Forward event
+				this.trigger('histogramsAdded', histos);
+
+				// If we don't have an active job something went wrong
+				if (!this.activeJob) {
+					console.error("Got histogramsAdded, without having an active job!");
+					return;
+				}
+
+				// Collect names of histograms
+				var histoNames = [];
+				for (var i=0; i<histos.length; i++) {
+					histoNames.push(histos[i].id);
+				}
+
+				// Get observable metadata and update job details
+				this.getObservableDetails( histoNames, (function(meta) { 
+
+					// Update observables metadata
+					this.activeJob.observablesMetadata = meta;
+
+					// Update histograms
+					this.activeJob.setHistograms( histos );
+
+					// The job is now defined
+					this.trigger('job.defined', this.activeJob);
+
+				}).bind(this));
+
+			}).bind(this));
+
+
+			//
+			// When the bulk of histograms is updated, update
+			// the possibly open overlay component.
+			//
+			labSocket.on('histogramsUpdated', (function(histos) {
+
+				// Forward event
+				this.trigger('histogramsUpdated', histos);
+
+				// If we don't have an active job something went wrong
+				if (!this.activeJob) {
+					console.error("Got histogramsUpdated, without having an active job!");
+					return;
+				}
+
+				// Update histograms
+				this.activeJob.setHistograms( histos );
+
+				// // Update histograms and index
+				// this.lastHistograms = histos;
+				// for (var i=0; i<histos.length; i++) {
+				// 	this.lastHistogramsIndex[histos[i].id] = histos[i];
+				// }
+
+				// // Make 'view' button clickable
+				// this.select(".p-view").removeClass("disabled");
+
+				// // Update all observables
+				// for (var i=0; i<histos.length; i++) {
+				// 	var h = histos[i];
+				// 	this.updateObservable( h.id, h );
+				// }
+
+				// // Update overlay component
+				// if (this.overlayComponent) {
+				// 	this.overlayComponent.onHistogramsDefined( histos );
+				// }
+
+			}).bind(this));
+
+
+			//
+			// When metadata are updated, calculate various metrics 
+			//
+			labSocket.on('metadataUpdated', (function(meta) {
+
+				// Forward event
+				this.trigger('metadataUpdated', meta);
+
+				// If we don't have an active job something went wrong
+				if (!this.activeJob) {
+					console.error("Got metadataUpdated, without having an active job!");
+					return;
+				}
+
+				// Update number of events and rate counter
+				this.activeJob.updateNevts( parseInt(meta['nevts']) );
+
+			}).bind(this));
+
+
+			//
+			// Listen for telemetry data and update worlders
+			//
+			labSocket.on('log', (function(logLine, telemetryData) {
+
+				// Forward event
+				this.trigger('log', logLine, telemetryData);
+
+				// If we don't have an active job something went wrong
+				if (!this.activeJob) {
+					console.error("Got log, without having an active job!");
+					return;
+				}
+
+				// Handle telemetry data
+				if (telemetryData['agent_added']) {
+
+					// Parse lat/lng if exist, otherwise use random
+					var lat = String(Math.random() * 180 - 90),
+						lng = String(Math.random() * 180);
+					// Update lat/lng
+					if (telemetryData['agent_added_latlng'] != undefined) {
+						var parts = telemetryData['agent_added_latlng'].split(",");
+						lat = Number(parts[0]);
+						lng = Number(parts[1]);
+					}
+
+					// Add agent
+					this.activeJob.addAgent( telemetryData['agent_added'],lat,lng );
+
+				} else if (telemetryData['agent_removed']) {
+
+					// Remove agent
+					this.activeJob.removeAgent( telemetryData['agent_removed'] );
+
+				}
+
+			}).bind(this));
+
+			//
+			// Reset interface when current job is deselected
+			//
+			labSocket.on('jobDeselected', (function(jobid) {
+
+				// Forward event
+				this.trigger('jobDeselected', jobid);
+
+				// Unbind job when deselected
+				if (this.activeJob && (this.activeJob.id == jobid))
+					this.unbindFromJob();
+
+			}).bind(this));
+
+			//
+			// Handle job listings
+			//
+			labSocket.on('jobAdded', (function(job) {
+
+				// Forward event
+				this.trigger('jobAdded', job);
+
+				// The first job is activated
+				if (!this.activeJob) {
+					this.bindToJob( job['id'] );
+				}
+
+			}).bind(this));
+			labSocket.on('jobRemoved', (function(job) {
+
+				// Forward event
+				this.trigger('jobRemoved', job);
+
+				// Unbind job when removed
+				if (this.activeJob && (this.activeJob.id == jobid))
+					this.unbindFromJob();
+
+			}).bind(this));
+
+			//
+			// When job is completed, reset interface
+			//
+			labSocket.on('runCompleted', (function() {
+
+				// Forward event
+				this.trigger('runCompleted');
+
+				// Unbind job when completed
+				if (this.activeJob && (this.activeJob.id == jobid))
+					this.unbindFromJob();
+
+			}).bind(this));
+
+			//
+			// When such job is already exists
+			//
+			labSocket.on('runExists', (function() {
+
+				// Forward event
+				this.trigger('runExists');
+
+				// If we don't have an active job something went wrong
+				if (!this.activeJob) {
+					console.error("Got runExists, without having an active job!");
+					return;
+				}
+
+				// // Make the interface aware of the situation
+				// this.select(".p-run-status").text( "ARCHIVED" );
+				// this.select(".p-progress .panel-value").text( "---" );
+				// this.select(".p-machines .panel-value").text("---");
+				// this.select(".p-events .panel-value").text("---");
+				// this.select(".p-abort").addClass("disabled");
+				// this.select(".p-details").removeClass("disabled");
+
+				// // Set the existing flag
+				// this.existingResults = true;
+
+				// // Do not allow to submit another job
+				// UI.scheduleFlash(
+				// 	"Existing Submission", 
+				// 	"Someone has already tried this configuration. We are presenting you the results.",
+				// 	"flash-icons/relax.png"
+				// );
+
+			}).bind(this));
+
+			//
+			// Apply job details when they arrive
+			//
+			labSocket.on('jobDetails', (function(job, agents) {
+
+				// Forward event
+				this.trigger('jobDetails', job, agents);
+
+				// If we don't have an active job something went wrong
+				if (!this.activeJob) {
+					console.error("Got jobDetails, without having an active job!");
+					return;
+				}
+
+				// Keep job details
+				this.activeJob.meta = job;
+				this.activeJob.maxEvents = job['maxEvents'];
+				this.activeJob.setAgents( agents );
+
+				// Get level details
+				if (!this.activeJob.levelDetails) {
+					// Query level details from job record
+					User.getLevelDetails( job['level'], (function(details) {
+						this.activeJob.levelDetails = details;
+					}).bind(this));
+				}
+
+			}).bind(this));
+
+		}
+
+		///////////////////////////////////////////////////////
+		// Public Interface
+		///////////////////////////////////////////////////////
+
+		/**
+		 * Check if we can submit the specified job
+		 */
+		Simulation.prototype.canSubmit = function( tunables, observables, level, callback ) {
+
+			// If we have an active job callback right away
+			if (this.activeJob != null) {
+				callback(false, "You can only submit one job. Please wait until it's finished or abort the previous one.");
+				return;
+			}
+
+			// But don't trust only our cached state
+			this.labapi.verifyJob( tunables, observables, (function(status) {
+				if (status == "ok") {
+					callback(true);
+				} else if (status == "conflict") {
+					callback(false, "You can only submit one job. Please wait until it's finished or abort the previous one.");
+				}
+			}).bind(this));
+
+		}
+
+		/**
+		 * Submit simulation parameters and start
+		 */
+		Simulation.prototype.submit = function( tunables, observables, level ) {
+
+			// Make sure no duplicates exist
+			if (this.activeJob != null) {
+				console.error("You can only submit a job if there is no other running!");
+				return;
+			};
+
+			// Get level details
+			User.getLevelDetails( level, (function(levelDetails) {
+
+				// Try to submit job
+				this.labapi.submitJob( tunables, observables, level, (function(job) {
+					var jid = job['jid'];
+					// If job data exist no jid is allocated, wait for 'runExists' event
+					if (!jid) return;
+
+					// Create job
+					this.activeJob = new SimulationJob( this, jid );
+
+					// Set level details
+					this.activeJob.levelDetails = levelDetails;
+
+					// The 'histogramsAdded' and 'jobDetails' will be fired soon
+
+				}).bind(this) );
+
+			}).bind(this));
+
+		}
+
+		/**
+		 * Abort a running simulation
+		 */
+		Simulation.prototype.abort = function() {
+
+			// Don't do anything if there is an active job
+			if (!this.activeJob)
+				return;
+
+			// Abort job
+			this.labapi.abortJob( this.activeJob.id );
+
+		}
+
+		///////////////////////////////////////////////////////
+		// Events Definition
+		///////////////////////////////////////////////////////
+
+		/**
+		 * The simulation state has changes
+		 *
+		 * 	- idle 	    : No simulation is running
+		 *  - queued    : The simulation is queued
+		 *  - started   : The simulation has started to one or more workers
+		 *  - running   : The simulation is running
+		 *  - halted    : The simulation is halted
+		 *
+		 * @param {string} state - The new state name
+		 * @event module:vas-core/simulation~Simulation#stateChanged		
+		 */
+
+		/**
+		 * @param {vas-core/simulation~SimulationJob} job - The job that was just defined
+		 * @event module:vas-core/simulation~Simulation#job.defined		
+		 */
+
+		/**
+		 * @param {vas-core/simulation~SimulationJob} job - The job that was just undefined
+		 * @event module:vas-core/simulation~Simulation#job.undefined		
+		 */
+
+		///////////////////////////////////////////////////////
+
+		// Create singleton
+		var simulation = new Simulation();
+		return simulation;
+
+	}
+
+);

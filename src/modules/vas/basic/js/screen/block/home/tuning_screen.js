@@ -1,7 +1,8 @@
 define(
 
 	// Dependencies
-	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/user", "vas/core/base/components/tuning",
+	["jquery", "vas/core/registry", "vas/core/ui", "vas/core/user",
+	 "vas/core/base/components/tuning", "vas/core/simulation",
 	 "text!vas/basic/tpl/screen/block/home/tuning_screen.html" ], 
 
 	/**
@@ -9,7 +10,8 @@ define(
 	 *
  	 * @exports vas-basic/screen/block/home/tuning_screen
 	 */
-	function($, R, UI, User, TC, tpl) {
+	function($, R, UI, User, TC, Simulation, tpl) {
+		window.sim = Simulation;
 
 		/**
 		 * @class
