@@ -32,10 +32,12 @@ define(
             // Tuning screen
             this.tuningPanel = R.instanceComponent("screen.block.tuning_panel", this.select(".tuning-panel"));
             this.forwardVisualEvents( this.tuningPanel );
+            this.adoptEvents( this.tuningPanel );
 
             // Tuning notepad
             this.tuningNotepad = R.instanceComponent("screen.block.tuning_notepad", this.select(".tuning-notepad"));
             this.forwardVisualEvents( this.tuningNotepad );
+            this.adoptEvents( this.tuningPanel );
 
 		}
 

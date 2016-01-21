@@ -1,0 +1,96 @@
+
+///////////////////////////////////////////////
+// tunable-sm.less - Small tunable widget
+///////////////////////////////////////////////
+
+.widget-tunable-sm {
+	.transition( background-color 0.25s );
+	background-color: rgba(255,255,255,0);
+	display: block;
+	position: relative;
+	height: (@tuning-scr-marker-h + @tuning-scr-drag-h) + @tuning-scr-pad-v * 3;
+	width: 100%;
+
+	&.highlight {
+		background-color: #FFFACD;
+	}
+
+	div.title {
+		cursor: help;
+		display: block;
+		position: absolute;
+		left: 0px; width: @tuning-scr-title-width;
+		top: @tuning-scr-pad-v; 
+		height: (@tuning-scr-marker-h + @tuning-scr-drag-h);
+
+		line-height: (@tuning-scr-marker-h + @tuning-scr-drag-h);
+		text-align: center;
+
+		font-size: 16px;
+		font-weight: bold;
+		color: @tuning-scr-c-label-f;
+	}
+
+	div.value-host {
+		position: absolute;
+		display: block;
+		left: @tuning-scr-title-width + 5px; right: 0;
+		top: @tuning-scr-pad-v; 
+		height: (@tuning-scr-marker-h + @tuning-scr-drag-h);
+
+		a.minus, a.plus {
+			position: absolute;
+			display: block;
+			right: 0; top: 0;
+
+			background-color: @tuning-scr-c-button-b;
+			color: @tuning-scr-c-button-f;
+			font-size: 14px;
+			font-weight: bold;
+			cursor: pointer;
+
+			width: (@tuning-scr-marker-h + @tuning-scr-drag-h)/2;
+			height: (@tuning-scr-marker-h + @tuning-scr-drag-h)/2;
+			text-align: center;
+			line-height: (@tuning-scr-marker-h + @tuning-scr-drag-h)/2;
+		}
+		a.minus {
+			top: (@tuning-scr-marker-h + @tuning-scr-drag-h)/2;
+			border-radius: 0 0 5px 0;
+		}
+		a.plus {
+			border-radius: 0 5px 0 0;
+		}
+		a:hover {
+			text-decoration: none;
+			background-color: lighten( @tuning-scr-c-button-b, 10%);
+		}
+
+		div.value {
+			display: block;
+			position: absolute;
+			line-height: (@tuning-scr-marker-h + @tuning-scr-drag-h);
+			left: 0; right: (@tuning-scr-marker-h + @tuning-scr-drag-h)/2;
+			top: 0; height: 100%;
+			padding: 0 5px;
+			font-size: 16px;
+
+		    border-radius: 5px 0 0 5px;
+
+			background-color: #EEE;
+			text-shadow: 1px 1px #FFF;
+			border-style: solid none none solid;
+			border-width: 1px;
+			border-color: #CCC;
+		}
+	}
+
+
+	&:hover {
+		background-color: rgba(255,255,255,0.5);
+		div.markers {
+			opacity: 1;
+		}
+	}
+
+}

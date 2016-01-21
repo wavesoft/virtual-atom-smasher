@@ -521,7 +521,63 @@ define("vas/core",
 					}
 
 					// Bind events
-					// TODO: Implement the home screen events
+					scrHome.on('help', function(term) {
+						VAS.displayHelp(term);
+					});
+					scrHome.on('showBook', function(bookID) {
+						VAS.displayBook(bookID);
+					});
+					scrHome.on('showCourse', function(courseName) {
+						VAS.displayCourse(courseName, function() {
+							VAS.displayTuningScreen();
+						});
+					});
+					scrHome.on('submitParameters', function( values, observables ) {
+
+						// Set job detals and display jobs screen
+						VAS.scrJobs.onSubmitRequest( values, observables );
+						VAS.displaySimulation();
+
+					});
+					scrHome.on('interpolateParameters', function(values) {
+						LiveQCore.requestInterpolation( values, 
+							function(histograms) {
+								scrHome.onUpdate(histograms);
+								VAS.referenceHistograms = histograms;
+							},
+							function(error) {
+								UI.growl("Could not request interpolation! "+error, "alert", 5000);
+							}
+						);
+
+					});
+					scrHome.on('flash', function(title,body,icon) {
+						UI.scheduleFlash(title, body, icon);
+					});
+					scrHome.on('displayStatus', function() {
+						VAS.displayStatus();
+					});
+					scrHome.on('displaySimulation', function() {
+						VAS.displaySimulation();
+					});
+					scrHome.on('feedback', function(data) {
+						VAS.sendFeedback(data);
+					});
+                    scrHome.on('logout', function(data) {
+                        // Go to login screen
+						UI.selectScreen("screen.login");
+                        // Logout
+                        APISocket.openAccount().logout();
+						// Stop auto-commit timers
+						VAS.stopActivityAutocommit();
+					});
+
+					// Reload tuning configuration
+					scrHome.on('reload', function() {
+						User.getTuningConfiguration(function(config) {
+							scrHome.onTuningConfigUpdated( config );
+						});
+					});
 
 					// Complete home
 					prog_home.ok("Home screen is ready");

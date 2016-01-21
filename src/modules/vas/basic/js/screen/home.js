@@ -49,10 +49,10 @@ define(
             // Tuning screen
             this.tuningScreen = R.instanceComponent("screen.block.tuning_screen", this.select(".home-content-tuning") );
             this.forwardVisualEvents( this.tuningScreen, { 'left':0, 'top': 50, 'right': 0, 'bottom': 0 } );               
+            this.adoptEvents( this.tuningScreen );
             this.tuningScreen.on('close', (function() {
                 this.hideTuningScren();
             }).bind(this));
-
 
             //
             // Left menu buttons
@@ -211,6 +211,13 @@ define(
         }
 
         /**
+         * Update all the status widgets around the home page 
+         */
+        HomeScreen.prototype.updateWidgets = function() {
+            
+        }
+
+        /**
          * Update the level configuration according to the local properties
          */
         HomeScreen.prototype.updateLevels = function() {
@@ -332,12 +339,18 @@ define(
          */
         HomeScreen.prototype.showTuningScreen = function( level ) {
 
-            // Fade-in tuning screen
-            UI.pageTransition(
-                    this.select(".home-content-machine"),
-                    this.select(".home-content-tuning"),
-                    UI.Transitions.DIFF_TOP
-                );
+            // Notify showing
+            this.tuningScreen.onWillShow((function() {
+
+                // Fade-in tuning screen
+                UI.pageTransition(
+                        this.select(".home-content-machine"),
+                        this.select(".home-content-tuning"),
+                        UI.Transitions.DIFF_TOP,
+                        this.tuningScreen.onShown
+                    );
+
+            }).bind(this));
 
         }
 
@@ -346,12 +359,18 @@ define(
          */
         HomeScreen.prototype.hideTuningScren = function( level ) {
 
-            // Fade-out tuning screen
-            UI.pageTransition(
-                    this.select(".home-content-tuning"),
-                    this.select(".home-content-machine"),
-                    UI.Transitions.DIFF_BOTTOM
-                );
+            // Notify hiding
+            this.tuningScreen.onWillHide((function() {
+
+                // Fade-out tuning screen
+                UI.pageTransition(
+                        this.select(".home-content-tuning"),
+                        this.select(".home-content-machine"),
+                        UI.Transitions.DIFF_BOTTOM,
+                        this.tuningScreen.onHidden
+                    );
+
+            }).bind(this));
 
         }
 

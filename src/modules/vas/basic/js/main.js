@@ -22,6 +22,7 @@ define("vas/basic", ['require',
 
 	// Widgets
 	'./common/widget/tunable_slider',
+	'./common/widget/tunable_slider_sm',
 	'./common/widget/book',
 
 	// Screens

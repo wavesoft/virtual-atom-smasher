@@ -454,6 +454,20 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Return a list of team resources
+		 */
+		User.prototype.getTeamResources = function( callback ) {
+			this.accountIO.getTeamResources( callback );
+		}
+
+		/**
+		 * Return a list of team details
+		 */
+		User.prototype.getTeamDetails = function( callback ) {
+			this.accountIO.getTeamDetails( callback );
+		}
+
+		/**
 		 * Request to change team
 		 */
 		User.prototype.requestToJoinTeam = function( teamID, callback ) {

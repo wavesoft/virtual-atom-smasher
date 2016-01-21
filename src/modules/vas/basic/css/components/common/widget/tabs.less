@@ -73,3 +73,34 @@
 		}
 	}
 }
+
+// 
+// Framed tab themes
+//
+.tab-frame-panel {
+	
+	.tab-body {
+		.frame-panel();
+		position: absolute;
+		top: 0; bottom: 44px;
+		left: 0; width: 100%; 
+		> div {
+			position: absolute;
+			left: 8px;
+			top: 8px;
+			right: 8px;
+			bottom: 8px;
+			height: auto;
+			width: auto;
+	        padding: 0 10px;
+	    }
+	}
+
+	.tab-bar  {
+		.tab-buttons();
+		position: absolute;
+		bottom: 0; height: 50px;
+		left: 60px; width: 100%; 
+	}
+
+}

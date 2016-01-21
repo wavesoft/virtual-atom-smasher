@@ -26,7 +26,7 @@ define([], function() {
 		// Focus active tab or first
 		var activeTab = this.tabsHost.find("li.active");
 		if (activeTab.length == 0) {
-			activeTab.click();
+			this.tabsHost.children().first().click();
 		} else {
 			activeTab.click();
 		}

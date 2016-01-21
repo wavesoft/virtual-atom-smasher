@@ -454,6 +454,28 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get team resources
+		 */
+		APIAccount.prototype.getTeamResources = function(callback) {
+			// Query server
+			this.sendAction("team.resources", {
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
+		 * Get team details
+		 */
+		APIAccount.prototype.getTeamDetails = function(callback) {
+			// Query server
+			this.sendAction("team.details", {
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
 		 * Get team listing
 		 */
 		APIAccount.prototype.requestToJoinTeam = function(team, callback) {
