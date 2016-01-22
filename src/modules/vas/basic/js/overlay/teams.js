@@ -3,6 +3,7 @@ define(
 	// Dependencies
 	[
 		"jquery", 
+		"vas/config",
 		"core/ui/tabs",
 		"core/ui/table",
 		"vas/core/base/components/overlays", 
@@ -16,7 +17,7 @@ define(
 	 *
 	 * @exports vas-basic/screen/teams
 	 */
-	function ($, Tabs, Table, C, R, User, tpl) {
+	function ($, Config, Tabs, Table, C, R, User, tpl) {
 
 		function dateFromTs(ts) {
     		var date = new Date(ts*1000);
@@ -50,28 +51,44 @@ define(
             		this.select(".tab-body"), this.select(".tab-bar > ul")
             	);
 
-            // Init table
-            this.tableResources = new Table(
+            // Init Resources Table
+            this.tableResources = 
+            	new Table(
             		this.select(".table-resources")
-            	);
+            	)
+	            .addColumn( "", "Status", 1,
+	            	function(id, data){ 
+	            		if (data['jobs_failed'] >= data['jobs_succeed']) {
+		            		return $('<img src="modules/vas/basic/img/icons/bullet_error.png" />');
+	            		} else {
+		            		return $('<img src="modules/vas/basic/img/icons/bullet_green.png" />');
+	            		} })
+	            .addColumn( "uuid", "ID", 4, 
+	            	function(id, data){ return $('<a target="_blank"></a>')
+	            		.attr("href","https://www.google.com/maps?q="+data['latlng'])
+	            		.text( String(id).split("/")[1] ); })
+	            .addColumn( "lastActivity", "Last Activity", 3,
+	            	function(ts){ return $('<span></span>').text( dateFromTs(ts) ); })
+	            .addColumn( "jobs_sent", "Jobs", 1 )
+	            .addColumn( "jobs_succeed", "Good", 1 )
+	            .addColumn( "jobs_failed", "Bad", 1 )
+	            .addColumn( "slots", "Slots", 1 );
 
-            this.tableResources.addColumn( "", "Status", 1,
-            	function(id, data){ 
-            		if (data['jobs_failed'] >= data['jobs_succeed']) {
-	            		return $('<img src="modules/vas/basic/img/icons/bullet_error.png" />');
-            		} else {
-	            		return $('<img src="modules/vas/basic/img/icons/bullet_green.png" />');
-            		} });
-            this.tableResources.addColumn( "uuid", "ID", 4, 
-            	function(id, data){ return $('<a target="_blank"></a>')
-            		.attr("href","https://www.google.com/maps?q="+data['latlng'])
-            		.text( String(id).split("/")[1] ); });
-            this.tableResources.addColumn( "lastActivity", "Last Activity", 3,
-            	function(ts){ return $('<span></span>').text( dateFromTs(ts) ); });
-            this.tableResources.addColumn( "jobs_sent", "Jobs", 1 );
-            this.tableResources.addColumn( "jobs_succeed", "Good", 1 );
-            this.tableResources.addColumn( "jobs_failed", "Bad", 1 );
-            this.tableResources.addColumn( "slots", "Slots", 1 );
+            // Init Resources Table
+            this.tableMembers = 
+            	new Table(
+            		this.select(".table-members")
+            	)
+	            .addColumn( "", "Status", 1,
+	            	function(id, data){ 
+	            		return $('<img src="modules/vas/basic/img/icons/user.png" />');
+	            	})
+	            .addColumn( "name", "Name", 7, "left",
+	            	function(name, data){ return $('<a target="_blank"></a>')
+	            		.attr("href",Config['forum_vas_api'] + "?auth=" + User.profile['token'] + "&profile="+data['name'])
+	            		.text( name ); })
+	            .addColumn( "papers", "Papers", 2 )
+	            .addColumn( "totalPoints", "Points", 2 )
 
 			///////////////////////////////
 			// View Control
@@ -109,6 +126,7 @@ define(
 
 				// Update details
 				console.log("Details:",data);
+				this.tableMembers.set( data['members'] );
 
 				cb_countdown();
 			}).bind(this));

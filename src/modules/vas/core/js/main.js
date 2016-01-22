@@ -532,10 +532,10 @@ define("vas/core",
 							VAS.displayTuningScreen();
 						});
 					});
-					scrHome.on('submitParameters', function( values, observables ) {
+					scrHome.on('submitParameters', function( values, observables, level ) {
 
 						// Set job detals and display jobs screen
-						VAS.scrJobs.onSubmitRequest( values, observables );
+						VAS.scrJobs.onSubmitRequest( values, observables, level );
 						VAS.displaySimulation();
 
 					});
@@ -755,10 +755,10 @@ define("vas/core",
 							VAS.displayTuningScreen();
 						});
 					});
-					scrTuning.on('submitParameters', function( values, observables ) {
+					scrTuning.on('submitParameters', function( values, observables, level ) {
 
 						// Set job detals and display jobs screen
-						VAS.scrJobs.onSubmitRequest( values, observables );
+						VAS.scrJobs.onSubmitRequest( values, observables, level );
 						VAS.displaySimulation();
 
 					});
