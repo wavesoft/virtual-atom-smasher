@@ -4,6 +4,7 @@ define(
 	[
 		"jquery", 
 		"core/ui/tabs",
+		"core/ui/table",
 		"vas/core/base/components/overlays", 
 		"vas/core/registry", 
 		"vas/core/user",
@@ -15,7 +16,19 @@ define(
 	 *
 	 * @exports vas-basic/screen/teams
 	 */
-	function ($, Tabs, C, R, User, tpl) {
+	function ($, Tabs, Table, C, R, User, tpl) {
+
+		function dateFromTs(ts) {
+    		var date = new Date(ts*1000);
+    		return (
+    			('0'+date.getDate()).substr(-2) + '/' +
+    			('0'+date.getMonth()).substr(-2) + '/' +
+    				 date.getFullYear() + ' ' +
+    			('0'+date.getHours()).substr(-2) + ':' +
+    			('0'+date.getMinutes()).substr(-2) + ':' +
+    			('0'+date.getSeconds()).substr(-2)
+    		);
+		}
 
 		/**
 		 * @class
@@ -36,6 +49,29 @@ define(
             this.tabsController = new Tabs(
             		this.select(".tab-body"), this.select(".tab-bar > ul")
             	);
+
+            // Init table
+            this.tableResources = new Table(
+            		this.select(".table-resources")
+            	);
+
+            this.tableResources.addColumn( "", "Status", 1,
+            	function(id, data){ 
+            		if (data['jobs_failed'] >= data['jobs_succeed']) {
+	            		return $('<img src="modules/vas/basic/img/icons/bullet_error.png" />');
+            		} else {
+	            		return $('<img src="modules/vas/basic/img/icons/bullet_green.png" />');
+            		} });
+            this.tableResources.addColumn( "uuid", "ID", 4, 
+            	function(id, data){ return $('<a target="_blank"></a>')
+            		.attr("href","https://www.google.com/maps?q="+data['latlng'])
+            		.text( String(id).split("/")[1] ); });
+            this.tableResources.addColumn( "lastActivity", "Last Activity", 3,
+            	function(ts){ return $('<span></span>').text( dateFromTs(ts) ); });
+            this.tableResources.addColumn( "jobs_sent", "Jobs", 1 );
+            this.tableResources.addColumn( "jobs_succeed", "Good", 1 );
+            this.tableResources.addColumn( "jobs_failed", "Bad", 1 );
+            this.tableResources.addColumn( "slots", "Slots", 1 );
 
 			///////////////////////////////
 			// View Control
@@ -61,20 +97,21 @@ define(
 				};
 
 			// Perform parallel requests
-			User.getTeamResources(function(data) {
+			User.getTeamResources((function(data) {
 
 				// Update resources
 				console.log("Resources:",data);
+				this.tableResources.set( data );
 
 				cb_countdown();
-			});
-			User.getTeamDetails(function(data) {
+			}).bind(this));
+			User.getTeamDetails((function(data) {
 
 				// Update details
 				console.log("Details:",data);
 
 				cb_countdown();
-			});
+			}).bind(this));
 
 		}
 
