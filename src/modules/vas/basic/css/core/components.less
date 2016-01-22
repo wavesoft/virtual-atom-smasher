@@ -37,6 +37,14 @@ div.table-list {
 
 			border-bottom: solid 1px #CCC;
 			background-color: rgba(255,255,255,0.5);
+
+			td.table-header-sortable, th.table-header-sortable {
+				cursor: pointer;
+
+				&.table-header-active {
+					color: #2980B9;
+				}
+			}
 		}
 
 		tbody {
