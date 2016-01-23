@@ -80,7 +80,7 @@ define(
 				// Update machine progress
 				this.select(".machine-progress .bar")
 					.css({
-						'width': progress + ' %'
+						'width': progress + '%'
 					});
 
 			}).bind(this));
@@ -112,6 +112,10 @@ define(
 				// Get needle rotation
 				var rot = mapNeedleRotation( fitScore ),
 					transform = "rotate("+( 90 - rot )+"deg)";
+
+				// No fitScore means missing -> go to 'bad' not good
+				if (!fitScore)
+					transform = "rotate(-90deg)";
 
 				// Apply rotation to the needle
 				this.select(".machine-needle")

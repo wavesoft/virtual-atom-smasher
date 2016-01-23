@@ -90,6 +90,19 @@ define(
 	            .addColumn( "papers", "Papers", 2 )
 	            .addColumn( "totalPoints", "Points", 2 )
 
+            // Init Papers Table
+            this.tablePapers = 
+            	new Table(
+            		this.select(".table-papers")
+            	)
+	            .addColumn( "", "Status", 1,
+	            	function(id, data){ 
+	            		return $('<img src="modules/vas/basic/img/icons/book_open.png" />');
+	            	})
+	            .addColumn( "title", "Title", 7, "left" )
+	            .addColumn( "fit", "Score", 2 )
+	            .addColumn( "citations", "Citations", 2 );
+
 			///////////////////////////////
 			// View Control
 			///////////////////////////////
