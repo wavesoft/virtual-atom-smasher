@@ -75,6 +75,30 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		ProfileOverlay.prototype = Object.create( Component.prototype );
 
 		////////////////////////////////////////////////////////////
+		/**
+		 * Initializes a new Quicksim Overlay Component.
+		 *
+		 * This overlay is presented to the user when he/she tries some values.
+		 * It starts the simulation and waits until the data make some sense
+		 * before allowing the user to continue.
+		 *
+		 *
+		 * @class
+		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
+		 * @augments module:vas-core/base/component~Component
+		 *
+		 */
+		var QuicksimOverlay = function( hostDOM ) {
+
+			// Initialize base class
+			Component.call(this, hostDOM);
+
+		}
+
+		// Subclass from Component
+		QuicksimOverlay.prototype = Object.create( Component.prototype );
+
+		////////////////////////////////////////////////////////////
 		//             Event definitions for JSDoc                //
 		////////////////////////////////////////////////////////////
 
@@ -85,6 +109,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 			'PapersOverlay'			: PapersOverlay,
 			'TeamsOverlay'			: TeamsOverlay,
 			'ProfileOverlay'		: ProfileOverlay,
+			'QuicksimOverlay'		: QuicksimOverlay,
 		};
 
 		return overlays;
