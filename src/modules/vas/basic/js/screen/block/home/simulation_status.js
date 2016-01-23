@@ -114,8 +114,15 @@ define(
 					transform = "rotate("+( 90 - rot )+"deg)";
 
 				// No fitScore means missing -> go to 'bad' not good
-				if (!fitScore)
+				if (!fitScore) 
 					transform = "rotate(-90deg)";
+
+				// Show/hide flag
+				if (fitScore > 4.0) {
+					this.select(".looks-bad").addClass("visible");
+				} else {					
+					this.select(".looks-bad").removeClass("visible");
+				}
 
 				// Apply rotation to the needle
 				this.select(".machine-needle")

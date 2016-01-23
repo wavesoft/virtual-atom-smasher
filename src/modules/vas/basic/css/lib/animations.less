@@ -8,34 +8,55 @@
 //
 .animation-spin(@duration: 4000ms) {
 
-    -webkit-animation-name: animate-spin;
+    -webkit-animation-name: kf-spin;
     -webkit-animation-duration: @duration;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: linear;
-    -moz-animation-name: animate-spin;
+    -moz-animation-name: kf-spin;
     -moz-animation-duration: @duration;
     -moz-animation-iteration-count: infinite;
     -moz-animation-timing-function: linear;
-    -ms-animation-name: animate-spin;
+    -ms-animation-name: kf-spin;
     -ms-animation-duration: @duration;
     -ms-animation-iteration-count: infinite;
     -ms-animation-timing-function: linear;
     
-    animation-name: animate-spin;
+    animation-name: kf-spin;
     animation-duration: @duration;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
 
 }
-@-moz-keyframes animate-spin {
+@-moz-keyframes kf-spin {
     from { -moz-transform: rotate(0deg); }
     to { -moz-transform: rotate(360deg); }
 }
-@-webkit-keyframes animate-spin {
+@-webkit-keyframes kf-spin {
     from { -webkit-transform: rotate(0deg); }
     to { -webkit-transform: rotate(360deg); }
 }
-@keyframes animate-spin {
+@keyframes kf-spin {
     from {transform:rotate(0deg);}
     to {transform:rotate(360deg);}
+}
+
+//
+// Fade in/out
+//
+.animation-blink(@duration: 1s) {
+  -webkit-animation: kf-blink @duration linear infinite;
+  -moz-animation: kf-blink @duration linear infinite;
+  -ms-animation: kf-blink @duration linear infinite;
+  animation: kf-blink @duration linear infinite;
+  opacity: 1.0;
+}
+
+@-moz-keyframes kf-blink {  
+  50% { opacity: 0.0; }
+}
+@-webkit-keyframes kf-blink {  
+  50% { opacity: 0.0; }
+}
+@keyframes kf-blink {  
+  50% { opacity: 0.0; }
 }
