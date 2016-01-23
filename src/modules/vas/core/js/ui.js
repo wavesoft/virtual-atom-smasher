@@ -217,7 +217,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 			tutorialCompleteListener = false,
 			tutorialActive = false,
 			tutorialSequence = "",
-			overlayStack = [],
+			pendingOverlays = [],
 			popupWidget = false;
 
 		///////////////////////////////////////////////////////////////
@@ -458,7 +458,6 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 				var lastActiveComponent = UI.activeOverlayComponent;
 
 				// Reset overlay stack and hide
-				overlayStack = [];
 				UI.hideOverlay();
 
 				// Trigger dispose to the previously active component
@@ -567,7 +566,6 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 
 					// Hide overlay
 					if (UI.activeOverlayComponent) {
-						overlayStack = [];
 						e.preventDefault();
 						e.stopPropagation();
 						Sequencer.reset();
@@ -627,19 +625,17 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 			var prevOk = false, nextOk = false,
 				fnPrevComplete = function() {
 					if (prevOk) return; prevOk = true;
-					elmPrev.off( animEndEventName );
 					if (++vc == 2) finalizeAnimation();
 				},
 				fnNextComplete = function() {
 					if (nextOk) return; nextOk = true;
-					elmNext.off( animEndEventName );
 					if (++vc == 2) finalizeAnimation();
 				};
 
 			// Listen for CSS 'animation completed' events
 			var vc = 0; 
-			elmPrev.on( animEndEventName, fnPrevComplete );
-			elmNext.on( animEndEventName, fnNextComplete );
+			elmPrev.one( animEndEventName, fnPrevComplete );
+			elmNext.one( animEndEventName, fnNextComplete );
 
 			// Fire failover callbacks with timeouts
 			//setTimeout( fnPrevComplete, 800 );
@@ -662,9 +658,6 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 			if (UI.lockdown)
 				return;
 
-			// Store request on stack
-			overlayStack.push([ name, v_transition, v_cb_ready, v_blur_back ]);
-
 			// Check for missing arguments
 			var args = [v_transition, v_cb_ready, v_blur_back],
 				transition = UI.Transitions.ZOOM_IN,
@@ -682,12 +675,33 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 				}
 			}
 
+			// Prepare request
+			var req = [name, transition, cb_ready, blur_back];
+
+			// If we have an active element place request on queue
+			if (UI.activeOverlayComponent) {
+				console.log("Overlay: Queued", req);
+				pendingOverlays.push(req);
+				return;
+			}
+
+			// Check for a next pending overlay request
+			var doCheckNextOverlay = function() {
+				if (pendingOverlays.length == 0) return;
+				var item = pendingOverlays.shift();
+
+				// Show item
+				console.log("Overlay: Processing", item);
+				doShowOverlay(item[0], item[1], item[2], item[3]);
+			}
+
 			// Delay-execute showOverlay if required
-			var doShowOverlay = function() {
+			var doShowOverlay = function(name, transition, cb_ready, blur_back) {
 
 				// Create host DOM for the component
 				var comDOM = $('<div class="'+config.css['screen']+' screen-overlay"></div>');
 				UI.hostOverlayWindow.append(comDOM);
+				UI.hostOverlayWindow.css("visibility", "hidden");
 
 				// Reset navbar
 				UI.hostOverlayNavbar.empty().hide();
@@ -695,34 +709,8 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 				// Add 'close' button
 				var btnClose = $('<div class="navbtn-large navbtn-upper navbtn-close"><span class="glyphicon glyphicon-remove"></span></div>').appendTo(UI.hostOverlayNavbar);
 				btnClose.click((function(e) {
-					overlayStack = [];
-					UI.hideOverlay();
+					UI.hideOverlay(doCheckNextOverlay);
 				}).bind(this));
-
-				// Add 'back' button
-				if (overlayStack.length > 1) {
-
-					// Create back button
-					var backBtn = $('<a class="nav-button"><span class="glyphicon glyphicon-menu-left"></span> Back</>').appendTo(UI.hostOverlayNavbar);
-					backBtn.click(function(e) {
-
-						// Stop propagation
-						e.preventDefault();
-						e.stopPropagation();
-
-						// Pop current page
-						overlayStack.pop();
-
-						// Get page to focus
-						// (Will be pushed again on showOverlay)
-						var focusAt = overlayStack.pop();
-						UI.showOverlay(
-								focusAt[0], focusAt[1], focusAt[2], focusAt[3], focusAt[4]
-							);
-
-					});
-
-				}
 
 				// Create screen instance
 				var s = R.instanceComponent(name, comDOM);
@@ -749,6 +737,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 				setTimeout(function() {
 					s.onWillShow(function() {
 						UI.hostOverlayNavbar.fadeIn();
+						UI.hostOverlayWindow.css("visibility", "visible");
 						UI.pageTransition( UI.blankOverlayScreen, comDOM, transition, function() {
 							s.onShown();
 						});
@@ -757,19 +746,17 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 
 				// Listen for close events of this component
 				s.onOnce('close', function() {
-					// Flush stack
-					overlayStack = [];
 					// Hide overlay
-					UI.hideOverlay();
+					UI.hideOverlay(doCheckNextOverlay);
 				});
 
-			}
+			};
 
 			// Block sequencer to prohibit interactions
 			//Sequencer.block();
 
 			// Hide previous and show this
-			UI.hideOverlay(doShowOverlay);
+			doShowOverlay( name, transition, cb_ready, blur_back );
 
 		}
 
@@ -1005,7 +992,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 					// Trigger hidden
 					if (UI.activeOverlayComponent)
 						UI.activeOverlayComponent.onHidden();
-
+ 
 					// Reset overlay
 					if (UI.activeOverlayComponent) {
 						UI.activeOverlayComponent.hostDOM.remove();
@@ -1014,7 +1001,7 @@ define(["jquery", "vas/config", "vas/core/registry", "vas/core/db", "vas/media",
 					UI.hostOverlay.hide();
 
 					// Fire callback
-					if (cb_ready) cb_ready();
+					if (cb_ready) setTimeout(cb_ready, 100);;
 
 					// Unblock sequencer
 					//Sequencer.unblock();
