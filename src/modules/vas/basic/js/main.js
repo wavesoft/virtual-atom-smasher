@@ -63,6 +63,7 @@ define("vas/basic", ['require',
 	'./overlay/papers',
 	'./overlay/teams',
 	'./overlay/profile',
+	'./overlay/exam',
 
 
 ], function(require) {

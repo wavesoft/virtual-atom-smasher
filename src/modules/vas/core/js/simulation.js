@@ -292,7 +292,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 					this.parent.trigger('update.agents', this.agents);
 
 					// Transient status handling
-					if ((this.agents.length == 0) && (this.status == "starting")) {
+					if ((this.agents.length == 0) && (["starting","running"].indexOf(this.status) != -1)) {
 						this.setStatus("queued");
 					}
 
@@ -865,7 +865,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 		 *
 		 * 	- idle 	    : No simulation is running
 		 *  - queued    : The simulation is queued
-		 *  - started   : The simulation has started to one or more workers
+		 *  - starting  : The simulation has started to one or more workers
 		 *  - running   : The simulation is running
 		 *  - halted    : The simulation is halted
 		 *

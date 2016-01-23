@@ -1,0 +1,90 @@
+
+///////////////////////////////////////////////
+// examl.less - The exam questionnaire overlay
+///////////////////////////////////////////////
+
+.exam-overlay {
+	display: flex !important;
+	overflow: visible !important;
+	align-items: center;
+	justify-content: center;
+
+	.questions-frame {
+
+		// Define background
+		background: url("modules/vas/basic/img/background/exam-paper.png");
+		background-repeat: no-repeat;
+		width: 600px;
+		height: 570px;
+		position: relative;
+		
+		//
+		// Main questionnaire body
+		//
+		.questions-main-body {
+			position: absolute;
+			left: 74px; top: 36px;
+			width: 500px; height: 490px;
+			overflow-x: hidden;
+			overflow-y: auto !important;
+
+			.questions-header {
+
+				> h1 {
+					margin: 15px 0;
+					color: #009999;
+				}
+				> p {
+					color: #666;
+				}
+
+			}
+
+			.questions-host{
+				.question {
+
+					h2.good {
+						color: #27ae60;
+					}
+					h2.bad {
+						color: #c0392b;
+					}
+
+					label {
+						display: block;
+						margin: 2px 2px 2px 15px;
+						cursor: pointer;
+						input {
+							vertical-align: middle;
+							margin-right: 5px;
+						}
+
+						input:checked + span {
+							font-weight: bold;
+							color: #8e44ad;
+						}
+
+						&:hover {
+							.border-radius(4px);
+							background-color: #CCCCFF;
+						}
+
+						&.correct > span {
+							font-weight: bold;
+							color: #27ae60 !important;
+						}
+						&.incorrect > span {
+							color: #666 !important;
+						}
+					}
+				}
+			}
+
+			.questions-footer {
+				margin-top: 20px;
+			}
+		}
+
+	}
+
+}

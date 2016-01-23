@@ -99,7 +99,13 @@
        -o-transition: @property 500ms cubic-bezier(0.515, -0.155, 1.000, -0.340); 
           transition: @property 500ms cubic-bezier(0.515, -0.155, 1.000, -0.340); /* custom */
 }
-
+.easing-transform(@easing: linear, @duration: 0.2s) {
+  -webkit-transition: -webkit-transform @duration @easing; /* older webkit */
+  -webkit-transition: -webkit-transform @duration @easing; 
+     -moz-transition: -moz-transform @duration @easing; 
+       -o-transition: -o-transform @duration @easing; 
+          transition: transform @duration @easing; /* easeOutBack */
+}
 //
 // Glyphicon mix-in
 //

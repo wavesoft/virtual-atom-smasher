@@ -1088,7 +1088,7 @@ define("vas/core",
 				}
 
 				// Display questionnaire overlay
-				UI.showOverlay("overlay.questionaire", (function(qOvr) {
+				UI.showOverlay("overlay.exam", (function(qOvr) {
 					qOvr.onQuestionaireDefined({
 						'id' 		: 'book-exam',
 						'title' 	: '<span class="glyphicon glyphicon-ok-circle"></span> Take out a pen and paper!',
