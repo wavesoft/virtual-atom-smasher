@@ -363,6 +363,7 @@ define(
 			Simulation.on('update.status', (function( status ) {
 
 				// Update status message
+				if (status == "idle") status = "---";
 				this.select(".p-run-status").text( status.toUpperCase() );
 
 			}).bind(this));

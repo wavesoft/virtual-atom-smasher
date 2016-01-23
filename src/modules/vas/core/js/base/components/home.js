@@ -37,6 +37,38 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		HomeMachine.prototype.onSaveSlotUpdate = function(slots) {
 		}
 
+
+		////////////////////////////////////////////////////////////
+		/**
+		 * Initializes a new Simulation Status Component.
+		 *
+		 * This is the component that remains in the corner of the screen while
+		 * a simulation is running in order to report it' progress.
+		 *
+		 * @class
+		 * @param {DOMElement} hostDOM - The DOM element where the component should be hosted in
+		 * @augments module:vas-core/base/component~Component
+		 *
+		 */
+		var SimulationStatus = function( hostDOM ) {
+
+			// Initialize base class
+			Component.call(this, hostDOM);
+
+		}
+
+		// Subclass from Component
+		SimulationStatus.prototype = Object.create( Component.prototype );
+
+		/**
+		 * This function is called when the simulation notification object
+		 * is initialized and the screen should start to monitor it's status.
+		 *
+		 * @param {module:vas-core/simulation~SimulationJob} simulation - The simulation object to bind on
+		 */
+		SimulationStatus.prototype.onBindToSimulation = function( simulation ) {
+		}
+
 		////////////////////////////////////////////////////////////
 		//             Event definitions for JSDoc                //
 		////////////////////////////////////////////////////////////
@@ -62,6 +94,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		// Expose home components
 		var homeComponents = {
 			'HomeMachine'		: HomeMachine,
+			'SimulationStatus'	: SimulationStatus,
 		};
 
 		return homeComponents;

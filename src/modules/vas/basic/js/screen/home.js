@@ -5,6 +5,7 @@ define(
         "vas/core/registry",
         "vas/core/user",
         "vas/core/ui",
+        "vas/core/simulation",
         "text!vas/basic/tpl/screen/home.html"
     ],
 
@@ -13,7 +14,7 @@ define(
      *
      * @exports vas-basic/components/running_screen
      */
-    function ($, C, R, User, UI, tpl) {
+    function ($, C, R, User, UI, Simulation, tpl) {
 
         /**
          * This is the basic version of the game's home screen.
@@ -53,6 +54,12 @@ define(
             this.tuningScreen.on('close', (function() {
                 this.hideTuningScren();
             }).bind(this));
+
+            // Simulation status
+            this.simulationStatus = R.instanceComponent("screen.block.simulation_status", this.select(".status-frame"));
+            this.forwardVisualEvents( this.simulationStatus, { 'right': 0, 'top': 0, 'height': 50, 'width': 200 });
+            this.adoptEvents( this.simulationStatus );
+            this.simulationStatus.onBindToSimulation( Simulation );
 
             //
             // Left menu buttons

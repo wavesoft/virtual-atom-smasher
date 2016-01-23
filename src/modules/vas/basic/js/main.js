@@ -37,6 +37,7 @@ define("vas/basic", ['require',
 
 	// Blocks
 	'./screen/block/simulation/observable_point',
+	'./screen/block/home/simulation_status',
 	'./screen/block/home/tuning_panel',
 	'./screen/block/home/tuning_screen',
 	'./screen/block/home/tuning_notepad',

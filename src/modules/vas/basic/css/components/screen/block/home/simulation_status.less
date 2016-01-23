@@ -1,0 +1,106 @@
+
+///////////////////////////////////////////////
+// simulation_status.less - The corner widget with sim status
+///////////////////////////////////////////////
+
+.simulation-status {
+
+	position: absolute;
+	right: 0; 
+
+	//
+	// By default the dial is hidden, show it with
+	// the visible class
+	//
+	top: -100px;
+	.elastic-transition(top);
+	&.visible {
+		top: 0;
+	}
+
+	//
+	// This is clickable
+	//
+	cursor: pointer;
+	&:hover {
+		.transform( scale(1.05) );
+	}
+
+	//
+	// Background animated gears
+	//
+	.machine-gear-1 {
+		.animation-spin();
+		position: absolute;
+		left: 46px; top: 4px;
+	}
+	.machine-gear-2 {
+		.animation-spin(5000ms);
+		position: absolute;
+		left: 26px; top: 43px;
+	}
+
+	//
+	// Machine background
+	//
+	.machine-background {
+
+		background: url("modules/vas/basic/img/background/staus-machine.png");
+		background-position: 0px 0px;
+		width: 200px; height: 90px;
+
+		position: absolute;
+		right: 0; top: 0;
+
+		//
+		// Machine needle
+		//
+		.machine-needle {
+			background: url("modules/vas/basic/img/bits/needle.png");
+			background-repeat: no-repeat; 
+			background-position: 0 0;
+			width: 35px; height: 10px;
+
+			// Specify transform origin
+			-webkit-transform-origin: 30px 5px;
+			-moz-transform-origin: 30px 5px;
+			-ms-transform-origin: 30px 5px;
+			-o-transform-origin: 30px 5px;
+			transform-origin: 30px 5px;
+
+			// Alignment
+		    left: 10px;
+		    top: 37px;
+		    position: absolute;
+   		}
+
+		//
+		// Components
+		//
+		.machine-label {
+			position: absolute;
+			left: 52px; top: 20px;
+			width: 133px; height: 30px;
+			// Alignment
+			line-height: 30px;
+			text-align: center;
+			// Font
+			font-size: 14px;
+		}
+		.machine-progress {
+			position: absolute;
+			left: 55px; top: 54px;
+			width: 127px; height: 8px;
+			overflow: hidden;
+
+			.bar {
+				display: block;
+				position: absolute;
+				left: 0; top: 0; height: 8px;
+				background-color: #29ABE2;
+			}
+		}
+
+	}
+	
+}
