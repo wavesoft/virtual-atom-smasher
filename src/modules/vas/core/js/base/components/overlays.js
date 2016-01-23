@@ -20,7 +20,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		 * @augments module:vas-core/base/component~Component
 		 *
 		 */
-		var PapersOverlay = function( hostDOM ) {
+		var ResultsOverlay = function( hostDOM ) {
 
 			// Initialize base class
 			Component.call(this, hostDOM);
@@ -28,7 +28,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 		}
 
 		// Subclass from Component
-		PapersOverlay.prototype = Object.create( Component.prototype );
+		ResultsOverlay.prototype = Object.create( Component.prototype );
 
 		////////////////////////////////////////////////////////////
 		/**
@@ -106,7 +106,7 @@ define(["vas/config", "vas/core/base/data_widget", "vas/core/base/component" ],
 
 		// Expose home components
 		var overlays = {
-			'PapersOverlay'			: PapersOverlay,
+			'ResultsOverlay'		: ResultsOverlay,
 			'TeamsOverlay'			: TeamsOverlay,
 			'ProfileOverlay'		: ProfileOverlay,
 			'QuicksimOverlay'		: QuicksimOverlay,

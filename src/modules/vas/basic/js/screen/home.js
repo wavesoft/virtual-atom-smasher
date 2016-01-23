@@ -3,6 +3,7 @@ define(
         "jquery",
         "vas/core/base/components",
         "vas/core/registry",
+        "vas/config",
         "vas/core/user",
         "vas/core/ui",
         "vas/core/simulation",
@@ -14,7 +15,7 @@ define(
      *
      * @exports vas-basic/components/running_screen
      */
-    function ($, C, R, User, UI, Simulation, tpl) {
+    function ($, C, R, Config, User, UI, Simulation, tpl) {
 
         /**
          * This is the basic version of the game's home screen.
@@ -88,9 +89,9 @@ define(
             }).bind(this));
 
             // Papers button
-            this.select(".navbtn-papers").click((function () {
+            this.select(".navbtn-results").click((function () {
                 // Do something when pressed
-                UI.showOverlay('overlay.papers', UI.Transitions.SCALEDOWN_TOP);
+                UI.showOverlay('overlay.results', UI.Transitions.SCALEDOWN_TOP);
             }).bind(this));
 
             // Teams button
