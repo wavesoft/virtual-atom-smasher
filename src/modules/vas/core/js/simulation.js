@@ -12,7 +12,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 		/**
 		 * Job status constnat
 		 */
-		var JOB_STATUS = ['queued', 'running', 'completed', 'failed', 'cancelled', 'stalled'];
+		var JOB_STATUS = ['queued', 'running', 'completed', 'failed', 'cancelled', 'stalled', 'cloned'];
 
 		/**
 		 * Class that holds and maintains the active job details
@@ -380,6 +380,10 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 			 */
 			this.activeJob = null;
 
+			// Idle helper
+			this._idle = false;
+			this._idleCallbacks = [];
+
 			// On user log-in update status
 			Global.events.on('login', (function(profile) {
 
@@ -424,6 +428,32 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 		///////////////////////////////////////////////////////
 
 		/**
+		 * Fire the specified callback when no pending operation in place
+		 */
+		Simulation.prototype.onIdle = function( callback ) {
+			if (this._idle) {
+				callback();
+				return;
+			}
+			this._idleCallbacks.push(callback);
+		}
+
+		/**
+		 * Acuire/Release Idle lock
+		 */
+		Simulation.prototype._setIdle = function( idle ) {
+			this._idle = idle;
+			if (idle && (this._idleCallbacks.length > 0)) {
+				for (var i=0; i<this._idleCallbacks.length; i++) {
+					try {
+						this._idleCallbacks[i]();
+					} catch (e) {
+						console.error("Error triggering onIdle callback!");
+					}
+				}
+			}
+		}
+		/**
 		 * Get (optionally cached) definitions of the specified list of observables
 		 */
 		Simulation.prototype.getObservableDetails = function( names, callback ) {
@@ -449,6 +479,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 
 			// Otherwise, query DB
 			var DB = APISocket.openDb();
+			this._setIdle(false);
 			DB.getMultipleRecords("observable", names, (function(docs) {
 
 				// Handle response
@@ -463,6 +494,9 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 
 				// Fire callback
 				callback( ans );
+
+				// We are now idle
+				this._setIdle(true);
 
 			}).bind(this));
 
@@ -487,17 +521,22 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 		 */
 		Simulation.prototype.unbindFromJob = function() {
 
-			// Release job description
-			if (this.activeJob) {
-				this.activeJob.reset();			
-				this.activeJob = null;
+			// Make sure we are idle
+			this.onIdle((function() {
 
-				// The job is now undefined
-				this.trigger('job.undefined');
-			}
+				// Release job description
+				if (this.activeJob) {
+					this.activeJob.reset();			
+					this.activeJob = null;
 
-			// Change state to idle
-			this.trigger('update.status', "idle");
+					// The job is now undefined
+					this.trigger('job.undefined');
+				}
+
+				// Change state to idle
+				this.trigger('update.status', "idle");
+
+			}).bind(this));
 
 		}
 
@@ -825,10 +864,9 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 				// Try to submit job
 				this.labapi.submitJob( tunables, observables, level, (function(job) {
 					var jid = job['jid'];
-					// If job data exist no jid is allocated, wait for 'runExists' event
-					if (!jid) return;
+					console.log("Job submission completed",job);
 
-					// Create job
+					// Create active job
 					this.activeJob = new SimulationJob( this, jid );
 
 					// Set level details
