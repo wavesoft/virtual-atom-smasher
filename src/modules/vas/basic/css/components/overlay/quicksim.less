@@ -4,6 +4,50 @@
 ///////////////////////////////////////////////
 
 .quicksim-overlay {
+	display: flex !important;
+	overflow: visible !important;
+	align-items: center;
+	justify-content: center;
+
+	.quicksim-frame {
+		background: url("modules/vas/basic/img/background/quicksim.png");
+		width: 500px; height: 300px;
+		position: relative;
+	
+		//
+		// Leds on the quicksim frame
+		// 
+		.led-1, .led-2, .led-3 { position: absolute; }
+		.led-1 { left: 121px; top: 61px; }
+		.led-2 { left: 224px; top: 61px; }
+		.led-3 { left: 327px; top: 61px; }
+
+		//
+		// The two buttons
+		//
+		.btn-cancel {
+			position: absolute;
+			left: 84px; top: 202px;
+		}
+		.btn-continue {
+			position: absolute;
+			left: 252px; top: 202px;
+		}
+
+		//
+		// The text area
+		//
+		.quicksim-text {
+			position: absolute;
+			left: 84px; top: 128px;
+			width: 331px; height: 68px;
+
+			text-align: center;
+			line-height: 68px;
+			font-size: 16px;
+		}
+
+	}
 
 }
 
