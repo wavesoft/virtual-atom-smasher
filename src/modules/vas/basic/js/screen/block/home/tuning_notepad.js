@@ -1,7 +1,7 @@
 define(
 
 	// Dependencies
-	["jquery", "core/ui/tabs", "vas/core/registry", "vas/core/ui", "vas/core/base/components/tuning", "vas/core/user",
+	["jquery", "core/ui/tabs", "vas/core/registry", "vas/core/ui", "vas/core/base/components/tuning", "vas/config", "vas/core/user",
 	 "text!vas/basic/tpl/screen/block/home/tuning_notepad.html" ], 
 
 	/**
@@ -9,7 +9,7 @@ define(
 	 *
  	 * @exports vas-basic/screen/block/home/tuning_notepad
 	 */
-	function($, Tabs, R, UI, TC, User, tpl) {
+	function($, Tabs, R, UI, TC, Config, User, tpl) {
 
 		function dateFromTs(ts) {
     		var date = new Date(ts*1000);
@@ -58,6 +58,12 @@ define(
 		////////////////////////////////////////////////////////////
 
 		DefaultTuningNotepad.prototype.reloadForumPosts = function() {
+
+			// Update link
+			this.select("a.notes-button")
+				.attr("href", Config.forum_vas_api + '?auth=' + User.profile.token + '&term=Notes&scope=team');
+
+			// Get team notes
 			User.getTeamNotes((function(notes) {
 
 				// Update team notes
