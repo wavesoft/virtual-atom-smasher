@@ -4,7 +4,8 @@ define(
 	// Requirements
 	[ 
 		"ccl-tracker",
-		"vas/core/registry", "vas/core/base/components", "vas/core/ui", "vas/core/user", "vas/media", "vas/core/apisocket",
+		"vas/core/simulation", "vas/core/registry", "vas/core/base/components", 
+		"vas/core/ui", "vas/core/user", "vas/media", "vas/core/apisocket",
 		"text!vas/basic/tpl/screen/simulation.html"
 	],
 
@@ -13,7 +14,7 @@ define(
 	 *
 	 * @exports vas-basic/screen/simulation
 	 */
-	function( Analytics, R, C, UI, User, Media, APISocket, tplMain ) {
+	function( Analytics, Simulation, R, C, UI, User, Media, APISocket, tplMain ) {
 
 		/**
 		 * @class
@@ -32,15 +33,9 @@ define(
 
 			// Setup properties
 			this.observables = [];
-			this.rateRing = [];
+			// this.rateRing = [];
 			this.overlayComponent = null;
-			this.labapi = null;
-			this.submitTunables = null;
-			this.submitObservables = null;
-			this.submitLevel = null;
-			this.existingResults = false;
 			this.lastHistograms = [];
-			this.lastHistogramsIndex = {};
 
 			//
 			// Create globe
@@ -72,11 +67,8 @@ define(
 				// Cancel event
 				e.stopPropagation();
 				e.preventDefault();
-				// Abort LabAPI job
-				if (this.labapi) {
-					this.labapi.abortJob( this.activeJob );
-					this.resetInterface();
-				}
+				// Abort job
+				Simulation.abort();
 				// Hide jobs
 				this.trigger("hideJobs");
 			}).bind(this));
@@ -136,13 +128,13 @@ define(
 				Analytics.fireEvent("simulation.jobdetails", {
 				});
 
-				// Show job details
-				this.labapi.getJobDetails(this.activeJob, (function(details) {
-					// Show job details overlay
-					UI.showOverlay("overlay.jobstatus", (function(com) {
-						com.onJobDetailsUpdated( details );
-					}).bind(this));
-				}).bind(this));
+				// // Show job details
+				// this.labapi.getJobDetails(this.activeJob, (function(details) {
+				// 	// Show job details overlay
+				// 	UI.showOverlay("overlay.jobstatus", (function(com) {
+				// 		com.onJobDetailsUpdated( details );
+				// 	}).bind(this));
+				// }).bind(this));
 
 			}).bind(this));
 
@@ -182,6 +174,11 @@ define(
 				}).bind(this));
 			}).bind(this));
 
+			//
+			// Bind to shared simulation proxy
+			//
+			this.bindToSimulation();
+
 		}
 
 		SimulationScreen.prototype = Object.create( C.SimulationScreen.prototype );
@@ -205,16 +202,8 @@ define(
 			this.select(".p-view").addClass("disabled");
 
 			// Reset properties
-			this.rateRing = [];
 			this.observables = [];
-			this.numConnectedMachines = 0;
-			this.pinIndex = { };
-			this.activeJob = null;
-			this.existingResults = true;
-
-			// Reset last histograms
 			this.lastHistograms = [];
-			this.lastHistogramsIndex = {};
 
 			// Reset globe
 			this.globe.removeAllPins();
@@ -330,135 +319,58 @@ define(
 		}
 
 		/**
-		 * Apply job details
+		 * Helper function to listen on events from the shared simulation class
 		 */
-		SimulationScreen.prototype.applyJobDetails = function( job, agents ) {
-
-			// Select
-			this.activeJob = job['id'];
-
-			// Update maximum number of events
-			this.maxEvents = job['maxEvents'];
-
-			// Change status label of the focused job
-			var jobStatus = ['QUEUED', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED', 'STALLED'];
-			this.select(".p-run-status").text( jobStatus[job['status']] );
-
-			// Start globe spinning if status is running
-			this.globe.setPaused( !(job['status'] == 1)  );
-			if ((job['status'] < 2) || (job['status'] == 5)) {
-				this.select(".p-abort").removeClass("disabled");
-				this.select(".p-details").removeClass("disabled");
-			}
-
-			// Parse agents
-			this.globe.removeAllPins();
-			this.pinIndex = { };
-			for (var i=0; i<agents.length; i++) {
-				var a = agents[i];
-
-				// Parse lat/lng if exist, otherwise use random
-				var lat = String(Math.random() * 180 - 90),
-					lng = String(Math.random() * 180);
-
-				// Update lat/lng
-				if (a['latlng'] != undefined) {
-					var parts = a['latlng'].split(",");
-					lat = Number(parts[0]);
-					lng = Number(parts[1]);
-				}
-
-				// Add a pin to the globe
-				this.pinIndex[a['uuid']] = this.globe.addPin( lat, lng );
-				this.globe.setPaused(false);
-
-				// Update interface
-				this.numConnectedMachines++;
-				this.select(".p-machines .panel-value").text(this.numConnectedMachines);
-
-			}
-
-		}
-
-		/**
-		 * Bind interface to a particular job
-		 */
-		SimulationScreen.prototype.bindToJob = function( job ) {
-
-			// Focus on the given job
-			this.resetInterface();
-			this.labapi.selectJob( job );
-
-			// Focus to job
-			this.activeJob = job;
-
-		}
-
-		/**
-		 * Bind to LabSocket API
-		 */
-		SimulationScreen.prototype.bindToLabsocket = function( labSocket ) {
-
-			// Open a database API interface for querying the database
-			var DB = APISocket.openDb();
+		SimulationScreen.prototype.bindToSimulation = function() {
+			var self = this;
 
 			//
-			// All LabSocket errors are logged to console
+			// Update interface widgets
 			//
-			labSocket.on('error', (function(message, critical) {
-				UI.logError( message, critical );
+			Simulation.on('update.eventRate', (function(rate) {
+				this.select(".p-events .panel-value").text( Math.round(rate) + " /s" );
+			}).bind(this));
+			Simulation.on('update.progress', (function(value) {
+				this.select(".p-progress .panel-value").text( Math.round(value)+" %");
+			}).bind(this));
+			Simulation.on('update.events', (function(agents) {
+
 			}).bind(this));
 
 			//
-			// When a histogram is added, we are creating an observable
+			// Agent information is updated
 			//
-			labSocket.on('histogramsAdded', (function(histos) {
+			Simulation.on('update.agents', (function(agents) {
 
-				// Collect names and map histogram ID to object
-				var histoNames = [],
-					histoMap = {};
-				for (var i=0; i<histos.length; i++) {
-					histoNames.push(histos[i].id);
-					histoMap[histos[i].id] = histos[i];
+				// Remove & Replace Pins
+				this.globe.removeAllPins();
+				for (var i=0; i<agents.length; i++) {
+					var a = agents[i];
+					this.globe.addPin( a.lat, a.lng );
 				}
 
-				// Query db for observable details
-				DB.getMultipleRecords("observable", histoNames, (function(docs) {
+				// Start/Stop Globe
+				this.globe.setPaused( agents.length == 0 );
 
-					// Handle response
-					for (var i=0; i<docs.length; i++) {
-						var obs = docs[i],
-							hist = histoMap[obs['name']];
-
-						// Fire respective observable
-						var obs = this.createObservable( hist.id, obs );
-
-						// Update component if we have data
-						if (this.lastHistogramsIndex[hist.id] !== undefined) {
-							obs.com.onUpdate( this.lastHistogramsIndex[hist.id] );
-						}
-
-					}
-
-					// Rearrange observables
-					this.rearrangeObservables();
-
-				}).bind(this));
+				// Update number of machines
+				this.select(".p-machines .panel-value").text( agents.length );
 
 			}).bind(this));
 
+			//
+			// Update status
+			//
+			Simulation.on('update.status', (function( status ) {
+
+				// Update status message
+				this.select(".p-run-status").text( status.toUpperCase() );
+
+			}).bind(this));
 
 			//
-			// When the bulk of histograms is updated, update
-			// the possibly open overlay component.
+			// Histogram information is updated
 			//
-			labSocket.on('histogramsUpdated', (function(histos) {
-
-				// Update histograms and index
-				this.lastHistograms = histos;
-				for (var i=0; i<histos.length; i++) {
-					this.lastHistogramsIndex[histos[i].id] = histos[i];
-				}
+			Simulation.on('update.histograms', (function( histos ) {
 
 				// Make 'view' button clickable
 				this.select(".p-view").removeClass("disabled");
@@ -470,163 +382,41 @@ define(
 				}
 
 				// Update overlay component
+				this.lastHistograms = histos;
 				if (this.overlayComponent) {
 					this.overlayComponent.onHistogramsDefined( histos );
 				}
 
 			}).bind(this));
 
-
 			//
-			// When metadata are updated, calculate various metrics 
+			// When a job is defined, update 
 			//
-			labSocket.on('metadataUpdated', (function(meta) {
-				var currNevts = parseInt(meta['nevts']),
-					progValue = currNevts * 100 / this.maxEvents;
+			Simulation.on('job.defined', (function( job ) {
 
-				// Update UI only if we are not displaying existing results
-				if (!this.existingResults) {
-					// Set progress
-					this.select(".p-progress .panel-value")
-						.text( Math.round(progValue) + " %" );
-					// Switch to running
-					if (currNevts > 0)
-						this.select(".p-run-status").text("RUNNING");
+				// Create observables
+				for (var i=0; i<job.histograms.length; i++) {
+					var h = job.histograms[i];
+
+					// Fire respective observable
+					var obs = this.createObservable( h.id, h.meta );
+					obs.com.onUpdate( h );
+
 				}
 
-	
-				// Calculate rate
-				var currTime = Date.now();
-				if (this.lastEventsTime) {
-					var deltaEvts = currNevts - this.lastEvents,
-						deltaTime = currTime - this.lastEventsTime,
-						rate = deltaEvts * 1000 / deltaTime,
-						avgRate = 0;
+				// Rearrange them
+				this.rearrangeObservables();
 
-					// Average with ring buffer
-					this.rateRing.push(rate);
-					if (this.rateRing.length > 10) this.rateRing.shift();
-					for (var i=0; i<this.rateRing.length; i++) 
-						avgRate += this.rateRing[i];
-					avgRate /= this.rateRing.length;
-
-					// Update average event rate
-					this.select(".p-events .panel-value").text( Math.round(avgRate) + " /s" );
-				}
-				this.lastEventsTime = currTime;
-				this.lastEvents = currNevts;
+				// Enable abort
+				this.select(".p-abort").removeClass("disabled");
 
 			}).bind(this));
 
-
 			//
-			// Listen for telemetry data and update worlders
+			// When a job is undefined, reset interface 
 			//
-			labSocket.on('log', (function(logLine, telemetryData) {
-				if (telemetryData['agent_added']) {
-					// Parse lat/lng if exist, otherwise use random
-					var lat = String(Math.random() * 180 - 90),
-						lng = String(Math.random() * 180);
-					// Update lat/lng
-					if (telemetryData['agent_added_latlng'] != undefined) {
-						var parts = telemetryData['agent_added_latlng'].split(",");
-						lat = Number(parts[0]);
-						lng = Number(parts[1]);
-					}
-
-					// Add a pin to the globe
-					this.pinIndex[ telemetryData['agent_added'] ] = this.globe.addPin( lat, lng );
-
-					// Update status
-					this.select(".p-run-status").text("STARTING");
-
-					// Update the number of machines
-					this.numConnectedMachines++;
-					this.select(".p-machines .panel-value").text(this.numConnectedMachines);
-					this.globe.setPaused(false);
-
-				} else if (telemetryData['agent_removed']) {
-
-					// Remove a pin from the globe
-					var pin = this.pinIndex[ telemetryData['agent_removed'] ];
-					this.globe.removePin(pin);
-					delete this.pinIndex[ telemetryData['agent_removed'] ];
-
-					// Update the number of machines
-					this.numConnectedMachines--;
-					this.select(".p-machines .panel-value").text(this.numConnectedMachines);
-
-					// If for any reason we ran out of agents, stop the globe
-					if (this.numConnectedMachines <= 0) {
-						this.globe.setPaused(true);
-					}
-
-				}
-			}).bind(this));
-
-			//
-			// Reset interface when current job is deselected
-			//
-			labSocket.on('jobDeselected', (function(jobid) {
-				if (this.activeJob == jobid)
-					this.resetInterface();
-			}).bind(this));
-
-			//
-			// Handle job listings
-			//
-			labSocket.on('jobAdded', (function(job) {
-				// The first job is activated
-				if (!this.activeJob) {
-					this.bindToJob( job['id'] );
-				}
-			}).bind(this));
-			labSocket.on('jobRemoved', (function(job) {
-				// If that was our job, reset
-				if (this.activeJob == job['id']) {
-					this.resetInterface();
-					this.activeJob = null;
-				}
-			}).bind(this));
-
-			//
-			// When job is completed, reset interface
-			//
-			labSocket.on('runCompleted', (function() {
+			Simulation.on('job.undefined', (function() {
 				this.resetInterface();
-			}).bind(this));
-
-			//
-			// When such job is already exists
-			//
-			labSocket.on('runExists', (function() {
-
-				// Make the interface aware of the situation
-				this.select(".p-run-status").text( "ARCHIVED" );
-				this.select(".p-progress .panel-value").text( "---" );
-				this.select(".p-machines .panel-value").text("---");
-				this.select(".p-events .panel-value").text("---");
-				this.select(".p-abort").addClass("disabled");
-				this.select(".p-details").removeClass("disabled");
-
-				// Set the existing flag
-				this.existingResults = true;
-
-				// Do not allow to submit another job
-				UI.scheduleFlash(
-					"Existing Submission", 
-					"Someone has already tried this configuration. We are presenting you the results.",
-					"flash-icons/relax.png"
-				);
-
-			}).bind(this));
-
-			//
-			// Apply job details when they arrive
-			//
-			labSocket.on('jobDetails', (function(job, agents) {
-				// Apply job details
-				this.applyJobDetails(job, agents);
 			}).bind(this));
 
 		}
@@ -671,12 +461,6 @@ define(
 		 */
 		SimulationScreen.prototype.onWillHide = function(cb) {
 
-			// Disconnect from LabAPI
-			if (this.labapi) {
-				this.resetInterface();
-				this.labapi.deselectJob();
-			}
-
 			// Pause globe
 			this.globe.setPaused(true);
 
@@ -691,60 +475,65 @@ define(
 		SimulationScreen.prototype.onWillShow = function(cb) {
 
 			// Reset interface
-			this.resetInterface();
+			// this.resetInterface();
 
-			// Open a LabSocket interface
-			this.labapi = APISocket.openLabsocket();
-			this.bindToLabsocket( this.labapi );
-
-			// Check if we should start a job
-			if (this.submitTunables) {
-
-				// Validate jobs
-				this.labapi.verifyJob( this.submitTunables, this.submitObservables, (function(status) {
-
-					// If we are good, submit it now!
-					if (status == "ok") {
-
-						// Submit job
-						this.labapi.submitJob( this.submitTunables, this.submitObservables, this.submitLevel );
-
-						// Check if user has not seen the intro tutorial, show it now
-						if (!User.isFirstTimeSeen("simulation.intro")) {
-							// Display the intro help screen
-							this.trigger("help", "03-simulation");
-							this.trigger("help", "04-histogram");
-							// Mark introduction sequence as shown
-							User.markFirstTimeAsSeen("simulation.intro");
-						}
-
-					} else if (status == "conflict") {
-
-						// Do not allow to submit another job
-						UI.scheduleFlash(
-							"Multiple submission", 
-							"You can only submit one job. Please wait until it's finished or abort the previous one!",
-							"flash-icons/alert.png"
-						);
-
-						// Request listing to connect to previous job
-						this.labapi.enumJobs();
-
-					}
-
-					// Reset
-					this.submitTunables = null;
-					this.submitObservables = null;
-					this.submitLevel = null;
-
-				}).bind(this));
-
-			} else {
-
-				// Otherwise request listing to connect to previous jobs
-				this.labapi.enumJobs();
-
+			// If there is an active simulation, request interface updates
+			if (Simulation.activeJob) {
+				Simulation.activeJob.triggerUpdates();
 			}
+
+			// // Open a LabSocket interface
+			// this.labapi = APISocket.openLabsocket();
+			// this.bindToLabsocket( this.labapi );
+
+			// // Check if we should start a job
+			// if (this.submitTunables) {
+
+			// 	// Validate jobs
+			// 	this.labapi.verifyJob( this.submitTunables, this.submitObservables, (function(status) {
+
+			// 		// If we are good, submit it now!
+			// 		if (status == "ok") {
+
+			// 			// Submit job
+			// 			this.labapi.submitJob( this.submitTunables, this.submitObservables, this.submitLevel );
+
+			// 			// Check if user has not seen the intro tutorial, show it now
+			// 			if (!User.isFirstTimeSeen("simulation.intro")) {
+			// 				// Display the intro help screen
+			// 				this.trigger("help", "03-simulation");
+			// 				this.trigger("help", "04-histogram");
+			// 				// Mark introduction sequence as shown
+			// 				User.markFirstTimeAsSeen("simulation.intro");
+			// 			}
+
+			// 		} else if (status == "conflict") {
+
+			// 			// Do not allow to submit another job
+			// 			UI.scheduleFlash(
+			// 				"Multiple submission", 
+			// 				"You can only submit one job. Please wait until it's finished or abort the previous one!",
+			// 				"flash-icons/alert.png"
+			// 			);
+
+			// 			// Request listing to connect to previous job
+			// 			this.labapi.enumJobs();
+
+			// 		}
+
+			// 		// Reset
+			// 		this.submitTunables = null;
+			// 		this.submitObservables = null;
+			// 		this.submitLevel = null;
+
+			// 	}).bind(this));
+
+			// } else {
+
+			// 	// Otherwise request listing to connect to previous jobs
+			// 	this.labapi.enumJobs();
+
+			// }
 
 			// Fire callback
 			cb();

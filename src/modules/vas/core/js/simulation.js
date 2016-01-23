@@ -10,6 +10,11 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 	function(Config, User, EventBase, APISocket, Global, Calculate, Analytics) {
 
 		/**
+		 * Job status constnat
+		 */
+		var JOB_STATUS = ['queued', 'running', 'completed', 'failed', 'cancelled', 'stalled'];
+
+		/**
 		 * Class that holds and maintains the active job details
 		 * @class
 		 */
@@ -88,6 +93,12 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 			 */
 			this.agents = [];
 
+			/**
+			 * The current job state
+			 * @type {string}
+			 */
+			this.status = "idle";
+
 			// Last properties for rate counting
 			this._lastNevtsTimestamp = 0;
 			this._rateRing = [];
@@ -101,6 +112,12 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 
 			// Update histograms
 			this.histograms = histograms;
+
+			// Inject metadata
+			for (var i=0; i<this.histograms.length; i++) {
+				this.histograms[i].meta = 
+					this.observablesMetadata[ this.histograms[i].id ];
+			}
 
 			// Update histograms
 			this.parent.trigger('update.histograms', this.histograms);
@@ -144,6 +161,9 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 
 			// Update average fit
 			this.parent.trigger('update.fitAverage', this.fitAverage);
+
+			// If we have data, we are running
+			this.setStatus("running");
 
 		}
 
@@ -250,6 +270,12 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 
 			// Update agents
 			this.parent.trigger('update.agents', this.agents);
+
+			// Transient status handling
+			if (this.status == "queued") {
+				this.setStatus("starting");
+			}
+
 		}
 
 		/**
@@ -265,6 +291,11 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 					// Update agents
 					this.parent.trigger('update.agents', this.agents);
 
+					// Transient status handling
+					if ((this.agents.length == 0) && (this.status == "starting")) {
+						this.setStatus("queued");
+					}
+
 					// Do not continue
 					return;
 				}
@@ -277,7 +308,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 		SimulationJob.prototype.reset = function() {
 
 			// Reset properties
-			this.histograms = {};
+			this.histograms = [];
 			this.observablesMetadata = {};
 			this.fits = [];
 			this.fitAverage = 0;
@@ -287,6 +318,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 			this.progress = 0;
 			this.meta = {};
 			this.agents = [];
+			this.status = "idle";
 			this._lastNevtsTimestamp = 0;
 			this._rateRing = [];
 
@@ -306,6 +338,21 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 			this.parent.trigger('update.histograms', this.histograms);
 			this.parent.trigger('update.fits', this.fits);
 			this.parent.trigger('update.fitAverage', this.fitAverage);
+			this.parent.trigger('update.status', this.status);
+		}
+
+		/**
+		 * Change state
+		 */
+		SimulationJob.prototype.setStatus = function( status ) {
+
+			// Don't change status if we are on the same
+			if (this.status == status) return;
+			this.status = status;
+
+			// Trigger status change
+			this.parent.trigger('update.status', this.status);
+
 		}
 
 		/**
@@ -342,6 +389,28 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 
 				// Enumerate pending jobs
 				this.labapi.enumJobs();
+
+			}).bind(this));
+
+			/**
+			 * Receive job update events
+			 */
+			APISocket.on('event', (function(evDetails) {
+				var evName = evDetails['name'],
+					evData = evDetails['data'] || {};
+
+				// -----------------------------
+				//  Job Update
+				// -----------------------------
+				if (evName == 'job_update') {
+
+					// Check if this is our current job
+					if (this.activeJob && (this.activeJob.id == evDetails['job'])) {
+						// Update status
+						this.activeJob.setStatus( JOB_STATUS[evDetails['status']] );
+					}
+
+				}
 
 			}).bind(this));
 
@@ -428,7 +497,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 			}
 
 			// Change state to idle
-			this.trigger('stateChanged', 'idle');
+			this.trigger('update.status', "idle");
 
 		}
 
@@ -632,8 +701,10 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 				this.trigger('runCompleted');
 
 				// Unbind job when completed
-				if (this.activeJob && (this.activeJob.id == jobid))
+				if (this.activeJob) {
+					this.activeJob.setStatus("completed");
 					this.unbindFromJob();
+				}
 
 			}).bind(this));
 
@@ -649,6 +720,12 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 				if (!this.activeJob) {
 					console.error("Got runExists, without having an active job!");
 					return;
+				}
+
+				// Unbind job when completed
+				if (this.activeJob) {
+					this.activeJob.setStatus("completed");
+					this.unbindFromJob();
 				}
 
 				// // Make the interface aware of the situation
@@ -689,6 +766,9 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 				this.activeJob.meta = job;
 				this.activeJob.maxEvents = job['maxEvents'];
 				this.activeJob.setAgents( agents );
+
+				// Update status
+				this.activeJob.setStatus( JOB_STATUS[job['status']] );
 
 				// Get level details
 				if (!this.activeJob.levelDetails) {
