@@ -38,6 +38,8 @@ define(
 			// Local properties
 			this.checkState = 0;
 			this.pendingRequest = null;
+			this.fit = 0;
+			this.nevts = 0;
 
 			// Bind on simulation events
 			Simulation.on('update.status', (function(message) {
@@ -69,12 +71,19 @@ define(
 			Simulation.on('update.fitAverage', (function(fit) {
 
 				// Update leds according to progress
+				this.fit = fit;
+				this.updateEstimation();
 
 			}).bind(this));
-			Simulation.on('update.agents', (function(agents) {
+			Simulation.on('update.events', (function(nevts) {
 
-				// Update agents
+				// Update number of events
+				this.nevts = nevts;
+				this.updateEstimation();
 
+			}).bind(this));
+			Simulation.on('log', (function(message, telemetry) {
+				this.select(".quicksim-status").text(message);
 			}).bind(this));
 
 			//
@@ -109,11 +118,66 @@ define(
 		 * Reset interface to default
 		 */
 		DefaultQuicksimOverlay.prototype.resetInterface = function() {
-			this.select(".led-1").removeClass(".bit-leds-r .bit-leds-g .bit-leds-y");
-			this.select(".led-2").removeClass(".bit-leds-r .bit-leds-g .bit-leds-y");
-			this.select(".led-3").removeClass(".bit-leds-r .bit-leds-g .bit-leds-y");
+			this.select(".led-1").removeClass("bit-leds-r bit-leds-g bit-leds-y");
+			this.select(".led-2").removeClass("bit-leds-r bit-leds-g bit-leds-y");
+			this.select(".led-3").removeClass("bit-leds-r bit-leds-g bit-leds-y");
 			this.select(".quicksim-status").text("");
 			this.select(".quicksim-text").text("");
+		}
+
+		/**
+		 * Set led state
+		 */
+		DefaultQuicksimOverlay.prototype.setLeds = function( led, color ) {
+			this.select(".led-"+led).removeClass("bit-leds-r bit-leds-g bit-leds-y");
+			if (color) {
+				this.select(".led-"+led).addClass("bit-leds-"+color);
+			}
+		}
+
+		/**
+		 * Get a choice according to fit
+		 */
+		DefaultQuicksimOverlay.prototype.getFitChoice = function(fit, choices) {
+			if (fit < 2.0) {
+				return choices[0];
+			} else if (fit < 4.0) {
+				return choices[1];
+			} else {
+				return choices[2];
+			}
+		}
+
+		/**
+		 * Set led state
+		 */
+		DefaultQuicksimOverlay.prototype.updateEstimation = function() {
+			if (this.nevts == 0) {
+				this.setLeds(1,'');
+				this.setLeds(2,'');
+				this.setLeds(3,'');
+			} else if (this.nevts < 1000) {
+				this.setLeds(1, this.getFitChoice(this.fit, ['g','y','r']));
+				this.select(".quicksim-text").html( this.getFitChoice(this.fit,[
+						"Looks good so far", 
+						"Doesn't look so good, but let's wait for a wihle",
+						"Looks bad, but let's wait for a while"
+					]) );
+			} else if (this.nevts < 3000) {
+				this.setLeds(2, this.getFitChoice(this.fit, ['g','y','r']));
+				this.select(".quicksim-text").html( this.getFitChoice(this.fit,[
+						"It looks like you found something good", 
+						"It's not the best, but it might turn out good later",
+						"This does not look like a good choice"
+					]) );
+			} else if (this.nevts < 5000) {
+				this.setLeds(3, this.getFitChoice(this.fit, ['g','y','r']));
+				this.select(".quicksim-text").html( this.getFitChoice(this.fit,[
+						"Your choices look good, click <em>See more</em> for details", 
+						"The values might be bad, click <em>See more</em> for details",
+						"This seems like a wrong choice, click <em>STOP!</em>"
+					]) );
+			}
 		}
 
 		////////////////////////////////////////////////
@@ -127,7 +191,7 @@ define(
 
 			// Prepare pending request
 			this.select(".quicksim-status").text("Starting simulation ...");
-			this.select(".quicksim-text").text("We sent a simulation request, please wait");
+			this.select(".quicksim-text").text("We submitted your request, please wait");
 			this.pendingRequest = [ values, level ];
 
 		}

@@ -8,23 +8,30 @@
 //
 .animation-spin(@duration: 4000ms) {
 
-    -webkit-animation-name: kf-spin;
     -webkit-animation-duration: @duration;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: linear;
-    -moz-animation-name: kf-spin;
     -moz-animation-duration: @duration;
     -moz-animation-iteration-count: infinite;
     -moz-animation-timing-function: linear;
-    -ms-animation-name: kf-spin;
     -ms-animation-duration: @duration;
     -ms-animation-iteration-count: infinite;
     -ms-animation-timing-function: linear;
-    
-    animation-name: kf-spin;
     animation-duration: @duration;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
+
+    -webkit-animation-name: kf-spin;
+    -moz-animation-name: kf-spin;
+    -ms-animation-name: kf-spin;
+    animation-name: kf-spin;
+
+    &.animation-reverse {
+      -webkit-animation-name: kf-spin-rev;
+      -moz-animation-name: kf-spin-rev;
+      -ms-animation-name: kf-spin-rev;
+      animation-name: kf-spin-rev;
+    }
 
 }
 @-moz-keyframes kf-spin {
@@ -38,6 +45,19 @@
 @keyframes kf-spin {
     from {transform:rotate(0deg);}
     to {transform:rotate(360deg);}
+}
+
+@-moz-keyframes kf-spin-rev {
+    from { -moz-transform: rotate(360deg); }
+    to { -moz-transform: rotate(0deg); }
+}
+@-webkit-keyframes kf-spin-rev {
+    from { -webkit-transform: rotate(360deg); }
+    to { -webkit-transform: rotate(0deg); }
+}
+@keyframes kf-spin-rev {
+    from {transform:rotate(360deg);}
+    to {transform:rotate(0deg);}
 }
 
 //

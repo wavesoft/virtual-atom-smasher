@@ -12,10 +12,15 @@
 	// By default the dial is hidden, show it with
 	// the visible class
 	//
-	top: -100px;
+	top: -130px;
 	.transition( ease-out 0.2s );
 	&.visible {
 		top: 0;
+
+		// Show animated elements only when visible (reduces rendering load)
+		.machine-gear-1, .machine-gear-2 {
+			display: block;
+		}
 	}
 
 	//
@@ -33,12 +38,16 @@
 	.machine-gear-1 {
 		.animation-spin();
 		position: absolute;
-		left: 46px; top: 4px;
+		left: 154px; top: 61px;
+		display: none;
 	}
 	.machine-gear-2 {
 		.animation-spin(5000ms);
+		.animation-reverse();
 		position: absolute;
-		left: 26px; top: 43px;
+	    left: -22px;
+	    top: 96px;
+		display: none;
 	}
 
 	//
@@ -48,7 +57,7 @@
 
 		background: url("modules/vas/basic/img/background/staus-machine.png");
 		background-position: 0px 0px;
-		width: 200px; height: 90px;
+		width: 260px; height: 130px;
 
 		position: absolute;
 		right: 0; top: 0;
@@ -70,8 +79,8 @@
 			transform-origin: 30px 5px;
 
 			// Alignment
-		    left: 10px;
-		    top: 37px;
+		    left: 26px;
+		    top: 53px;
 		    position: absolute;
 
 		    // Easing
@@ -83,25 +92,26 @@
 		//
 		.machine-label {
 			position: absolute;
-			left: 52px; top: 20px;
-			width: 133px; height: 30px;
+		    left: 76px; top: 36px;
+			width: 144px; height: 30px;
 			// Alignment
 			line-height: 30px;
 			text-align: center;
 			// Font
-			font-size: 14px;
+			font-size: 16px;
 		}
 		.machine-progress {
 			position: absolute;
-			left: 55px; top: 54px;
-			width: 127px; height: 8px;
+			left: 77px; top: 73px;
+    		width: 140px; height: 8px;
 			overflow: hidden;
 
 			.bar {
 				display: block;
 				position: absolute;
 				left: 0; top: 0; height: 8px;
-				background-color: #29ABE2;
+				background-color: #000;
+				background-image: url("modules/vas/basic/img/bits/back-sprites.gif");
 			}
 		}
 
@@ -112,11 +122,12 @@
 	//
 	.looks-bad {
 		position: absolute;
-	    right: 180px;
-	    top: 50px;
+		right: 220px;
+	    top: 70px;
 
 	    cursor: default;
 	    .pointer-events(none);
+	    .animation-blink(3s);
 
 		//
 		// Show/hide according to visibility flag
@@ -135,7 +146,7 @@
 	.bit-more-up {
 		.animation-blink(0.25s);
 		position: absolute;
-		top: -10px; left: 50px;
+		top: -10px; left: 32px;
 	}
 	
 }
