@@ -49,7 +49,7 @@ define(
 
 			// Put an 'explain this' button which triggers the 'explain' event
 			if (meta['book']) {
-				var l = $('<a href="do:show-more"><span class="uicon uicon-explain"></span> Explain this ...</a>');
+				var l = $('<a href="javascript:;"><span class="uicon uicon-explain"></span> Explain this ...</a>');
 				l.click((function(e) {
 					e.preventDefault();
 					e.stopPropagation();

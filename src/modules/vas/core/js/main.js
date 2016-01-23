@@ -524,7 +524,7 @@ define("vas/core",
 					scrHome.on('help', function(term) {
 						VAS.displayHelp(term);
 					});
-					scrHome.on('showBook', function(bookID) {
+					scrHome.on('explain', function(bookID) {
 						VAS.displayBook(bookID);
 					});
 					scrHome.on('showCourse', function(courseName) {
@@ -1189,10 +1189,10 @@ define("vas/core",
 		VAS.displayBook = function( bookID ) {
 
 			// Display book
-			UI.showOverlay("overlay.book", (function(comBook) {
+			UI.showOverlay("overlay.knowledge", UI.Transitions.SCALEDOWN_TOP, (function(comBook) {
 
 				// Update metadata
-				comBook.onMetaUpdate({ 'book': bookID });
+				comBook.onFocusTerm( bookID );
 
 			}).bind(this));
 

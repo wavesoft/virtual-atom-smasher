@@ -32,6 +32,7 @@ define(
 
             // Local properties
             this.bookListElements = { };
+            this.focusTermOnShow = null;
 
 			///////////////////////////////
 			// View Control
@@ -190,6 +191,15 @@ define(
 		/**
 		 * Populate the interface before showing it
 		 *
+		 * @param {string} term - Focus the specified term when visible
+		 */
+		DefaultKnowledgeOverlay.prototype.onFocusTerm = function( term ) {
+			this.focusTermOnShow = term;
+		};
+
+		/**
+		 * Populate the interface before showing it
+		 *
 		 * @param {function} cb - The callback to fire when the website is loaded
 		 */
 		DefaultKnowledgeOverlay.prototype.onWillShow = function(cb) {
@@ -197,6 +207,26 @@ define(
 			// Update listing when shown
 			this.doUpdateListing( cb );
 
+		}
+
+		/**
+		 * After showing the interface, focus on a particular term
+		 */
+		DefaultKnowledgeOverlay.prototype.onShown = function() {
+			// Check if we have to focus a term
+			if (this.focusTermOnShow) {
+
+				// Ensure that the term is visible
+				this.ensureAccessible( this.focusTermOnShow );
+				// Select that appropriate term
+				this.focusTerm( this.focusTermOnShow, true );
+				// Request to populate the specified bok
+				this.bookWidget.doPopulateBook( this.focusTermOnShow );
+
+				// Reset
+				this.focusTermOnShow = null;
+
+			}
 		}
 
 		// Register login screen

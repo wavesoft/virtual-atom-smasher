@@ -39,7 +39,7 @@ define(
             // Tuning notepad
             this.tuningNotepad = R.instanceComponent("screen.block.tuning_notepad", this.select(".tuning-notepad"));
             this.forwardVisualEvents( this.tuningNotepad );
-            this.adoptEvents( this.tuningPanel );
+            this.adoptEvents( this.tuningNotepad );
 
 		}
 
