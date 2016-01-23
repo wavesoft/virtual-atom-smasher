@@ -148,34 +148,55 @@ define(
 				return Math.max( Math.min( Math.sqrt( Math.max(fit, 0) ) * 25, 100 ), 0 );
 			};
 
-			// Update labels
-			this.select(".label-fit").html( chi2fit[0].toFixed(2) );
-			this.select(".label-error").html( "&plusmn;" + chi2fit[1].toFixed(2) );
+			// Check cases of missing data
+			if (!chi2fit || isNaN(chi2fit[0]) || isNaN((chi2fit[1]))) {
 
-			// Find uncertainty and value in percentage of the width
-			var pMin = mapPercent(chi2fit[0] - chi2fit[1]),
-				pMax = mapPercent(chi2fit[0] + chi2fit[1]),
-				pVal = mapPercent(chi2fit[0]);
+				// Update labels
+				this.select(".label-fit").html( "Empty" );
+				this.select(".label-error").html( "---" );
 
-			// Visualise them
-			this.select(".circle").css({
-				"left": pVal + "%"
-			});
-			this.select(".errorbar").css({
-				"left": pMin + "%",
-				"width": (pMax - pMin) + "%"
-			});
+				// Defaults
+				this.hostDOM.removeClass("fit-perfect fit-good fit-average fit-bad")
+				this.select(".circle").css({
+					"left": 0
+				});
+				this.select(".errorbar").css({
+					"left": 0,
+					"width": 0
+				});
 
-			// Pick fit color
-			this.hostDOM.removeClass("fit-perfect fit-good fit-average fit-bad")
-			if (chi2fit[0] < 1) { // 1 sigma
-				this.hostDOM.addClass("fit-perfect")
-			} else if (chi2fit[0] < 4) { // 2 sigma
-				this.hostDOM.addClass("fit-good")
-			} else if (chi2fit[0] < 9) { // 3 sigma
-				this.hostDOM.addClass("fit-average")
 			} else {
-				this.hostDOM.addClass("fit-bad")
+
+				// Update labels
+				this.select(".label-fit").html( chi2fit[0].toFixed(2) );
+				this.select(".label-error").html( "&plusmn;" + chi2fit[1].toFixed(2) );
+
+				// Find uncertainty and value in percentage of the width
+				var pMin = mapPercent(chi2fit[0] - chi2fit[1]),
+					pMax = mapPercent(chi2fit[0] + chi2fit[1]),
+					pVal = mapPercent(chi2fit[0]);
+
+				// Visualise them
+				this.select(".circle").css({
+					"left": pVal + "%"
+				});
+				this.select(".errorbar").css({
+					"left": pMin + "%",
+					"width": (pMax - pMin) + "%"
+				});
+
+				// Pick fit color
+				this.hostDOM.removeClass("fit-perfect fit-good fit-average fit-bad")
+				if (chi2fit[0] < 1) { // 1 sigma
+					this.hostDOM.addClass("fit-perfect")
+				} else if (chi2fit[0] < 4) { // 2 sigma
+					this.hostDOM.addClass("fit-good")
+				} else if (chi2fit[0] < 9) { // 3 sigma
+					this.hostDOM.addClass("fit-average")
+				} else {
+					this.hostDOM.addClass("fit-bad")
+				}
+
 			}
 
 		}
