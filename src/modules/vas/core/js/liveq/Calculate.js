@@ -258,6 +258,12 @@ define(
 		}
 
 
+		/**
+		 * Get first degree of histogram
+		 */
+		Calculate.getHistogramScales = function( histogram ) {
+		}
+
 		// Return calculation namespace
 		return Calculate
 

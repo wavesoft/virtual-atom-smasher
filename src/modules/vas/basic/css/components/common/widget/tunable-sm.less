@@ -8,7 +8,7 @@
 	background-color: rgba(255,255,255,0);
 	display: block;
 	position: relative;
-	height: (@tuning-scr-marker-h + @tuning-scr-drag-h) + @tuning-scr-pad-v * 3;
+	height: @tuning-scr-drag-h + @tuning-scr-pad-v * 2;
 	width: 100%;
 
 	&.highlight {
@@ -21,9 +21,9 @@
 		position: absolute;
 		left: 0px; width: @tuning-scr-title-width;
 		top: @tuning-scr-pad-v; 
-		height: (@tuning-scr-marker-h + @tuning-scr-drag-h);
+		height: @tuning-scr-drag-h;
 
-		line-height: (@tuning-scr-marker-h + @tuning-scr-drag-h);
+		line-height: @tuning-scr-drag-h;
 		text-align: center;
 
 		font-size: 16px;
@@ -36,7 +36,7 @@
 		display: block;
 		left: @tuning-scr-title-width + 5px; right: 0;
 		top: @tuning-scr-pad-v; 
-		height: (@tuning-scr-marker-h + @tuning-scr-drag-h);
+		height: @tuning-scr-drag-h;
 
 		a.minus, a.plus {
 			position: absolute;
@@ -49,13 +49,13 @@
 			font-weight: bold;
 			cursor: pointer;
 
-			width: (@tuning-scr-marker-h + @tuning-scr-drag-h)/2;
-			height: (@tuning-scr-marker-h + @tuning-scr-drag-h)/2;
+			width: @tuning-scr-drag-h/2;
+			height: @tuning-scr-drag-h/2;
 			text-align: center;
-			line-height: (@tuning-scr-marker-h + @tuning-scr-drag-h)/2;
+			line-height: @tuning-scr-drag-h/2;
 		}
 		a.minus {
-			top: (@tuning-scr-marker-h + @tuning-scr-drag-h)/2;
+			top: @tuning-scr-drag-h/2;
 			border-radius: 0 0 5px 0;
 		}
 		a.plus {
@@ -69,8 +69,8 @@
 		div.value {
 			display: block;
 			position: absolute;
-			line-height: (@tuning-scr-marker-h + @tuning-scr-drag-h);
-			left: 0; right: (@tuning-scr-marker-h + @tuning-scr-drag-h)/2;
+			line-height: @tuning-scr-drag-h;
+			left: 0; right: @tuning-scr-drag-h/2;
 			top: 0; height: 100%;
 			padding: 0 5px;
 			font-size: 16px;

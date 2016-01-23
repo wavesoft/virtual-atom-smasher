@@ -4,9 +4,9 @@
  */
 define("vas/core",
 
-	["jquery", "ccl-tracker", "vas/config",  "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/media", "vas/core/apisocket", "vas/core/base/components", "core/util/progress_aggregator", "vas/core/liveq/core", "vas/core/liveq/Calculate" ], 
+	["jquery", "ccl-tracker", "vas/config",  "vas/core/registry", "vas/core/ui", "vas/core/db", "vas/core/user", "vas/core/simulation", "vas/media", "vas/core/apisocket", "vas/core/base/components", "core/util/progress_aggregator", "vas/core/liveq/core", "vas/core/liveq/Calculate" ], 
 
-	function($, Analytics, config, R, UI, DB, User, Media, APISocket, Components, ProgressAggregator, LiveQCore, LiveQCalc) {
+	function($, Analytics, config, R, UI, DB, User, Simulation, Media, APISocket, Components, ProgressAggregator, LiveQCore, LiveQCalc) {
 		var VAS = { };
 
 		/**
@@ -532,11 +532,10 @@ define("vas/core",
 							VAS.displayTuningScreen();
 						});
 					});
-					scrHome.on('submitParameters', function( values, observables, level ) {
+					scrHome.on('submitParameters', function( values, level ) {
 
 						// Set job detals and display jobs screen
-						VAS.scrJobs.onSubmitRequest( values, observables, level );
-						VAS.displaySimulation();
+						VAS.startSimulation( values, level );
 
 					});
 					scrHome.on('interpolateParameters', function(values) {
@@ -1038,9 +1037,66 @@ define("vas/core",
 				// Select home screen
 				UI.selectScreen("screen.knowledge", animateBackwards ? UI.Transitions.ZOOM_OUT : UI.Transitions.ZOOM_IN);
 
-
 			});
 			*/
+
+		}
+
+		/**
+		 * Start simulation
+		 */
+		VAS.startSimulation = function( values, level ) {
+
+			// Continue with the submission proces
+			var continue_submission = function() {
+				// Display the quicksim overlay
+				UI.showOverlay("overlay.quicksim", function( com ) {
+
+					// Handle submit request
+					com.onSubmitRequest( values, level );
+
+					// Listen for events
+					com.on('showDetails', function() {
+						VAS.displaySimulation();
+					});
+
+				});
+			}
+
+			// Check if we can submit such simulation
+			Simulation.canSubmit(values, level, function(status, msg) {
+				if (status) {
+
+					// Continue submission
+					continue_submission();
+
+				} else {
+
+					// Warn
+					UI.scheduleFlashPrompt(
+						"Multiple submission", 
+						"You are already running a validation. This will overwrite your previous request!", 
+						[
+							{ 
+								"label"    : "Continue",
+								"class"    : "btn-red",
+							  	"callback" : function(){
+							  		// Confirm
+							  		Simulation.abort();
+							  		continue_submission();
+								}
+							},
+							{
+								"label"    : "Cancel",
+								"class"    : "btn-darkblue",
+								"callback" : function(){
+								}
+							}
+						],
+						"flash-icons/alert.png"
+					);
+				}
+			});
 
 		}
 

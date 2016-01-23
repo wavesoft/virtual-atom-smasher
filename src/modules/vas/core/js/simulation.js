@@ -102,6 +102,8 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 			// Last properties for rate counting
 			this._lastNevtsTimestamp = 0;
 			this._rateRing = [];
+			this._contributeTimer = 0
+			this._contributeAlertSent = false;
 
 		};
 
@@ -163,7 +165,9 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 			this.parent.trigger('update.fitAverage', this.fitAverage);
 
 			// If we have data, we are running
-			this.setStatus("running");
+			if (!histograms[0].data.empty) {
+				this.setStatus("running");
+			}
 
 		}
 
@@ -352,6 +356,28 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 
 			// Trigger status change
 			this.parent.trigger('update.status', this.status);
+
+			// If we are queued for too long, prompt the user
+			// to start his own computing resources
+			if (!this._contributeAlertSent) {
+				if (status == 'queued') {
+
+					// Wait a minute
+					this._contributeTimer = setTimeout((function() {
+
+						// Send alert
+						this._contributeAlertSent = true;
+						this.parent.trigger("notify.startResources");
+
+					}).bind(this), 60000);
+
+				} else {
+
+					// Abort timer otherwise
+					clearTimeout(this._contributeTimer);
+
+				}
+			}
 
 		}
 
@@ -828,7 +854,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 		/**
 		 * Check if we can submit the specified job
 		 */
-		Simulation.prototype.canSubmit = function( tunables, observables, level, callback ) {
+		Simulation.prototype.canSubmit = function( tunables, level, callback ) {
 
 			// If we have an active job callback right away
 			if (this.activeJob != null) {
@@ -837,7 +863,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 			}
 
 			// But don't trust only our cached state
-			this.labapi.verifyJob( tunables, observables, (function(status) {
+			this.labapi.verifyJob( tunables, [], (function(status) {
 				if (status == "ok") {
 					callback(true);
 				} else if (status == "conflict") {
@@ -850,7 +876,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 		/**
 		 * Submit simulation parameters and start
 		 */
-		Simulation.prototype.submit = function( tunables, observables, level ) {
+		Simulation.prototype.submit = function( tunables, level ) {
 
 			// Make sure no duplicates exist
 			if (this.activeJob != null) {
@@ -862,7 +888,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 			User.getLevelDetails( level, (function(levelDetails) {
 
 				// Try to submit job
-				this.labapi.submitJob( tunables, observables, level, (function(job) {
+				this.labapi.submitJob( tunables, [], level, (function(job) {
 					var jid = job['jid'];
 					console.log("Job submission completed",job);
 
@@ -912,13 +938,25 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 		 */
 
 		/**
+		 * A job was defined
+		 *
 		 * @param {vas-core/simulation~SimulationJob} job - The job that was just defined
 		 * @event module:vas-core/simulation~Simulation#job.defined		
 		 */
 
 		/**
+		 * A job was undefined
+		 *
 		 * @param {vas-core/simulation~SimulationJob} job - The job that was just undefined
 		 * @event module:vas-core/simulation~Simulation#job.undefined		
+		 */
+
+		/**
+		 * This message is sent when the user stays on 'queued' for too long,
+		 * this should be handled according tot he currently active component to 
+		 * prompt the user to start a resource through citizengrid.
+		 *
+		 * @event module:vas-core/simulation~Simulation#notify.startResources		
 		 */
 
 		///////////////////////////////////////////////////////

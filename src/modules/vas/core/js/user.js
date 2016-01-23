@@ -454,6 +454,13 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 		}
 
 		/**
+		 * Return a list of notes of the user's team
+		 */
+		User.prototype.getTeamNotes = function( callback ) {
+			this.accountIO.getTeamNotes( callback );
+		}
+
+		/**
 		 * Return a list of team resources
 		 */
 		User.prototype.getTeamResources = function( callback ) {

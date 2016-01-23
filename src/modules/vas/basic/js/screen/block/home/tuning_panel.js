@@ -31,11 +31,13 @@ define(
 			this.elmContainer = this.select(".tuning-panel-container");
 			this.elmHostOld = this.select(".tunables-group-old");
 			this.elmHostNew = this.select(".tunables-group-new");
+			this.elmHostSeparator = this.select(".tunables-separator");
 
 			// Map of tunables
 			this.tunablesMap = {};
 			this.valuesMap = {};
 			this.firstTunable = false;
+			this.level = 0;
 
 			// Size information
 			this.oldRows = 0;
@@ -48,7 +50,7 @@ define(
 				this.trigger('close');
 			}).bind(this));
 			this.select(".btn-go").click((function() {
-				this.trigger('submitParameters', this.valuesMap);
+				this.trigger('submitParameters', this.valuesMap, this.level);
 			}).bind(this));
 
 		};
@@ -115,40 +117,43 @@ define(
 		DefaultTuningPanel.prototype.applySize = function() {
 
 			// Fit the widgets on the specified box size
+			var separatorHeight = 57;
+			if (this.oldRows == 0) separatorHeight=0;
 			var availWidth = this.width - parseInt(this.elmContainer.css("margin-left"))
 								   		- parseInt(this.elmContainer.css("margin-right"));
 			var availHeight = this.height - parseInt(this.elmContainer.css("margin-top"))
 										  - parseInt(this.elmContainer.css("margin-bottom"));
 
 			// Update size of widgets
-			var refHeight = 0;
+			var newHeight = 0;
 			this.elmHostNew.children().each(function(i,e) {
 				$(e).css({
 					"width": availWidth * 0.5
 				})
-				if (!refHeight)
-					refHeight = $(e).outerHeight();
+				if (!newHeight)
+					newHeight = $(e).outerHeight();
 			});
+			var oldHeight = 0;
 			this.elmHostOld.children().each(function(i,e) {
 				$(e).css({
 					"width": availWidth * 0.25
 				})
-				if (!refHeight)
-					refHeight = $(e).outerHeight();
+				if (!oldHeight)
+					oldHeight = $(e).outerHeight();
 			});
 
 			// Update size variables
 			var pWidth = availWidth * this.widthScale 
 							+ parseInt(this.elmContainer.css("margin-left"))
 							+ parseInt(this.elmContainer.css("margin-right"));
-				pHeight = refHeight * (this.oldRows + this.newRows)
+				pHeight = oldHeight * this.oldRows + newHeight * this.newRows + separatorHeight
 							+ parseInt(this.elmContainer.css("margin-top"))
 						  	+ parseInt(this.elmContainer.css("margin-bottom"))
 
 			// Specify dimentions
 			this.elmContainer.css({
 				'width': availWidth * this.widthScale,
-				'height': refHeight * (this.oldRows + this.newRows)
+				'height': oldHeight * this.oldRows + newHeight * this.newRows + separatorHeight
 			});
 
 			// Define the dimentions
@@ -170,6 +175,7 @@ define(
 		DefaultTuningPanel.prototype.onLevelDefined = function(details) {
 			console.log(details);
 			var tunables = details['tunables'];
+			this.level = details['index'];
 
 			// Reset everything
 			this.firstTunable = true;
@@ -205,7 +211,8 @@ define(
 
 			// Hide/show blocks
 			if (tun_new.length == 0) { this.elmHostNew.hide(); } else { this.elmHostNew.show(); }
-			if (tun_old.length == 0) { this.elmHostOld.hide(); } else { this.elmHostOld.show(); }
+			if (tun_old.length == 0) { this.elmHostOld.hide(); this.elmHostSeparator.hide(); } 
+								else { this.elmHostOld.show(); this.elmHostSeparator.show(); }
 
 			// Generate tunables
 			for (var i=0; i<tun_new.length; i++) {

@@ -476,6 +476,17 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get team forum notes
+		 */
+		APIAccount.prototype.getTeamNotes = function(callback) {
+			// Query server
+			this.sendAction("team.notes", {
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
 		 * Get team listing
 		 */
 		APIAccount.prototype.requestToJoinTeam = function(team, callback) {

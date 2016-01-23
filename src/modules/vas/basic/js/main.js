@@ -41,6 +41,7 @@ define("vas/basic", ['require',
 	'./screen/block/home/tuning_panel',
 	'./screen/block/home/tuning_screen',
 	'./screen/block/home/tuning_notepad',
+	'./screen/block/home/tuning_notepad/values',
 	'./screen/block/home/machine',
 
 	// Backdrops

@@ -45,6 +45,7 @@
 
 		}
 	}
+
 }
 
 .tab-buttons-small {
@@ -67,6 +68,47 @@
 				// Lock background
 				&:hover, &:active {
 					background-position: 0 -124px;
+				}
+			}
+
+		}
+	}
+
+	&.tab-skin-top {
+		> ul > li {
+			background-image: url(modules/vas/basic/img/button/btn-tab-small-top.png);
+
+			&.active {
+			    height: 28px;
+			    top: 5px;
+			    background-position: 0 -120px;
+			}
+		}
+	}
+}
+
+//
+// Sketch buttons
+//
+.tab-buttons-sketch {
+	> ul {
+		> li {
+			width: 100px; height: 32px;
+			margin-left: -6px;
+		    padding-top: 8px;
+
+			// Background 
+			background-image: url(modules/vas/basic/img/button/btn-tab-small-sketch.png);
+			&:hover { background-position: 0 -40px; }
+			&:active { background-position: 0 -80px; }
+
+			// Active background and styling
+			&.active {
+				background-position: 0 -120px;
+
+				// Lock background
+				&:hover, &:active {
+					background-position: 0 -120px;
 				}
 			}
 
