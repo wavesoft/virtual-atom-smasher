@@ -291,6 +291,9 @@ define(["vas/core/api/interface", "vas/core/liveq/LiveQ", "vas/core/liveq/LabPro
 			this.sendAction("job.results", {
 				'jid': jobid
 			}, function(data) {
+
+				// Check if we are ok
+
 				if (callback) callback(data['data']);
 			});
 

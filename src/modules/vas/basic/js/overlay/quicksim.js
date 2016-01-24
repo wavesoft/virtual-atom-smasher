@@ -74,7 +74,9 @@ define(
 				// 'Exists' is a special case
 				if (message == 'exists') {
 
-					this.select(".quicksim-text").text("We don't have to run the simulation");
+					this.select(".quicksim-text")
+						.addClass("text-green")		
+						.text("We don't have to run the simulation");
 					this.select(".quicksim-status").text("Somebody else has already tried this values!");
 					this.haltInterface = true;
 
@@ -140,6 +142,7 @@ define(
 			this.select(".led-1").removeClass("bit-leds-r bit-leds-g bit-leds-y");
 			this.select(".led-2").removeClass("bit-leds-r bit-leds-g bit-leds-y");
 			this.select(".led-3").removeClass("bit-leds-r bit-leds-g bit-leds-y");
+			this.select(".quicksim-text").removeClass("text-green");
 			this.select(".quicksim-status").text("");
 			this.select(".quicksim-text").text("");
 		}
@@ -196,6 +199,8 @@ define(
 						"The values might be bad, click <em>See more</em> for details",
 						"This seems like a wrong choice, click <em>STOP!</em>"
 					]) );
+			} else {
+				this.select(".quicksim-text").addClass("text-green");				
 			}
 		}
 
@@ -210,6 +215,7 @@ define(
 
 			// Unhalt interface
 			this.haltInterface = false;
+			this.resetInterface();
 
 			// Prepare pending request
 			this.select(".quicksim-status").text("Starting simulation ...");

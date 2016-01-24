@@ -584,10 +584,13 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 			//
 			// When a histogram is added, we are creating an observable
 			//
-			labSocket.on('histogramsAdded', (function(histos) {
+			labSocket.on('histogramsAdded', (function(histos, channelID) {
 
 				// Forward event
-				this.trigger('histogramsAdded', histos);
+				this.trigger('histogramsAdded', histos, channelID);
+
+				// Skip uninteresting channels
+				if (channelID != 0) return;
 
 				// If we don't have an active job something went wrong
 				if (!this.activeJob) {
@@ -622,10 +625,26 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 			// When the bulk of histograms is updated, update
 			// the possibly open overlay component.
 			//
-			labSocket.on('histogramsUpdated', (function(histos) {
+			labSocket.on('histogramsUpdated', (function(histos, channelID) {
 
 				// Forward event
-				this.trigger('histogramsUpdated', histos);
+				this.trigger('histogramsUpdated', histos, channelID);
+
+				// Check if this set of histogram targets a query
+				if (channelID != 0) {
+
+					// Check if this is for a query
+					if (this.pendingQueryCallback && (channelID == 1)) {
+						// Trigger callback & Reset
+						this.pendingQueryCallback( histos )
+						this.pendingQueryCallback = null;
+					}
+
+					// Discard
+					return;
+
+				}
+
 
 				// If we don't have an active job something went wrong
 				if (!this.activeJob) {
@@ -666,6 +685,9 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 
 				// Forward event
 				this.trigger('metadataUpdated', meta);
+
+				// Skip uninteresting channels
+				if (meta['channel'] != 0) return;
 
 				// If we don't have an active job something went wrong
 				if (!this.activeJob) {
@@ -917,6 +939,28 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 
 			// Abort job
 			this.labapi.abortJob( this.activeJob.id );
+
+		}
+
+		/**
+		 * Get results of some particular simulation
+		 */
+		Simulation.prototype.getResults = function( jid, callback ) {
+
+			// Set a pending query
+			this.pendingQueryCallback = callback;
+
+			// Send request
+			this.labapi.getJobResults(jid, (function(data) {
+				// Check for errors
+				if (data['status'] != 'ok') {
+
+					// Trigger error if failed
+					this.pendingQueryCallback = null;
+					if (callback) callback([], data['message']);
+
+				}
+			}).bind(this));
 
 		}
 

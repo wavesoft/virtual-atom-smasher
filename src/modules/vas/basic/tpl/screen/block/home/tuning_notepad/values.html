@@ -2,15 +2,41 @@
 <div class="values-tabs">
 	<ul>
 		<li class="tab-last active" data-id="last">Last Values</li>
-		<li class="tab-favs" data-id="favs">Favorite <span class="glyphicon glyphicon-star-empty"></span></li>
+		<li class="tab-favs" data-id="favs">Favourite <span class="glyphicon glyphicon-star-empty"></span></li>
 	</ul>
 </div>
 <!-- Values Body (multi-tabbed) -->
 <div class="tab-body values-body">
-	<div class="body-last">
-		Last
+	<div class="body-nodata bit-spider-corner content-empty">
+		<div>
+			<div class="content-title">No results!</div>
+			<div class="content-body">You must first run some simulation before you can see some results! Click on the <em>GO!</em> button to try your current values.</div>
+		</div>
 	</div>
-	<div class="body-favs">
-		Favs
+	<div class="body-nofav bit-spider-corner content-empty">
+		<div>
+			<div class="content-title">No favourites!</div>
+			<div class="content-body">You haven't selected any favourite result. Click on the <em>My Results</em> tab and select one of your previous runs as a favourite.</div>
+		</div>
+	</div>
+	<div class="body-data">
+
+		<!-- Results header -->
+		<div class="results-head">
+			<dl class="block-left dl-horiz">
+				<dt>Score</dt>
+				<dd class="value-score">0.0 (Perfect)</dd>
+				<dt>Date</dt>
+				<dd class="value-date">01/01/2016 00:00:00</dd>
+			</dl>
+			<div class="block-right">
+				<button class="btn-results ibtn-paper">View Results</button>
+			</div>
+		</div>
+
+		<!-- Results body -->
+		<div class="results-table">
+		</div>
+
 	</div>
 </div>

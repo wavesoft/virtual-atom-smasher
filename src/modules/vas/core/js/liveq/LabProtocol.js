@@ -10,6 +10,10 @@ define(
 	 */
 	function( EventBase, ReferenceData, HistogramData ) {
 
+		var FLAG_INTERPOLATION = 1,
+			FLAG_EXISTS = 2,
+			FLAG_CHANNEL_2 = 4;
+
 
 		/**
 		 * Initialize the lab protocol class.
@@ -34,18 +38,20 @@ define(
 			EventBase.call(this);
 
 			/**
-			 * This object contains the mapping between the histogram name
-			 * and it's {@link LiveQ.ReferenceData} class.
-			 * @member {Object}
+			 * Receiving slots
+			 * 
+			 * This array contains the active communication channels
+			 * with LiveQ back-end. 
+			 *
+			 * Each object in the list contains two properties, a
+			 * 'data' object, of {@link LiveQ.HistogramData} class and
+			 * a 'reference' object that contains {@link LiveQ.Histogram}
+			 * objects.
 			 */
-			this.reference = { };
-
-			/**
-			 * This object contains the histogram data in a 
-			 * {@link LiveQ.HistogramData} class.
-			 * @member {LiveQ.HistogramData}
-			 */
-			this.data = { };
+			this.receiveChannels = [
+				{ 'reference': {}, 'data': {} },	// Primary
+				{ 'reference': {}, 'data': {} }		// Query
+			];
 
 			/**
 			 * Check if we ware initialized
@@ -68,23 +74,6 @@ define(
 		 */
 		LabProtocol.prototype.handleConfigFrame = function( configReader ) {
 
-			// Fire histogram removal callbacks
-			for(var histoID in this.data){
-
-				// Get histogram
-				var histo = this.data[histoID];
-
-				// Fire removal callbacks
-				if ((histo != undefined) && (typeof(histo) != 'function')) {
-					this.trigger('histogramRemoved', this.data[histoID], this.reference[histoID]);
-				}
-
-			}
-
-			// Reset reference and data
-			this.reference = { };
-			this.data = { };
-
 			// Read the configuration header data
 			var protoVersion = configReader.getUint8();
 
@@ -96,6 +85,27 @@ define(
 					numHistos = configReader.getUint32(),
 					allHistos = [];
 
+				// Pick channel
+				var channelID = ((flags & FLAG_CHANNEL_2) != 0) ? 1 : 0,
+					channel = this.receiveChannels[channelID];
+
+				// Fire histogram removal callbacks
+				for(var histoID in channel.data){
+
+					// Get histogram
+					var histo = channel.data[histoID];
+
+					// Fire removal callbacks
+					if ((histo != undefined) && (typeof(histo) != 'function')) {
+						this.trigger('histogramRemoved', channel.data[histoID], channel.reference[histoID], channelID);
+					}
+
+				}
+
+				// Reset reference/data
+				channel.reference = {};
+				channel.data = {};
+
 				// Read histograms
 				for (var j=0; j<numHistos; j++) {
 					
@@ -103,25 +113,25 @@ define(
 					var histo = ReferenceData.fromReader( configReader );
 
 					// Store to reference
-					this.reference[histo.id] = histo;
+					channel.reference[histo.id] = histo;
 
 					// Use reference information to create new histogram
-					this.data[histo.id] = new HistogramData( histo.data.bins, histo.id );
+					channel.data[histo.id] = new HistogramData( histo.data.bins, histo.id );
 
 					// Fire histogram added callbacks
-					this.trigger('histogramAdded', this.data[histo.id], this.reference[histo.id]);
+					this.trigger('histogramAdded', channel.data[histo.id], channel.reference[histo.id], channelID);
 
 					// Store for histogramsAdded
 					allHistos.push({
 						'id'   : histo.id,
-						'data' : this.data[histo.id],
-						'ref'  : this.reference[histo.id]
+						'data' : channel.data[histo.id],
+						'ref'  : channel.reference[histo.id]
 					})
 
 				}
 
 				// Fire one event when all histograms are added
-				this.trigger('histogramsAdded', allHistos);
+				this.trigger('histogramsAdded', allHistos, channelID);
 
 				// If we were not initialized, fire onReady
 				if (!this.initialized) {
@@ -129,6 +139,7 @@ define(
 					this.trigger('ready', {
 						'protocol': 1,
 						'flags': flags,
+						'channel': channelID,
 						'targetEvents': numEvents * 1000
 					});
 				}
@@ -165,6 +176,10 @@ define(
 					reserved0 = reader.getUint16(),
 					numHistos = reader.getUint32();
 
+				// Pick channel
+				var channelID = ((flags & FLAG_CHANNEL_2) != 0) ? 1 : 0,
+					channel = this.receiveChannels[channelID];
+
 				// Check if the data are from interpolation
 				var fromInterpolation = ((flags & 0x01) != 0);
 
@@ -176,10 +191,10 @@ define(
 					var histoID = reader.getString();
 
 					// Try to find a histogram with this id
-					if (this.data[histoID] != undefined) {
+					if (channel.data[histoID] != undefined) {
 
 						// Fetch histogram
-						var histo = this.data[histoID];
+						var histo = channel.data[histoID];
 
 						// Update histogram bins from reader, skipping the
 						// reading of histogram ID (it has already happened)
@@ -188,7 +203,7 @@ define(
 							// An error occured, which has taken out of sync
 							// the binary protocol. Until we come up with a better
 							// solution, we are now officially unable to continue.
-							this.trigger( 'error', 'Connection with the server interrupted! Unable to parse histogram frame', true );
+							this.trigger( 'error', 'Connection with the server interrupted! Unable to parse histogram frame', true, channelID );
 
 						}
 
@@ -197,13 +212,13 @@ define(
 							numEvents = histo.nevts;
 
 						// Fire histogram update callbacks
-						this.trigger( 'histogramUpdated', histo, this.reference[histoID] );
+						this.trigger( 'histogramUpdated', histo, channel.reference[histoID], channelID );
 
 						// Keep the histogram data for the 'histogramsUpdated' event
 						allHistos.push({
 							'id': histoID,
 							'data': histo,
-							'ref': this.reference[histoID]
+							'ref': channel.reference[histoID]
 						});
 
 					} else {
@@ -215,14 +230,16 @@ define(
 				// Fire metadata update histogram
 				this.trigger( 'metadataUpdated', {
 					'nevts': numEvents,
-					'interpolation': fromInterpolation
+					'interpolation': fromInterpolation,
+					'flags': flags,
+					'channel': channelID,
 				});
 
 				// Let everybody know that data arrived
-				this.trigger( 'dataArrived', fromInterpolation );
+				this.trigger( 'dataArrived', fromInterpolation, channelID );
 
 				// Fire an update callback regarding all histograms
-				this.trigger( 'histogramsUpdated', allHistos, fromInterpolation );
+				this.trigger( 'histogramsUpdated', allHistos, channelID );
 
 
 			} else {

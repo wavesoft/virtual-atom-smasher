@@ -3,6 +3,27 @@
 // buttons.less - Buttons CSS
 ///////////////////////////////////////////////
 
+.ibtn-paper {
+	background-image: url("modules/vas/basic/img/button/btn-paper.png");
+	background-color: transparent;
+	background-position: 0 0;
+	width: 90px; height: 70px;
+	overflow: hidden;
+	border: none;
+	cursor: pointer;
+
+	&:hover {
+		background-position: 0 -70px;
+	}
+	&:active {
+		background-position: 0 -140px;
+	}
+	&:focus {
+		outline:0;
+	}
+
+}
+
 .ibtn-tube {
 	background-image: url("modules/vas/basic/img/button/btn-tube.png");
 	background-color: transparent;

@@ -1,0 +1,25 @@
+
+///////////////////////////////////////////////
+// typography.less - Reusable typographic elements
+///////////////////////////////////////////////
+
+//
+// Horizontal definition list with 30%-70% space allocation to term/desc
+//
+dl.dl-horiz {
+	> dt {
+	    width: 30%;
+	    display: block;
+	    margin: 0;
+	    float: left;
+	    font-weight: bold;
+	}
+	> dd {
+	    width: 70%;
+	    display: inline-block;
+
+	    margin: 0;
+	    margin-start: 0;
+	    -webkit-margin-start: 0;
+	}
+}

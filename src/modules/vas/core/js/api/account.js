@@ -207,6 +207,30 @@ define(["vas/core/api/interface", "vas/config"],
 		}
 
 		/**
+		 * Get last user result
+		 */
+		APIAccount.prototype.getLastResult = function(callback) {
+			// Query server
+			this.sendAction("results.last", {
+				'id': paper_id
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
+		 * Get a list of all user results
+		 */
+		APIAccount.prototype.getMyResults = function(callback) {
+			// Query server
+			this.sendAction("results.all", {
+				'id': paper_id
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
 		 * Get a particular paper
 		 */
 		APIAccount.prototype.readPaper = function(paper_id, callback) {

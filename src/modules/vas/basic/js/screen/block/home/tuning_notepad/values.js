@@ -1,7 +1,7 @@
 define(
 
 	// Dependencies
-	["jquery", "core/ui/tabs", "vas/core/registry", "vas/core/ui", "vas/core/base/components/tuning",
+	["jquery", "core/ui/tabs", "core/ui/table", "vas/core/registry", "vas/core/ui", "vas/core/base/components/tuning",
 	 "text!vas/basic/tpl/screen/block/home/tuning_notepad/values.html" ], 
 
 	/**
@@ -9,7 +9,7 @@ define(
 	 *
  	 * @exports vas-basic/screen/block/home/tuning_notepad/values
 	 */
-	function($, Tabs, R, UI, TC, tpl) {
+	function($, Tabs, Table, R, UI, TC, tpl) {
 
 		/**
 		 * @class
@@ -32,6 +32,14 @@ define(
 					this.select(".values-tabs > ul")
 				);
 
+			// Create a table controller
+			this.tableController = new Table(
+					this.select(".results-table")
+				);
+			this.tableController
+				.addColumn("name", "Tunable", 8)
+				.addColumn("vlaue", "Value", 4);
+
             // Set-up body
             this.select(".body-hint").hide();
 
@@ -44,6 +52,13 @@ define(
 		 * Update level information
 		 */
 		DefaultTuningNotepadValues.prototype.onLevelDefined = function(details) {
+
+		}
+
+		/**
+		 * Definition of last run values
+		 */
+		DefaultTuningNotepadValues.prototype.onLastRunDefined = function( values ) {
 
 		}
 
