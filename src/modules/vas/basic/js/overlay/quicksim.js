@@ -40,9 +40,13 @@ define(
 			this.pendingRequest = null;
 			this.fit = 0;
 			this.nevts = 0;
+			this.haltInterface = false;
 
 			// Bind on simulation events
 			Simulation.on('update.status', (function(message) {
+
+				// If halted, return
+				if (this.haltInterface) return;
 
 				// Status text mapping
 				var map = {
@@ -67,8 +71,24 @@ define(
 					this.select(".quicksim-text").text("Evaluating your values");
 				}
 
+				// 'Exists' is a special case
+				if (message == 'exists') {
+
+					this.select(".quicksim-text").text("We don't have to run the simulation");
+					this.select(".quicksim-status").text("Somebody else has already tried this values!");
+					this.haltInterface = true;
+
+					// Close interface
+					setTimeout((function() {
+						this.trigger("close");
+					}).bind(this), 2000);
+				}
+
 			}).bind(this));
 			Simulation.on('update.fitAverage', (function(fit) {
+
+				// If halted, return
+				if (this.haltInterface) return;
 
 				// Update leds according to progress
 				this.fit = fit;
@@ -77,21 +97,20 @@ define(
 			}).bind(this));
 			Simulation.on('update.events', (function(nevts) {
 
+				// If halted, return
+				if (this.haltInterface) return;
+
 				// Update number of events
 				this.nevts = nevts;
 				this.updateEstimation();
 
 			}).bind(this));
 			Simulation.on('log', (function(message, telemetry) {
-				this.select(".quicksim-status").text(message);
-			}).bind(this));
 
-			//
-			// Reset when job is undefined
-			//
-			Simulation.on('job.undefined', (function() {
-				this.resetInterface();
-				this.trigger("close");
+				// If halted, return
+				if (this.haltInterface) return;
+				this.select(".quicksim-status").text(message);
+
 			}).bind(this));
 
 			//
@@ -188,6 +207,9 @@ define(
 		 * A request was placed to start a simulation
 		 */
 		DefaultQuicksimOverlay.prototype.onSubmitRequest = function( values, level ) {
+
+			// Unhalt interface
+			this.haltInterface = false;
 
 			// Prepare pending request
 			this.select(".quicksim-status").text("Starting simulation ...");

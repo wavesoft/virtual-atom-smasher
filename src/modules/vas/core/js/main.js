@@ -570,6 +570,9 @@ define("vas/core",
 						// Stop auto-commit timers
 						VAS.stopActivityAutocommit();
 					});
+					scrHome.on('showKnowledge', function() {
+						VAS.displayKnowledge();
+					});
 
 					// Reload tuning configuration
 					scrHome.on('reload', function() {
@@ -1022,23 +1025,20 @@ define("vas/core",
 		}
 
 		/**
-		 * Check user's record and show the appropriate courses screen
-		 * configuration.
+		 * Display knowledge screen
 		 */
-		VAS.displayKnowledge = function( animateBackwards ) {
+		VAS.displayKnowledge = function( focusTerm ) {
 
-			/* DEPRECATED!
-			// Get user's knowledge from database 
-			User.getKnowledgeTree(function(config) {
+			// Display book
+			UI.showOverlay("overlay.knowledge", UI.Transitions.SCALEDOWN_TOP, (function(comBook) {
 
-				// Setup home screen
-				VAS.scrKnowledge.onTopicTreeUpdated( config );
+				// Update metadata
+				if (focusTerm) comBook.onFocusTerm( focusTerm );
 
-				// Select home screen
-				UI.selectScreen("screen.knowledge", animateBackwards ? UI.Transitions.ZOOM_OUT : UI.Transitions.ZOOM_IN);
+				// Bind course callback
+				comBook.on('takeExam', VAS.displayExamOverlay);
 
-			});
-			*/
+			}).bind(this));
 
 		}
 
@@ -1245,12 +1245,7 @@ define("vas/core",
 		VAS.displayBook = function( bookID ) {
 
 			// Display book
-			UI.showOverlay("overlay.knowledge", UI.Transitions.SCALEDOWN_TOP, (function(comBook) {
-
-				// Update metadata
-				comBook.onFocusTerm( bookID );
-
-			}).bind(this));
+			VAS.displayKnowledge( bookID );
 
 		}
 

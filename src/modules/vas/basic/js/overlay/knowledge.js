@@ -53,6 +53,14 @@ define(
 				this.bookWidget.doPopulateBook( book );
 			}).bind(this));
 
+			//
+			// Handle interface clicks
+			//
+			this.select(".btn-quiz").click((function() {
+				this.trigger("close");
+				this.trigger("takeExam");
+			}).bind(this));
+
 		}
 
 		DefaultKnowledgeOverlay.prototype = Object.create(KnowledgeOverlay.prototype);

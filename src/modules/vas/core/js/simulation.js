@@ -12,7 +12,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 		/**
 		 * Job status constnat
 		 */
-		var JOB_STATUS = ['queued', 'running', 'completed', 'failed', 'cancelled', 'stalled', 'cloned'];
+		var JOB_STATUS = ['queued', 'running', 'completed', 'failed', 'cancelled', 'stalled', 'exists'];
 
 		/**
 		 * Class that holds and maintains the active job details
@@ -789,7 +789,7 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 
 				// Unbind job when completed
 				if (this.activeJob) {
-					this.activeJob.setStatus("completed");
+					this.activeJob.setStatus("exists");
 					this.unbindFromJob();
 				}
 

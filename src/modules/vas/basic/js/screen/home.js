@@ -85,7 +85,7 @@ define(
             // Knowledge button
             this.select(".navbtn-knowledge").click((function () {
                 // Do something when pressed
-                UI.showOverlay('overlay.knowledge', UI.Transitions.SCALEDOWN_TOP);
+                this.trigger("showKnowledge");
             }).bind(this));
 
             // Papers button

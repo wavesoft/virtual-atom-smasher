@@ -116,6 +116,37 @@
 	}
 }
 
+
+//
+// Glow buttons
+//
+.tab-buttons-glow {
+	> ul {
+		> li {
+			width: 110px; height: 32px;
+			margin-left: -6px;
+		    padding-top: 8px;
+		    line-height: 20px;
+
+			// Background 
+			background-image: url(modules/vas/basic/img/button/btn-tab-small-glow.png);
+			&:hover { background-position: 0 -40px; }
+			&:active { background-position: 0 -80px; }
+
+			// Active background and styling
+			&.active {
+				background-position: 0 -120px;
+
+				// Lock background
+				&:hover, &:active {
+					background-position: 0 -120px;
+				}
+			}
+
+		}
+	}
+}
+
 // 
 // Framed tab themes
 //
