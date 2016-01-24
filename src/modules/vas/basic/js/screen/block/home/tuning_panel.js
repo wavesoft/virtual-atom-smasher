@@ -160,7 +160,7 @@ define(
 			this.hostDOM.css({
 				// Centering
 				'left': (this.width - pWidth) / 2, 
-				'top': (this.height - pHeight) / 2,
+				'top': (this.height - pHeight) / 2 - 40,
 			});
 
 		}
