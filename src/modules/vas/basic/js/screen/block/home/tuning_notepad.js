@@ -42,8 +42,16 @@ define(
 					this.select(".notepad-body"),
 					this.select(".notepad-tabs > ul")
 				);
+			this.tabsController.on('change', (function(id){
 
-			// Create sub-component for the tab
+				// Trigger the willShown/shown events when focusing on the tab
+				if (id == "data") {
+					this.valuesTab.show();
+				}
+
+			}).bind(this));
+
+			// Create sub-component for the data tab
 			this.valuesTab = R.instanceComponent("screen.block.tuning_notepad.values", this.select(".body-data"));
 			this.forwardVisualEvents( this.valuesTab );
 			this.adoptEvents( this.valuesTab );

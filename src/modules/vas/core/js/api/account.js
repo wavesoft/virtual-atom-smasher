@@ -211,8 +211,7 @@ define(["vas/core/api/interface", "vas/config"],
 		 */
 		APIAccount.prototype.getLastResult = function(callback) {
 			// Query server
-			this.sendAction("results.last", {
-				'id': paper_id
+			this.sendAction("job.last", {
 			}, function(data) {
 				if (data && callback) callback(data['data']);
 			});
@@ -221,10 +220,21 @@ define(["vas/core/api/interface", "vas/config"],
 		/**
 		 * Get a list of all user results
 		 */
-		APIAccount.prototype.getMyResults = function(callback) {
+		APIAccount.prototype.getFavResult = function(callback) {
 			// Query server
-			this.sendAction("results.all", {
-				'id': paper_id
+			this.sendAction("job.fav", {
+			}, function(data) {
+				if (data && callback) callback(data['data']);
+			});
+		}
+
+		/**
+		 * Get a list of all user results
+		 */
+		APIAccount.prototype.getCompletedResults = function(page, callback) {
+			// Query server
+			this.sendAction("jobs.completed", {
+				'page': page
 			}, function(data) {
 				if (data && callback) callback(data['data']);
 			});

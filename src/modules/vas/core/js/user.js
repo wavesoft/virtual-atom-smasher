@@ -666,7 +666,6 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			this.accountIO.sendBookAnswers( answers, callback );
 		}
 
-
 		/**
 		 * Query and return learning evaluation questions
 		 */
@@ -757,6 +756,30 @@ define(["vas/config", "core/util/event_base", "vas/core/db", "vas/core/apisocket
 			// Pass query to account API
 			this.accountIO.getLevelDetails( id, callback );
 		};
+
+		/**
+		 * Return the last job details
+		 */
+		User.prototype.getLastResult = function( callback ) {
+			// Pass query to account API
+			this.accountIO.getLastResult( callback );
+		}
+
+		/**
+		 * Return the favourite job details
+		 */
+		User.prototype.getFavResult = function( callback ) {
+			// Pass query to account API
+			this.accountIO.getFavResult( callback );
+		}
+
+		/**
+		 * Return the list of completed jobs
+		 */
+		User.prototype.getCompletedResults = function( page, callback ) {
+			// Pass query to account API
+			this.accountIO.getCompletedResults( page, callback );
+		}
 
 		/**
 		 * Get user's eligibility status to the active awards

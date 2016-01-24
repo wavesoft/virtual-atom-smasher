@@ -1,7 +1,8 @@
 define(
 
 	// Dependencies
-	["jquery", "core/ui/tabs", "core/ui/table", "vas/core/registry", "vas/core/ui", "vas/core/base/components/tuning",
+	["jquery", "core/ui/tabs", "core/ui/table", "vas/core/user", 
+	 "vas/core/registry", "vas/core/ui", "vas/core/base/components/tuning",
 	 "text!vas/basic/tpl/screen/block/home/tuning_notepad/values.html" ], 
 
 	/**
@@ -9,7 +10,7 @@ define(
 	 *
  	 * @exports vas-basic/screen/block/home/tuning_notepad/values
 	 */
-	function($, Tabs, Table, R, UI, TC, tpl) {
+	function($, Tabs, Table, User, R, UI, TC, tpl) {
 
 		/**
 		 * @class
@@ -25,12 +26,17 @@ define(
 			// Render template
             this.loadTemplate(tpl);
             this.renderView();
+            this.displayMode = "last";
 
 			// Create a tabs controller
 			this.tabsController = new Tabs(
 					this.select(".values-body"),
 					this.select(".values-tabs > ul")
 				);
+			this.tabsController.on('change',(function(id) {
+				this.displayMode = id;
+				this.updateDisplay();
+			}).bind(this));
 
 			// Create a table controller
 			this.tableController = new Table(
@@ -48,6 +54,21 @@ define(
 		// Subclass from TuningNotepad
 		DefaultTuningNotepadValues.prototype = Object.create( TC.TuningNotepad.prototype );
 
+		////////////////////////////////////////////////////////////
+		// Helper functions
+		////////////////////////////////////////////////////////////
+
+		/**
+		 * Update last run results
+		 */
+		DefaultTuningNotepadValues.prototype.updateDisplay = function() {
+			
+		}
+
+		////////////////////////////////////////////////////////////
+		// Interface implementation
+		////////////////////////////////////////////////////////////
+
 		/**
 		 * Update level information
 		 */
@@ -56,10 +77,11 @@ define(
 		}
 
 		/**
-		 * Definition of last run values
+		 * Update display before showing the component
 		 */
-		DefaultTuningNotepadValues.prototype.onLastRunDefined = function( values ) {
-
+		DefaultTuningNotepadValues.prototype.onWillShow = function( cb ) {
+			this.updateDisplay();
+			cb();
 		}
 
 		// Store tuning widget component on registry
