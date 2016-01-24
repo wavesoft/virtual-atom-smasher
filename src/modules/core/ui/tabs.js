@@ -1,12 +1,13 @@
 /**
  * [core/ui/tabs] - Reusable component for tabs
  */
-define([], function() {
+define(["core/util/event_base"], function(EventBase) {
 
 	/**
 	 * The Tabs class is responsible for automatically managing tabbed views
 	 */
 	var Tabs = function( bodyHost, tabsHost ) {
+		EventBase.call(this);
 
 		// Keep body and tabs variables
 		this.bodyHost = $(bodyHost);
@@ -33,6 +34,9 @@ define([], function() {
 
 	}
 
+	// Subclass from EventBase
+	Tabs.prototype = Object.create( EventBase.prototype );
+
 	/**
 	 * Focus a particular tab
 	 */
@@ -50,6 +54,9 @@ define([], function() {
 			e.stopPropagation();
 			var id = $(this).data("id");
 			self.selectTab(id);
+
+			// Notify listeners
+			self.trigger('change', id);
 		});
 
 	}
@@ -62,8 +69,26 @@ define([], function() {
 		this.bodyHost.children().hide();
 		this.tabsHost.children().removeClass("active");
 		// Focus ID
-		this.bodyHost.find(".body-"+id).show();
-		this.tabsHost.find(".tab-"+id).addClass("active");
+		this.bodyHost.children(".body-"+id).show();
+		this.tabsHost.children(".tab-"+id).addClass("active");
+	}
+
+	/**
+	 * Focus a particular body, without focusing the tab
+	 */
+	Tabs.prototype.activateBody = function( id ) {
+		// Unfocus everything
+		this.bodyHost.children().hide();
+		this.bodyHost.children(".body-"+id).show();
+	}
+
+	/**
+	 * Focus a particular button, without focusing the body
+	 */
+	Tabs.prototype.activateTab = function( id ) {
+		// Unfocus everything
+		this.tabsHost.children().removeClass("active");
+		this.tabsHost.children(".tab-"+id).addClass("active");
 	}
 
 	/**

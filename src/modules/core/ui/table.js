@@ -1,12 +1,13 @@
 /**
  * [core/ui/table] - Reusable component for tabular data
  */
-define([], function() {
+define(["core/util/event_base"], function(EventBase) {
 
 	/**
 	 * The Table class is responsible for displaying arbitrary tabular data
 	 */
 	var Table = function( tabHost ) {
+		EventBase.call(this);
 
 		// Get table host element
 		this.eHostElement = $(tabHost);
@@ -22,7 +23,18 @@ define([], function() {
 		this.sortColumn = "";
 		this.columns = [];
 		this.rows = [];
+		this.emptyPlaceholder = $('<span>(No data to display)</span>');
 
+	}
+
+	// Subclass from EventBase
+	Table.prototype = Object.create( EventBase.prototype );
+
+	/**
+	 * Define the empty placeholder
+	 */
+	Table.prototype.setEmptyPlaceholder = function( dom  ) {
+		this.emptyPlaceholder = $(dom);
 	}
 
 	/**

@@ -711,7 +711,6 @@ define(["vas/config", "vas/core/user", "core/util/event_base", "vas/core/apisock
 
 				// If we don't have an active job something went wrong
 				if (!this.activeJob) {
-					console.error("Got log, without having an active job!");
 					return;
 				}
 
