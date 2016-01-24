@@ -6,6 +6,7 @@ define(
 		"vas/config",
 		"core/ui/tabs",
 		"core/ui/table",
+		"core/util/geocode",
 		"vas/core/base/components/overlays", 
 		"vas/core/registry", 
 		"vas/core/user",
@@ -17,7 +18,7 @@ define(
 	 *
 	 * @exports vas-basic/screen/teams
 	 */
-	function ($, Config, Tabs, Table, C, R, User, tpl) {
+	function ($, Config, Tabs, Table, Geocode, C, R, User, tpl) {
 
 		function dateFromTs(ts) {
     		var date = new Date(ts*1000);
@@ -67,9 +68,12 @@ define(
 	            	function(id, data){ return $('<a target="_blank"></a>')
 	            		.attr("href","https://www.google.com/maps?q="+data['latlng'])
 	            		.text( String(id).split("/")[1] ); })
-	            .addColumn( "lastActivity", "Last Activity", 3,
+	            .addColumn( "lastActivity", "Last Activity", 2,
 	            	function(ts){ return $('<span></span>').text( dateFromTs(ts) ); })
-	            .addColumn( "jobs_sent", "Jobs", 1 )
+	            .addColumn( "latlng", "Location", 2,
+	            	function(text, data){ 
+	            		return $('<span class="do-geocode"></span>').text(text);
+	            	})
 	            .addColumn( "jobs_succeed", "Good", 1 )
 	            .addColumn( "jobs_failed", "Bad", 1 )
 	            .addColumn( "slots", "Slots", 1 );
@@ -116,6 +120,27 @@ define(
 		//////////////////////////////////////////////////////////////
 
 		/**
+		 * Geocode IP to city
+		 */
+		DefaultTeamsOverlay.prototype.geocodeResourceLocations = function() {
+
+			// Get next item to geocode
+			var item = this.select(".table-resources .do-geocode");
+			if (item.length == 0) return;
+
+			// Replace contents with geocoded city
+			Geocode.geocodeCity( item.text(), function(city) {
+				item
+					.removeClass("do-geocode")
+					.text(city);
+			});
+
+			// Chained calls
+			setTimeout(this.geocodeResourceLocations.bind(this), 1);
+
+		}
+
+		/**
 		 * Update details of all windows
 		 */
 		DefaultTeamsOverlay.prototype.updateDetails = function(cb) {
@@ -132,6 +157,7 @@ define(
 				// Update resources
 				console.log("Resources:",data);
 				this.tableResources.set( data );
+				this.geocodeResourceLocations();
 
 				cb_countdown();
 			}).bind(this));
