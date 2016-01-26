@@ -688,6 +688,16 @@ define(["vas/config", "vas/core/base/component", "vas/core/base/view" ],
 		HomeScreen.prototype.onStateChanged = function(stateName, stateValue) {
 		}
 
+		/**
+		 * This function is fired when a level is unlocked.
+		 *
+		 * @abstract
+		 * @param {int} levelID - The level unlocked
+		 */
+		HomeScreen.prototype.onLevelUnlocked = function(levelID) {
+
+		}
+
 		////////////////////////////////////////////////////////////
 		/**
 		 * Initializes a new Results Screen.

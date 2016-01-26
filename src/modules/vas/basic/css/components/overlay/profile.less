@@ -3,11 +3,73 @@
 // profile.less - Profile Overlay Screen
 ///////////////////////////////////////////////
 
+@profile-sidebar-size: 180px;
+@profile-image-size: @profile-sidebar-size - 10px;
+
 .screen-overlay.profile {
 	.frame-book();
 
 	// Internal content
 	.content {
+
+		//
+		// Sidebar
+		//
+		.content-sidebar {
+		    position: absolute;
+		    left: 0; width: @profile-sidebar-size;
+		    top: 0; height: 100%;
+
+		    div.value-title {
+				padding: 5px;
+			    font-size: 18px;
+			    font-weight: bold;
+		    }
+		    div.value-icon {
+		    	width: @profile-image-size;
+		    	height: @profile-image-size;
+		    	border-radius: 10px;
+		    	background-repeat: no-repeat;
+		    	background-position: center center;
+		    	background-size: contain;
+		    	background-color: #fff;
+		    }
+		    
+		    div.actions {
+		    	position: absolute;
+		    	left: 0; bottom: 0;
+		    	width: 100%;
+		    }
+
+		}
+
+		//
+		// Body where the body is sown
+		//
+		.content-body {
+			.frame-panel();
+		    position: absolute;
+		    left: (@profile-sidebar-size + 10px); right: 0;
+		    top: 0; height: 100%;
+
+		    .pm-header {
+		    	position: absolute;
+		    	left: 20px; width: 100%;
+		    	top: 15px; height: 35px;
+		    	line-height: 35px;
+		    	font-size: 20px;
+		    }
+		    .pm-table {
+		    	position: absolute;
+		    	left: 20px; width: 100%;
+		    	top: 55px; bottom: 55px;
+		    }
+		    .pm-footer {
+		    	position: absolute;
+		    	left: 20px; width: 100%;
+		    	bottom: 15px; height: 35px;
+		    }
+		}
 
 	}
 

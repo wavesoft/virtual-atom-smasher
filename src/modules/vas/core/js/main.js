@@ -217,6 +217,25 @@ define("vas/core",
 									evData['icon']
 									);
 
+							} else if (evData['type'] == "simulation_results") {
+
+								// Flash details
+								UI.scheduleFlash(
+									evData['title'],
+									evData['message'],
+									evData['icon'],
+
+									// When disposed
+									function() {
+
+										// Tell home screen to do some level reloading
+										// and animation to the interface.
+										if (evData['unlocks_level'])
+											VAS.scrHome.onLevelUnlocked( evData['unlocks_level'] );
+
+									}
+								);
+
 							} else {
 
 								// Any other type goes to growl

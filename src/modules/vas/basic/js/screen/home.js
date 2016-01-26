@@ -165,6 +165,7 @@ define(
             // Level offset
             this.levelOffset = 0;
             this.levels = [];
+            this.tuningVisible = false;
 
             //
             // Enable page transitions on content
@@ -174,6 +175,10 @@ define(
         }
 
         HomeScreen.prototype = Object.create(C.HomeScreen.prototype);
+
+        ////////////////////////////////////////////////////////////
+        // Interface implementation
+        ////////////////////////////////////////////////////////////
 
         /**
          * Define the parameters of the machine
@@ -198,6 +203,24 @@ define(
             }).bind(this));
 
         }
+
+        /**
+         * A particular level is unlocked
+         */
+        HomeScreen.prototype.onLevelUnlocked = function( level ) {
+
+            // Hide tuning screen
+            this.hideTuningScren((function() {
+
+                // Show animation to the level 
+
+            }).bind(this));
+
+        }
+
+        ////////////////////////////////////////////////////////////
+        // Helper functions
+        ////////////////////////////////////////////////////////////
 
         /**
          * Handle hovering over a level button
@@ -345,7 +368,13 @@ define(
         /**
          * Show tuing screen
          */
-        HomeScreen.prototype.showTuningScreen = function( level ) {
+        HomeScreen.prototype.showTuningScreen = function( cb ) {
+
+            // If we are already visible don't do anything
+            if (this.tuningVisible) {
+                if (cb) setTimeout(cb, 1);
+                return;
+            }
 
             // Notify showing
             this.tuningScreen.onWillShow((function() {
@@ -355,7 +384,11 @@ define(
                         this.select(".home-content-machine"),
                         this.select(".home-content-tuning"),
                         UI.Transitions.DIFF_TOP,
-                        this.tuningScreen.onShown
+                        (function() {
+                            this.tuningVisible = true;
+                            this.tuningScreen.onShown();
+                            if (cb) cb();
+                        }).bind(this)
                     );
 
             }).bind(this));
@@ -365,7 +398,13 @@ define(
         /**
          * Hide tuing screen
          */
-        HomeScreen.prototype.hideTuningScren = function( level ) {
+        HomeScreen.prototype.hideTuningScren = function( cb ) {
+
+            // If we are already hidden don't do anything
+            if (!this.tuningVisible) {
+                if (cb) setTimeout(cb, 1);
+                return;
+            }
 
             // Notify hiding
             this.tuningScreen.onWillHide((function() {
@@ -375,7 +414,11 @@ define(
                         this.select(".home-content-tuning"),
                         this.select(".home-content-machine"),
                         UI.Transitions.DIFF_BOTTOM,
-                        this.tuningScreen.onHidden
+                        (function() {
+                            this.tuningVisible = false;
+                            this.tuningScreen.onHidden();
+                            if (cb) cb();
+                        }).bind(this)
                     );
 
             }).bind(this));
